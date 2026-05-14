@@ -1,7 +1,148 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 
+// Importación de Componentes Livewire (Controladores de Nueva Generación)
+use App\Http\Controllers\Cms\{
+    AuthenticatedSessionController,
+    PasswordResetLinkController,
+    ProfileController,
+    SettingsController,
+    DashboardController,
+    ProductsController,
+    CategoriesController,
+    BrandsController,
+    RolController,
+    SectionController,
+    UserController,
+    PermissionsController
+};
+
+/*
+|--------------------------------------------------------------------------
+| Public Website Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
-    return view('welcome');
+    return 'Acceso bloqueado - Helin Medical Platform';
+})->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| CMS Main Architecture
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('cms')->group(function () {
+
+    /* --- GUEST: AUTHENTICATION FLOW --- */
+    Route::middleware('guest')->group(function () {
+
+        // Login & Session Management
+        Route::get('/login', AuthenticatedSessionController::class)->name('login');
+
+        // Password Recovery Flow
+        Route::get('/forgot-password', PasswordResetLinkController::class)->name('password.request');
+    });
+
+    /* --- PROTECTED: CMS CORE (AUTH & VERIFIED) --- */
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+        /* 1. Main Dashboard */
+        Route::get('/dashboard', DashboardController::class)->name('dashboard')
+            ->middleware('permission:Administradores');
+
+        /* 2. Account & Profile ("Me" Module) */
+        // Un solo componente Livewire maneja toda la lógica del perfil
+        Route::get('/me', ProfileController::class)->name('profile.show');
+
+        /* 3. Catalog & Medical Inventory */
+        Route::prefix('catalog')->name('catalog.')->group(function () {
+            Route::get('/products', ProductsController::class)->name('products.index')
+                ->middleware('permission:Catálogo,Productos');
+            Route::get('/products/create', ProductsController::class)->name('products.create')
+                ->middleware('permission:Catálogo,Productos');
+            Route::get('/categories', CategoriesController::class)->name('categories.index')
+                ->middleware('permission:Catálogo,Categorías');
+            Route::get('/categories/create', CategoriesController::class)->name('categories.create')
+                ->middleware('permission:Catálogo,Categorías');
+            Route::get('/brands', BrandsController::class)->name('brands.index')
+                ->middleware('permission:Catálogo,Marcas');
+            Route::get('/brands/create', BrandsController::class)->name('brands.create')
+                ->middleware('permission:Catálogo,Marcas');
+        });
+
+        /* 4. Global System Settings */
+        Route::get('/settings', SettingsController::class)->name('settings.index')
+            ->middleware('permission:Configuración,Configuración General');
+
+        Route::get('/sections', SectionController::class)->name('sections.index')
+            ->middleware('permission:Configuración,Secciones');
+
+        /* 5. System Administration (RBAC & Users) */
+        Route::prefix('system')->name('admin.')->group(function () {
+            Route::get('/users', UserController::class)->name('users.index')
+                ->middleware('permission:Administradores,Usuarios');
+            Route::get('/roles', RolController::class)->name('roles.index')
+                ->middleware('permission:Administradores,Roles');
+
+            // Legacy permissions route (Si no se ha migrado a componente único aún)
+            Route::get('/roles/{role}/permissions', [RolController::class, 'permission'])->name('roles.permissions')
+                ->middleware('permission:Administradores,Permisos');
+        });
+
+        // Permisos detallados por Rol (Nuevo componente Livewire) - Ruta CMS
+        Route::get('/system/permissions/{roleId}', PermissionsController::class)->name('cms.permissions.index')
+            ->middleware('permission:Administradores,Permisos');
+
+        // Ruta CMS para roles (compatibilidad con vistas)
+        Route::get('/system/roles', RolController::class)->name('cms.roles')
+            ->middleware('permission:Administradores,Roles');
+
+        /* 6. Session Utilities & Security */
+        // El componente AuthenticatedSessionController suele manejar el logout internamente,
+        // pero definimos las rutas de bloqueo por seguridad.
+        Route::get('/lock', [AuthenticatedSessionController::class, 'lock'])->name('session.lock');
+
+        // Nota: El logout se dispara vía Livewire o mediante una ruta GET estándar
+        Route::get('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
+    });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Internal API & Debugging
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->prefix('api/internal')->group(function () {
+    Route::get('/session-check', [AuthenticatedSessionController::class, 'checkSession'])->name('api.session.check');
+});
+
+// Enabled only for local development environment
+if (app()->environment('local')) {
+    Route::prefix('debug')->name('debug.')->group(function () {
+        Route::get('/routes', function () {
+            return response()->json(collect(Route::getRoutes())->map(fn($r) => [
+                'method' => implode('|', $r->methods()),
+                'uri'    => $r->uri(),
+                'name'   => $r->getName()
+            ]));
+        })->name('routes');
+    });
+}
+
+/*
+|--------------------------------------------------------------------------
+| Global Fallback Route
+|--------------------------------------------------------------------------
+*/
+
+Route::fallback(function () {
+    return request()->expectsJson()
+        ? response()->json(['message' => 'Resource not found in Helin CMS'], 404)
+        : view('errors.404');
+})->name('fallback');

@@ -1,0 +1,228 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Cms;
+
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\Activities;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
+
+/**
+ * Class RolController
+ *
+ * Manages the security roles within the Helin CMS.
+ * This component handles the CRUD operations for the roles table,
+ * ensuring strict validation and activity logging.
+ *
+ * @package App\Http\Controllers\Cms
+ * @version 1.1.0
+ */
+#[Title('Role Management | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
+class RolController extends Component
+{
+    use WithPagination;
+
+    /**
+     * @var string The unique identifier name of the role.
+     */
+    #[Validate('required|string|max:255|unique:roles,name', as: 'role name')]
+    public string $name = '';
+
+    /**
+     * @var int|null The ID of the role currently being updated.
+     */
+    public ?int $editingId = null;
+
+    /**
+     * @var string The search term used for filtering the roles list.
+     */
+    public string $search = '';
+
+    /**
+     * @var int The number of records to display per page.
+     */
+    public int $perPage = 20;
+
+    /**
+     * @var bool Controls the visibility of the creation/edition modal.
+     */
+    public bool $showForm = false;
+
+    /**
+     * @var bool Indicates if the component is performing an async operation.
+     */
+    public bool $isLoading = false;
+
+    /**
+     * @var string The Tailwind CSS theme for pagination.
+     */
+    protected string $paginationTheme = 'tailwind';
+
+    /**
+     * Component Lifecycle: Security check for administrative access.
+     *
+     * @return void
+     */
+    public function mount(): void
+    {
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, 'Unauthorized access to Helin security modules.');
+        }
+    }
+
+    /**
+     * Render the component view with paginated and filtered roles.
+     *
+     * @return View
+     */
+    public function render(): View
+    {
+        $roles = Role::query()
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate($this->perPage);
+
+        return view('cms.roles.index', [
+            'roles' => $roles
+        ]);
+    }
+
+    /**
+     * Open the form modal and reset the state for a new record.
+     *
+     * @return void
+     */
+    public function create(): void
+    {
+        $this->resetForm();
+        $this->showForm = true;
+        $this->dispatch('open-form');
+    }
+
+    /**
+     * Save the role data into the database (Create or Update).
+     *
+     * @return void
+     */
+    public function save(): void
+    {
+        $this->isLoading = true;
+
+        // Dynamic validation to exclude the current ID from the unique check during updates
+        $rules = [
+            'name' => 'required|string|max:255|unique:roles,name' . ($this->editingId ? ",{$this->editingId}" : ''),
+        ];
+
+        $this->validate($rules);
+
+        try {
+            if ($this->editingId) {
+                $role = Role::findOrFail($this->editingId);
+                $role->update(['name' => $this->name]);
+
+                Activities::saveActivity("Security Role Updated: {$this->name} (ID: #{$role->id})");
+                $this->dispatch('toast', message: 'Rol actualizado correctamente', type: 'success');
+            } else {
+                $role = Role::create(['name' => $this->name]);
+
+                // Create permissions for the new role
+                Permission::createPermissions($role->id);
+
+                Activities::saveActivity("New Security Role Created: {$this->name} (ID: #{$role->id}) with permissions");
+                $this->dispatch('toast', message: 'Rol creado correctamente con permisos', type: 'success');
+            }
+
+            $this->cancel();
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'Error processing the request', type: 'error');
+        } finally {
+            $this->isLoading = false;
+        }
+    }
+
+    /**
+     * Load an existing role into the form for edition.
+     *
+     * @param int $id The unique identifier of the role.
+     * @return void
+     */
+    public function edit(int $id): void
+    {
+        $role = Role::findOrFail($id);
+
+        $this->editingId = $id;
+        $this->name = $role->name;
+
+        $this->showForm = true;
+        $this->dispatch('open-form');
+    }
+
+    /**
+     * Remove a role from the database.
+     *
+     * @param int $id The unique identifier of the role.
+     * @return void
+     */
+    public function confirmDelete(int $id): void
+    {
+        try {
+            $role = Role::findOrFail($id);
+            $roleName = $role->name;
+            $role->delete();
+
+            Activities::saveActivity("Security Role Deleted: {$roleName}");
+            $this->dispatch('toast', message: 'Rol eliminado correctamente', type: 'success');
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'The role cannot be deleted due to active dependencies.', type: 'error');
+        }
+    }
+
+    /**
+     * Close the form modal and clear validation/state.
+     *
+     * @return void
+     */
+    public function cancel(): void
+    {
+        $this->resetForm();
+        $this->showForm = false;
+        $this->dispatch('close-form');
+    }
+
+    /**
+     * Reset the public properties and validation errors.
+     *
+     * @return void
+     */
+    private function resetForm(): void
+    {
+        $this->reset(['name', 'editingId']);
+        $this->resetValidation();
+    }
+
+    /**
+     * Reset pagination when the search query is updated.
+     *
+     * @return void
+     */
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+}

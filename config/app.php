@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Inactivity Settings
+    |--------------------------------------------------------------------------
+    |
+    | These settings control the inactivity timeout for user sessions.
+    | The warning time determines when to show the warning modal,
+    | and the logout time determines when to automatically log out.
+    |
+    */
+    'inactivity' => [
+        'warning_time' => env('INACTIVITY_WARNING_TIME', 60), // seconds
+        'logout_time' => env('INACTIVITY_LOGOUT_TIME', 120),   // seconds
+    ],
+
 ];
