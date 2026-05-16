@@ -374,6 +374,15 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+  /* Primary Color Utilities */
+  .bg-primary {
+    background-color: rgb(var(--color-primary));
+  }
+
+  .text-primary {
+    color: rgb(var(--color-primary));
+  }
+
   /* Glassmorphism */
   .glass {
     @apply bg-white/20 backdrop-blur-lg border border-white/20;
