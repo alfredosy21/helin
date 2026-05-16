@@ -164,12 +164,12 @@ class TestimonialsController extends Component
                 $testimonial = Testimonial::findOrFail($this->editingId);
                 $testimonial->update($data);
 
-                Activities::saveActivity("Testimonial Synchronized: Asset ID #{$testimonial->id}");
+                Activities::saveActivity("Testimonio sincronizado: Activo ID #{$testimonial->id}");
                 $this->dispatch('toast', message: 'Testimonio actualizado correctamente', type: 'success');
             } else {
                 $testimonial = Testimonial::create($data);
 
-                Activities::saveActivity("Testimonial Registered: Asset ID #{$testimonial->id}");
+                Activities::saveActivity("Testimonio registrado: Activo ID #{$testimonial->id}");
                 $this->dispatch('toast', message: 'Testimonio registrado correctamente', type: 'success');
             }
 
@@ -224,7 +224,7 @@ class TestimonialsController extends Component
             $testimonialName = $testimonial->name;
             $testimonial->delete();
 
-            Activities::saveActivity("Testimonial Removed: {$testimonialName}");
+            Activities::saveActivity("Testimonio eliminado: {$testimonialName}");
             $this->dispatch('toast', message: 'Testimonio eliminado correctamente', type: 'success');
 
         } catch (\Exception $ex) {
@@ -249,7 +249,7 @@ class TestimonialsController extends Component
                 Testimonial::query()->where('id', $id)->update(['order' => $index]);
             }
 
-            Activities::saveActivity("Testimonials Reordered by User ID #" . Auth::id());
+            Activities::saveActivity("Testimonios reordenados por Usuario ID #" . Auth::id());
             $this->dispatch('toast', message: 'Orden de testimonios actualizado correctamente', type: 'success');
 
         } catch (\Exception $ex) {

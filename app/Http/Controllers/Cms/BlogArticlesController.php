@@ -1,0 +1,394 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Cms;
+
+use App\Models\Blog;
+use App\Models\Activities;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
+
+/**
+ * Class BlogArticlesController
+ *
+ * Manages blog articles within the Helin CMS content management system.
+ * Handles blog content creation, SEO optimization, and publishing workflow.
+ * Provides reactive interface for blog article lifecycle management.
+ *
+ * Features:
+ * - Rich content management
+ * - SEO optimization (meta tags, slugs)
+ * - Publishing workflow
+ * - Featured and pinned articles
+ * - Category assignment
+ * - Engagement tracking
+ * - Bulk operations support
+ *
+ * @version 1.0.0
+ * @package App\Http\Controllers\Cms
+ */
+#[Title('Blog Article Management | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
+class BlogArticlesController extends Component
+{
+    use WithPagination;
+
+    /** @var string Article title */
+    #[Validate('required|string|max:255', as: 'título del artículo')]
+    public string $title = '';
+
+    /** @var string|null SEO-friendly slug for URL generation */
+    #[Validate('nullable|string|max:255')]
+    public ?string $slug = '';
+
+    /** @var string|null Article author name */
+    #[Validate('nullable|string|max:255')]
+    public ?string $author = '';
+
+    /** @var string|null Article content body */
+    #[Validate('required|string')]
+    public ?string $content = '';
+
+    /** @var string|null Article excerpt for preview */
+    #[Validate('nullable|string|max:500')]
+    public ?string $excerpt = '';
+
+    /** @var string|null Featured image URL or path */
+    #[Validate('nullable|string|max:255')]
+    public ?string $featured_image = '';
+
+    /** @var string|null Meta title for SEO */
+    #[Validate('nullable|string|max:255')]
+    public ?string $meta_title = '';
+
+    /** @var string|null Meta description for SEO */
+    #[Validate('nullable|string|max:500')]
+    public ?string $meta_description = '';
+
+    /** @var string|null Meta keywords for SEO */
+    #[Validate('nullable|string|max:255')]
+    public ?string $meta_keywords = '';
+
+    /** @var int|null Blog category ID */
+    #[Validate('nullable|integer|exists:blog_categories,id')]
+    public ?int $blog_category_id = null;
+
+    /** @var bool Article active status */
+    #[Validate('boolean')]
+    public bool $is_active = false;
+
+    /** @var bool Featured article status */
+    #[Validate('boolean')]
+    public bool $is_featured = false;
+
+    /** @var bool Pinned article status */
+    #[Validate('boolean')]
+    public bool $is_pinned = false;
+
+    /** @var int|null ID of the article being modified */
+    public ?int $editingId = null;
+
+    /** @var string Search query for real-time filtering */
+    public string $search = '';
+
+    /** @var int Pagination limit */
+    public int $perPage = 20;
+
+    /** @var bool Modal visibility state */
+    public bool $showForm = false;
+
+    /** @var bool Global loading indicator */
+    public bool $isLoading = false;
+
+    /** @var string Custom pagination theme */
+    protected string $paginationTheme = 'tailwind';
+
+    /**
+     * Component Lifecycle: Authorization Check
+     *
+     * Validates user permissions to access blog article management.
+     * Only administrators and content managers can access this module.
+     *
+     * @return void
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     */
+    public function mount(): void
+    {
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, 'Unauthorized access to Helin Blog Articles module.');
+        }
+    }
+
+    /**
+     * Render the component with paginated and sorted blog articles
+     *
+     * Displays blog articles in a tabular format with search capabilities,
+     * pagination, and ordering. Includes both active and inactive articles
+     * for comprehensive management.
+     *
+     * @return View
+     */
+    public function render(): View
+    {
+        $articles = Blog::query()
+            ->with('blogCategory')
+            ->when($this->search, function ($query) {
+                $query->where('title', 'like', "%{$this->search}%")
+                    ->orWhere('slug', 'like', "%{$this->search}%")
+                    ->orWhere('author', 'like', "%{$this->search}%")
+                    ->orWhere('content', 'like', "%{$this->search}%");
+            })
+            ->orderBy('is_pinned', 'desc')
+            ->orderBy('published_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
+
+        return view('cms.blog_articles.index', [
+            'articles' => $articles
+        ]);
+    }
+
+    /**
+     * Prepare the interface for a new article record
+     *
+     * Initializes form fields with default values and opens the modal for data entry.
+     *
+     * @return void
+     */
+    public function create(): void
+    {
+        $this->resetForm();
+        $this->is_active = false;
+        $this->showForm = true;
+        $this->dispatch('open-form');
+    }
+
+    /**
+     * Persist or synchronize blog article data
+     *
+     * Handles both creation and update operations with comprehensive validation.
+     * Automatically generates slug if not provided. Updates activity log and
+     * provides user feedback through toast notifications.
+     *
+     * @return void
+     */
+    public function save(): void
+    {
+        $this->isLoading = true;
+
+        // Dynamic unique validation
+        $this->validate([
+            'title' => 'required|string|max:255|unique:blogs,title' . ($this->editingId ? ",{$this->editingId}" : ''),
+            'slug' => 'nullable|string|max:255|unique:blogs,slug' . ($this->editingId ? ",{$this->editingId}" : ''),
+            'author' => 'nullable|string|max:255',
+            'content' => 'required|string',
+            'excerpt' => 'nullable|string|max:500',
+            'featured_image' => 'nullable|string|max:255',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
+            'blog_category_id' => 'nullable|integer|exists:blog_categories,id',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_pinned' => 'boolean',
+        ]);
+
+        try {
+            $data = [
+                'title' => $this->title,
+                'slug' => $this->slug ?: \Illuminate\Support\Str::slug($this->title),
+                'author' => $this->author,
+                'content' => $this->content,
+                'excerpt' => $this->excerpt,
+                'featured_image' => $this->featured_image,
+                'meta_title' => $this->meta_title,
+                'meta_description' => $this->meta_description,
+                'meta_keywords' => $this->meta_keywords,
+                'blog_category_id' => $this->blog_category_id,
+                'is_active' => $this->is_active,
+                'is_featured' => $this->is_featured,
+                'is_pinned' => $this->is_pinned,
+                'published_at' => $this->is_active ? now() : null,
+            ];
+
+            if ($this->editingId) {
+                $article = Blog::findOrFail($this->editingId);
+                $article->update($data);
+
+                Activities::saveActivity("Artículo de blog actualizado: ID #{$article->id}");
+                $this->dispatch('toast', message: 'Artículo de blog actualizado correctamente', type: 'success');
+            } else {
+                $article = Blog::create($data);
+
+                Activities::saveActivity("Artículo de blog creado: ID #{$article->id}");
+                $this->dispatch('toast', message: 'Artículo de blog creado correctamente', type: 'success');
+            }
+
+            $this->cancel();
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'Error al procesar el artículo de blog', type: 'error');
+        } finally {
+            $this->isLoading = false;
+        }
+    }
+
+    /**
+     * Hydrate form with existing article data
+     *
+     * Loads all article properties into the form for editing.
+     * Opens the modal and prepares the interface for modification.
+     *
+     * @param int $id The article identifier
+     * @return void
+     */
+    public function edit(int $id): void
+    {
+        $article = Blog::findOrFail($id);
+
+        $this->editingId = $id;
+        $this->title = $article->title;
+        $this->slug = $article->slug;
+        $this->author = $article->author;
+        $this->content = $article->content;
+        $this->excerpt = $article->excerpt;
+        $this->featured_image = $article->featured_image;
+        $this->meta_title = $article->meta_title;
+        $this->meta_description = $article->meta_description;
+        $this->meta_keywords = $article->meta_keywords;
+        $this->blog_category_id = $article->blog_category_id;
+        $this->is_active = $article->is_active;
+        $this->is_featured = $article->is_featured;
+        $this->is_pinned = $article->is_pinned;
+
+        $this->showForm = true;
+        $this->dispatch('open-form');
+    }
+
+    /**
+     * Execute article removal after UI confirmation
+     *
+     * Permanently deletes a blog article and associated data.
+     * Updates activity log and provides user feedback.
+     * Handles potential constraint violations gracefully.
+     *
+     * @param int $id The article identifier
+     * @return void
+     */
+    public function confirmDelete(int $id): void
+    {
+        try {
+            $article = Blog::findOrFail($id);
+            $articleTitle = $article->title;
+            $article->delete();
+
+            Activities::saveActivity("Artículo de blog eliminado: {$articleTitle}");
+            $this->dispatch('toast', message: 'Artículo de blog eliminado correctamente', type: 'success');
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'No se puede eliminar el artículo. Verifique datos asociados.', type: 'error');
+        }
+    }
+
+    /**
+     * Close form and reset internal state
+     *
+     * Clears all form data, hides the modal, and resets validation state.
+     * Dispatches event to notify frontend components of state change.
+     *
+     * @return void
+     */
+    public function cancel(): void
+    {
+        $this->resetForm();
+        $this->showForm = false;
+        $this->dispatch('close-form');
+    }
+
+    /**
+     * Clear all reactive form properties
+     *
+     * Resets all form fields to their default values and clears validation
+     * errors. Used during form initialization and cleanup operations.
+     *
+     * @return void
+     */
+    private function resetForm(): void
+    {
+        $this->reset([
+            'title', 'slug', 'author', 'content', 'excerpt', 'featured_image',
+            'meta_title', 'meta_description', 'meta_keywords', 'blog_category_id',
+            'is_active', 'is_featured', 'is_pinned', 'editingId'
+        ]);
+        $this->resetValidation();
+    }
+
+    /**
+     * Lifecycle listener: Pagination reset on search
+     *
+     * Automatically resets pagination to first page when search query changes.
+     * Ensures consistent user experience during search operations.
+     *
+     * @return void
+     */
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    /**
+     * Toggle article active status
+     *
+     * @param int $id The article identifier
+     * @return void
+     */
+    public function toggleStatus(int $id): void
+    {
+        try {
+            $article = Blog::findOrFail($id);
+            $article->update([
+                'is_active' => !$article->is_active,
+                'published_at' => !$article->is_active ? now() : null
+            ]);
+
+            $status = $article->is_active ? 'activado' : 'desactivado';
+            Activities::saveActivity("Artículo de blog {$status}: ID #{$article->id}");
+            $this->dispatch('toast', message: "Artículo {$status} correctamente", type: 'success');
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'Error al cambiar el estado del artículo', type: 'error');
+        }
+    }
+
+    /**
+     * Toggle featured status
+     *
+     * @param int $id The article identifier
+     * @return void
+     */
+    public function toggleFeatured(int $id): void
+    {
+        try {
+            $article = Blog::findOrFail($id);
+            $article->update(['is_featured' => !$article->is_featured]);
+
+            $status = $article->is_featured ? 'marcado como destacado' : 'desmarcado como destacado';
+            Activities::saveActivity("Artículo de blog {$status}: ID #{$article->id}");
+            $this->dispatch('toast', message: "Artículo {$status}", type: 'success');
+
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'Error al cambiar el estado destacado', type: 'error');
+        }
+    }
+}

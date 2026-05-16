@@ -5,15 +5,15 @@
 /* Design Tokens */
 :root {
   /* Brand Colors */
-  --color-primary: 59 130 246;        /* blue-600 */
-  --color-primary-light: 147 197 253; /* blue-300 */
-  --color-primary-dark: 29 78 216;     /* blue-800 */
+  --color-primary: 9 182 162;          /* rgb(9, 182, 162) - Helin Latam brand color */
+  --color-primary-light: 9 182 162;    /* Unificado al color primario #09b6a2 */
+  --color-primary-dark: 9 182 162;     /* Unificado al color primario #09b6a2 */
 
   /* Semantic Colors */
   --color-success: 34 197 94;          /* green-500 */
   --color-warning: 245 158 11;        /* amber-500 */
   --color-danger: 239 68 68;          /* red-500 */
-  --color-info: 59 130 246;            /* blue-500 */
+  --color-info: 9 182 162;            /* Unificado con la marca corporativa */
 
   /* Neutral Palette */
   --color-gray-50: 249 250 251;
@@ -127,16 +127,16 @@
     scrollbar-color: rgb(var(--color-gray-300)) rgb(var(--color-gray-100));
   }
 
-  /* Focus Styles */
+  /* Focus Styles - Actualizado al color de marca */
   :focus-visible {
     outline: 2px solid rgb(var(--color-primary));
     outline-offset: 2px;
   }
 
-  /* Selection */
+  /* Selection - Actualizado con el tono corporativo */
   ::selection {
-    background-color: rgb(var(--color-primary-light));
-    color: rgb(var(--color-gray-900));
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--color-gray-50));
   }
 
   /* Typography */
@@ -161,7 +161,7 @@
   }
 
   .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-[rgb(9,182,162)] text-white hover:bg-[rgb(9,182,162)] focus:ring-[rgb(9,182,162)] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
@@ -184,8 +184,9 @@
     @apply bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
+  /* Corregido link con el color primario de marca */
   .btn-link {
-    @apply text-blue-600 hover:text-blue-700 focus:ring-blue-500 p-0 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply text-[rgb(9,182,162)] hover:text-[rgb(9,182,162)] focus:ring-[rgb(9,182,162)] p-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Button Sizes */
@@ -197,7 +198,7 @@
 
   /* Input Base */
   .input {
-    @apply block w-full rounded-2xl border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-colors duration-200 placeholder:text-gray-400;
+    @apply block w-full rounded-xl border-gray-300 focus:border-[rgb(9,182,162)] focus:border transition-colors duration-200 placeholder:text-gray-400;
   }
 
   .input-error {
@@ -219,11 +220,11 @@
   }
 
   .badge-default { @apply bg-gray-100 text-gray-800; }
-  .badge-primary { @apply bg-blue-100 text-blue-800; }
+  .badge-primary { @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)]; }
   .badge-success { @apply bg-green-100 text-green-800; }
   .badge-warning { @apply bg-amber-100 text-amber-800; }
   .badge-danger { @apply bg-red-100 text-red-800; }
-  .badge-info { @apply bg-cyan-100 text-cyan-800; }
+  .badge-info { @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)]; }
 
   /* Modal Base */
   .modal-backdrop {
@@ -252,7 +253,7 @@
   }
 
   .toast-info {
-    @apply bg-blue-50 border border-blue-200 text-blue-800;
+    @apply bg-[rgb(9,182,162)]/10 border border-[rgb(9,182,162)]/30 text-[rgb(9,182,162)];
   }
 
   /* Loading States */
@@ -311,13 +312,13 @@
     @apply bg-gray-50;
   }
 
-  /* Navigation */
+  /* Navigation - Ajustado para que marque con el color suave corporativo */
   .nav-link {
     @apply flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-700 rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-colors;
   }
 
   .nav-link-active {
-    @apply bg-blue-50 text-blue-700;
+    @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)];
   }
 
   /* Sidebar */
@@ -344,7 +345,7 @@
   }
 
   .hover-glow {
-    @apply hover:shadow-lg hover:shadow-blue-500/20 transition-shadow duration-200;
+    @apply hover:shadow-lg hover:shadow-[rgb(9,182,162)]/20 transition-shadow duration-200;
   }
 
   /* Animations */
@@ -364,9 +365,9 @@
     animation: bounceIn 0.6s ease-out;
   }
 
-  /* Text Utilities */
+  /* Text Utilities - Gradiente corporativo unificado al primario */
   .text-gradient {
-    @apply bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[rgb(9,182,162)] to-[rgb(9,182,162)] bg-clip-text text-transparent;
   }
 
   .text-shadow {
@@ -400,8 +401,9 @@
     @apply bg-white rounded-2xl border border-gray-200;
   }
 
+  /* Fondo del gradiente suave de la marca ajustado */
   .card-gradient {
-    @apply bg-gradient-to-br from-blue-50 to-indigo-50;
+    @apply bg-gradient-to-br from-[rgb(9,182,162)]/5 to-[rgb(9,182,162)]/5;
   }
 
   /* Button Interactions */
@@ -409,9 +411,9 @@
     @apply hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200;
   }
 
-  /* Focus States */
+  /* Focus States - Corregido al color primario */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-[rgb(9,182,162)] focus:ring-offset-2;
   }
 
   /* Spacing Utilities */

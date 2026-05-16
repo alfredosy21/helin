@@ -168,7 +168,7 @@ class SettingsController extends Component
 
             $settings->save();
 
-            Activities::saveActivity("System Configuration Updated by User #" . Auth::id());
+            Activities::saveActivity("Configuración del sistema actualizada por Usuario #" . Auth::id());
             DB::commit();
 
             $this->current_image = $settings->image;

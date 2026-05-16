@@ -52,8 +52,8 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative">
                         <div class="flex items-center justify-between mb-6">
-                            <div class="w-14 h-14 bg-blue-100 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center">
-                                <x-ui-icon name="users" class="w-7 h-7 text-blue-600 dark:text-blue-400" />
+                            <div class="w-14 h-14 bg-primary-100 dark:bg-primary-500/10 rounded-2xl flex items-center justify-center">
+                                <x-ui-icon name="users" class="w-7 h-7 text-primary-600 dark:text-primary-400" />
                             </div>
                             <div class="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-500/10 rounded-full">
                                 <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
@@ -146,7 +146,7 @@
                     <div class="relative">
                         <!-- Animated Background Pattern -->
                         <div class="absolute inset-0 opacity-5">
-                            <div class="absolute top-0 left-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl"></div>
+                            <div class="absolute top-0 left-0 w-32 h-32 bg-primary-500 rounded-full blur-3xl"></div>
                             <div class="absolute bottom-0 right-0 w-24 h-24 bg-purple-500 rounded-full blur-2xl"></div>
                         </div>
 

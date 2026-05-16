@@ -175,12 +175,12 @@ class BlogCategoriesController extends Component
                 $blogCategory = BlogCategory::findOrFail($this->editingId);
                 $blogCategory->update($data);
 
-                Activities::saveActivity("Blog Category Updated: ID #{$blogCategory->id}");
+                Activities::saveActivity("Categoría de blog actualizada: ID #{$blogCategory->id}");
                 $this->dispatch('toast', message: 'Categoría de blog actualizada correctamente', type: 'success');
             } else {
                 $blogCategory = BlogCategory::create($data);
 
-                Activities::saveActivity("Blog Category Created: ID #{$blogCategory->id}");
+                Activities::saveActivity("Categoría de blog creada: ID #{$blogCategory->id}");
                 $this->dispatch('toast', message: 'Categoría de blog creada correctamente', type: 'success');
             }
 
@@ -236,7 +236,7 @@ class BlogCategoriesController extends Component
             $blogCategoryName = $blogCategory->name;
             $blogCategory->delete();
 
-            Activities::saveActivity("Blog Category Removed: {$blogCategoryName}");
+            Activities::saveActivity("Categoría de blog eliminada: {$blogCategoryName}");
             $this->dispatch('toast', message: 'Categoría de blog eliminada correctamente', type: 'success');
         } catch (\Exception $ex) {
             report($ex);
@@ -260,7 +260,7 @@ class BlogCategoriesController extends Component
                 BlogCategory::query()->where('id', $id)->update(['order' => $index]);
             }
 
-            Activities::saveActivity("Blog Categories Reordered by User ID #" . Auth::id());
+            Activities::saveActivity("Categorías de blog reordenadas por Usuario ID #" . Auth::id());
             $this->dispatch('toast', message: 'Orden de categorías actualizado correctamente', type: 'success');
         } catch (\Exception $ex) {
             report($ex);

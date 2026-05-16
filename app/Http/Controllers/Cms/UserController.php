@@ -150,12 +150,12 @@ class UserController extends Component
                 $user = User::findOrFail($this->editingId);
                 $user->update($data);
                 
-                Activities::saveActivity("User Profile Synchronized: Admin ID #{$user->id}");
+                Activities::saveActivity("Perfil de usuario sincronizado: Admin ID #{$user->id}");
                 $this->dispatch('toast', message: 'Usuario actualizado correctamente', type: 'success');
             } else {
                 $user = User::create($data);
                 
-                Activities::saveActivity("User Provisioned: Admin ID #{$user->id}");
+                Activities::saveActivity("Usuario provisionado: Admin ID #{$user->id}");
                 $this->dispatch('toast', message: 'Usuario creado correctamente', type: 'success');
             }
 
@@ -196,7 +196,7 @@ class UserController extends Component
             $userName = $user->name;
             $user->delete();
 
-            Activities::saveActivity("User Termination: {$userName}");
+            Activities::saveActivity("Terminación de usuario: {$userName}");
             $this->dispatch('toast', message: 'Usuario eliminado correctamente', type: 'success');
 
         } catch (\Exception $ex) {

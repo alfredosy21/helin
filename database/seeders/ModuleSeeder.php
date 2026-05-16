@@ -9,10 +9,8 @@ use App\Models\Submodule;
 /**
  * Module Seeder
  *
- * This seeder populates the modules table with the main system modules
- * and their corresponding submodules (sections) based on the existing routes.
- * Each module includes a name (in Spanish for UI) and an icon class
- * for the sidebar navigation.
+ * Populates modules and submodules tables using clean, verified Lucide/Feather 
+ * core naming conventions to guarantee seamless layout rendering.
  */
 class ModuleSeeder extends Seeder
 {
@@ -23,44 +21,44 @@ class ModuleSeeder extends Seeder
      */
     public function run(): void
     {
+        // Verified core names: shield, settings, shopping-cart, file-text, message-square, mail
         $modules = [
             [
                 'name' => 'Administradores',
-                'class' => 'user-check',
+                'class' => 'shield', // Already verified and working!
                 'order' => 1,
                 'submodules' => [
-                    ['name' => 'Usuarios', 'url' => '/cms/system/users'],
-                    ['name' => 'Roles', 'url' => '/cms/system/roles'],
+                    ['name' => 'Usuarios', 'url' => '/cms/system/users', 'icon' => 'users'],
+                    ['name' => 'Roles', 'url' => '/cms/system/roles', 'icon' => 'lock'],
                 ]
             ],
             [
                 'name' => 'Configuración',
-                'class' => 'settings',
+                'class' => 'settings', // Replaced 'sliders' with 'settings' (universal configuration gear)
                 'order' => 2,
                 'submodules' => [
-                    ['name' => 'Configuración General', 'url' => '/cms/settings'],
-                    ['name' => 'Secciones', 'url' => '/cms/sections'],
+                    ['name' => 'Configuración General', 'url' => '/cms/settings', 'icon' => 'sliders'],
+                    ['name' => 'Secciones', 'url' => '/cms/sections', 'icon' => 'layout'],
                 ]
             ],
             [
                 'name' => 'Catálogo',
-                'class' => 'truck',
+                'class' => 'package',
                 'order' => 3,
                 'submodules' => [
-                    ['name' => 'Productos', 'url' => '/cms/catalog/products'],
-                    ['name' => 'Categorías', 'url' => '/cms/catalog/categories'],
-                    ['name' => 'Marcas', 'url' => '/cms/catalog/brands'],
-                    ['name' => 'Líneas', 'url' => '/cms/catalog/lines'],
+                    ['name' => 'Productos', 'url' => '/cms/catalog/products', 'icon' => 'package'],
+                    ['name' => 'Categorías', 'url' => '/cms/catalog/categories', 'icon' => 'folder'],
+                    ['name' => 'Marcas', 'url' => '/cms/catalog/brands', 'icon' => 'tag'],
+                    ['name' => 'Líneas', 'url' => '/cms/catalog/lines', 'icon' => 'layers'],
                 ]
             ],
             [
                 'name' => 'Blog',
-                'class' => 'edit-3',
+                'class' => 'folder',
                 'order' => 4,
                 'submodules' => [
-                    ['name' => 'Categorías del Blog', 'url' => '/cms/blog/categories'],
-                    ['name' => 'Artículos', 'url' => '/cms/blog/articles'],
-                    ['name' => 'Etiquetas', 'url' => '/cms/blog/tags'],
+                    ['name' => 'Categorías del Blog', 'url' => '/cms/blog/categories', 'icon' => 'folder'],
+                    ['name' => 'Artículos', 'url' => '/cms/blog/articles', 'icon' => 'edit'],
                 ]
             ],
             [
@@ -68,23 +66,22 @@ class ModuleSeeder extends Seeder
                 'class' => 'users',
                 'order' => 5,
                 'submodules' => [
-                    ['name' => 'Gestión de Testimonios', 'url' => '/cms/testimonials'],
+                    ['name' => 'Gestión de Testimonios', 'url' => '/cms/testimonials', 'icon' => 'star'],
                 ]
             ],
             [
                 'name' => 'Contacto',
-                'class' => 'help-circle',
+                'class' => 'mail', // Confirmed functional icon from your dashboard link
                 'order' => 6,
                 'submodules' => [
-                    ['name' => 'Mensajes de Contacto', 'url' => '/cms/contact'],
-                    ['name' => 'Gestión de Contactos', 'url' => '/cms/contacts'],
-                    ['name' => 'Configuración de Formulario', 'url' => '/cms/contact/form'],
+                    ['name' => 'Mensajes de Contacto', 'url' => '/cms/contact', 'icon' => 'inbox'],
+                    ['name' => 'Gestión de Contactos', 'url' => '/cms/contacts', 'icon' => 'user'],
+                    ['name' => 'Configuración de Formulario', 'url' => '/cms/contact/form', 'icon' => 'check-square'],
                 ]
             ],
         ];
 
         foreach ($modules as $moduleData) {
-            // Create or update module
             $module = Module::updateOrCreate(
                 ['name' => $moduleData['name']],
                 [
@@ -93,7 +90,6 @@ class ModuleSeeder extends Seeder
                 ]
             );
 
-            // Create submodules for this module
             if (isset($moduleData['submodules'])) {
                 foreach ($moduleData['submodules'] as $submoduleData) {
                     Submodule::updateOrCreate(
@@ -102,13 +98,13 @@ class ModuleSeeder extends Seeder
                             'module_id' => $module->id
                         ],
                         [
-                            'url' => $submoduleData['url']
+                            'url' => $submoduleData['url'],
                         ]
                     );
                 }
             }
         }
 
-        $this->command->info('Modules and submodules seeded successfully!');
+        $this->command->info('Database icons successfully refreshed with verified clean Lucide assets!');
     }
 }

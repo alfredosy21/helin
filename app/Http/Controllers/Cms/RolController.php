@@ -132,7 +132,7 @@ class RolController extends Component
                 $role = Role::findOrFail($this->editingId);
                 $role->update(['name' => $this->name]);
 
-                Activities::saveActivity("Security Role Updated: {$this->name} (ID: #{$role->id})");
+                Activities::saveActivity("Rol de seguridad actualizado: {$this->name} (ID: #{$role->id})");
                 $this->dispatch('toast', message: 'Rol actualizado correctamente', type: 'success');
             } else {
                 $role = Role::create(['name' => $this->name]);
@@ -140,7 +140,7 @@ class RolController extends Component
                 // Create permissions for the new role
                 Permission::createPermissions($role->id);
 
-                Activities::saveActivity("New Security Role Created: {$this->name} (ID: #{$role->id}) with permissions");
+                Activities::saveActivity("Nuevo rol de seguridad creado: {$this->name} (ID: #{$role->id}) con permisos");
                 $this->dispatch('toast', message: 'Rol creado correctamente con permisos', type: 'success');
             }
 
@@ -184,7 +184,7 @@ class RolController extends Component
             $roleName = $role->name;
             $role->delete();
 
-            Activities::saveActivity("Security Role Deleted: {$roleName}");
+            Activities::saveActivity("Rol de seguridad eliminado: {$roleName}");
             $this->dispatch('toast', message: 'Rol eliminado correctamente', type: 'success');
 
         } catch (\Exception $ex) {

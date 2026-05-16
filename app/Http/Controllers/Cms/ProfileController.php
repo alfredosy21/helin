@@ -154,7 +154,7 @@ class ProfileController extends Component
             // Save if data changed or a new image was uploaded
             if ($user->isDirty() || $hasNewImage) {
                 $user->save();
-                Activities::saveActivity('User updated personal profile information and assets');
+                Activities::saveActivity('Usuario actualizó información personal y activos del perfil');
                 $this->dispatch('toast', message: 'Profile updated successfully.', type: 'success');
             }
 
@@ -197,7 +197,7 @@ class ProfileController extends Component
 
             $this->reset(['current_password', 'new_password', 'password_confirmation']);
 
-            Activities::saveActivity('Account security update: Password changed');
+            Activities::saveActivity('Actualización de seguridad de cuenta: Contraseña cambiada');
             $this->dispatch('toast', message: 'Password updated successfully.', type: 'success');
 
         } catch (Exception $e) {
@@ -223,7 +223,7 @@ class ProfileController extends Component
                 $user->save();
 
                 $this->current_image = null;
-                Activities::saveActivity('User removed profile picture');
+                Activities::saveActivity('Usuario eliminó foto de perfil');
                 $this->dispatch('toast', message: 'Profile picture removed.', type: 'info');
             }
         } catch (Exception $e) {
@@ -244,7 +244,7 @@ class ProfileController extends Component
             $userId = Auth::id();
             DB::table('sessions')->where('user_id', $userId)->delete();
 
-            Activities::saveActivity('User terminated all active sessions');
+            Activities::saveActivity('Usuario terminó todas las sesiones activas');
 
             Auth::guard('web')->logout();
             session()->invalidate();

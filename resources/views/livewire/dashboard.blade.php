@@ -5,8 +5,8 @@
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <x-ui-icon name="users" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                        <x-ui-icon name="users" class="w-4 h-4 text-primary-600 dark:text-primary-400" />
                     </div>
                 </div>
                 <div class="ml-4">

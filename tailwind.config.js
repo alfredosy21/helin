@@ -8,19 +8,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Mapeamos el color corporativo de Helin como la paleta primaria de la aplicación
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          50: '#e6f9f7',
+          100: '#b3ece6',
+          200: '#80dfd4',
+          300: '#4dd2c2',
+          400: '#1ac5b1',
+          500: '#09b6a2', // Tu verde/turquesa de marca exacto
+          600: '#079282',
+          700: '#056e61',
+          800: '#044a41',
+          900: '#022520',
+          950: '#011310',
         },
+        // Añadimos el tono exacto del Sidebar moderno para usarlo semánticamente
+        sidebar: {
+          dark: '#1e293b',      // Slate oscuro e impecable de las capturas
+          hover: 'rgba(255, 255, 255, 0.05)',
+          active: 'rgba(255, 255, 255, 0.1)',
+        }
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],

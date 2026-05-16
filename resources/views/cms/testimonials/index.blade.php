@@ -1,7 +1,7 @@
 <div class="p-6 lg:p-8 bg-gray-50 min-h-screen">
     <!-- Animated Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute -top-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -top-40 -left-40 w-80 h-80 bg-primary-400/10 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute top-1/2 -right-40 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 3s;"></div>
     </div>
 
@@ -83,7 +83,7 @@
 
                                 <!-- Actions -->
                                 <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button wire:click="edit({{ $testimonial->id }})" class="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors" title="Editar">
+                                    <button wire:click="edit({{ $testimonial->id }})" class="p-2 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors" title="Editar">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
@@ -98,7 +98,7 @@
 
                             <!-- Order Badge -->
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/20 dark:text-primary-400">
                                     Orden: {{ $testimonial->order }}
                                 </span>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">
@@ -230,53 +230,53 @@
         </div>
     </div>
     @endif
-</div>
 
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="fixed inset-0 z-50 hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
-    <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
-            <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mr-4">
-                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">¿Eliminar Testimonio?</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">¿Deseas eliminar este testimonio? Esta acción no se puede deshacer.</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">¿Eliminar Testimonio?</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">¿Deseas eliminar este testimonio? Esta acción no se puede deshacer.</p>
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                        Cancelar
+                    </button>
+                    <button onclick="confirmDelete()" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                        Eliminar
+                    </button>
                 </div>
-            </div>
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
-                    Cancelar
-                </button>
-                <button onclick="confirmDelete()" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
-                    Eliminar
-                </button>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-let deleteTestimonialId = null;
+    <script>
+    let deleteTestimonialId = null;
 
-function openDeleteModal(testimonialId) {
-    deleteTestimonialId = testimonialId;
-    document.getElementById('deleteModal').classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    deleteTestimonialId = null;
-    document.getElementById('deleteModal').classList.add('hidden');
-}
-
-function confirmDelete() {
-    if (deleteTestimonialId) {
-        Livewire.find('<?= $this->getId() ?>').confirmDelete(deleteTestimonialId);
-        closeDeleteModal();
+    function openDeleteModal(testimonialId) {
+        deleteTestimonialId = testimonialId;
+        document.getElementById('deleteModal').classList.remove('hidden');
     }
-}
-</script>
+
+    function closeDeleteModal() {
+        deleteTestimonialId = null;
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function confirmDelete() {
+        if (deleteTestimonialId) {
+            Livewire.find('<?= $this->getId() ?>').confirmDelete(deleteTestimonialId);
+            closeDeleteModal();
+        }
+    }
+    </script>
+</div>

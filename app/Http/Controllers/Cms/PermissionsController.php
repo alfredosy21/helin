@@ -120,8 +120,8 @@ class PermissionsController extends Component
                     ->where('type', Permission::MAIN_MODULE_TYPE)
                     ->update(['status' => $newStatus]);
 
-            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activated' : 'Deactivated';
-            Activities::saveActivity("Module Permission {$action}: Role ID #{$this->roleId}, Module ID #{$moduleId}");
+            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            Activities::saveActivity("Permiso de módulo {$action}: Rol ID #{$this->roleId}, Módulo ID #{$moduleId}");
 
             $this->dispatch('toast',
                 "Module permission {$action} successfully",
@@ -166,8 +166,8 @@ class PermissionsController extends Component
 
             $permission->update(['status' => $newStatus]);
 
-            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activated' : 'Deactivated';
-            Activities::saveActivity("Submodule Permission {$action}: Permission ID #{$permissionId}");
+            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            Activities::saveActivity("Permiso de submódulo {$action}: Permiso ID #{$permissionId}");
 
             $this->dispatch('toast',
                 "Submodule permission {$action} successfully",
@@ -206,8 +206,8 @@ class PermissionsController extends Component
                         ->update(['status' => $status]);
             }
 
-            $action = $status === Permission::ACTIVE_STATUS ? 'Activated all' : 'Deactivated all';
-            Activities::saveActivity("{$action} module permissions for Role ID #{$this->roleId}");
+            $action = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            Activities::saveActivity("{$action} permisos de módulo para Rol ID #{$this->roleId}");
 
             $this->dispatch('toast',
                 "{$action} module permissions successfully",
@@ -247,8 +247,8 @@ class PermissionsController extends Component
                     ->whereIn('module_id', $activeModuleIds)
                     ->update(['status' => $status]);
 
-            $action = $status === Permission::ACTIVE_STATUS ? 'Activated all' : 'Deactivated all';
-            Activities::saveActivity("{$action} submodule permissions for Role ID #{$this->roleId}");
+            $action = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            Activities::saveActivity("{$action} permisos de submódulo para Rol ID #{$this->roleId}");
 
             $this->dispatch('toast',
                 "{$action} submodule permissions successfully",

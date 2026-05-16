@@ -10,10 +10,10 @@
 
             <!-- Logo Section -->
             <div class="text-center mb-8">
-                <div class="mx-auto h-16 w-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25 mb-4">
+                <div class="mx-auto h-16 w-16 flex items-center justify-center rounded-2xl bg-[rgb(9,182,162)] shadow-lg shadow-[rgb(9,182,162)]/25 mb-4">
                     <span class="text-white font-bold text-2xl">H</span>
                 </div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
                     {{ $isLocked ? 'Desbloquear Sesión' : 'Bienvenido de nuevo' }}
                 </h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
@@ -27,11 +27,11 @@
                     <!-- Email Field -->
                     <div class="group">
                         <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Correo Electrónico
+                            Correo electrónico
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500" />
+                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400" />
                             </div>
                             <input
                                 wire:model="email"
@@ -39,7 +39,7 @@
                                 type="email"
                                 required
                                 @if($isLocked) readonly @endif
-                                class="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-0 focus:border-slate-200 dark:focus:border-slate-600 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
                                 placeholder="tu@correo.com"
                             >
                         </div>
@@ -53,14 +53,14 @@
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="lock" class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500" />
+                                <x-ui-icon name="lock" class="h-5 w-5 text-slate-400" />
                             </div>
                             <input
                                 wire:model="password"
                                 id="password"
                                 type="password"
                                 required
-                                class="w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-0 focus:border-slate-200 dark:focus:border-slate-600 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
                                 placeholder="••••••••"
                             >
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePassword('password')">
@@ -78,15 +78,15 @@
                             wire:model="remember"
                             id="remember"
                             type="checkbox"
-                            class="h-4 w-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                            class="h-4 w-4 text-primary-600 border-slate-300 rounded focus:ring-blue-500"
                             onchange="console.log('Remember checkbox changed:', this.checked)"
                         >
-                        <label for="remember" class="ml-2 block text-sm text-slate-700 dark:text-slate-300 cursor-pointer hover:text-blue-600 transition-colors">
+                        <label for="remember" class="ml-2 block text-sm text-slate-700 dark:text-slate-300 cursor-pointer hover:text-primary-600 transition-colors">
                             Recordarme
                         </label>
                     </div>
                     <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-blue-600 hover:text-blue-500">¿Olvidaste tu contraseña?</a>
+                        <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500">¿Olvidaste tu contraseña?</a>
                     </div>
                 </div>
                 @endif
@@ -96,7 +96,7 @@
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
-                        class="w-full flex justify-center items-center py-3 px-4 rounded-xl text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg disabled:opacity-50"
+                        class="w-full flex justify-center items-center py-3 px-4 rounded-xl text-white bg-[rgb(9,182,162)] hover:bg-[rgb(6,122,108)] transition-all disabled:opacity-50"
                     >
                         <span wire:loading wire:target="{{ $isLocked ? 'unlock' : 'login' }}" class="mr-2">
                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@
                         </span>
 
                         <span wire:loading.remove wire:target="{{ $isLocked ? 'unlock' : 'login' }}">
-                            {{ $isLocked ? 'Desbloquear' : 'Iniciar Sesión' }}
+                            {{ $isLocked ? 'Desbloquear' : 'Iniciar sesión' }}
                         </span>
 
                         <x-ui-icon name="arrow-right" class="w-4 h-4 ml-2" />

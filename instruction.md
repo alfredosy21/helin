@@ -1278,7 +1278,7 @@ class ImportRequest extends FormRequest {
         font-medium rounded-2xl
         transition-all duration-200
         focus:outline-none focus:ring-2 focus:ring-offset-2
-        {$variant === 'primary' ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500' : ''}
+        {$variant === 'primary' ? 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-blue-500' : ''}
         {$variant === 'secondary' ? 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500' : ''}
         {$variant === 'danger' ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500' : ''}
         {$size === 'sm' ? 'px-3 py-1.5 text-sm' : ''}
@@ -1691,13 +1691,13 @@ resources/
 
 @php
     $variantClasses = [
-        'primary' => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+        'primary' => 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-blue-500',
         'secondary' => 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
         'success' => 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
         'warning' => 'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
         'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
         'ghost' => 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
-        'link' => 'text-blue-600 hover:text-blue-700 focus:ring-blue-500 p-0'
+        'link' => 'text-primary-600 hover:text-primary-700 focus:ring-blue-500 p-0'
     ];
     
     $sizeClasses = [
@@ -2273,8 +2273,8 @@ function themeToggle() {
 <div class="text-center py-12">
     <!-- Illustration animada -->
     <div class="mb-8">
-        <div class="inline-flex items-center justify-center w-24 h-24 bg-blue-100 rounded-full animate-pulse">
-            <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="inline-flex items-center justify-center w-24 h-24 bg-primary-100 rounded-full animate-pulse">
+            <svg class="w-12 h-12 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
         </div>
@@ -2349,7 +2349,7 @@ function themeToggle() {
                             </h4>
                             <template x-for="item in category" :key="item.id">
                                 <div class="px-3 py-2 hover:bg-gray-50 rounded-xl cursor-pointer transition-colors"
-                                     :class="{ 'bg-blue-50': highlightedIndex === item.globalIndex }"
+                                     :class="{ 'bg-primary-50': highlightedIndex === item.globalIndex }"
                                      @click="navigateTo(item)">
                                     <div class="flex items-center justify-between">
                                         <div>
@@ -2459,7 +2459,7 @@ function globalSearch() {
          class="fixed bottom-4 right-4 z-40">
         
         <template x-if="status === 'saving'">
-            <div class="bg-blue-500 text-white px-4 py-2 rounded-2xl shadow-lg flex items-center space-x-2">
+            <div class="bg-primary-500 text-white px-4 py-2 rounded-2xl shadow-lg flex items-center space-x-2">
                 <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -2618,7 +2618,7 @@ function autoSave() {
                 <div class="p-4 border border-gray-200 rounded-2xl hover:border-blue-500 cursor-pointer transition-colors"
                      @click="addWidget(availableWidget)">
                     <div class="text-center">
-                        <x-icon :name="availableWidget.icon" class="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                        <x-icon :name="availableWidget.icon" class="w-8 h-8 text-primary-500 mx-auto mb-2" />
                         <h4 class="font-medium" x-text="availableWidget.title"></h4>
                         <p class="text-sm text-gray-500" x-text="availableWidget.description"></p>
                     </div>
@@ -3208,7 +3208,7 @@ function mobileNavigation() {
     <div class="flex justify-center space-x-2 mt-4">
         <template x-for="(item, index) in items" :key="index">
             <div class="w-2 h-2 rounded-full transition-colors"
-                 :class="index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'">
+                 :class="index === currentIndex ? 'bg-primary-500' : 'bg-gray-300'">
             </div>
         </template>
     </div>
@@ -3350,7 +3350,7 @@ function touchGestures() {
             Cancelar
         </button>
         <button type="submit" 
-                class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                class="w-full sm:w-auto px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors">
             Guardar
         </button>
     </div>

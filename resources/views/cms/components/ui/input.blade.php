@@ -32,7 +32,7 @@
         @endif
         
         {{-- Input --}}
-        <input 
+        <input
             type="{{ $type }}"
             name="{{ $name }}"
             id="{{ $name }}"
@@ -43,10 +43,10 @@
             {{ $readonly ? 'readonly' : '' }}
             {{ $attributes->merge([
                 'class' => trim("
-                block w-full rounded-2xl border-gray-300
-                focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
-                shadow-sm
-                {$error ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}
+                block w-full rounded-xl border-gray-300
+                focus:outline-none focus:ring-0 focus:border-gray-300
+                shadow-none
+                {$error ? 'border-red-500' : ''}
                 {$disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
                 {$readonly ? 'bg-gray-50 cursor-not-allowed' : ''}
                 transition-colors duration-200

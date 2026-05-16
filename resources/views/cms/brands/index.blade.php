@@ -10,7 +10,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                Nueva Marca
+                Nueva marca
             </button>
         </div>
     </div>
@@ -173,249 +173,62 @@
         </div>
     </div>
     @endif
+
+    <script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('open-form', () => {
+            // Auto-scroll to form when opened
+            setTimeout(() => {
+                document.querySelector('.sticky')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+        });
+
+        Livewire.on('close-form', () => {
+            // Handle form close
+        });
+
+        Livewire.on('toast', (event) => {
+            // Handle toast notifications
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 max-w-sm ${
+                event.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' :
+                event.type === 'error' ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' :
+                'bg-primary-50 dark:bg-primary-900/20 border border-blue-200 dark:border-blue-800'
+            } rounded-lg p-4 shadow-lg`;
+
+            const icon = event.type === 'success' ? 'check-circle' :
+                       event.type === 'error' ? 'x-circle' :
+                       'info-circle';
+
+            toast.innerHTML = `
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <x-ui-icon name="${icon}" class="w-5 h-5 text-${
+                            event.type === 'success' ? 'green' :
+                            event.type === 'error' ? 'red' : 'blue'
+                        }-400" />
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-${
+                            event.type === 'success' ? 'green-800 dark:text-green-200' :
+                            event.type === 'error' ? 'red-800 dark:text-red-200' :
+                            'blue-800 dark:text-primary-200'
+                        }">
+                            ${event.message}
+                        </p>
+                    </div>
+                </div>
+            </div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        });
+    });
+    </script>
 </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Form Section -->
-        <div class="lg:col-span-1">
-            <x-ui-card class="sticky top-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        {{ $editingId ? 'Editar Marca' : 'Nueva Marca' }}
-                    </h3>
-                    @if($showForm)
-                        <button wire:click="cancel" class="text-gray-400 hover:text-gray-600">
-                            <x-ui-icon name="x" class="w-5 h-5" />
-                        </button>
-                    @endif
-                </div>
-
-                <form wire:submit="save" class="space-y-4">
-                    <!-- Name Field -->
-                    <div>
-                        <x-ui-label for="name" required>Nombre de la Marca</x-ui-label>
-                        <x-ui-input
-                            id="name"
-                            wire:model="name"
-                            placeholder="Nombre de la marca"
-                            required
-                        />
-                        @error('name')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Image Field -->
-                    <div>
-                        <x-ui-label for="image">Logo o Imagen</x-ui-label>
-                        <x-ui-input
-                            id="image"
-                            wire:model="image"
-                            placeholder="URL del logo o referencia de imagen"
-                        />
-                        @error('image')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-xs text-gray-500">URL del logo o referencia de imagen</p>
-                    </div>
-
-                    <!-- Position Field -->
-                    <div>
-                        <x-ui-label for="position" required>Posición</x-ui-label>
-                        <x-ui-input
-                            id="position"
-                            type="number"
-                            wire:model="position"
-                            placeholder="0"
-                            required
-                        />
-                        @error('position')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-xs text-gray-500">Prioridad de visualización</p>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex space-x-3">
-                        <x-ui-button
-                            type="submit"
-                            variant="primary"
-                            class="flex-1"
-                            wire:loading.attr="disabled"
-                        >
-                            <span wire:loading wire:target="save">
-                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Guardando...
-                            </span>
-                            <span wire:loading.remove wire:target="save">
-                                {{ $editingId ? 'Actualizar' : 'Crear' }} Marca
-                            </span>
-                        </x-ui-button>
-
-                        @if($showForm)
-                            <x-ui-button
-                                type="button"
-                                variant="ghost"
-                                wire:click="cancel"
-                            >
-                                Cancelar
-                            </x-ui-button>
-                        @endif
-                    </div>
-                </form>
-            </x-ui-card>
-        </div>
-
-        <!-- List Section -->
-        <div class="lg:col-span-2">
-            <x-ui-card>
-                <!-- Card Header -->
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Lista de Marcas</h3>
-
-                    <!-- Search -->
-                    <div class="relative w-64">
-                        <x-ui-icon name="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input
-                            type="text"
-                            wire:model.live.debounce.500ms="search"
-                            placeholder="Buscar marcas..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                        >
-                    </div>
-                </div>
-
-                <!-- Brands Grid -->
-                @if($brands->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @foreach($brands as $brand)
-                            <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                <!-- Brand Header -->
-                                <div class="flex items-start justify-between mb-3">
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-gray-900">{{ $brand->name }}</h4>
-                                        <p class="text-sm text-gray-500">Posición: {{ $brand->position }}</p>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button
-                                            wire:click="edit({{ $brand->id }})"
-                                            class="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                                            title="Editar"
-                                        >
-                                            <x-ui-icon name="edit-2" class="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            wire:click="confirmDelete({{ $brand->id }})"
-                                            class="p-1 text-red-600 hover:bg-red-50 rounded"
-                                            title="Eliminar"
-                                        >
-                                            <x-ui-icon name="trash-2" class="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Brand Image Preview -->
-                                @if($brand->image)
-                                    <div class="mb-3">
-                                        <img src="{{ $brand->image }}"
-                                             alt="{{ $brand->name }}"
-                                             class="w-full h-24 object-cover rounded-lg bg-gray-100"
-                                             onerror="this.src='/images/default-brand.png'">
-                                    </div>
-                                @else
-                                    <div class="mb-3 w-full h-24 bg-gray-100 rounded-lg flex items-center justify-center">
-                                        <x-ui-icon name="image" class="w-8 h-8 text-gray-400" />
-                                    </div>
-                                @endif
-
-                                <!-- Brand Info -->
-                                <div class="text-sm text-gray-600">
-                                    <p class="mb-1">ID: {{ $brand->id }}</p>
-                                    <p>Creado: {{ $brand->created_at->format('d/m/Y') }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="mt-6">
-                        {{ $brands->links() }}
-                    </div>
-                @else
-                    <!-- Empty State -->
-                    <div class="text-center py-12">
-                        <x-ui-icon name="tag" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">No hay marcas</h3>
-                        <p class="text-gray-500 mb-4">No se encontraron marcas. Crea tu primera marca.</p>
-                        <button wire:click="create" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            <x-ui-icon name="plus" class="w-4 h-4 mr-2" />
-                            Crear Marca
-                        </button>
-                    </div>
-                @endif
-            </x-ui-card>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('livewire:init', () => {
-    Livewire.on('open-form', () => {
-        // Auto-scroll to form when opened
-        setTimeout(() => {
-            document.querySelector('.sticky')?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }, 100);
-    });
-
-    Livewire.on('close-form', () => {
-        // Handle form close
-    });
-
-    Livewire.on('toast', (event) => {
-        // Handle toast notifications
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 max-w-sm ${
-            event.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' :
-            event.type === 'error' ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' :
-            'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
-        } rounded-lg p-4 shadow-lg`;
-
-        const icon = event.type === 'success' ? 'check-circle' :
-                   event.type === 'error' ? 'x-circle' :
-                   'info-circle';
-
-        toast.innerHTML = `
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <x-ui-icon name="${icon}" class="w-5 h-5 text-${
-                        event.type === 'success' ? 'green' :
-                        event.type === 'error' ? 'red' : 'blue'
-                    }-400" />
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-${
-                        event.type === 'success' ? 'green-800 dark:text-green-200' :
-                        event.type === 'error' ? 'red-800 dark:text-red-200' :
-                        'blue-800 dark:text-blue-200'
-                    }">
-                        ${event.message}
-                    </p>
-                </div>
-            </div>
-        </div>`;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.remove();
-        }, 3000);
-    });
-});
-</script>
-@endsection

@@ -58,7 +58,7 @@
                 type="button"
                 onclick="confirmModal('{{ $id }}')"
                 class="px-4 py-2 text-white rounded-md transition-colors
-                    {{ $type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700' }}"
+                    {{ $type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-primary-600 hover:bg-primary-700' }}"
             >
                 {{ $confirmText }}
             </button>

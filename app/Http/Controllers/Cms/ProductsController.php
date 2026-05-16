@@ -29,7 +29,6 @@ use Livewire\Attributes\Layout;
  * @package App\Http\Controllers\Cms
  */
 #[Title('Product Catalog | Helin CMS')]
-#[Layout('cms.layouts.dashboard')]
 class ProductsController extends Component
 {
     use WithPagination, WithFileUploads;
@@ -47,9 +46,17 @@ class ProductsController extends Component
     public string $currency = 'USD';
     public int $stock = 0;
     public string $unit = 'Und';
+    public ?string $meta_title = '';
+    public ?string $meta_description = '';
+    public ?string $meta_keywords = '';
     public bool $is_active = true;
     public bool $is_featured = false;
     public bool $is_new = true;
+    public bool $is_on_sale = false;
+    public ?float $sale_price = null;
+    public ?string $sale_start_date = null;
+    public ?string $sale_end_date = null;
+    public ?string $published_at = null;
 
     // --- Gestión de Archivos (Temporary uploads) ---
     public $featured_image; 
@@ -134,21 +141,28 @@ class ProductsController extends Component
         DB::beginTransaction();
         try {
             $payload = [
-                'name'           => $this->name,
-                'slug'           => $this->slug ?: Str::slug($this->name),
-                'sku'            => strtoupper($this->sku),
-                'category_id'    => $this->category_id,
-                'brand_id'       => $this->brand_id,
-                'description'    => $this->description,
-                'clinical_specs' => $this->clinical_specs,
-                'price'          => $this->price,
-                'currency'       => $this->currency,
-                'stock'          => $this->stock,
-                'unit'           => $this->unit,
-                'is_active'      => $this->is_active,
-                'is_featured'    => $this->is_featured,
-                'is_new'         => $this->is_new,
-                'published_at'   => $this->is_active ? now() : null,
+                'name'            => $this->name,
+                'slug'            => $this->slug ?: Str::slug($this->name),
+                'sku'             => strtoupper($this->sku),
+                'category_id'     => $this->category_id,
+                'brand_id'        => $this->brand_id,
+                'description'     => $this->description,
+                'clinical_specs'  => $this->clinical_specs,
+                'price'           => $this->price,
+                'currency'        => $this->currency,
+                'stock'           => $this->stock,
+                'unit'            => $this->unit,
+                'meta_title'      => $this->meta_title,
+                'meta_description' => $this->meta_description,
+                'meta_keywords'   => $this->meta_keywords,
+                'is_active'       => $this->is_active,
+                'is_featured'     => $this->is_featured,
+                'is_new'          => $this->is_new,
+                'is_on_sale'      => $this->is_on_sale,
+                'sale_price'      => $this->sale_price,
+                'sale_start_date' => $this->sale_start_date,
+                'sale_end_date'   => $this->sale_end_date,
+                'published_at'     => $this->published_at ?: ($this->is_active ? now() : null),
             ];
 
             if ($this->editingId) {
@@ -206,7 +220,7 @@ class ProductsController extends Component
                 }
             }
 
-            Activities::saveActivity("Managed Product: {$product->name} (SKU: {$product->sku})");
+            Activities::saveActivity("Producto gestionado: {$product->name} (SKU: {$product->sku})");
             DB::commit();
 
             $this->dispatch('toast', message: $msg, type: 'success');
@@ -225,15 +239,29 @@ class ProductsController extends Component
     {
         $product = Product::findOrFail($id);
         $this->editingId = $id;
-        
+
         $this->name = $product->name;
+        $this->slug = $product->slug;
         $this->sku = $product->sku;
         $this->category_id = $product->category_id;
         $this->brand_id = $product->brand_id;
         $this->description = $product->description ?? '';
+        $this->clinical_specs = $product->clinical_specs ?? '';
         $this->price = (float) $product->price;
+        $this->currency = $product->currency ?? 'USD';
         $this->stock = (int) $product->stock;
+        $this->unit = $product->unit ?? 'Und';
+        $this->meta_title = $product->meta_title ?? '';
+        $this->meta_description = $product->meta_description ?? '';
+        $this->meta_keywords = $product->meta_keywords ?? '';
         $this->is_active = $product->is_active;
+        $this->is_featured = $product->is_featured;
+        $this->is_new = $product->is_new;
+        $this->is_on_sale = $product->is_on_sale;
+        $this->sale_price = $product->sale_price;
+        $this->sale_start_date = $product->sale_start_date ? $product->sale_start_date->format('Y-m-d') : null;
+        $this->sale_end_date = $product->sale_end_date ? $product->sale_end_date->format('Y-m-d') : null;
+        $this->published_at = $product->published_at ? $product->published_at->format('Y-m-d\TH:i') : null;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -256,7 +284,7 @@ class ProductsController extends Component
                 $newMedia->save();
             }
 
-            Activities::saveActivity("Product Duplicated: SKU {$new->sku}");
+            Activities::saveActivity("Producto duplicado: SKU {$new->sku}");
             $this->dispatch('toast', message: 'Producto duplicado correctamente', type: 'success');
         } catch (\Exception $e) {
             $this->dispatch('toast', message: 'Error al duplicar', type: 'error');
@@ -272,7 +300,7 @@ class ProductsController extends Component
         }
 
         $product->delete();
-        Activities::saveActivity("Product Deleted: {$product->name}");
+        Activities::saveActivity("Producto eliminado: {$product->name}");
         $this->dispatch('toast', message: 'Producto y archivos eliminados', type: 'success');
     }
 
@@ -286,9 +314,12 @@ class ProductsController extends Component
     private function resetForm(): void
     {
         $this->reset([
-            'name', 'slug', 'sku', 'category_id', 'brand_id', 'description', 
-            'clinical_specs', 'price', 'stock', 'featured_image', 'gallery', 
-            'documents', 'editingId'
+            'name', 'slug', 'sku', 'category_id', 'brand_id', 'description',
+            'clinical_specs', 'price', 'currency', 'stock', 'unit',
+            'meta_title', 'meta_description', 'meta_keywords',
+            'is_active', 'is_featured', 'is_new', 'is_on_sale',
+            'sale_price', 'sale_start_date', 'sale_end_date', 'published_at',
+            'featured_image', 'gallery', 'documents', 'editingId'
         ]);
         $this->resetValidation();
     }

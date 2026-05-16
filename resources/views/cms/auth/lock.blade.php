@@ -17,7 +17,7 @@
                     <x-ui-icon name="lock" class="text-white text-2xl" />
                 </div>
                 <h1 class="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                    Sesión Bloqueada
+                    Sesión bloqueada
                 </h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
                     Tu sesión ha sido bloqueada por seguridad
@@ -43,11 +43,11 @@
                     <!-- Email Field (pre-filled) -->
                     <div class="group">
                         <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Correo Electrónico
+                            Correo electrónico
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
                             </div>
                             <input
                                 id="email"
@@ -70,7 +70,7 @@
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="key" class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                                <x-ui-icon name="key" class="h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
                             </div>
                             <input
                                 wire:model="password"
@@ -103,13 +103,13 @@
                 </div>
 
                 <!-- Security Notice -->
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                <div class="bg-primary-50 dark:bg-primary-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <x-ui-icon name="shield" class="w-4 h-4 text-blue-400" />
+                            <x-ui-icon name="shield" class="w-4 h-4 text-primary-400" />
                         </div>
                         <div class="ml-2">
-                            <p class="text-xs text-blue-800 dark:text-blue-200">
+                            <p class="text-xs text-primary-800 dark:text-primary-200">
                                 Ingresa tu contraseña para desbloquear la sesión. Tu sesión permanecerá activa.
                             </p>
                         </div>
@@ -139,7 +139,7 @@
                     <button wire:click="logout" 
                             class="w-full flex justify-center items-center py-3 px-4 border border-slate-300 dark:border-slate-600 text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-300 bg-white/50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-all duration-200 backdrop-blur-sm"
                     >
-                        <span class="mr-2">Cerrar Sesión</span>
+                        <span class="mr-2">Cerrar sesión</span>
                         <x-ui-icon name="log-out" class="w-4 h-4" />
                     </button>
                 </div>
@@ -156,7 +156,7 @@ document.addEventListener('livewire:init', () => {
         toast.className = `fixed top-4 right-4 z-50 max-w-sm ${
             event.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' :
             event.type === 'error' ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' :
-            'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
+            'bg-primary-50 dark:bg-primary-900/20 border border-blue-200 dark:border-blue-800'
         } rounded-lg p-4 shadow-lg`;
         
         const icon = event.type === 'success' ? 'check-circle' : 
@@ -175,7 +175,7 @@ document.addEventListener('livewire:init', () => {
                     <p class="text-sm font-medium text-${
                         event.type === 'success' ? 'green-800 dark:text-green-200' :
                         event.type === 'error' ? 'red-800 dark:text-red-200' :
-                        'blue-800 dark:text-blue-200'
+                        'blue-800 dark:text-primary-200'
                     }">
                         ${event.message}
                     </p>

@@ -14,7 +14,7 @@
     @livewireStyles
     @stack('head')
 </head>
-<body class="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
+<body class="h-full bg-[#f8fafc] dark:bg-gray-900">
 
     <!-- Flash Messages (Mantenemos tu lógica intacta) -->
     @foreach (['error', 'success', 'warning', 'info'] as $msg)

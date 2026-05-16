@@ -2,7 +2,7 @@
 
     <!-- Animated Background Elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-400/10 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
         <div class="absolute top-1/2 left-1/2 w-80 h-80 bg-emerald-400/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 4s;"></div>
     </div>
@@ -12,13 +12,13 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-4">
                 <nav class="flex items-center text-sm text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-blue-600 transition-all duration-200 hover:scale-105">
+                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-primary-600 transition-all duration-200 hover:scale-105">
                         <x-ui-icon name="home" class="w-4 h-4 mr-1" />
                         CMS
                     </a>
                     <x-ui-icon name="chevron-right" class="w-4 h-4 mx-2 text-slate-400" />
                     <span class="flex items-center text-slate-900 dark:text-white font-medium">
-                        <x-ui-icon name="settings" class="w-4 h-4 mr-2 text-blue-600" />
+                        <x-ui-icon name="settings" class="w-4 h-4 mr-2 text-primary-600" />
                         Configuración
                     </span>
                 </nav>
@@ -118,7 +118,7 @@
                                     @elseif($current_image)
                                         <div class="relative z-10">
                                             <img src="{{ asset('storage/' . $current_image) }}" class="h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500 rounded-xl shadow-lg group-hover:shadow-emerald-500/20" />
-                                            <div class="absolute top-2 right-2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div class="absolute top-2 right-2 bg-primary-500 text-white px-3 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                                 Actual
                                             </div>
                                         </div>
@@ -216,7 +216,7 @@
                 <div class="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/20 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-[2.5rem]"></div>
                     <div class="relative">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 rounded-2xl flex items-center justify-center text-primary-600 dark:text-primary-400 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
                             <x-ui-icon name="building" class="w-8 h-8" />
                         </div>
                         <h3 class="text-2xl font-black bg-gradient-to-r from-slate-900 to-blue-800 dark:from-white dark:to-blue-200 bg-clip-text text-transparent mb-3">
@@ -225,8 +225,8 @@
                         <p class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-6">Datos de contacto</p>
                         <div class="space-y-4">
                             <div class="flex items-start gap-3 group">
-                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
-                                    <x-ui-icon name="mail" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
+                                    <x-ui-icon name="mail" class="w-4 h-4 text-primary-600 dark:text-primary-400" />
                                 </div>
                                 <div>
                                     <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Email</p>
@@ -287,7 +287,7 @@
                 <div class="group relative bg-gradient-to-br from-slate-900 to-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-white hover:shadow-3xl transition-all duration-300 hover:scale-[1.02] border border-slate-700/50">
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-[2.5rem]"></div>
                     <div class="relative">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center text-primary-400 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
                             <x-ui-icon name="info" class="w-8 h-8" />
                         </div>
                         <h3 class="text-2xl font-bold mb-3">Estado del sistema</h3>

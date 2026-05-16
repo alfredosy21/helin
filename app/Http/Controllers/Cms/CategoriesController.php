@@ -117,12 +117,12 @@ class CategoriesController extends Component
                 $category = Category::findOrFail($this->editingId);
                 $category->update($data);
 
-                Activities::saveActivity("Taxonomy Updated: Category ID #{$category->id}");
+                Activities::saveActivity("Taxonomía actualizada: Categoría ID #{$category->id}");
                 $this->dispatch('toast', message: 'Categoría actualizada correctamente', type: 'success');
             } else {
                 $category = Category::create($data);
 
-                Activities::saveActivity("Taxonomy Created: Category ID #{$category->id}");
+                Activities::saveActivity("Taxonomía creada: Categoría ID #{$category->id}");
                 $this->dispatch('toast', message: 'Categoría creada correctamente', type: 'success');
             }
 
@@ -161,7 +161,7 @@ class CategoriesController extends Component
             $categoryName = $category->name;
             $category->delete();
 
-            Activities::saveActivity("Taxonomy Item Removed: {$categoryName}");
+            Activities::saveActivity("Elemento de taxonomía eliminado: {$categoryName}");
             $this->dispatch('toast', message: 'Categoría eliminada correctamente', type: 'success');
         } catch (\Exception $ex) {
             report($ex);
@@ -180,7 +180,7 @@ class CategoriesController extends Component
                 Category::query()->where('id', $id)->update(['order' => $index]);
             }
 
-            Activities::saveActivity("Taxonomy Reordered by User ID #" . Auth::id());
+            Activities::saveActivity("Taxonomía reordenada por Usuario ID #" . Auth::id());
             $this->dispatch('toast', message: 'Orden actualizado correctamente', type: 'success');
         } catch (\Exception $ex) {
             report($ex);

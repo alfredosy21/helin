@@ -152,12 +152,12 @@ class BrandsController extends Component
                 $brand = Brand::findOrFail($this->editingId);
                 $brand->update($data);
 
-                Activities::saveActivity("Brand Updated: ID #{$brand->id}");
+                Activities::saveActivity("Marca actualizada: ID #{$brand->id}");
                 $this->dispatch('toast', message: 'Marca actualizada correctamente', type: 'success');
             } else {
                 $brand = Brand::create($data);
 
-                Activities::saveActivity("Brand Created: ID #{$brand->id}");
+                Activities::saveActivity("Marca creada: ID #{$brand->id}");
                 $this->dispatch('toast', message: 'Marca creada correctamente', type: 'success');
             }
 
@@ -210,7 +210,7 @@ class BrandsController extends Component
             $brandName = $brand->name;
             $brand->delete();
 
-            Activities::saveActivity("Brand Removed: {$brandName}");
+            Activities::saveActivity("Marca eliminada: {$brandName}");
             $this->dispatch('toast', message: 'Marca eliminada correctamente', type: 'success');
 
         } catch (\Exception $ex) {
@@ -235,7 +235,7 @@ class BrandsController extends Component
                 Brand::query()->where('id', $id)->update(['order' => $index]);
             }
 
-            Activities::saveActivity("Brands Reordered by User ID #" . Auth::id());
+            Activities::saveActivity("Marcas reordenadas por Usuario ID #" . Auth::id());
             $this->dispatch('toast', message: 'Orden de marcas actualizado correctamente', type: 'success');
 
         } catch (\Exception $ex) {

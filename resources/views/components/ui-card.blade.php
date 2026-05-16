@@ -1,4 +1,3 @@
-{{--
 @props([
     'title' => null,
     'subtitle' => null,
@@ -8,6 +7,7 @@
     'bordered' => false,
     'shadow' => true
 ])
+
 @php
     $variantClasses = [
         'default' => 'bg-white',
@@ -45,7 +45,6 @@
     $currentShadow = $shadow ? ($shadowClasses[$shadow] ?? 'shadow-lg') : '';
     $hoverClass = $hover ? 'hover:shadow-xl hover:scale-[1.02] transition-all duration-300' : '';
 @endphp
---}}
 <div
     {{ $attributes->merge([
         'class' => trim('{$currentVariant} {$currentPadding} {$currentShadow} {$hoverClass} rounded-3xl ' . ($bordered ? 'border-gray-200 ' : '') . 'shadow-black/5')

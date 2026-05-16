@@ -23,12 +23,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
             </span>
-            <input wire:model.live="search" type="text" 
-                class="block w-full pl-10 pr-3 py-2 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-sm" 
+            <input wire:model.live="search" type="text"
+                class="block w-full pl-10 pr-3 py-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-lg text-sm"
                 placeholder="Buscar por nombre o slug...">
         </div>
         <div class="flex items-center gap-2">
-            <select wire:model.live="perPage" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-sm bg-white">
+            <select wire:model.live="perPage" class="border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-lg text-sm bg-white">
                 <option value="10">10 por página</option>
                 <option value="20">20 por página</option>
                 <option value="50">50 por página</option>
@@ -117,9 +117,9 @@
                 <div class="p-6 space-y-5">
                     <!-- Nombre -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Nombre de la Categoría</label>
-                        <input type="text" wire:model="name" 
-                            class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm placeholder-gray-400" 
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Nombre de la categoría</label>
+                        <input type="text" wire:model="name"
+                            class="w-full border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-xl text-sm shadow-none placeholder-gray-400"
                             placeholder="ej. Implantes Dentales, Instrumentación...">
                         @error('name') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                     </div>
@@ -127,9 +127,9 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Slug -->
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Slug (Opcional)</label>
-                            <input type="text" wire:model="slug" 
-                                class="w-full border-gray-300 bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm" 
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Slug (opcional)</label>
+                            <input type="text" wire:model="slug"
+                                class="w-full border-gray-300 bg-gray-50 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-xl text-sm shadow-none"
                                 placeholder="ej. implantes-dentales">
                             <p class="mt-1 text-[10px] text-gray-400 italic">Si se deja vacío, se generará automáticamente.</p>
                             @error('slug') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
@@ -137,9 +137,9 @@
 
                         <!-- Posición -->
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Posición en Menú</label>
-                            <input type="number" wire:model="position" 
-                                class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm" 
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Posición en menú</label>
+                            <input type="number" wire:model="position"
+                                class="w-full border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded-xl text-sm shadow-none"
                                 min="0">
                             @error('position') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                         </div>

@@ -17,7 +17,7 @@
     
     $variantClasses = [
         'default' => 'text-gray-600',
-        'primary' => 'text-blue-600',
+        'primary' => 'text-primary-600',
         'success' => 'text-green-600',
         'warning' => 'text-amber-600',
         'danger' => 'text-red-600',

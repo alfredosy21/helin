@@ -64,14 +64,14 @@
             <!-- Quick Links -->
             <div class="mt-6 flex justify-center space-x-4">
                 @if(auth()->check())
-                    <a href="{{ route('dashboard') }}" class="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                    <a href="{{ route('dashboard') }}" class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
                         Dashboard
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                    <a href="{{ route('login') }}" class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
                         Iniciar Sesión
                     </a>
-                    <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                    <a href="{{ route('password.request') }}" class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
                         ¿Olvidaste tu contraseña?
                     </a>
                 @endif

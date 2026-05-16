@@ -121,7 +121,7 @@ class AuthenticatedSessionController extends Component
                     'user_agent' => request()->userAgent(),
                 ]);
 
-                Activities::saveActivity("User logged into the system: {$user->email}");
+                Activities::saveActivity("Usuario inició sesión en el sistema: {$user->email}");
 
                 $this->redirectIntended('/cms/dashboard');
                 return;
@@ -151,7 +151,7 @@ class AuthenticatedSessionController extends Component
                 session()->forget('locked_user_id');
                 session()->regenerate();
 
-                Activities::saveActivity("Session unlocked successfully for: {$this->email}");
+                Activities::saveActivity("Sesión desbloqueada exitosamente para: {$this->email}");
 
                 $this->redirectIntended('/cms/dashboard');
                 return;
@@ -194,7 +194,7 @@ class AuthenticatedSessionController extends Component
         session()->regenerateToken();
         session()->flush();
 
-        Activities::saveActivity("User logged out: {$userEmail}");
+        Activities::saveActivity("Usuario cerró sesión: {$userEmail}");
 
         // Verificar si estamos en contexto Livewire o ruta normal
         if (request()->expectsJson() || request()->header('X-Livewire')) {

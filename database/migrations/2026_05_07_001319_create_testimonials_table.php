@@ -10,7 +10,7 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('testimonies', function (Blueprint $table) {
+        Schema::create('testimonials', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('specialty');
@@ -27,6 +27,6 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::dropIfExists('testimonies');
+        Schema::dropIfExists('testimonials');
     }
 };

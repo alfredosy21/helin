@@ -159,12 +159,12 @@ class LineController extends Component
                 $line = Line::findOrFail($this->editingId);
                 $line->update($data);
 
-                Activities::saveActivity("Product Line Updated: ID #{$line->id}");
+                Activities::saveActivity("Línea de producto actualizada: ID #{$line->id}");
                 $this->dispatch('toast', message: 'Línea actualizada correctamente', type: 'success');
             } else {
                 $line = Line::create($data);
 
-                Activities::saveActivity("Product Line Created: ID #{$line->id}");
+                Activities::saveActivity("Línea de producto creada: ID #{$line->id}");
                 $this->dispatch('toast', message: 'Línea creada correctamente', type: 'success');
             }
 
@@ -217,7 +217,7 @@ class LineController extends Component
             $lineName = $line->name;
             $line->delete();
 
-            Activities::saveActivity("Product Line Removed: {$lineName}");
+            Activities::saveActivity("Línea de producto eliminada: {$lineName}");
             $this->dispatch('toast', message: 'Línea eliminada correctamente', type: 'success');
 
         } catch (\Exception $ex) {
@@ -242,7 +242,7 @@ class LineController extends Component
                 Line::query()->where('id', $id)->update(['order' => $index]);
             }
 
-            Activities::saveActivity("Product Lines Reordered by User ID #" . Auth::id());
+            Activities::saveActivity("Líneas de producto reordenadas por Usuario ID #" . Auth::id());
             $this->dispatch('toast', message: 'Orden de líneas actualizado correctamente', type: 'success');
 
         } catch (\Exception $ex) {

@@ -14,6 +14,10 @@ use App\Http\Controllers\Cms\{
     ProductsController,
     CategoriesController,
     BrandsController,
+    LineController,
+    TestimonialsController,
+    BlogCategoriesController,
+    BlogArticlesController,
     RolController,
     SectionController,
     UserController,
@@ -73,6 +77,28 @@ Route::prefix('cms')->group(function () {
                 ->middleware('permission:Catálogo,Marcas');
             Route::get('/brands/create', BrandsController::class)->name('brands.create')
                 ->middleware('permission:Catálogo,Marcas');
+            Route::get('/lines', LineController::class)->name('lines.index')
+                ->middleware('permission:Catálogo,Líneas');
+            Route::get('/lines/create', LineController::class)->name('lines.create')
+                ->middleware('permission:Catálogo,Líneas');
+        });
+
+        /* 3.5. Content Management */
+        Route::get('/testimonials', TestimonialsController::class)->name('testimonials.index')
+            ->middleware('permission:Contenido,Testimonios');
+        Route::get('/testimonials/create', TestimonialsController::class)->name('testimonials.create')
+            ->middleware('permission:Contenido,Testimonios');
+
+        /* 3.6. Blog Management */
+        Route::prefix('blog')->name('blog.')->group(function () {
+            Route::get('/categories', BlogCategoriesController::class)->name('categories.index')
+                ->middleware('permission:Blog,Categorías');
+            Route::get('/categories/create', BlogCategoriesController::class)->name('categories.create')
+                ->middleware('permission:Blog,Categorías');
+            Route::get('/articles', BlogArticlesController::class)->name('articles.index')
+                ->middleware('permission:Blog,Artículos');
+            Route::get('/articles/create', BlogArticlesController::class)->name('articles.create')
+                ->middleware('permission:Blog,Artículos');
         });
 
         /* 4. Global System Settings */

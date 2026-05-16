@@ -3,7 +3,7 @@
 
     <!-- Animated Background Elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-400/10 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
     </div>
 
@@ -12,7 +12,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-3">
                 <nav class="flex items-center text-sm text-slate-500 dark:text-slate-400">
-                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-blue-600 transition-colors">
+                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-primary-600 transition-colors">
                         <x-ui-icon name="home" class="w-4 h-4 mr-1" />
                         CMS
                     </a>
@@ -20,7 +20,7 @@
                     <span class="text-slate-900 dark:text-white font-semibold italic">Mi Perfil Profesional</span>
                 </nav>
                 <h1 class="text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-                    Configuración de <span class="text-blue-600">Perfil</span>
+                    Configuración de <span class="text-primary-600">Perfil</span>
                 </h1>
             </div>
 
@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="w-full">
-                        <label class="group/btn relative flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 dark:bg-blue-600 text-white rounded-2xl font-bold cursor-pointer overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-500/40">
+                        <label class="group/btn relative flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 dark:bg-primary-600 text-white rounded-2xl font-bold cursor-pointer overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-500/40">
                             <x-ui-icon name="upload-cloud" class="w-6 h-6 animate-bounce" />
                             <span class="relative z-10">Subir Nueva Foto</span>
                             <input type="file" wire:model="image" class="hidden" accept="image/*" />
@@ -90,10 +90,10 @@
 
             <!-- Personal Information Card -->
             <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl p-10 rounded-[3rem] border border-white dark:border-gray-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
 
                 <h2 class="text-2xl font-black mb-10 flex items-center gap-4 text-slate-900 dark:text-white">
-                    <span class="w-10 h-2 bg-blue-600 rounded-full"></span>
+                    <span class="w-10 h-2 bg-primary-600 rounded-full"></span>
                     Información Personal
                 </h2>
 
@@ -164,7 +164,7 @@
                         <x-ui-button variant="secondary" wire:click="closeAllSessions" class="flex-1 sm:flex-none !rounded-2xl text-red-500 font-bold border-red-100 hover:bg-red-50">
                             Cerrar Sesiones
                         </x-ui-button>
-                        <x-ui-button wire:click="savePassword" class="flex-1 sm:flex-none !rounded-2xl bg-slate-900 dark:bg-blue-700 text-white font-bold shadow-lg">
+                        <x-ui-button wire:click="savePassword" class="flex-1 sm:flex-none !rounded-2xl bg-slate-900 dark:bg-primary-700 text-white font-bold shadow-lg">
                             <span wire:loading.remove wire:target="savePassword">Actualizar Clave</span>
                             <x-ui-icon wire:loading wire:target="savePassword" name="loader" class="w-5 h-5 animate-spin" />
                         </x-ui-button>

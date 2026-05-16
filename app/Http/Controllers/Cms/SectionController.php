@@ -148,7 +148,7 @@ class SectionController extends Component
                 'status_content' => $this->status_content ? 1 : 0,
             ]);
 
-            Activities::saveActivity("Section Synchronized: ID #{$section->id} ({$this->title})");
+            Activities::saveActivity("Sección sincronizada: ID #{$section->id} ({$this->title})");
 
             $this->dispatch('toast', message: 'Sección actualizada correctamente', type: 'success');
             $this->cancelEdit();
@@ -187,7 +187,7 @@ class SectionController extends Component
             $title = $section->title;
             $section->delete();
 
-            Activities::saveActivity("Section Decommissioned: {$title}");
+            Activities::saveActivity("Sección desactivada: {$title}");
             $this->dispatch('toast', message: 'Sección eliminada correctamente', type: 'success');
 
         } catch (\Exception $ex) {
@@ -216,7 +216,7 @@ class SectionController extends Component
 
             if ($this->editingId) {
                 Sections::query()->where('id', $this->editingId)->update(['image' => $images]);
-                Activities::saveActivity("Media asset detached from Section ID #{$this->editingId}");
+                Activities::saveActivity("Activo multimedia desvinculado de Sección ID #{$this->editingId}");
             }
 
             $this->loadPhotos();
