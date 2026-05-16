@@ -11,35 +11,33 @@
 
 // Global configuration
 window.inactivityConfig = {
-    warningTime: 60000,    // Will be updated by server config
-    logoutTime: 120000,    // Will be updated by server config
+    warningTime: 600000,   // 10 min - Will be updated by server config
+    logoutTime: 660000,    // 11 min - Will be updated by server config
     logoutUrl: '/cms/logout',
     csrfToken: ''
 };
 
 // Initialize dashboard functionality
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Dashboard JS initialized');
-    initializeInactivitySystem();
-    initializeFullscreen();
-    initializeModalHandlers();
-    initializeToastListeners();
-});
+// Módulo ES6 (Vite): ya se ejecuta tras el DOM parseado
+console.log('Dashboard JS initialized');
+initializeInactivitySystem();
+initializeFullscreen();
+initializeLogoutAlert();
+initializeToastListeners();
 
 // Toast notification system
 function initializeToastListeners() {
-    // Escuchar eventos de Toast desde Livewire
-    document.addEventListener('livewire:init', () => {
+    const setup = () => {
+        if (!window.Livewire) {
+            console.warn('Livewire not available for toast setup');
+            return;
+        }
         console.log('Livewire initialized in dashboard, setting up toast listeners');
 
         Livewire.on('toast', ({ message, type }) => {
             console.log('Toast received in dashboard:', { message, type });
 
-            if(window.showToast) {
-                window.showToast(message, type);
-            } else if(window.Toastify) {
-                // Usar Toastify si está disponible
-                console.log('Using Toastify for notification in dashboard');
+            if (window.Toastify) {
                 window.Toastify({
                     text: message,
                     duration: 3000,
@@ -52,12 +50,25 @@ function initializeToastListeners() {
                     stopOnFocus: true
                 }).showToast();
             } else {
-                // Fallback: alert simple
                 console.warn('No toast system available in dashboard, using alert');
                 alert(`${type.toUpperCase()}: ${message}`);
             }
         });
-    });
+    };
+
+    if (window.Livewire) {
+        setup();
+    } else {
+        document.addEventListener('livewire:init', setup);
+    }
+
+    // Fallback: si por alguna razón no se capturó el evento, reintentar
+    setTimeout(() => {
+        if (window.Livewire && !window._dashboardToastSetup) {
+            window._dashboardToastSetup = true;
+            setup();
+        }
+    }, 500);
 }
 
 // Inactivity System
@@ -81,8 +92,8 @@ function initializeInactivitySystem() {
 
         console.log('Timers reset at:', new Date().toLocaleTimeString());
 
-        // Timer para mostrar advertencia (30 segundos para testing)
-        const warningTime = 30000; // 30 segundos para testing
+        // Timer para mostrar advertencia (desde server config: 10 min por defecto)
+        const warningTime = window.inactivityConfig.warningTime;
         warningTimer = setTimeout(() => {
             if (!warningShown && (Date.now() - lastActivity) >= warningTime) {
                 console.log('Showing inactivity warning');
@@ -90,8 +101,8 @@ function initializeInactivitySystem() {
             }
         }, warningTime);
 
-        // Timer para logout automático (60 segundos para testing)
-        const logoutTime = 60000; // 60 segundos para testing
+        // Timer para logout automático (desde server config: 11 min por defecto)
+        const logoutTime = window.inactivityConfig.logoutTime;
         inactivityTimer = setTimeout(() => {
             console.log('Performing automatic logout');
             performLogout();
@@ -100,20 +111,31 @@ function initializeInactivitySystem() {
 
     function showInactivityWarning() {
         warningShown = true;
-        console.log('Opening inactivity modal');
+        console.log('Showing inactivity SweetAlert2');
 
-        const modal = document.getElementById('inactivityModal');
-        if (modal) {
-            if (typeof openModal === 'function') {
-                openModal('inactivityModal');
-                console.log('Modal opened successfully');
-            } else {
-                console.error('openModal function not found');
-                // Fallback: mostrar alert simple
-                alert('Tu sesión está a punto de expirar. Haz clic para continuar.');
-            }
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: '¿Sigue ahí?',
+                text: 'Tu sesión está a punto de expirar por inactividad.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#09b6a2',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: 'Continuar Sesión',
+                cancelButtonText: 'Cerrar Sesión',
+                reverseButtons: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    continueSession();
+                } else {
+                    performLogout();
+                }
+            });
         } else {
-            console.error('Inactivity modal not found');
+            console.error('SweetAlert2 not found');
+            alert('Tu sesión está a punto de expirar. Haz clic para continuar.');
         }
     }
 
@@ -125,7 +147,6 @@ function initializeInactivitySystem() {
             window.confirmLogout();
         } else {
             console.error('confirmLogout function not found');
-            // Fallback: redirect directo
             window.location.href = window.inactivityConfig.logoutUrl;
         }
     }
@@ -134,10 +155,6 @@ function initializeInactivitySystem() {
         console.log('Session continued by user');
         warningShown = false;
         resetTimers();
-
-        if (typeof closeModal === 'function') {
-            closeModal('inactivityModal');
-        }
     }
 
     // Eventos que resetean el timer de inactividad
@@ -157,12 +174,6 @@ function initializeInactivitySystem() {
 
     // Función global para continuar sesión
     window.continueSession = continueSession;
-
-    // Timer de debug cada 10 segundos
-    setInterval(() => {
-        const inactive = Date.now() - lastActivity;
-        console.log('Inactive for:', Math.round(inactive / 1000), 'seconds');
-    }, 10000);
 
     // Limpiar timers cuando la página se cierra
     window.addEventListener('beforeunload', function() {
@@ -211,9 +222,8 @@ function initializeFullscreen() {
     };
 }
 
-// Modal handlers
-function initializeModalHandlers() {
-    // Logout modal handler
+// Logout Alert (SweetAlert2)
+function initializeLogoutAlert() {
     window.confirmLogout = function() {
         const form = document.createElement('form');
         form.method = 'GET';
@@ -223,14 +233,29 @@ function initializeModalHandlers() {
         form.submit();
     };
 
-    // Modal event listeners
-    document.addEventListener('modalConfirmed', function(event) {
-        if (event.detail.modalId === 'logoutModal') {
-            window.confirmLogout();
-        } else if (event.detail.modalId === 'inactivityModal') {
-            window.continueSession();
+    window.showLogoutAlert = function() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: '¿Cerrar sesión?',
+                text: '¿Estás seguro de que deseas cerrar tu sesión actual?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#09b6a2',
+                cancelButtonColor: '#cbd5e1',
+                confirmButtonText: 'Cerrar Sesión',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.confirmLogout();
+                }
+            });
+        } else {
+            if (confirm('¿Estás seguro de que deseas cerrar tu sesión actual?')) {
+                window.confirmLogout();
+            }
         }
-    });
+    };
 }
 
 // Update configuration from server

@@ -82,13 +82,13 @@
                                             class="text-xs px-3 py-1 bg-green-50 text-green-700 border border-green-100 rounded-full hover:bg-green-100 transition-colors font-medium">
                                             Activar todos
                                         </button>
-                                        <button wire:click="toggleAllSubmodules(0)" 
+                                        <button wire:click="toggleAllSubmodules(0)"
                                             class="text-xs px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded-full hover:bg-red-100 transition-colors font-medium">
                                             Desactivar todos
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @foreach($module['submodules'] as $submodule)
                                         <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
@@ -151,41 +151,51 @@
 </div>
 
 <script>
+// Normalizar parámetro de Livewire 3 (puede venir como array u objeto)
+function normalizeLivewireEvent(raw) {
+    if (Array.isArray(raw) && raw.length > 0) return raw[0];
+    if (raw && typeof raw === 'object') return raw;
+    return {};
+}
+
 document.addEventListener('livewire:init', () => {
     Livewire.on('toast', (event) => {
+        const data = normalizeLivewireEvent(event);
+        const type = data.type || 'info';
+        const message = data.message || '';
+
         const toast = document.createElement('div');
-        // Estilos ultra limpios y planos para los Toasts en sintonía con el nuevo diseño corporativo
         toast.className = `fixed top-4 right-4 z-50 max-w-sm transform transition-all duration-300 ease-in-out ${
-            event.type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
-            event.type === 'error' ? 'bg-white border-l-4 border-red-500' :
-            event.type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
+            type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
+            type === 'error' ? 'bg-white border-l-4 border-red-500' :
+            type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
             'bg-white border-l-4 border-blue-500'
         } rounded-r-xl p-4 shadow-xl border border-slate-100`;
-        
+
         toast.innerHTML = `
             <div class="flex items-center gap-3">
                 <div class="flex-shrink-0">
                     <svg class="w-5 h-5 ${
-                        event.type === 'success' ? 'text-emerald-500' :
-                        event.type === 'error' ? 'text-red-500' :
-                        event.type === 'warning' ? 'text-yellow-500' :
+                        type === 'success' ? 'text-emerald-500' :
+                        type === 'error' ? 'text-red-500' :
+                        type === 'warning' ? 'text-yellow-500' :
                         'text-primary-500'
                     }" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M${
-                            event.type === 'success' ? '5 13l4 4L19 7' :
-                            event.type === 'error' ? '6 18L18 6' :
-                            event.type === 'warning' ? '12 9v2m0 4h.01' :
+                            type === 'success' ? '5 13l4 4L19 7' :
+                            type === 'error' ? '6 18L18 6' :
+                            type === 'warning' ? '12 9v2m0 4h.01' :
                             '13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
                         }"/>
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm font-semibold text-slate-800">${event.message}</p>
+                    <p class="text-sm font-semibold text-slate-800">${message}</p>
                 </div>
             </div>`;
-        
+
         document.body.appendChild(toast);
-        
+
         setTimeout(() => { toast.classList.add('translate-x-0'); }, 100);
         setTimeout(() => {
             toast.classList.add('translate-x-full', 'opacity-0');

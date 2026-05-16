@@ -9,26 +9,27 @@
  */
 
 // Initialize auth functionality
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Auth JS initialized');
-    initializeToastListeners();
-    initializePasswordToggle();
-});
+// Módulo ES6 (Vite): ya se ejecuta tras el DOM parseado
+console.log('Auth JS initialized');
+initializeToastListeners();
+initializePasswordToggle();
 
 // Toast notification system
 function initializeToastListeners() {
-    // Escuchar eventos de Toast desde Livewire
-    document.addEventListener('livewire:init', () => {
+    const setup = () => {
+        if (!window.Livewire) {
+            console.warn('Livewire not available for toast setup');
+            return;
+        }
         console.log('Livewire initialized, setting up toast listeners');
 
-        Livewire.on('toast', ({ message, type }) => {
+        Livewire.on('toast', (event) => {
+            const data = Array.isArray(event) ? event[0] : event;
+            const message = data?.message ?? data?.detail?.message ?? 'Mensaje no disponible';
+            const type    = data?.type    ?? data?.detail?.type    ?? 'info';
             console.log('Toast received:', { message, type });
 
-            if(window.showToast) {
-                window.showToast(message, type);
-            } else if(window.Toastify) {
-                // Usar Toastify si está disponible
-                console.log('Using Toastify for notification');
+            if (window.Toastify) {
                 window.Toastify({
                     text: message,
                     duration: 3000,
@@ -41,12 +42,25 @@ function initializeToastListeners() {
                     stopOnFocus: true
                 }).showToast();
             } else {
-                // Fallback: alert simple
                 console.warn('No toast system available, using alert');
                 alert(`${type.toUpperCase()}: ${message}`);
             }
         });
-    });
+    };
+
+    if (window.Livewire) {
+        setup();
+    } else {
+        document.addEventListener('livewire:init', setup);
+    }
+
+    // Fallback: si por alguna razón no se capturó el evento, reintentar
+    setTimeout(() => {
+        if (window.Livewire && !window._authToastSetup) {
+            window._authToastSetup = true;
+            setup();
+        }
+    }, 500);
 }
 
 // Password toggle functionality
@@ -218,49 +232,6 @@ async function encryptData(data) {
     }
 }
 
-// Interceptar el envío del formulario de login
-function initializeLoginEncryption() {
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginForm = document.querySelector('form[wire\\:submit]');
-        if (loginForm) {
-            loginForm.addEventListener('submit', async function(e) {
-                if (!e.detail) {
-                    // Prevenir envío normal
-                    e.preventDefault();
-
-                    const emailField = document.querySelector('input[name="email"]');
-                    const passwordField = document.querySelector('input[name="password"]');
-
-                    if (emailField && passwordField) {
-                        // Combinar credenciales
-                        const credentials = JSON.stringify({
-                            email: emailField.value,
-                            password: passwordField.value,
-                            timestamp: Date.now()
-                        });
-
-                        // Encriptar credenciales
-                        const encryptedCredentials = await encryptData(credentials);
-
-                        // Agregar timestamp para evitar replay attacks
-                        const timestamp = Date.now();
-
-                        // Enviar con Livewire usando wire:model
-                        window.livewire.find('app.http.controllers.cms.authenticated-session-controller')
-                            .set('email', emailField.value)
-                            .set('password', passwordField.value)
-                            .set('encrypted_data', encryptedCredentials)
-                            .set('login_timestamp', timestamp)
-                            .call('login');
-                    }
-                }
-            });
-        }
-    });
-}
-
-// Inicializar encriptación de login
-initializeLoginEncryption();
 
 // Export para uso externo
 window.AuthJS = {

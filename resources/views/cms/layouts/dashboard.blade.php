@@ -24,11 +24,11 @@
 </head>
 <body class="min-h-screen bg-[#f8fafc] dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
     <div class="flex min-h-screen">
-        
+
         {{-- Ultra Clean & Modern Sidebar --}}
         <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:static lg:inset-0 flex-shrink-0">
             <div class="flex flex-col flex-grow bg-[#1e293b] dark:bg-slate-950 overflow-hidden border-r border-slate-800/50">
-                
+
                 {{-- Logo Area - Identical to your exact brand header --}}
                 <div class="flex items-center h-16 px-6 bg-[#09b6a2] text-white flex-shrink-0">
                     <div class="flex items-center space-x-3">
@@ -44,12 +44,12 @@
 
                 {{-- Navigation Loop Options --}}
                 <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
-                    
+
                     {{-- Dashboard Link (With Custom Monitor/Desk Icon) --}}
                     @php
                         $isDashboard = Request::is('cms/dashboard') || Request::is('dashboard');
                     @endphp
-                    <a href="{{ route('dashboard') }}" wire:navigate 
+                    <a href="{{ route('dashboard') }}" wire:navigate
                        class="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-white/10 text-white font-semibold' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200' }}">
                         <x-ui-icon name="monitor" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-[#09b6a2]' : 'text-slate-400 group-hover:text-slate-300' }}" />
                         <span>Escritorio</span>
@@ -71,12 +71,12 @@
                                 }
                             }
                         @endphp
-                        
+
                         <div class="space-y-0.5" x-data="{ open: {{ $hasActiveSubmodule ? 'true' : 'false' }} }">
                             {{-- Main Module Action Row --}}
-                            <button @click="open = !open" 
+                            <button @click="open = !open"
                                     class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $hasActiveSubmodule ? 'text-white bg-white/[0.02]' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200' }}">
-                                
+
                                 <div class="flex items-center space-x-3">
                                     {{-- Dynamic Module Category Custom Icon Class --}}
                                     <x-ui-icon name="{{ $module['class'] }}" class="w-4 h-4 {{ $hasActiveSubmodule ? 'text-[#09b6a2]' : 'text-slate-400 group-hover:text-slate-300' }}" />
@@ -85,7 +85,7 @@
 
                                 {{-- Sleek Expandable Angle Dropdown Arrow --}}
                                 @if(isset($module['submodules']) && count($module['submodules']) > 0)
-                                    <svg class="w-3.5 h-3.5 transform transition-transform duration-200 text-slate-500 group-hover:text-slate-300" 
+                                    <svg class="w-3.5 h-3.5 transform transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                                          :class="{ 'rotate-180 text-[#09b6a2]': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -94,24 +94,24 @@
 
                             {{-- Submodules Dropdown Container --}}
                             @if(isset($module['submodules']) && count($module['submodules']) > 0)
-                                <div x-show="open" 
-                                     x-cloak 
-                                     x-transition:enter="transition ease-out duration-150" 
-                                     x-transition:enter-start="opacity-0 max-h-0 overflow-hidden" 
+                                <div x-show="open"
+                                     x-cloak
+                                     x-transition:enter="transition ease-out duration-150"
+                                     x-transition:enter-start="opacity-0 max-h-0 overflow-hidden"
                                      x-transition:enter-end="opacity-100 max-h-96 overflow-hidden"
                                      x-transition:leave="transition ease-in duration-100"
                                      x-transition:leave-start="opacity-100 max-h-96"
                                      x-transition:leave-end="opacity-0 max-h-0"
                                      class="pl-7 pr-2 py-1 space-y-0.5">
                                     {{-- Reduced left indentation padding class from pl-11 to pl-7 --}}
-                                    
+
                                     @foreach($module['submodules'] as $submodule)
                                         @php
                                             $isSubActive = Request::is(trim($submodule['url'], '/')) || Request::is(trim($submodule['url'], '/') . '/*');
                                         @endphp
-                                        <a href="{{ url($submodule['url']) }}" wire:navigate 
+                                        <a href="{{ url($submodule['url']) }}" wire:navigate
                                            class="flex items-center space-x-2.5 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-150 {{ $isSubActive ? 'text-[#09b6a2] bg-white/5 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]' }}">
-                                            
+
                                             {{-- Dynamic Submodule Custom Icon Class from Database Attributes --}}
                                             @if(!empty($submodule['icon']))
                                                 <x-ui-icon name="{{ $submodule['icon'] }}" class="w-3.5 h-3.5 {{ $isSubActive ? 'text-[#09b6a2]' : 'text-slate-500 group-hover:text-slate-400' }}" />
@@ -119,7 +119,7 @@
                                                 {{-- Fallback indicator element when icon structural context is null --}}
                                                 <span class="w-1.5 h-1.5 rounded-full {{ $isSubActive ? 'bg-[#09b6a2]' : 'bg-slate-600' }}"></span>
                                             @endif
-                                            
+
                                             <span>{{ $submodule['name'] }}</span>
                                         </a>
                                     @endforeach
@@ -180,7 +180,7 @@
                                     <x-ui-icon name="user" class="w-4 h-4" />
                                     <span>Mi Perfil</span>
                                 </a>
-                                <button onclick="openModal('logoutModal')" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                <button onclick="window.showLogoutAlert()" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                     <x-ui-icon name="log-out" class="w-4 h-4" />
                                     <span>Cerrar Sesión</span>
                                 </button>
@@ -217,9 +217,6 @@
         </div>
     </div>
 
-    {{-- System Modal Components --}}
-    <x-modal id="logoutModal" title="¿Cerrar sesión?" message="¿Estás seguro de que deseas cerrar tu sesión actual?" confirmText="Cerrar Sesión" cancelText="Cancelar" type="primary" icon="logout" />
-    <x-modal id="inactivityModal" title="¿Sigue ahí?" message="Tu sesión está a punto de expirar" submessage="Selecciona 'Continuar' para mantenerte activo" confirmText="Continuar Sesión" cancelText="Cerrar Sesión" type="warning" icon="clock" />
 
     {{-- Flash Notifications Dynamic Banner Popups Container --}}
     <div class="fixed top-4 right-4 z-[100] flex flex-col space-y-3">

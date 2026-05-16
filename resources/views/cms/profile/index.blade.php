@@ -161,7 +161,7 @@
                     </div>
 
                     <div class="flex gap-4 w-full sm:w-auto">
-                        <x-ui-button variant="secondary" wire:click="closeAllSessions" class="flex-1 sm:flex-none !rounded-2xl text-red-500 font-bold border-red-100 hover:bg-red-50">
+                        <x-ui-button variant="secondary" onclick="confirmCloseAllSessions()" class="flex-1 sm:flex-none !rounded-2xl text-red-500 font-bold border-red-100 hover:bg-red-50">
                             Cerrar Sesiones
                         </x-ui-button>
                         <x-ui-button wire:click="savePassword" class="flex-1 sm:flex-none !rounded-2xl bg-slate-900 dark:bg-primary-700 text-white font-bold shadow-lg">
@@ -174,3 +174,26 @@
         </div>
     </div>
 </div>
+
+<script>
+function confirmCloseAllSessions() {
+    Swal.fire({
+        title: '¿Cerrar todas las sesiones?',
+        text: 'Se cerrarán todas tus sesiones activas en todos los dispositivos. Deberás volver a iniciar sesión.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#cbd5e1',
+        confirmButtonText: 'Sí, cerrar sesiones',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const wireEl = document.querySelector('[wire\\:id]');
+            if (wireEl) {
+                Livewire.find(wireEl.getAttribute('wire:id')).closeAllSessions();
+            }
+        }
+    });
+}
+</script>

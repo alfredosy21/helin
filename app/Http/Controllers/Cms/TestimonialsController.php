@@ -35,7 +35,7 @@ use Livewire\Attributes\Validate;
  * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Testimonial Management | Helin CMS')]
+#[Title('Gestión de Testimonios | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class TestimonialsController extends Component
 {

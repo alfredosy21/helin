@@ -33,7 +33,7 @@ use Livewire\Attributes\Validate;
  * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Blog Article Management | Helin CMS')]
+#[Title('Gestión de Artículos del Blog | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class BlogArticlesController extends Component
 {
@@ -102,6 +102,8 @@ class BlogArticlesController extends Component
 
     /** @var bool Modal visibility state */
     public bool $showForm = false;
+    public bool $showDeleteModal = false;
+    public ?int $deleteId = null;
 
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
@@ -151,7 +153,8 @@ class BlogArticlesController extends Component
             ->paginate($this->perPage);
 
         return view('cms.blog_articles.index', [
-            'articles' => $articles
+            'articles'   => $articles,
+            'categories' => \App\Models\BlogCategory::orderBy('name')->get()
         ]);
     }
 
@@ -273,20 +276,18 @@ class BlogArticlesController extends Component
         $this->dispatch('open-form');
     }
 
-    /**
-     * Execute article removal after UI confirmation
-     *
-     * Permanently deletes a blog article and associated data.
-     * Updates activity log and provides user feedback.
-     * Handles potential constraint violations gracefully.
-     *
-     * @param int $id The article identifier
-     * @return void
-     */
-    public function confirmDelete(int $id): void
+    public function openDeleteModal(int $id): void
     {
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function delete(): void
+    {
+        if (!$this->deleteId) return;
+
         try {
-            $article = Blog::findOrFail($id);
+            $article = Blog::findOrFail($this->deleteId);
             $articleTitle = $article->title;
             $article->delete();
 
@@ -296,6 +297,9 @@ class BlogArticlesController extends Component
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: 'No se puede eliminar el artículo. Verifique datos asociados.', type: 'error');
+        } finally {
+            $this->showDeleteModal = false;
+            $this->deleteId = null;
         }
     }
 

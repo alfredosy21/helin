@@ -24,7 +24,7 @@ use Livewire\Attributes\Validate;
  * * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('User Management | Helin CMS')]
+#[Title('Gestión de Usuarios | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class UserController extends Component
 {
@@ -76,7 +76,7 @@ class UserController extends Component
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, 'Unauthorized access to Helin User Directory.');
         }
-        
+
         $this->suggestedPassword = Str::password(12);
     }
 
@@ -149,12 +149,12 @@ class UserController extends Component
             if ($this->editingId) {
                 $user = User::findOrFail($this->editingId);
                 $user->update($data);
-                
+
                 Activities::saveActivity("Perfil de usuario sincronizado: Admin ID #{$user->id}");
                 $this->dispatch('toast', message: 'Usuario actualizado correctamente', type: 'success');
             } else {
                 $user = User::create($data);
-                
+
                 Activities::saveActivity("Usuario provisionado: Admin ID #{$user->id}");
                 $this->dispatch('toast', message: 'Usuario creado correctamente', type: 'success');
             }

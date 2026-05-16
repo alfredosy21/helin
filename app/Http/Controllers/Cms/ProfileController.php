@@ -27,7 +27,7 @@ use Livewire\Attributes\Layout;
  * @package App\Http\Controllers\Cms
  * @version 1.1.0
  */
-#[Title('My Profile | Helin CMS')]
+#[Title('Mi Perfil | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class ProfileController extends Component
 {
@@ -155,7 +155,9 @@ class ProfileController extends Component
             if ($user->isDirty() || $hasNewImage) {
                 $user->save();
                 Activities::saveActivity('Usuario actualizó información personal y activos del perfil');
-                $this->dispatch('toast', message: 'Profile updated successfully.', type: 'success');
+                $this->dispatch('toast', message: 'Perfil actualizado correctamente.', type: 'success');
+            } else {
+                $this->dispatch('toast', message: 'No se detectaron cambios en el perfil.', type: 'info');
             }
 
             DB::commit();

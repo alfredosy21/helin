@@ -21,7 +21,7 @@ use Livewire\Attributes\Validate;
  * * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Category Management | Helin CMS')]
+#[Title('Gestión de Categorías | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class CategoriesController extends Component
 {

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 /**
  * Custom Mail Service
@@ -20,26 +21,26 @@ use Illuminate\Support\Facades\Log;
 class CustomMail
 {
     /**
-     * Send password reset email with secure token link.
+     * Send password reset email with the new generated password.
      *
      * @param string $email Recipient email address
-     * @param string $token Secure password reset token
+     * @param string $password New plain-text password
      * @param string|null $name Recipient name (defaults to 'Usuario')
      * @return bool Success status of the operation
      */
-    public static function passwordReset(string $email, string $token, ?string $name = null): bool
+    public static function passwordReset(string $email, string $password, ?string $name = null): bool
     {
         try {
             $data = [
-                'name'       => $name ?? 'Usuario',
-                'resetLink'  => route('password.reset', ['token' => $token, 'email' => $email]),
-                'expiration' => config('auth.passwords.users.expire', 60),
-                'company'    => config('app.name')
+                'name'     => $name ?? 'Usuario',
+                'password' => $password,
+                'loginLink'=> route('login'),
+                'company'  => config('app.name')
             ];
 
             Mail::send('emails.password-reset', $data, function ($message) use ($email) {
                 $message->to($email)
-                    ->subject('Reset Password - ' . config('app.name'));
+                    ->subject('Nueva Contraseña - ' . config('app.name'));
             });
 
             return true;

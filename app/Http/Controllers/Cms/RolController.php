@@ -25,7 +25,7 @@ use Livewire\Attributes\Validate;
  * @package App\Http\Controllers\Cms
  * @version 1.1.0
  */
-#[Title('Role Management | Helin CMS')]
+#[Title('Gestión de Roles | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class RolController extends Component
 {
@@ -129,6 +129,12 @@ class RolController extends Component
 
         try {
             if ($this->editingId) {
+                // Prevent updating roles with ID <= 1 (protected system roles)
+                if ($this->editingId <= 1) {
+                    $this->dispatch('toast', message: 'No se puede modificar roles del sistema', type: 'error');
+                    return;
+                }
+
                 $role = Role::findOrFail($this->editingId);
                 $role->update(['name' => $this->name]);
 
@@ -148,7 +154,7 @@ class RolController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error processing the request', type: 'error');
+            $this->dispatch('toast', message: 'Error al procesar la solicitud', type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -162,6 +168,12 @@ class RolController extends Component
      */
     public function edit(int $id): void
     {
+        // Prevent editing roles with ID <= 1 (protected system roles)
+        if ($id <= 1) {
+            $this->dispatch('toast', message: 'No se puede editar roles del sistema', type: 'error');
+            return;
+        }
+
         $role = Role::findOrFail($id);
 
         $this->editingId = $id;
@@ -179,6 +191,12 @@ class RolController extends Component
      */
     public function confirmDelete(int $id): void
     {
+        // Prevent deleting roles with ID <= 1 (protected system roles)
+        if ($id <= 1) {
+            $this->dispatch('toast', message: 'No se puede eliminar roles del sistema', type: 'error');
+            return;
+        }
+
         try {
             $role = Role::findOrFail($id);
             $roleName = $role->name;
@@ -189,7 +207,7 @@ class RolController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'The role cannot be deleted due to active dependencies.', type: 'error');
+            $this->dispatch('toast', message: 'No se puede eliminar el rol. Datos relacionados activos.', type: 'error');
         }
     }
 

@@ -33,7 +33,7 @@ use Livewire\Attributes\Validate;
  * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Brand Management | Helin CMS')]
+#[Title('Gestión de Marcas | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class BrandsController extends Component
 {

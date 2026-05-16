@@ -27,7 +27,7 @@ use Livewire\Attributes\Layout;
  * @version 1.1.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Global Settings | Helin CMS')]
+#[Title('Configuración General | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class SettingsController extends Component
 {

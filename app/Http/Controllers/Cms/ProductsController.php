@@ -28,7 +28,7 @@ use Livewire\Attributes\Layout;
  * * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Product Catalog | Helin CMS')]
+#[Title('Catálogo de Productos | Helin CMS')]
 class ProductsController extends Component
 {
     use WithPagination, WithFileUploads;
@@ -59,7 +59,7 @@ class ProductsController extends Component
     public ?string $published_at = null;
 
     // --- Gestión de Archivos (Temporary uploads) ---
-    public $featured_image; 
+    public $featured_image;
     public $gallery = [];
     public $documents = [];
 
@@ -70,6 +70,8 @@ class ProductsController extends Component
     public string $filterStatus = 'all';
     public int $perPage = 15;
     public bool $showForm = false;
+    public bool $showDeleteModal = false;
+    public ?int $deleteId = null;
     public bool $isLoading = false;
 
     protected string $paginationTheme = 'tailwind';
@@ -175,12 +177,12 @@ class ProductsController extends Component
             }
 
             // --- Procesamiento de Archivos (Usando tu Service) ---
-            
+
             // 1. Imagen Principal
             if ($this->featured_image) {
                 // Limpiar anterior si existe
-                $product->media()->where('is_main', true)->delete(); 
-                
+                $product->media()->where('is_main', true)->delete();
+
                 $upload = $fileUpload->save($this->featured_image, 'products/featured');
                 $product->media()->create([
                     'file_path' => $upload['path'],
@@ -291,10 +293,18 @@ class ProductsController extends Component
         }
     }
 
-    public function confirmDelete(int $id, FileUploadService $fileUpload): void
+    public function openDeleteModal(int $id): void
     {
-        $product = Product::findOrFail($id);
-        
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function delete(FileUploadService $fileUpload): void
+    {
+        if (!$this->deleteId) return;
+
+        $product = Product::findOrFail($this->deleteId);
+
         foreach ($product->media as $media) {
             $fileUpload->delete($media->file_path);
         }
@@ -302,6 +312,9 @@ class ProductsController extends Component
         $product->delete();
         Activities::saveActivity("Producto eliminado: {$product->name}");
         $this->dispatch('toast', message: 'Producto y archivos eliminados', type: 'success');
+
+        $this->showDeleteModal = false;
+        $this->deleteId = null;
     }
 
     public function cancel(): void

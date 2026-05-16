@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -24,7 +23,7 @@ use Livewire\Attributes\Layout;
  * * @package App\Http\Controllers\Cms
  * @version 1.0.0
  */
-#[Title('Reset Password | Helin CMS')]
+#[Title('Restablecer Contraseña | Helin CMS')]
 #[Layout('cms.layouts.auth')]
 class PasswordResetLinkController extends Component
 {
@@ -52,27 +51,24 @@ class PasswordResetLinkController extends Component
     }
 
     /**
-     * Execute the password reset link request logic.
-     * * Implements security checks for user existence and active status
-     * without revealing sensitive account information (OWASP standard).
-     * * @return void
+     * Generate a random password, update the user, and send it via email.
+     *
+     * @return void
      */
     public function sendResetLink(): void
     {
         $this->validate();
 
-        // 1. Rate Limiting Check
         if ($this->isRateLimited()) {
             $this->addError('email', Messages::get('password.reset.too_many_attempts'));
             return;
         }
 
         try {
-            // 2. Locate and Verify User
             $user = User::query()->where('email', strtolower(trim($this->email)))->first();
 
             if (!$user) {
-                // Return success even if user doesn't exist to prevent email harvesting
+                $this->dispatch('toast', message: 'Si el correo existe en nuestro sistema, recibirás una nueva contraseña en breve.', type: 'success');
                 $this->requestSent = true;
                 return;
             }
@@ -82,14 +78,17 @@ class PasswordResetLinkController extends Component
                 return;
             }
 
-            // 3. Generate and Store Secure Token
-            $token = Str::random(60);
-            cache()->put('password-reset-' . $user->id, Hash::make($token), 3600); // 1 hour expiry
+            // 1. Generate random password
+            $plainPassword = Str::password(12, true, true, true, false);
 
-            // 4. Send Custom Notification
-            $this->sendNotification($user, $token);
+            // 2. Update user password
+            $user->password = Hash::make($plainPassword);
+            $user->save();
 
-            // 5. Audit Logging
+            // 3. Send email with new password
+            $this->sendNotification($user, $plainPassword);
+
+            // 4. Audit Logging
             activity()
                 ->causedBy($user)
                 ->performedOn($user)
@@ -97,29 +96,31 @@ class PasswordResetLinkController extends Component
                     'ip_address' => request()->ip(),
                     'user_agent' => request()->userAgent(),
                 ])
-                ->log('Password reset requested via Livewire Component');
+                ->log('Password reset (auto-generated) via Livewire Component');
 
-            // 6. Set Cooldown for this IP
+            // 5. Set Cooldown for this IP
             cache()->put('rate-limit-reset-' . request()->ip(), true, 60);
 
+            $this->dispatch('toast', message: 'Se envió un correo con tu nueva contraseña.', type: 'success');
             $this->requestSent = true;
 
         } catch (Exception $e) {
             Log::error("Password Reset Flow Failure: " . $e->getMessage());
-            $this->dispatch('toast', message: 'An internal error occurred. Please try later.', type: 'error');
+            $this->dispatch('toast', message: 'Ocurrió un error interno. Inténtalo más tarde.', type: 'error');
         }
     }
 
     /**
-     * Dispatches the custom reset email via Helin Mail Service.
-     * * @param User $user Recipient user
-     * @param string $token Plain-text secure token
+     * Dispatches the email with the new generated password.
+     *
+     * @param User $user Recipient user
+     * @param string $plainPassword The generated plain-text password
      * @return void
      */
-    protected function sendNotification(User $user, string $token): void
+    protected function sendNotification(User $user, string $plainPassword): void
     {
         try {
-            CustomMail::passwordReset($user->email, $token, $user->name);
+            CustomMail::passwordReset($user->email, $plainPassword, $user->name);
         } catch (Exception $e) {
             Log::critical("Mail Service Failure: Reset email not sent to {$user->email}", [
                 'error' => $e->getMessage()

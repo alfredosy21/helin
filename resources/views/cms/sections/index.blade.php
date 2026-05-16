@@ -3,7 +3,7 @@
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
-        
+
         {{-- Header Section & Breadcrumb Refinado --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
@@ -21,7 +21,7 @@
 
         {{-- Main Unified Card: Filtros y Tabla --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
-            
+
             {{-- Search & Filter Section --}}
             <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
                 <div class="relative flex-1">
@@ -111,6 +111,161 @@
             @endif
         </div>
     </div>
-
-
 </div>
+
+{{-- Drawer lateral de edición --}}
+@if($showEditForm)
+<div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancelEdit"></div>
+
+    <div class="relative w-full max-w-lg h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
+        <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+            <div>
+                <h2 class="text-base font-bold text-[#222]">Editar bloque de contenido</h2>
+                <p class="text-xs text-[#c0c1c6]">ID #{{ $editingId }}</p>
+            </div>
+            <button wire:click="cancelEdit" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors border-none bg-transparent cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <form wire:submit.prevent="update" class="flex flex-col flex-1 h-full">
+            <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                {{-- Título --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Título</label>
+                    <input type="text" wire:model="title" placeholder="Título de la sección"
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                    @error('title') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                </div>
+
+                {{-- Contenido --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Contenido</label>
+                    <textarea wire:model="content" rows="4" placeholder="Contenido HTML o texto..."
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                    @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                </div>
+
+                {{-- Botón CTA --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Etiqueta botón</label>
+                        <input type="text" wire:model="name_button" placeholder="Ej: Saber más"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">URL botón</label>
+                        <input type="text" wire:model="url_button" placeholder="/ruta-o-url"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                    </div>
+                </div>
+
+                {{-- Imagen principal --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Imagen principal</label>
+                    <input type="text" wire:model="image" placeholder="nombre-imagen.jpg"
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                </div>
+
+                {{-- Fotos vinculadas --}}
+                @if(count($photos) > 0)
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Fotos vinculadas</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        @foreach($photos as $photo)
+                        <div class="relative group bg-slate-50 rounded-lg border border-slate-100 p-2 flex flex-col items-center">
+                            <img src="{{ asset('storage/' . $photo['name']) }}" class="w-full h-16 object-cover rounded mb-1" alt="" />
+                            <button type="button" wire:click="removePhoto('{{ $photo['name'] }}')" class="text-[10px] text-red-500 hover:text-red-700 font-medium">Eliminar</button>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                {{-- Toggles de estado --}}
+                <div class="flex items-center gap-6 pt-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" wire:model="status" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
+                        <span class="text-xs font-medium text-slate-600">Activo</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" wire:model="status_content" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
+                        <span class="text-xs font-medium text-slate-600">Visible</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">
+                <button type="button" wire:click="cancelEdit" class="flex-1 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors py-2 cursor-pointer">
+                    Cancelar
+                </button>
+                <button type="submit" wire:loading.attr="disabled" class="flex-1 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors py-2 border-none cursor-pointer flex items-center justify-center">
+                    <span wire:loading.remove wire:target="update">Guardar cambios</span>
+                    <span wire:loading wire:target="update">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+
+<script>
+// Normalizar parámetro de Livewire 3 (puede venir como array u objeto)
+function normalizeLivewireEvent(raw) {
+    if (Array.isArray(raw) && raw.length > 0) return raw[0];
+    if (raw && typeof raw === 'object') return raw;
+    return {};
+}
+
+document.addEventListener('livewire:init', () => {
+    Livewire.on('toast', (event) => {
+        const data = normalizeLivewireEvent(event);
+        const type = data.type || 'info';
+        const message = data.message || '';
+
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 max-w-sm transform transition-all duration-300 ease-in-out ${
+            type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
+            type === 'error' ? 'bg-white border-l-4 border-red-500' :
+            type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
+            'bg-white border-l-4 border-blue-500'
+        } rounded-r-xl p-4 shadow-xl border border-slate-100`;
+
+        toast.innerHTML = `
+            <div class="flex items-center gap-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5 ${
+                        type === 'success' ? 'text-emerald-500' :
+                        type === 'error' ? 'text-red-500' :
+                        type === 'warning' ? 'text-yellow-500' :
+                        'text-primary-500'
+                    }" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M${
+                            type === 'success' ? '5 13l4 4L19 7' :
+                            type === 'error' ? '6 18L18 6' :
+                            type === 'warning' ? '12 9v2m0 4h.01' :
+                            '13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                        }"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-slate-800">${message}</p>
+                </div>
+            </div>`;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => { toast.classList.add('translate-x-0'); }, 100);
+        setTimeout(() => {
+            toast.classList.add('translate-x-full', 'opacity-0');
+            setTimeout(() => { toast.remove(); }, 300);
+        }, 3000);
+    });
+});
+</script>

@@ -25,7 +25,7 @@ use Livewire\Attributes\Layout;
  * @package App\Http\Controllers\Cms
  * @version 1.1.0
  */
-#[Title('Login | Helin CMS')]
+#[Title('Iniciar Sesión | Helin CMS')]
 #[Layout('cms.layouts.auth')]
 class AuthenticatedSessionController extends Component
 {
@@ -131,7 +131,7 @@ class AuthenticatedSessionController extends Component
 
         } catch (Exception $e) {
             Log::error("Authentication failure: " . $e->getMessage());
-            $this->dispatch('toast', message: 'System error during authentication.', type: 'error');
+            $this->dispatch('toast', message: 'Error del sistema durante la autenticación', type: 'error');
         }
     }
 

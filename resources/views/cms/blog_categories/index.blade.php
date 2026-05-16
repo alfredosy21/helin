@@ -1,225 +1,221 @@
-<div class="p-6 lg:p-8 bg-gray-50 min-h-screen">
-    <!-- Encabezado de la Sección -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Categorías de Blog</h1>
-            <p class="text-sm text-gray-500 mt-1">Gestiona la taxonomía del blog con personalización visual y optimización SEO.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <button wire:click="create" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 transition ease-in-out duration-150 shadow-sm">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+
+    {{-- Content Layout --}}
+    <div class="relative z-10 p-6 space-y-6">
+
+        {{-- Header Section & Breadcrumb --}}
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
+            <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide uppercase">
+                    <span>Escritorio</span>
+                    <span class="text-slate-300">/</span>
+                    <span class="text-primary-600 font-semibold">categorías de blog</span>
+                </div>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                    Gestión de <span class="text-primary-600">categorías de blog</span>
+                </h1>
+            </div>
+
+            {{-- Botón Principal --}}
+            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                 </svg>
                 Nueva categoría
             </button>
         </div>
-    </div>
 
-    <!-- Toolbar: Búsqueda y Paginación -->
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row md:items-center gap-4">
-        <div class="relative flex-1">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </span>
-            <input wire:model.live="search" type="text"
-                class="block w-full pl-10 pr-3 py-2 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-sm"
-                placeholder="Buscar por nombre, slug o descripción...">
-        </div>
-        <div class="flex items-center gap-2">
-            <select wire:model.live="perPage" class="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg text-sm bg-white">
-                <option value="10">10 por página</option>
-                <option value="20">20 por página</option>
-                <option value="50">50 por página</option>
-            </select>
-        </div>
-    </div>
+        {{-- Main Unified Card --}}
+        <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
 
-    <!-- Tabla de Datos -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
-                    <tr>
-                        <th class="px-6 py-4 font-semibold w-20 text-center">Orden</th>
-                        <th class="px-6 py-4 font-semibold">Categoría</th>
-                        <th class="px-6 py-4 font-semibold">Slug / URL</th>
-                        <th class="px-6 py-4 font-semibold w-24 text-center">Color</th>
-                        <th class="px-6 py-4 font-semibold text-right">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse($blogCategories as $blogCategory)
-                        <tr wire:key="blog-category-{{ $blogCategory->id }}" class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 text-center">
-                                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 text-gray-700 font-bold text-xs border border-gray-200">
-                                    {{ $blogCategory->order }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    @if($blogCategory->color)
-                                        <div class="w-4 h-4 rounded-full border border-gray-200 category-color-indicator" data-category-color="{{ $blogCategory->color }}"></div>
-                                    @endif
-                                    <div>
-                                        <span class="text-gray-900 font-bold text-sm block">
-                                            {{ $blogCategory->name }}
-                                        </span>
-                                        @if($blogCategory->description)
-                                            <span class="text-gray-500 text-xs block truncate max-w-xs">
-                                                {{ $blogCategory->description }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="text-indigo-600 font-mono text-xs bg-indigo-50 px-2 py-1 rounded">
-                                    {{ $blogCategory->slug }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                @if($blogCategory->color)
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium category-color-badge" data-category-color="{{ $blogCategory->color }}">
-                                        {{ $blogCategory->color }}
+            {{-- Search & Filter Section --}}
+            <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
+                <div class="relative flex-1">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
+                    </span>
+                    <input type="text" wire:model.live="search" placeholder="Buscar por nombre, slug o descripción..."
+                        class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                </div>
+                <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                    <option value="10">10 por pág.</option>
+                    <option value="20">20 por pág.</option>
+                    <option value="50">50 por pág.</option>
+                </select>
+            </div>
+
+            {{-- Blog Categories Table --}}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                            <th class="px-6 py-3.5 text-center w-20">orden</th>
+                            <th class="px-6 py-3.5">Categoría</th>
+                            <th class="px-6 py-3.5">Slug / URL</th>
+                            <th class="px-6 py-3.5 text-center w-24">Color</th>
+                            <th class="px-6 py-3.5 text-right w-40">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 text-sm">
+                        @forelse($blogCategories as $blogCategory)
+                            <tr wire:key="blog-category-{{ $blogCategory->id }}" class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
+                                        {{ $blogCategory->order }}
                                     </span>
-                                @else
-                                    <span class="text-gray-400 text-xs">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end items-center gap-2">
-                                    <button wire:click="edit({{ $blogCategory->id }})" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Editar Categoría">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <button onclick="openDeleteModal(<?php echo $blogCategory->id; ?>)" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar Categoría">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-400 font-medium">
-                                No se encontraron categorías de blog.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="px-6 py-4 bg-white border-t border-gray-100">
-            {{ $blogCategories->links() }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        @if($blogCategory->color)
+                                            <div class="w-4 h-4 rounded-full border border-slate-200 category-color-indicator" data-category-color="{{ $blogCategory->color }}"></div>
+                                        @endif
+                                        <div>
+                                            <span class="font-bold text-[#222] text-sm block">
+                                                {{ $blogCategory->name }}
+                                            </span>
+                                            @if($blogCategory->description)
+                                                <span class="text-xs text-[#c0c1c6] block truncate max-w-xs">
+                                                    {{ $blogCategory->description }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="font-mono text-xs text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded">
+                                        {{ $blogCategory->slug }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    @if($blogCategory->color)
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium category-color-badge" data-category-color="{{ $blogCategory->color }}">
+                                            {{ $blogCategory->color }}
+                                        </span>
+                                    @else
+                                        <span class="text-[#c0c1c6] text-xs">-</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end gap-1">
+                                        <button wire:click="edit({{ $blogCategory->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="editar categoría">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
+                                            </svg>
+                                        </button>
+                                        <button onclick="openDeleteModal({{ $blogCategory->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="eliminar categoría">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-16 text-center">
+                                    <div class="flex flex-col items-center text-[#c0c1c6]">
+                                        <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
+                                        <p class="text-xs font-medium">No se encontraron categorías de blog</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Paginación --}}
+            @if($blogCategories->hasPages())
+                <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
+                    {{ $blogCategories->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
-    <!-- Modal de Gestión -->
+    {{-- Formulario Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" wire:click="cancel"></div>
+    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+        <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-gray-900">
-                    {{ $editingId ? 'Actualizar Categoría' : 'Nueva Categoría de Blog' }}
-                </h3>
-                <button wire:click="cancel" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+        <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                <div>
+                    <h2 class="text-base font-bold text-[#222]">
+                        {{ $editingId ? 'Actualizar' : 'Crear nuevo' }} categoría
+                    </h2>
+                    <p class="text-xs text-[#c0c1c6]">Taxonomía del blog</p>
+                </div>
+                <button wire:click="cancel" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors border-none bg-transparent cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
-            <form wire:submit.prevent="save">
-                <div class="p-6 space-y-5">
-                    <!-- Nombre -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Nombre de la Categoría</label>
-                        <input type="text" wire:model="name"
-                            class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm placeholder-gray-400"
-                            placeholder="ej. Tecnología, Noticias, Tutoriales...">
-                        @error('name') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
+            <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
+                <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre de la categoría</label>
+                        <input type="text" wire:model="name" placeholder="ej. Tecnología, Noticias, Tutoriales..."
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Descripción -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Descripción (Opcional)</label>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Descripción (opcional)</label>
                         <textarea wire:model="description" rows="3"
-                            class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm placeholder-gray-400 resize-none"
-                            placeholder="Breve descripción para SEO y visualización..."></textarea>
-                        @error('description') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Slug -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Slug (Opcional)</label>
-                            <input type="text" wire:model="slug"
-                                class="w-full border-gray-300 bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm"
-                                placeholder="ej. tecnologia">
-                            <p class="mt-1 text-[10px] text-gray-400 italic">Si se deja vacío, se generará automáticamente.</p>
-                            @error('slug') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
-                        </div>
-
-                        <!-- Posición -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Posición en Menú</label>
-                            <input type="number" wire:model="order"
-                                class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm"
-                                min="0">
-                            @error('order') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug (opcional)</label>
+                        <input type="text" wire:model="slug" placeholder="ej. tecnologia"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        <p class="text-xs text-[#c0c1c6] italic">Si se deja vacío, se generará automáticamente.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- Color -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Color Tema</label>
-                            <div class="flex gap-2">
-                                <input type="color" wire:model="color"
-                                    class="h-10 w-20 border-gray-300 rounded cursor-pointer">
-                                <input type="text" wire:model="color"
-                                    class="flex-1 border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm"
-                                    placeholder="#3B82F6"
-                                    pattern="^#[0-9A-Fa-f]{6}$">
-                            </div>
-                            <p class="mt-1 text-[10px] text-gray-400 italic">Color para la interfaz</p>
-                            @error('color') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Posición en menú</label>
+                        <input type="number" wire:model="order" min="0"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                        @error('order') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
 
-                        <!-- Icono -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Icono (Opcional)</label>
-                            <input type="text" wire:model="icon"
-                                class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm"
-                                placeholder="ej. book, news, tech">
-                            @error('icon') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Color tema</label>
+                        <div class="flex gap-2">
+                            <input type="color" wire:model="color" class="h-10 w-20 border border-slate-100 rounded cursor-pointer">
+                            <input type="text" wire:model="color"
+                                class="flex-1 px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                                placeholder="#3B82F6" pattern="^#[0-9A-Fa-f]{6}$">
                         </div>
+                        @error('color') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        <p class="text-xs text-[#c0c1c6] italic">Color para la interfaz</p>
+                    </div>
 
-                        <!-- Imagen -->
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-wider">Imagen (Opcional)</label>
-                            <input type="text" wire:model="image"
-                                class="w-full border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl text-sm shadow-sm"
-                                placeholder="URL o ruta">
-                            @error('image') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Icono (opcional)</label>
+                        <input type="text" wire:model="icon" placeholder="ej. book, news, tech"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Imagen (opcional)</label>
+                        <input type="text" wire:model="image" placeholder="URL o ruta"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
-                <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">
+                <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">
+                    <button type="button" wire:click="cancel" class="flex-1 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors py-2 cursor-pointer">
                         Cancelar
                     </button>
-                    <button type="submit" wire:loading.attr="disabled"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all flex items-center justify-center min-w-[140px]">
+                    <button type="submit" wire:loading.attr="disabled" class="flex-1 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors py-2 border-none cursor-pointer flex items-center justify-center">
                         <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? 'Guardar Cambios' : 'Crear Categoría' }}
+                            {{ $editingId ? 'Guardar cambios' : 'Crear categoría' }}
                         </span>
                         <span wire:loading wire:target="save">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -233,82 +229,76 @@
         </div>
     </div>
     @endif
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Apply dynamic colors to category indicators
-    const colorIndicators = document.querySelectorAll('.category-color-indicator');
-    colorIndicators.forEach(indicator => {
-        const color = indicator.getAttribute('data-category-color');
-        if (color) {
-            indicator.style.backgroundColor = color;
-        }
-    });
+    {{-- Modal de Confirmación de Eliminación --}}
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs transition-opacity" onclick="closeDeleteModal()"></div>
 
-    // Apply dynamic colors to category badges
-    const colorBadges = document.querySelectorAll('.category-color-badge');
-    colorBadges.forEach(badge => {
-        const color = badge.getAttribute('data-category-color');
-        if (color) {
-            // Create a lighter version for background
-            const r = parseInt(color.slice(1, 3), 16);
-            const g = parseInt(color.slice(3, 5), 16);
-            const b = parseInt(color.slice(5, 7), 16);
-            const lighterColor = `rgba(${r}, ${g}, ${b}, 0.2)`;
-
-            badge.style.backgroundColor = lighterColor;
-            badge.style.color = color;
-        }
-    });
-});
-</script>
-
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="fixed inset-0 z-50 hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" onclick="closeDeleteModal()"></div>
-    <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
-            <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-xl shadow-xl w-full max-w-sm border border-slate-100 transform transition-all p-6 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-50 mb-4">
+                    <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                     </svg>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900">¿Eliminar Categoría?</h3>
-                    <p class="text-sm text-gray-600">¿Deseas eliminar esta categoría de blog? Se podrían afectar artículos asociados.</p>
+                <h3 class="text-base font-bold text-[#222] mb-1">¿Eliminar esta categoría?</h3>
+                <p class="text-xs text-slate-400 mb-6">Esta acción no se puede deshacer y podría afectar artículos asociados.</p>
+
+                <div class="flex gap-3">
+                    <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors rounded-lg">
+                        Cancelar
+                    </button>
+                    <button onclick="confirmDelete()" class="flex-1 px-4 py-2 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors border-none cursor-pointer">
+                        Eliminar categoría
+                    </button>
                 </div>
-            </div>
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-                    Cancelar
-                </button>
-                <button onclick="confirmDelete()" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
-                    Eliminar
-                </button>
             </div>
         </div>
     </div>
+
+    <script>
+        let deleteBlogCategoryId = null;
+
+        function openDeleteModal(blogCategoryId) {
+            deleteBlogCategoryId = blogCategoryId;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            deleteBlogCategoryId = null;
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+
+        function confirmDelete() {
+            if (deleteBlogCategoryId) {
+                Livewire.find('{{ $this->getId() }}').confirmDelete(deleteBlogCategoryId);
+                closeDeleteModal();
+            }
+        }
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorIndicators = document.querySelectorAll('.category-color-indicator');
+        colorIndicators.forEach(indicator => {
+            const color = indicator.getAttribute('data-category-color');
+            if (color) {
+                indicator.style.backgroundColor = color;
+            }
+        });
+
+        const colorBadges = document.querySelectorAll('.category-color-badge');
+        colorBadges.forEach(badge => {
+            const color = badge.getAttribute('data-category-color');
+            if (color) {
+                const r = parseInt(color.slice(1, 3), 16);
+                const g = parseInt(color.slice(3, 5), 16);
+                const b = parseInt(color.slice(5, 7), 16);
+                const lighterColor = `rgba(${r}, ${g}, ${b}, 0.2)`;
+                badge.style.backgroundColor = lighterColor;
+                badge.style.color = color;
+            }
+        });
+    });
+    </script>
 </div>
-
-<script>
-let deleteBlogCategoryId = null;
-
-function openDeleteModal(blogCategoryId) {
-    deleteBlogCategoryId = blogCategoryId;
-    document.getElementById('deleteModal').classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    deleteBlogCategoryId = null;
-    document.getElementById('deleteModal').classList.add('hidden');
-}
-
-function confirmDelete() {
-    if (deleteBlogCategoryId) {
-        Livewire.find('<?= $this->getId() ?>').confirmDelete(deleteBlogCategoryId);
-        closeDeleteModal();
-    }
-}
-</script>

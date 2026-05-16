@@ -17,14 +17,14 @@ use Livewire\Attributes\Validate;
 
 /**
  * Class SectionController
- * 
+ *
  * Reactive management interface for Helin platform content blocks.
  * Provides real-time CRUD operations, media detachment logic, and audit logging.
- * 
+ *
  * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Section Management | Helin CMS')]
+#[Title('Gestión de Secciones | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class SectionController extends Component
 {
@@ -106,7 +106,7 @@ class SectionController extends Component
 
     /**
      * Hydrate the form properties with existing section data.
-     * 
+     *
      * @param int $id
      */
     public function edit(int $id): void
@@ -163,7 +163,7 @@ class SectionController extends Component
 
     /**
      * Trigger a confirmation event before deletion.
-     * 
+     *
      * @param int $id
      */
     public function delete(int $id): void
@@ -177,7 +177,7 @@ class SectionController extends Component
 
     /**
      * Permanently remove a section and record the audit trail.
-     * 
+     *
      * @param int $id
      */
     public function confirmDelete(int $id): void
@@ -198,7 +198,7 @@ class SectionController extends Component
 
     /**
      * Unlink a specific media file from the current section's record.
-     * 
+     *
      * @param string $photoName
      */
     public function removePhoto(string $photoName): void
@@ -270,7 +270,7 @@ class SectionController extends Component
 
     /**
      * Get formatted section list for legacy API compatibility.
-     * 
+     *
      * @return array
      */
     public function getSectionLists(): array

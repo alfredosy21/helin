@@ -16,11 +16,11 @@ use Livewire\Attributes\Validate;
 
 /**
  * Class BlogCategoriesController
- * 
+ *
  * Manages blog categories within the Helin CMS content management system.
  * Handles blog taxonomy organization, visual customization, and display sequencing.
  * Provides reactive interface for blog category lifecycle management with SEO optimization.
- * 
+ *
  * Features:
  * - Hierarchical organization support
  * - Visual customization (colors, icons, images)
@@ -28,11 +28,11 @@ use Livewire\Attributes\Validate;
  * - Active/inactive status control
  * - Engagement tracking integration
  * - Bulk operations support
- * 
+ *
  * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Blog Category Management | Helin CMS')]
+#[Title('Gestión de Categorías del Blog | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class BlogCategoriesController extends Component
 {
@@ -86,10 +86,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Component Lifecycle: Authorization Check
-     * 
+     *
      * Validates user permissions to access blog category management.
      * Only administrators and content managers can access this module.
-     * 
+     *
      * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
@@ -103,11 +103,11 @@ class BlogCategoriesController extends Component
 
     /**
      * Render the component with paginated and sorted blog categories
-     * 
+     *
      * Displays blog categories in a tabular format with search capabilities,
      * pagination, and ordering. Includes both active and inactive categories
      * for comprehensive management.
-     * 
+     *
      * @return View
      */
     public function render(): View
@@ -129,10 +129,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Prepare the interface for a new blog category record
-     * 
+     *
      * Initializes form fields with default values and calculates the next
      * order position automatically. Opens the modal for data entry.
-     * 
+     *
      * @return void
      */
     public function create(): void
@@ -148,11 +148,11 @@ class BlogCategoriesController extends Component
 
     /**
      * Persist or synchronize blog category data
-     * 
+     *
      * Handles both creation and update operations with comprehensive validation.
      * Automatically generates slug if not provided. Updates activity log and
      * provides user feedback through toast notifications.
-     * 
+     *
      * @return void
      */
     public function save(): void
@@ -195,10 +195,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Hydrate form with existing blog category data
-     * 
+     *
      * Loads all category properties into the form for editing.
      * Opens the modal and prepares the interface for modification.
-     * 
+     *
      * @param int $id The blog category identifier
      * @return void
      */
@@ -221,11 +221,11 @@ class BlogCategoriesController extends Component
 
     /**
      * Execute blog category removal after UI confirmation
-     * 
+     *
      * Permanently deletes a blog category and associated data.
      * Updates activity log and provides user feedback.
      * Handles potential constraint violations gracefully.
-     * 
+     *
      * @param int $id The blog category identifier
      * @return void
      */
@@ -246,10 +246,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Reorder the display sequence of blog categories via drag & drop data
-     * 
+     *
      * Updates the order field for multiple categories in a single operation.
      * Validates the input data and updates activity log for audit trail.
-     * 
+     *
      * @param array $orderedIds Array of IDs in the new order
      * @return void
      */
@@ -270,10 +270,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Close form and reset internal state
-     * 
+     *
      * Clears all form data, hides the modal, and resets validation state.
      * Dispatches event to notify frontend components of state change.
-     * 
+     *
      * @return void
      */
     public function cancel(): void
@@ -285,16 +285,16 @@ class BlogCategoriesController extends Component
 
     /**
      * Clear all reactive form properties
-     * 
+     *
      * Resets all form fields to their default values and clears validation
      * errors. Used during form initialization and cleanup operations.
-     * 
+     *
      * @return void
      */
     private function resetForm(): void
     {
         $this->reset([
-            'name', 'slug', 'description', 'color', 'icon', 'image', 
+            'name', 'slug', 'description', 'color', 'icon', 'image',
             'order', 'editingId'
         ]);
         $this->resetValidation();
@@ -302,10 +302,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Lifecycle listener: Pagination reset on search
-     * 
+     *
      * Automatically resets pagination to first page when search query changes.
      * Ensures consistent user experience during search operations.
-     * 
+     *
      * @return void
      */
     public function updatedSearch(): void
@@ -315,10 +315,10 @@ class BlogCategoriesController extends Component
 
     /**
      * Compatibility bridge for legacy frontend calls
-     * 
+     *
      * Provides backward compatibility for existing frontend components
      * that may rely on the old method naming convention.
-     * 
+     *
      * @return array
      */
     public function getBlogCategoryLists(): array
