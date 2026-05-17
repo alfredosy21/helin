@@ -31,6 +31,7 @@ return [
         'yes_delete' => 'Sí, eliminar',
         'no_cancel' => 'Cancelar',
         'desktop' => 'Escritorio',
+        'dashboard' => 'Dashboard',
         'no_records' => 'No se encontraron registros',
         'order' => 'Orden',
         'drag_to_reorder' => 'Arrastrar para reordenar',

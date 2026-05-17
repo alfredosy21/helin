@@ -2,13 +2,26 @@
     <div class="relative z-10 p-6 space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide uppercase">
-                    <span>{{ __('cms.permissions.parent_breadcrumb') }}</span>
-                    <span class="text-slate-300">/</span>
-                    <span>{{ __('cms.permissions.roles_breadcrumb') }}</span>
-                    <span class="text-slate-300">/</span>
-                    <span class="text-primary-600 font-semibold">{{ __('cms.permissions.breadcrumb') }}</span>
-                </div>
+                <x-cms-breadcrumb
+                    module="cms.permissions.parent_breadcrumb"
+                    submodule="cms.permissions.roles_breadcrumb"
+                    section="cms.permissions.breadcrumb">
+                    <x-slot name="moduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+                        </svg>
+                    </x-slot>
+                    <x-slot name="submoduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.548-.365A5.605 5.605 0 011.5 15.5a5.608 5.608 0 011.316-3.484m3.742-1.411A5.951 5.951 0 0112 9.756V8.25a2.25 2.25 0 012.25-2.25h.872M12 9.756V8.25a2.25 2.25 0 00-2.25-2.25H9M12 9.756c1.916.597 3.438 1.582 4.442 2.955"/>
+                        </svg>
+                    </x-slot>
+                    <x-slot name="sectionIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                        </svg>
+                    </x-slot>
+                </x-cms-breadcrumb>
                 <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
                     {{ __('cms.permissions.title') }}
                 </h1>
@@ -150,57 +163,3 @@
     </div>
 </div>
 
-<script>
-// Normalizar parámetro de Livewire 3 (puede venir como array u objeto)
-function normalizeLivewireEvent(raw) {
-    if (Array.isArray(raw) && raw.length > 0) return raw[0];
-    if (raw && typeof raw === 'object') return raw;
-    return {};
-}
-
-document.addEventListener('livewire:init', () => {
-    Livewire.on('toast', (event) => {
-        const data = normalizeLivewireEvent(event);
-        const type = data.type || 'info';
-        const message = data.message || '';
-
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 max-w-sm transform transition-all duration-300 ease-in-out ${
-            type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
-            type === 'error' ? 'bg-white border-l-4 border-red-500' :
-            type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
-            'bg-white border-l-4 border-blue-500'
-        } rounded-r-xl p-4 shadow-xl border border-slate-100`;
-
-        toast.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="flex-shrink-0">
-                    <svg class="w-5 h-5 ${
-                        type === 'success' ? 'text-emerald-500' :
-                        type === 'error' ? 'text-red-500' :
-                        type === 'warning' ? 'text-yellow-500' :
-                        'text-primary-500'
-                    }" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M${
-                            type === 'success' ? '5 13l4 4L19 7' :
-                            type === 'error' ? '6 18L18 6' :
-                            type === 'warning' ? '12 9v2m0 4h.01' :
-                            '13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                        }"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-800">${message}</p>
-                </div>
-            </div>`;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => { toast.classList.add('translate-x-0'); }, 100);
-        setTimeout(() => {
-            toast.classList.add('translate-x-full', 'opacity-0');
-            setTimeout(() => { toast.remove(); }, 300);
-        }, 3000);
-    });
-});
-</script>

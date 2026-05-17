@@ -11,17 +11,14 @@
     <div class="relative p-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-4">
-                <nav class="flex items-center text-sm text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-primary-600 transition-all duration-200 hover:scale-105">
-                        <x-ui-icon name="home" class="w-4 h-4 mr-1" />
-                        CMS
-                    </a>
-                    <x-ui-icon name="chevron-right" class="w-4 h-4 mx-2 text-slate-400" />
-                    <span class="flex items-center text-slate-900 dark:text-white font-medium">
-                        <x-ui-icon name="settings" class="w-4 h-4 mr-2 text-primary-600" />
-                        {{ __('cms.settings.title') }}
-                    </span>
-                </nav>
+                <x-cms-breadcrumb module="cms.settings.title">
+                    <x-slot name="moduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </x-slot>
+                </x-cms-breadcrumb>
                 <div class="space-y-2">
                     <h1 class="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-200 dark:to-white bg-clip-text text-transparent tracking-tight">
                         {{ $isEditing ? __('cms.settings.editing') : __('cms.settings.title') }}
@@ -318,58 +315,3 @@
         </div>
     @endif
 </div>
-
-<script>
-// Normalizar parámetro de Livewire 3 (puede venir como array u objeto)
-function normalizeLivewireEvent(raw) {
-    if (Array.isArray(raw) && raw.length > 0) return raw[0];
-    if (raw && typeof raw === 'object') return raw;
-    return {};
-}
-
-document.addEventListener('livewire:init', () => {
-    Livewire.on('toast', (event) => {
-        const data = normalizeLivewireEvent(event);
-        const type = data.type || 'info';
-        const message = data.message || '';
-
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 max-w-sm transform transition-all duration-300 ease-in-out ${
-            type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
-            type === 'error' ? 'bg-white border-l-4 border-red-500' :
-            type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
-            'bg-white border-l-4 border-blue-500'
-        } rounded-r-xl p-4 shadow-xl border border-slate-100`;
-
-        toast.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="flex-shrink-0">
-                    <svg class="w-5 h-5 ${
-                        type === 'success' ? 'text-emerald-500' :
-                        type === 'error' ? 'text-red-500' :
-                        type === 'warning' ? 'text-yellow-500' :
-                        'text-primary-500'
-                    }" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M${
-                            type === 'success' ? '5 13l4 4L19 7' :
-                            type === 'error' ? '6 18L18 6' :
-                            type === 'warning' ? '12 9v2m0 4h.01' :
-                            '13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                        }"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-800">${message}</p>
-                </div>
-            </div>`;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => { toast.classList.add('translate-x-0'); }, 100);
-        setTimeout(() => {
-            toast.classList.add('translate-x-full', 'opacity-0');
-            setTimeout(() => { toast.remove(); }, 300);
-        }, 3000);
-    });
-});
-</script>

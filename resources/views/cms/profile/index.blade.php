@@ -11,14 +11,13 @@
     <div class="relative p-6 mb-4">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-3">
-                <nav class="flex items-center text-sm text-slate-500 dark:text-slate-400">
-                    <a href="{{ route('dashboard') }}" class="flex items-center hover:text-primary-600 transition-colors">
-                        <x-ui-icon name="home" class="w-4 h-4 mr-1" />
-                        {{ __('cms.profile.cms_breadcrumb') }}
-                    </a>
-                    <x-ui-icon name="chevron-right" class="w-4 h-4 mx-2 text-slate-400" />
-                    <span class="text-slate-900 dark:text-white font-semibold italic">{{ __('cms.profile.breadcrumb') }}</span>
-                </nav>
+                <x-cms-breadcrumb module="cms.profile.breadcrumb">
+                    <x-slot name="moduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.25-.33-7.5-1.632z"/>
+                        </svg>
+                    </x-slot>
+                </x-cms-breadcrumb>
                 <h1 class="text-5xl font-black tracking-tight text-slate-900 dark:text-white">
                     {{ __('cms.profile.title') }}
                 </h1>

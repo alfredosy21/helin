@@ -7,11 +7,20 @@
         {{-- Header Section & Breadcrumb Refinado --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide">
-                    <span>{{ __('cms.sections.parent_breadcrumb') }}</span>
-                    <span class="text-slate-300">/</span>
-                    <span class="text-primary font-semibold">{{ __('cms.sections.breadcrumb') }}</span>
-                </div>
+                <x-cms-breadcrumb
+                    module="cms.sections.parent_breadcrumb"
+                    submodule="cms.sections.breadcrumb">
+                    <x-slot name="moduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/>
+                        </svg>
+                    </x-slot>
+                    <x-slot name="submoduleIcon">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+                        </svg>
+                    </x-slot>
+                </x-cms-breadcrumb>
                 <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
                     {{ __('cms.sections.title') }}
                 </h1>
@@ -79,11 +88,13 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        <button type="button" wire:click="edit({{ $section->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="{{ __('cms.general.edit') }}">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
-                                            </svg>
-                                        </button>
+                                        <x-cms-tooltip text="{{ __('cms.general.edit') }}">
+                                            <button type="button" wire:click="edit({{ $section->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
+                                                </svg>
+                                            </button>
+                                        </x-cms-tooltip>
                                     </div>
                                 </td>
                             </tr>
@@ -223,58 +234,3 @@
         @endif
     </div>
 </div>
-
-<script>
-// Normalizar parámetro de Livewire 3 (puede venir como array u objeto)
-function normalizeLivewireEvent(raw) {
-    if (Array.isArray(raw) && raw.length > 0) return raw[0];
-    if (raw && typeof raw === 'object') return raw;
-    return {};
-}
-
-document.addEventListener('livewire:init', () => {
-    Livewire.on('toast', (event) => {
-        const data = normalizeLivewireEvent(event);
-        const type = data.type || 'info';
-        const message = data.message || '';
-
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 max-w-sm transform transition-all duration-300 ease-in-out ${
-            type === 'success' ? 'bg-white border-l-4 border-emerald-500' :
-            type === 'error' ? 'bg-white border-l-4 border-red-500' :
-            type === 'warning' ? 'bg-white border-l-4 border-yellow-500' :
-            'bg-white border-l-4 border-blue-500'
-        } rounded-r-xl p-4 shadow-xl border border-slate-100`;
-
-        toast.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="flex-shrink-0">
-                    <svg class="w-5 h-5 ${
-                        type === 'success' ? 'text-emerald-500' :
-                        type === 'error' ? 'text-red-500' :
-                        type === 'warning' ? 'text-yellow-500' :
-                        'text-primary-500'
-                    }" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M${
-                            type === 'success' ? '5 13l4 4L19 7' :
-                            type === 'error' ? '6 18L18 6' :
-                            type === 'warning' ? '12 9v2m0 4h.01' :
-                            '13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                        }"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-800">${message}</p>
-                </div>
-            </div>`;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => { toast.classList.add('translate-x-0'); }, 100);
-        setTimeout(() => {
-            toast.classList.add('translate-x-full', 'opacity-0');
-            setTimeout(() => { toast.remove(); }, 300);
-        }, 3000);
-    });
-});
-</script>
