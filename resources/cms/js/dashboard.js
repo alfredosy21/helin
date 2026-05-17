@@ -28,26 +28,62 @@ initializeToastListeners();
 // Toast notification system
 function initializeToastListeners() {
     const setup = () => {
+        // Evita que se ejecute y duplique si ya se configuró previamente
+        if (window._dashboardToastSetup) return;
+
         if (!window.Livewire) {
             console.warn('Livewire not available for toast setup');
             return;
         }
+
+        // Marcamos como configurado inmediatamente
+        window._dashboardToastSetup = true;
         console.log('Livewire initialized in dashboard, setting up toast listeners');
 
         Livewire.on('toast', ({ message, type }) => {
             console.log('Toast received in dashboard:', { message, type });
 
             if (window.Toastify) {
+                // Definición de colores de borde e iconos según el tipo (Estilo moderno / Shadcn)
+                const configMap = {
+                    success: {
+                        borderColor: 'border-emerald-500',
+                        icon: '<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    },
+                    error: {
+                        borderColor: 'border-rose-500',
+                        icon: '<svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    },
+                    warning: {
+                        borderColor: 'border-amber-500',
+                        icon: '<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>'
+                    },
+                    info: {
+                        borderColor: 'border-blue-500',
+                        icon: '<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    }
+                };
+
+                const currentConfig = configMap[type] || configMap.info;
+
+                // Estructura HTML en un único nodo contenedor para que Toastify lo monte de forma nativa
+                const container = document.createElement('div');
+                container.className = 'flex items-center gap-3';
+                container.innerHTML = `
+                    <div class="flex-shrink-0">${currentConfig.icon}</div>
+                    <div class="text-xs font-medium text-slate-700 pr-2">${message}</div>
+                `;
+
                 window.Toastify({
-                    text: message,
-                    duration: 3000,
+                    node: container,   // Pasamos el nodo DOM real en lugar de un string en 'text'
+                    duration: 4000,    // Un poco más de tiempo para lectura cómoda
                     gravity: "top",
                     position: "right",
+                    // Integración limpia con tus estilos basados en Tailwind
+                    className: `!bg-white !border-l-4 ${currentConfig.borderColor} !shadow-xl !rounded-xl !p-4 !max-w-sm !font-sans border border-slate-100`,
                     style: {
-                        background: type === 'error' ? '#ef4444' :
-                                    type === 'success' ? '#10b981' :
-                                    type === 'warning' ? '#f59e0b' :
-                                    '#3b82f6',
+                        background: 'transparent', // Elimina el degradado por defecto de Toastify
+                        boxShadow: 'none'         // Cede el control de la sombra a Tailwind
                     },
                     stopOnFocus: true
                 }).showToast();
@@ -64,12 +100,9 @@ function initializeToastListeners() {
         document.addEventListener('livewire:init', setup);
     }
 
-    // Fallback: si por alguna razón no se capturó el evento, reintentar
+    // Fallback seguro: reintento sin riesgo de duplicidad gracias al flag de control
     setTimeout(() => {
-        if (window.Livewire && !window._dashboardToastSetup) {
-            window._dashboardToastSetup = true;
-            setup();
-        }
+        setup();
     }, 500);
 }
 
@@ -240,13 +273,15 @@ function initializeLogoutAlert() {
             Swal.fire({
                 title: '¿Cerrar sesión?',
                 text: '¿Estás seguro de que deseas cerrar tu sesión actual?',
-                icon: 'question',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#09b6a2',
-                cancelButtonColor: '#cbd5e1',
+                cancelButtonColor: '#ef4444',
                 confirmButtonText: 'Cerrar Sesión',
                 cancelButtonText: 'Cancelar',
-                reverseButtons: true
+                reverseButtons: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.confirmLogout();
@@ -268,7 +303,7 @@ window.confirmAction = function(config) {
         confirmButtonText = 'Eliminar',
         cancelButtonText = 'Cancelar',
         confirmButtonColor = '#09B6A2',
-        cancelButtonColor = '#f1f5f9',
+        cancelButtonColor= '#ef4444',
         onConfirm = () => {},
         onCancel = null
     } = config;
@@ -288,13 +323,6 @@ window.confirmAction = function(config) {
         cancelButtonColor,
         confirmButtonText,
         cancelButtonText,
-        customClass: {
-            popup: 'rounded-xl border border-slate-100',
-            title: 'text-base font-bold text-[#222]',
-            htmlContainer: 'text-xs text-slate-500',
-            confirmButton: '!rounded-lg !px-4 !py-2 !text-xs !font-medium shadow-none',
-            cancelButton: '!rounded-lg !px-4 !py-2 !text-xs !font-medium !text-slate-600 shadow-none border border-slate-100'
-        }
     }).then((result) => {
         if (result.isConfirmed) {
             onConfirm();

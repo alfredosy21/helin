@@ -21,7 +21,7 @@ use Livewire\Attributes\Layout;
  * This controller manages the main administrative interface, handling
  * real-time statistics, system health metrics, and activity tracking.
  */
-#[Title('Dashboard | Helin CMS')]
+#[Title('Escritorio | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class DashboardController extends Component
 {

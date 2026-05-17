@@ -103,22 +103,30 @@ class PermissionsController extends Component
      * Toggle module permission status
      *
      * @param int $moduleId The module ID
-     * @param int $currentStatus Current permission status
      * @return void
      */
-    public function toggleModulePermission(int $moduleId, int $currentStatus): void
+    public function toggleModulePermission(int $moduleId): void
     {
         $this->isLoading = true;
 
         try {
-            $newStatus = $currentStatus === Permission::ACTIVE_STATUS
+            // Obtener el estado actual de la base de datos
+            $permission = Permission::where('rol_id', $this->roleId)
+                    ->where('module_id', $moduleId)
+                    ->where('type', Permission::MAIN_MODULE_TYPE)
+                    ->first();
+
+            if (!$permission) {
+                $this->dispatch('toast', message: __('cms.controllers.permissions.module_error'), type: 'error');
+                $this->isLoading = false;
+                return;
+            }
+
+            $newStatus = $permission->status === Permission::ACTIVE_STATUS
                 ? Permission::INACTIVE_STATUS
                 : Permission::ACTIVE_STATUS;
 
-            Permission::where('rol_id', $this->roleId)
-                    ->where('module_id', $moduleId)
-                    ->where('type', Permission::MAIN_MODULE_TYPE)
-                    ->update(['status' => $newStatus]);
+            $permission->update(['status' => $newStatus]);
 
             $action = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.module_activated') : __('cms.controllers.permissions.module_deactivated');
             $actionWord = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.action_activated') : __('cms.controllers.permissions.action_deactivated');

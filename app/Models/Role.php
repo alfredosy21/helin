@@ -30,7 +30,7 @@ class Role extends Model
      * Role ID constants for core system logic.
      */
     public const ADMINISTRATOR = 1;
-    const EDITOR = 2;
+    public const EDITOR = 2;
 
     /**
      * The attributes that are mass assignable.

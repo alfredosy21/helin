@@ -1,10 +1,8 @@
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+{{-- Content Layout --}}
+<div class="p-6 space-y-6">
 
-    {{-- Content Layout --}}
-    <div class="relative z-10 p-6 space-y-6">
-
-        {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
+    {{-- Header Section & Breadcrumb --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
                 <x-cms-breadcrumb
                     module="cms.products.parent_breadcrumb"
@@ -404,4 +402,5 @@ function deleteProduct(id) {
     });
 }
 </script>
+</div>
 </div>

@@ -76,9 +76,10 @@
                                         {{ $module['status'] == 1 ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
                                     </span>
                                     <button
-                                        wire:click="toggleModulePermission({{ $module['module_id'] }}, {{ $module['status'] }})"
+                                        wire:click="toggleModulePermission({{ $module['module_id'] }})"
                                         class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 {{ $module['status'] == 1 ? 'bg-primary' : 'bg-slate-200' }}"
-                                        wire:loading.attr="disabled">
+                                        wire:loading.attr="disabled"
+                                        wire:target="toggleModulePermission">
                                         <span class="sr-only">Toggle module permission</span>
                                         <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $module['status'] == 1 ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                     </button>

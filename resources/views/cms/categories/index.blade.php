@@ -137,14 +137,14 @@
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.name_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="{{ __('cms.categories.name_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.slug_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.slug_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="slug" placeholder="{{ __('cms.categories.slug_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror

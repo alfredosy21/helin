@@ -139,7 +139,6 @@ class UserController extends Component
                 'rol_id' => $this->rol_id,
                 'level'  => 2,
                 'is_active' => true,
-                'image'  => 'default-avatar.png',
             ];
 
             if (!empty($this->password)) {
@@ -153,6 +152,8 @@ class UserController extends Component
                 Activities::saveActivity(__('cms.controllers.users.activity_updated', ['id' => $user->id]));
                 $this->dispatch('toast', message: __('cms.controllers.users.updated'), type: 'success');
             } else {
+                // Establecer imagen por defecto solo al crear nuevo usuario
+                $data['image'] = 'default-avatar.png';
                 $user = User::create($data);
 
                 Activities::saveActivity(__('cms.controllers.users.activity_created', ['id' => $user->id]));

@@ -75,7 +75,7 @@ class RolController extends Component
     public function mount(): void
     {
         $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+        if (!$user || ($user->rol_id !== Role::ADMINISTRATOR && $user->level !== Role::ADMINISTRATOR)) {
             abort(403, __('cms.abort.roles'));
         }
     }
