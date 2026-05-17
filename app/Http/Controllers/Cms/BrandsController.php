@@ -40,7 +40,7 @@ class BrandsController extends Component
     use WithPagination;
 
     /** @var string Commercial name of the brand */
-    #[Validate('required|string|max:255', as: 'nombre de la marca')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string|null Brand logo path or reference */
@@ -86,7 +86,7 @@ class BrandsController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Brands module.');
+            abort(403, __('cms.abort.brands'));
         }
     }
 
@@ -155,23 +155,23 @@ class BrandsController extends Component
                 $brand = Brand::findOrFail($this->editingId);
                 $brand->update($data);
 
-                Activities::saveActivity("Marca actualizada: ID #{$brand->id}");
-                $this->dispatch('toast', message: 'Marca actualizada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.brands.activity_updated', ['id' => $brand->id]));
+                $this->dispatch('toast', message: __('cms.controllers.brands.updated'), type: 'success');
             } else {
                 Brand::query()->increment('order');
                 $data['order'] = 1;
 
                 $brand = Brand::create($data);
 
-                Activities::saveActivity("Marca creada: ID #{$brand->id}");
-                $this->dispatch('toast', message: 'Marca creada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.brands.activity_created', ['id' => $brand->id]));
+                $this->dispatch('toast', message: __('cms.controllers.brands.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la marca', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.brands.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -217,12 +217,12 @@ class BrandsController extends Component
             $brandName = $brand->name;
             $brand->delete();
 
-            Activities::saveActivity("Marca eliminada: {$brandName}");
-            $this->dispatch('toast', message: 'Marca eliminada correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.brands.activity_deleted', ['name' => $brandName]));
+            $this->dispatch('toast', message: __('cms.controllers.brands.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar la marca. Verifique productos asociados.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.brands.delete_error'), type: 'error');
         }
     }
 
@@ -242,12 +242,12 @@ class BrandsController extends Component
                 Brand::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Marcas reordenadas por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden de marcas actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.brands.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.brands.order_updated'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al reordenar las marcas', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.brands.order_error'), type: 'error');
         }
     }
 
@@ -274,6 +274,13 @@ class BrandsController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.brand_name'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['name', 'image', 'description', 'seo_description', 'editingId']);

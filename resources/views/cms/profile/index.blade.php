@@ -14,13 +14,13 @@
                 <nav class="flex items-center text-sm text-slate-500 dark:text-slate-400">
                     <a href="{{ route('dashboard') }}" class="flex items-center hover:text-primary-600 transition-colors">
                         <x-ui-icon name="home" class="w-4 h-4 mr-1" />
-                        CMS
+                        {{ __('cms.profile.cms_breadcrumb') }}
                     </a>
                     <x-ui-icon name="chevron-right" class="w-4 h-4 mx-2 text-slate-400" />
-                    <span class="text-slate-900 dark:text-white font-semibold italic">Mi Perfil Profesional</span>
+                    <span class="text-slate-900 dark:text-white font-semibold italic">{{ __('cms.profile.breadcrumb') }}</span>
                 </nav>
                 <h1 class="text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-                    Configuración de <span class="text-primary-600">Perfil</span>
+                    {{ __('cms.profile.title') }}
                 </h1>
             </div>
 
@@ -28,7 +28,7 @@
                 <x-ui-button variant="primary" wire:click="save" wire:loading.attr="disabled" class="group relative overflow-hidden hover:scale-105 transition-all duration-300 shadow-xl shadow-blue-500/20 !rounded-2xl">
                     <span class="relative z-10 flex items-center px-4 py-1">
                         <x-ui-icon name="save" class="w-5 h-5 mr-2" />
-                        Actualizar Perfil
+                        {{ __('cms.profile.update_button') }}
                     </span>
                     <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700"></div>
                 </x-ui-button>
@@ -45,7 +45,7 @@
                 <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-emerald-500/5"></div>
 
                 <div class="relative flex flex-col items-center space-y-8">
-                    <h2 class="text-xl font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 text-sm">Avatar de Usuario</h2>
+                    <h2 class="text-xl font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 text-sm">{{ __('cms.profile.avatar_title') }}</h2>
 
                     <div class="relative">
                         <div class="w-56 h-56 rounded-[2.5rem] overflow-hidden border-[6px] border-white dark:border-gray-700 shadow-2xl relative group/avatar">
@@ -75,11 +75,11 @@
                     <div class="w-full">
                         <label class="group/btn relative flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 dark:bg-primary-600 text-white rounded-2xl font-bold cursor-pointer overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-500/40">
                             <x-ui-icon name="upload-cloud" class="w-6 h-6 animate-bounce" />
-                            <span class="relative z-10">Subir Nueva Foto</span>
+                            <span class="relative z-10">{{ __('cms.profile.upload_photo') }}</span>
                             <input type="file" wire:model="image" class="hidden" accept="image/*" />
                         </label>
                         @error('image') <p class="text-center text-xs text-red-500 font-bold mt-3 italic">{{ $message }}</p> @enderror
-                        <p class="text-center text-[10px] text-slate-400 dark:text-slate-500 mt-4 uppercase font-black tracking-tighter">JPG, PNG o WEBP • Máximo 2MB</p>
+                        <p class="text-center text-[10px] text-slate-400 dark:text-slate-500 mt-4 uppercase font-black tracking-tighter">{{ __('cms.profile.photo_formats') }}</p>
                     </div>
                 </div>
             </div>
@@ -94,33 +94,33 @@
 
                 <h2 class="text-2xl font-black mb-10 flex items-center gap-4 text-slate-900 dark:text-white">
                     <span class="w-10 h-2 bg-primary-600 rounded-full"></span>
-                    Información Personal
+                    {{ __('cms.profile.personal_info') }}
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="space-y-2">
-                        <x-ui-input label="Nombre Completo" wire:model="name" icon="user" class="!rounded-2xl" />
+                        <x-ui-input label="{{ __('cms.profile.full_name') }}" wire:model="name" icon="user" class="!rounded-2xl" />
                         @error('name') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui-input label="Correo Electrónico" wire:model="email" icon="mail" class="!rounded-2xl" />
+                        <x-ui-input label="{{ __('cms.profile.email') }}" wire:model="email" icon="mail" class="!rounded-2xl" />
                         @error('email') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                                         <div class="space-y-2">
-                        <x-ui-input label="Departamento" wire:model="department" placeholder="Ej: TI, Marketing, Ventas" icon="building" class="!rounded-2xl" />
+                        <x-ui-input label="{{ __('cms.profile.department') }}" wire:model="department" placeholder="{{ __('cms.profile.department_placeholder') }}" icon="building" class="!rounded-2xl" />
                         @error('department') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui-input label="Posición" wire:model="position" placeholder="Ej: Senior Developer, Manager" icon="award" class="!rounded-2xl" />
+                        <x-ui-input label="{{ __('cms.profile.position') }}" wire:model="position" placeholder="{{ __('cms.profile.position_placeholder') }}" icon="award" class="!rounded-2xl" />
                         @error('position') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui-input label="Teléfono" wire:model="phone" placeholder="Ej: +1 234 567 8900" icon="phone" class="!rounded-2xl" />
+                        <x-ui-input label="{{ __('cms.profile.phone') }}" wire:model="phone" placeholder="{{ __('cms.profile.phone_placeholder') }}" icon="phone" class="!rounded-2xl" />
                         @error('phone') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="md:col-span-2 space-y-2">
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Biografía</label>
-                        <textarea wire:model="biography" rows="4" placeholder="Cuéntanos sobre ti..." class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"></textarea>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{{ __('cms.profile.biography') }}</label>
+                        <textarea wire:model="biography" rows="4" placeholder="{{ __('cms.profile.biography_placeholder') }}" class="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"></textarea>
                         @error('biography') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -132,20 +132,20 @@
 
                 <h2 class="text-2xl font-black mb-10 flex items-center gap-4 text-slate-900 dark:text-white">
                     <span class="w-10 h-2 bg-red-600 rounded-full"></span>
-                    Seguridad de la Cuenta
+                    {{ __('cms.profile.security_title') }}
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="space-y-2">
-                        <x-ui-input type="password" label="Contraseña Actual" wire:model="current_password" class="!rounded-2xl" />
+                        <x-ui-input type="password" label="{{ __('cms.profile.current_password') }}" wire:model="current_password" class="!rounded-2xl" />
                         @error('current_password') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui-input type="password" label="Nueva Contraseña" wire:model="new_password" class="!rounded-2xl" />
+                        <x-ui-input type="password" label="{{ __('cms.profile.new_password') }}" wire:model="new_password" class="!rounded-2xl" />
                         @error('new_password') <span class="text-xs text-red-500 font-bold ml-2">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-2">
-                        <x-ui-input type="password" label="Confirmar Nueva" wire:model="password_confirmation" class="!rounded-2xl" />
+                        <x-ui-input type="password" label="{{ __('cms.profile.confirm_password') }}" wire:model="password_confirmation" class="!rounded-2xl" />
                     </div>
                 </div>
 
@@ -155,17 +155,17 @@
                             <x-ui-icon name="shield-alert" class="w-6 h-6" />
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Zona de Seguridad</h4>
-                            <p class="text-xs text-slate-500">Se recomienda cambiar la clave cada 90 días.</p>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">{{ __('cms.profile.security_zone') }}</h4>
+                            <p class="text-xs text-slate-500">{{ __('cms.profile.password_recommendation') }}</p>
                         </div>
                     </div>
 
                     <div class="flex gap-4 w-full sm:w-auto">
                         <x-ui-button variant="secondary" onclick="confirmCloseAllSessions()" class="flex-1 sm:flex-none !rounded-2xl text-red-500 font-bold border-red-100 hover:bg-red-50">
-                            Cerrar Sesiones
+                            {{ __('cms.profile.close_sessions') }}
                         </x-ui-button>
                         <x-ui-button wire:click="savePassword" class="flex-1 sm:flex-none !rounded-2xl bg-slate-900 dark:bg-primary-700 text-white font-bold shadow-lg">
-                            <span wire:loading.remove wire:target="savePassword">Actualizar Clave</span>
+                            <span wire:loading.remove wire:target="savePassword">{{ __('cms.profile.update_password') }}</span>
                             <x-ui-icon wire:loading wire:target="savePassword" name="loader" class="w-5 h-5 animate-spin" />
                         </x-ui-button>
                     </div>
@@ -178,14 +178,14 @@
 <script>
 function confirmCloseAllSessions() {
     Swal.fire({
-        title: '¿Cerrar todas las sesiones?',
-        text: 'Se cerrarán todas tus sesiones activas en todos los dispositivos. Deberás volver a iniciar sesión.',
+        title: '{{ __('cms.profile.close_all_sessions_title') }}',
+        text: '{{ __('cms.profile.close_all_sessions_text') }}',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#ef4444',
         cancelButtonColor: '#cbd5e1',
-        confirmButtonText: 'Sí, cerrar sesiones',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: '{{ __('cms.profile.confirm_close_sessions') }}',
+        cancelButtonText: '{{ __('cms.general.cancel') }}',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {

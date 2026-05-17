@@ -12,10 +12,10 @@
                     <span class="text-white font-bold text-2xl">H</span>
                 </div>
                 <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
-                    Recuperar Contraseña
+                    {{ __('cms.forgot_password.title') }}
                 </h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                    Ingresa tu correo y te enviaremos una nueva contraseña
+                    {{ __('cms.forgot_password.subtitle') }}
                 </p>
             </div>
 
@@ -28,14 +28,14 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-slate-800">Correo enviado</h3>
+                        <h3 class="text-lg font-semibold text-slate-800">{{ __('cms.forgot_password.success_title') }}</h3>
                         <p class="mt-2 text-sm text-slate-500">
-                            Si el correo existe en nuestro sistema, recibirás una nueva contraseña en breve. Revisa tu bandeja de entrada.
+                            {{ __('cms.forgot_password.success_message') }}
                         </p>
                     </div>
                     <a href="{{ route('login') }}"
                         class="inline-flex items-center justify-center w-full py-3 px-4 rounded-xl text-white bg-[rgb(9,182,162)] hover:bg-[rgb(6,122,108)] transition-all text-sm font-semibold">
-                        Volver al inicio de sesión
+                        {{ __('cms.forgot_password.back_to_login') }}
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
                         </svg>
@@ -46,7 +46,7 @@
                 <form wire:submit.prevent="sendResetLink" class="space-y-6">
                     <div class="group">
                         <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Correo electrónico
+                            {{ __('cms.forgot_password.email_label') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -58,7 +58,7 @@
                                 type="email"
                                 required
                                 class="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-0 focus:border-slate-200 dark:focus:border-slate-600 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
-                                placeholder="tu@correo.com"
+                                placeholder="{{ __('cms.forgot_password.email_placeholder') }}"
                             >
                         </div>
                         @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -77,14 +77,14 @@
                                 </svg>
                             </span>
                             <span wire:loading.remove wire:target="sendResetLink">
-                                Enviar nueva contraseña
+                                {{ __('cms.forgot_password.send_button') }}
                             </span>
                         </button>
                     </div>
 
                     <div class="text-center">
                         <a href="{{ route('login') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">
-                            Volver al inicio de sesión
+                            {{ __('cms.forgot_password.back_to_login') }}
                         </a>
                     </div>
                 </form>

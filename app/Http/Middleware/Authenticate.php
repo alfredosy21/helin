@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use App\Utils\Messages;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -99,7 +98,7 @@ class Authenticate extends Middleware
         if ($request->expectsJson() || $request->is('api/*')) {
             abort(response()->json([
                 'success' => false,
-                'message' => Messages::get('auth.unauthenticated'),
+                'message' => __('cms.messages.auth.unauthenticated'),
                 'code' => 401,
                 'data' => [
                     'redirect' => route('login'),
@@ -158,7 +157,7 @@ class Authenticate extends Middleware
         if (!$token) {
             return response()->json([
                 'success' => false,
-                'message' => Messages::get('auth.api_token_required'),
+                'message' => __('cms.messages.auth.api_token_required'),
                 'code' => 401,
             ], 401);
         }
@@ -166,7 +165,7 @@ class Authenticate extends Middleware
         if (!$this->isValidApiToken($token)) {
             return response()->json([
                 'success' => false,
-                'message' => Messages::get('auth.api_token_invalid'),
+                'message' => __('cms.messages.auth.api_token_invalid'),
                 'code' => 401,
             ], 401);
         }
@@ -189,13 +188,13 @@ class Authenticate extends Middleware
         if (!$user || !$user->hasRole('admin')) {
             Auth::logout();
             session()->invalidate();
-            return redirect()->route('login')->with('error', Messages::get('auth.admin_required'));
+            return redirect()->route('login')->with('error', __('cms.messages.auth.admin_required'));
         }
 
         if (!$user->is_active) {
             Auth::logout();
             session()->invalidate();
-            return redirect()->route('login')->with('error', Messages::get('auth.inactive'));
+            return redirect()->route('login')->with('error', __('cms.messages.auth.inactive'));
         }
 
         return true;
@@ -235,12 +234,12 @@ class Authenticate extends Middleware
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => false,
-                'message' => Messages::get('auth.session_expired'),
+                'message' => __('cms.messages.auth.session_expired'),
                 'code' => 401
             ], 401);
         }
 
-        return redirect()->route('login')->with('warning', Messages::get('auth.session_expired'));
+        return redirect()->route('login')->with('warning', __('cms.messages.auth.session_expired'));
     }
 
     /**
@@ -264,13 +263,13 @@ class Authenticate extends Middleware
     protected function getRedirectMessage(Request $request, array $guards): string
     {
         if (session()->has('auth.timeout')) {
-            return Messages::get('auth.session_expired');
+            return __('cms.messages.auth.session_expired');
         }
 
         if (in_array('admin', $guards)) {
-            return Messages::get('auth.admin_required');
+            return __('cms.messages.auth.admin_required');
         }
 
-        return Messages::get('auth.required');
+        return __('cms.messages.auth.required');
     }
 }

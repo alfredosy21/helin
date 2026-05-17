@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\Blog;
 use App\Models\Activities;
+use App\Models\BlogCategory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -40,7 +41,7 @@ class BlogArticlesController extends Component
     use WithPagination;
 
     /** @var string Article title */
-    #[Validate('required|string|max:255', as: 'título del artículo')]
+    #[Validate('required|string|max:255')]
     public string $title = '';
 
     /** @var string|null SEO-friendly slug for URL generation */
@@ -124,7 +125,7 @@ class BlogArticlesController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Blog Articles module.');
+            abort(403, __('cms.abort.blog_articles'));
         }
     }
 
@@ -155,7 +156,7 @@ class BlogArticlesController extends Component
 
         return view('cms.blog_articles.index', [
             'articles'   => $articles,
-            'categories' => \App\Models\BlogCategory::orderBy('name')->get()
+            'categories' => BlogCategory::query()->orderBy('name')->get()
         ]);
     }
 
@@ -226,23 +227,23 @@ class BlogArticlesController extends Component
                 $article = Blog::findOrFail($this->editingId);
                 $article->update($data);
 
-                Activities::saveActivity("Artículo de blog actualizado: ID #{$article->id}");
-                $this->dispatch('toast', message: 'Artículo de blog actualizado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.blog_articles.activity_updated', ['id' => $article->id]));
+                $this->dispatch('toast', message: __('cms.controllers.blog_articles.updated'), type: 'success');
             } else {
                 Blog::query()->increment('order');
                 $data['order'] = 1;
 
                 $article = Blog::create($data);
 
-                Activities::saveActivity("Artículo de blog creado: ID #{$article->id}");
-                $this->dispatch('toast', message: 'Artículo de blog creado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.blog_articles.activity_created', ['id' => $article->id]));
+                $this->dispatch('toast', message: __('cms.controllers.blog_articles.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar el artículo de blog', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -295,12 +296,12 @@ class BlogArticlesController extends Component
             $articleTitle = $article->title;
             $article->delete();
 
-            Activities::saveActivity("Artículo de blog eliminado: {$articleTitle}");
-            $this->dispatch('toast', message: 'Artículo de blog eliminado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_articles.activity_deleted', ['title' => $articleTitle]));
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar el artículo. Verifique datos asociados.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.delete_error'), type: 'error');
         } finally {
             $this->showDeleteModal = false;
             $this->deleteId = null;
@@ -330,6 +331,13 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'title' => __('cms.validation_attributes.article_title'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset([
@@ -368,13 +376,16 @@ class BlogArticlesController extends Component
                 'published_at' => !$article->is_active ? now() : null
             ]);
 
+            $toastMsg = $article->is_active
+                ? __('cms.controllers.blog_articles.activated')
+                : __('cms.controllers.blog_articles.deactivated');
             $status = $article->is_active ? 'activado' : 'desactivado';
-            Activities::saveActivity("Artículo de blog {$status}: ID #{$article->id}");
-            $this->dispatch('toast', message: "Artículo {$status} correctamente", type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_articles.activity_status', ['status' => $status, 'id' => $article->id]));
+            $this->dispatch('toast', message: $toastMsg, type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al cambiar el estado del artículo', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.status_error'), type: 'error');
         }
     }
 
@@ -390,13 +401,16 @@ class BlogArticlesController extends Component
             $article = Blog::findOrFail($id);
             $article->update(['is_featured' => !$article->is_featured]);
 
+            $toastMsg = $article->is_featured
+                ? __('cms.controllers.blog_articles.featured_on')
+                : __('cms.controllers.blog_articles.featured_off');
             $status = $article->is_featured ? 'marcado como destacado' : 'desmarcado como destacado';
-            Activities::saveActivity("Artículo de blog {$status}: ID #{$article->id}");
-            $this->dispatch('toast', message: "Artículo {$status}", type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_articles.activity_featured', ['status' => $status, 'id' => $article->id]));
+            $this->dispatch('toast', message: $toastMsg, type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al cambiar el estado destacado', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.featured_error'), type: 'error');
         }
     }
 
@@ -413,11 +427,11 @@ class BlogArticlesController extends Component
                 Blog::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Artículos de blog reordenados por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_articles.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.order_updated'), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al reordenar los artículos', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_articles.order_error'), type: 'error');
         }
     }
 }

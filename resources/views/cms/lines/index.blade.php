@@ -7,12 +7,12 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
                 <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide uppercase">
-                    <span>Escritorio</span>
+                    <span>{{ __('cms.general.desktop') }}</span>
                     <span class="text-slate-300">/</span>
-                    <span class="text-primary-600 font-semibold">Líneas</span>
+                    <span class="text-primary-600 font-semibold">{{ __('cms.lines.breadcrumb') }}</span>
                 </div>
                 <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
-                    Gestión de <span class="text-primary-600">líneas</span>
+                    {{ __('cms.lines.title') }}
                 </h1>
             </div>
 
@@ -21,7 +21,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                 </svg>
-                Nueva línea
+                {{ __('cms.lines.new_button') }}
             </button>
         </div>
 
@@ -34,13 +34,13 @@
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
-                    <input type="text" wire:model.live="search" placeholder="Buscar por nombre o slug..."
+                    <input type="text" wire:model.live="search" placeholder="{{ __('cms.lines.search_placeholder') }}"
                         class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
-                    <option value="10">10 por pág.</option>
-                    <option value="20">20 por pág.</option>
-                    <option value="50">50 por pág.</option>
+                    <option value="10">{{ __('cms.tables.per_page_10') }}</option>
+                    <option value="20">{{ __('cms.tables.per_page_20') }}</option>
+                    <option value="50">{{ __('cms.tables.per_page_50') }}</option>
                 </select>
             </div>
 
@@ -49,9 +49,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5">Línea</th>
-                            <th class="px-6 py-3.5">Slug / URL</th>
-                            <th class="px-6 py-3.5 text-right w-40">Acciones</th>
+                            <th class="px-6 py-3.5">{{ __('cms.tables.line') }}</th>
+                            <th class="px-6 py-3.5">{{ __('cms.tables.slug_url') }}</th>
+                            <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody id="lines-table-body" class="divide-y divide-slate-50 text-sm">
@@ -74,12 +74,12 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        <button wire:click="edit({{ $line->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Editar línea">
+                                        <button wire:click="edit({{ $line->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="{{ __('cms.general.edit') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
                                         </button>
-                                        <button onclick="openDeleteModal({{ $line->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Eliminar línea">
+                                        <button onclick="openDeleteModal({{ $line->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="{{ __('cms.general.delete') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                                             </svg>
@@ -92,7 +92,7 @@
                                 <td colspan="3" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
                                         <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                        <p class="text-xs font-medium">No se encontraron líneas</p>
+                                        <p class="text-xs font-medium">{{ __('cms.lines.no_lines') }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -119,9 +119,9 @@
             <div class="p-6 border-b border-slate-50 flex justify-between items-center">
                 <div>
                     <h2 class="text-base font-bold text-[#222]">
-                        {{ $editingId ? 'Actualizar' : 'Nueva' }} línea
+                        {{ $editingId ? __('cms.lines.edit_title') : __('cms.lines.new_title') }}
                     </h2>
-                    <p class="text-xs text-[#c0c1c6]">Clasificación principal del catálogo</p>
+                    <p class="text-xs text-[#c0c1c6]">{{ __('cms.lines.subtitle') }}</p>
                 </div>
                 <button wire:click="cancel" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors border-none bg-transparent cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
@@ -131,29 +131,29 @@
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre de la línea</label>
-                        <input type="text" wire:model="name" placeholder="ej. Equipamiento Médico, Instrumental, Consumibles..."
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.lines.name_label') }}</label>
+                        <input type="text" wire:model="name" placeholder="{{ __('cms.lines.name_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug (opcional)</label>
-                        <input type="text" wire:model="slug" placeholder="ej. equipamiento-medico"
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.lines.slug_label') }}</label>
+                        <input type="text" wire:model="slug" placeholder="{{ __('cms.lines.slug_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        <p class="text-xs text-[#c0c1c6] italic">Si se deja vacío, se generará automáticamente.</p>
+                        <p class="text-xs text-[#c0c1c6] italic">{{ __('cms.categories.slug_helper') }}</p>
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Descripción (opcional)</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.description_label') }}</label>
                         <textarea wire:model="description" rows="3"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Descripción (opcional)</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.seo_description_label') }}</label>
                         <textarea wire:model="seo_description" rows="2"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
@@ -163,11 +163,11 @@
 
                 <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">
                     <button type="button" wire:click="cancel" class="flex-1 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors py-2 cursor-pointer">
-                        Cancelar
+                        {{ __('cms.general.cancel') }}
                     </button>
                     <button type="submit" wire:loading.attr="disabled" class="flex-1 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors py-2 border-none cursor-pointer flex items-center justify-center">
                         <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? 'Guardar cambios' : 'Crear línea' }}
+                            {{ $editingId ? __('cms.general.save') : __('cms.lines.new_button') }}
                         </span>
                         <span wire:loading wire:target="save">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -193,15 +193,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                     </svg>
                 </div>
-                <h3 class="text-base font-bold text-[#222] mb-1">¿Eliminar esta línea?</h3>
-                <p class="text-xs text-slate-400 mb-6">Esta acción no se puede deshacer y podría afectar categorías y productos asociados.</p>
+                <h3 class="text-base font-bold text-[#222] mb-1">{{ __('cms.lines.delete_title') }}</h3>
+                <p class="text-xs text-slate-400 mb-6">{{ __('cms.lines.delete_warning') }}</p>
 
                 <div class="flex gap-3">
                     <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors rounded-lg">
-                        Cancelar
+                        {{ __('cms.general.cancel') }}
                     </button>
                     <button onclick="confirmDelete()" class="flex-1 px-4 py-2 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors border-none cursor-pointer">
-                        Eliminar línea
+                        {{ __('cms.lines.delete_button') }}
                     </button>
                 </div>
             </div>

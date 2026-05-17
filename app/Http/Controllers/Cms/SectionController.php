@@ -31,19 +31,19 @@ class SectionController extends Component
     use WithPagination;
 
     /** @var string Primary title of the section content block */
-    #[Validate('required|string|max:255', as: 'section title')]
+    #[Validate('required|string|max:255')]
     public string $title = '';
 
     /** @var string Main HTML or text content for the section */
-    #[Validate('required|string', as: 'section content')]
+    #[Validate('required|string')]
     public string $content = '';
 
     /** @var string|null Label for the Call to Action button */
-    #[Validate('nullable|string|max:255', as: 'button label')]
+    #[Validate('nullable|string|max:255')]
     public ?string $name_button = '';
 
     /** @var string|null Target URL or route for the button */
-    #[Validate('nullable|string|max:500', as: 'button URL')]
+    #[Validate('nullable|string|max:500')]
     public ?string $url_button = '';
 
     /** @var string|null Comma-separated list of image filenames */
@@ -85,7 +85,7 @@ class SectionController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin CMS core modules.');
+            abort(403, __('cms.abort.sections'));
         }
     }
 
@@ -148,14 +148,14 @@ class SectionController extends Component
                 'status_content' => $this->status_content ? 1 : 0,
             ]);
 
-            Activities::saveActivity("Sección sincronizada: ID #{$section->id} ({$this->title})");
+            Activities::saveActivity(__('cms.controllers.sections.activity_updated', ['id' => $section->id, 'title' => $this->title]));
 
-            $this->dispatch('toast', message: 'Sección actualizada correctamente', type: 'success');
+            $this->dispatch('toast', message: __('cms.controllers.sections.updated'), type: 'success');
             $this->cancelEdit();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Ocurrió un error al procesar la solicitud', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.sections.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -170,8 +170,8 @@ class SectionController extends Component
     {
         $this->dispatch('confirm-delete',
             id: $id,
-            message: '¿Estás seguro de eliminar esta sección? Esta acción no se puede deshacer.',
-            title: '¡Cuidado!'
+            message: __('cms.controllers.sections.delete_confirm_message'),
+            title: __('cms.controllers.sections.delete_confirm_title')
         );
     }
 
@@ -187,12 +187,12 @@ class SectionController extends Component
             $title = $section->title;
             $section->delete();
 
-            Activities::saveActivity("Sección desactivada: {$title}");
-            $this->dispatch('toast', message: 'Sección eliminada correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.sections.activity_deleted', ['title' => $title]));
+            $this->dispatch('toast', message: __('cms.controllers.sections.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error: La sección contiene datos protegidos.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.sections.delete_error'), type: 'error');
         }
     }
 
@@ -216,15 +216,15 @@ class SectionController extends Component
 
             if ($this->editingId) {
                 Sections::query()->where('id', $this->editingId)->update(['image' => $images]);
-                Activities::saveActivity("Activo multimedia desvinculado de Sección ID #{$this->editingId}");
+                Activities::saveActivity(__('cms.controllers.sections.activity_photo_removed', ['id' => $this->editingId]));
             }
 
             $this->loadPhotos();
-            $this->dispatch('toast', message: 'Imagen eliminada correctamente', type: 'success');
+            $this->dispatch('toast', message: __('cms.controllers.sections.image_removed'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al eliminar la imagen', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.sections.image_remove_error'), type: 'error');
         }
     }
 
@@ -253,6 +253,16 @@ class SectionController extends Component
     /**
      * Reset internal state properties and validation errors.
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'title' => __('cms.validation_attributes.section_title'),
+            'content' => __('cms.validation_attributes.section_content'),
+            'name_button' => __('cms.validation_attributes.button_label'),
+            'url_button' => __('cms.validation_attributes.button_url'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['title', 'content', 'name_button', 'url_button', 'image', 'status', 'status_content', 'editingId']);

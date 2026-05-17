@@ -1,6 +1,6 @@
 @extends('cms.layouts.auth')
 
-@section('title', 'Sesión Bloqueada')
+@section('title', __('cms.lock.title'))
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -17,10 +17,10 @@
                     <x-ui-icon name="lock" class="text-white text-2xl" />
                 </div>
                 <h1 class="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                    Sesión bloqueada
+                    {{ __('cms.lock.title') }}
                 </h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                    Tu sesión ha sido bloqueada por seguridad
+                    {{ __('cms.lock.subtitle') }}
                 </p>
                 @if($user)
                     <div class="mt-4 flex items-center justify-center space-x-3">
@@ -43,7 +43,7 @@
                     <!-- Email Field (pre-filled) -->
                     <div class="group">
                         <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Correo electrónico
+                            {{ __('cms.lock.email') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -56,7 +56,7 @@
                                 required
                                 value="{{ $user ? $user->email : old('email') }}"
                                 class="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 backdrop-blur-sm"
-                                placeholder="tu@correo.com"
+                                placeholder="{{ __('cms.lock.email_placeholder') }}"
                                 autocomplete="email"
                                 readonly
                             >
@@ -66,7 +66,7 @@
                     <!-- Password Field -->
                     <div class="group">
                         <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Contraseña
+                            {{ __('cms.general.password') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -110,7 +110,7 @@
                         </div>
                         <div class="ml-2">
                             <p class="text-xs text-primary-800 dark:text-primary-200">
-                                Ingresa tu contraseña para desbloquear la sesión. Tu sesión permanecerá activa.
+                                {{ __('cms.lock.unlock_notice') }}
                             </p>
                         </div>
                     </div>
@@ -129,17 +129,17 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Desbloqueando...
+                            {{ __('cms.general.unlocking') }}
                         </span>
-                        <span wire:loading.remove wire:target="unlock" class="mr-2">Desbloquear Sesión</span>
+                        <span wire:loading.remove wire:target="unlock" class="mr-2">{{ __('cms.lock.unlock_session') }}</span>
                         <x-ui-icon name="unlock" class="w-4 h-4" />
                     </button>
 
                     <!-- Logout Button -->
-                    <button wire:click="logout" 
+                    <button wire:click="logout"
                             class="w-full flex justify-center items-center py-3 px-4 border border-slate-300 dark:border-slate-600 text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-300 bg-white/50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-all duration-200 backdrop-blur-sm"
                     >
-                        <span class="mr-2">Cerrar sesión</span>
+                        <span class="mr-2">{{ __('cms.lock.close_session') }}</span>
                         <x-ui-icon name="log-out" class="w-4 h-4" />
                     </button>
                 </div>
@@ -158,11 +158,11 @@ document.addEventListener('livewire:init', () => {
             event.type === 'error' ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' :
             'bg-primary-50 dark:bg-primary-900/20 border border-blue-200 dark:border-blue-800'
         } rounded-lg p-4 shadow-lg`;
-        
-        const icon = event.type === 'success' ? 'check-circle' : 
-                   event.type === 'error' ? 'x-circle' : 
+
+        const icon = event.type === 'success' ? 'check-circle' :
+                   event.type === 'error' ? 'x-circle' :
                    'info-circle';
-        
+
         toast.innerHTML = `
             <div class="flex">
                 <div class="flex-shrink-0">
@@ -182,9 +182,9 @@ document.addEventListener('livewire:init', () => {
                 </div>
             </div>
         </div>`;
-        
+
         document.body.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.remove();
         }, 3000);

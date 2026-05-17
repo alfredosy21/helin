@@ -12,7 +12,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
 
 /**
  * Class PermissionsController
@@ -63,7 +62,7 @@ class PermissionsController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Permissions module.');
+            abort(403, __('cms.abort.permissions'));
         }
 
         $this->roleId = $roleId;
@@ -93,7 +92,7 @@ class PermissionsController extends Component
             $this->permissions = Permission::getPermissionsByRole($this->roleId);
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al cargar permisos', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.permissions.load_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -120,11 +119,12 @@ class PermissionsController extends Component
                     ->where('type', Permission::MAIN_MODULE_TYPE)
                     ->update(['status' => $newStatus]);
 
-            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
-            Activities::saveActivity("Permiso de módulo {$action}: Rol ID #{$this->roleId}, Módulo ID #{$moduleId}");
+            $action = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.module_activated') : __('cms.controllers.permissions.module_deactivated');
+            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            Activities::saveActivity(__('cms.controllers.permissions.activity_single_module', ['action' => $actionWord, 'role_id' => $this->roleId, 'module_id' => $moduleId]));
 
             $this->dispatch('toast',
-                message: "Permiso de módulo {$action} correctamente",
+                message: $action,
                 type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
@@ -132,7 +132,7 @@ class PermissionsController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al actualizar permiso de módulo', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.permissions.module_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -150,7 +150,7 @@ class PermissionsController extends Component
         // Only allow submodule permission if parent module is active
         if ($moduleStatus !== Permission::ACTIVE_STATUS) {
             $this->dispatch('toast',
-                message: 'Por favor active el módulo padre primero',
+                message: __('cms.controllers.permissions.parent_module_required'),
                 type: 'warning'
             );
             return;
@@ -166,11 +166,12 @@ class PermissionsController extends Component
 
             $permission->update(['status' => $newStatus]);
 
-            $action = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
-            Activities::saveActivity("Permiso de submódulo {$action}: Permiso ID #{$permissionId}");
+            $action = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.submodule_activated') : __('cms.controllers.permissions.submodule_deactivated');
+            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            Activities::saveActivity(__('cms.controllers.permissions.activity_single_submodule', ['action' => $actionWord, 'permission_id' => $permissionId]));
 
             $this->dispatch('toast',
-                message: "Permiso de submódulo {$action} correctamente",
+                message: $action,
                 type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
@@ -178,7 +179,7 @@ class PermissionsController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al actualizar permiso de submódulo', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.permissions.submodule_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -206,11 +207,12 @@ class PermissionsController extends Component
                         ->update(['status' => $status]);
             }
 
-            $action = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
-            Activities::saveActivity("{$action} permisos de módulo para Rol ID #{$this->roleId}");
+            $action = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.all_activated') : __('cms.controllers.permissions.all_deactivated');
+            $actionWord = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            Activities::saveActivity(__('cms.controllers.permissions.activity_module', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',
-                message: "{$action} permisos de módulo correctamente",
+                message: $action,
                 type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
@@ -218,7 +220,7 @@ class PermissionsController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al actualizar todos los permisos', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.permissions.all_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -247,11 +249,12 @@ class PermissionsController extends Component
                     ->whereIn('module_id', $activeModuleIds)
                     ->update(['status' => $status]);
 
-            $action = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
-            Activities::saveActivity("{$action} permisos de submódulo para Rol ID #{$this->roleId}");
+            $action = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.all_sub_activated') : __('cms.controllers.permissions.all_sub_deactivated');
+            $actionWord = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            Activities::saveActivity(__('cms.controllers.permissions.activity_submodule', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',
-                message: "{$action} permisos de submódulo correctamente",
+                message: $action,
                 type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
@@ -259,7 +262,7 @@ class PermissionsController extends Component
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al actualizar permisos de submódulo', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.permissions.all_sub_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -277,7 +280,7 @@ class PermissionsController extends Component
             $this->roleName = $role->name;
         } catch (\Exception $ex) {
             report($ex);
-            $this->roleName = 'Unknown Role';
+            $this->roleName = __('cms.controllers.permissions.unknown_role');
         }
     }
 }

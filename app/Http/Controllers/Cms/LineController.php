@@ -40,7 +40,7 @@ class LineController extends Component
     use WithPagination;
 
     /** @var string Display name of the product line */
-    #[Validate('required|string|max:255', as: 'nombre de la línea')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string|null SEO-friendly slug for URL generation */
@@ -86,7 +86,7 @@ class LineController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Lines module.');
+            abort(403, __('cms.abort.lines'));
         }
     }
 
@@ -161,23 +161,23 @@ class LineController extends Component
                 $line = Line::findOrFail($this->editingId);
                 $line->update($data);
 
-                Activities::saveActivity("Línea de producto actualizada: ID #{$line->id}");
-                $this->dispatch('toast', message: 'Línea actualizada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.lines.activity_updated', ['id' => $line->id]));
+                $this->dispatch('toast', message: __('cms.controllers.lines.updated'), type: 'success');
             } else {
                 Line::query()->increment('order');
                 $data['order'] = 1;
 
                 $line = Line::create($data);
 
-                Activities::saveActivity("Línea de producto creada: ID #{$line->id}");
-                $this->dispatch('toast', message: 'Línea creada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.lines.activity_created', ['id' => $line->id]));
+                $this->dispatch('toast', message: __('cms.controllers.lines.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la línea de producto', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.lines.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -223,12 +223,12 @@ class LineController extends Component
             $lineName = $line->name;
             $line->delete();
 
-            Activities::saveActivity("Línea de producto eliminada: {$lineName}");
-            $this->dispatch('toast', message: 'Línea eliminada correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.lines.activity_deleted', ['name' => $lineName]));
+            $this->dispatch('toast', message: __('cms.controllers.lines.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar la línea. Verifique productos asociados.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.lines.delete_error'), type: 'error');
         }
     }
 
@@ -248,12 +248,12 @@ class LineController extends Component
                 Line::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Líneas de producto reordenadas por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden de líneas actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.lines.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.lines.order_updated'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al actualizar el orden', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.lines.order_error'), type: 'error');
         }
     }
 
@@ -280,6 +280,13 @@ class LineController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.line_name'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['name', 'slug', 'description', 'seo_description', 'editingId']);

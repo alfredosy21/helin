@@ -29,6 +29,7 @@ use Livewire\Attributes\Layout;
  * @package App\Http\Controllers\Cms
  */
 #[Title('Catálogo de Productos | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
 class ProductsController extends Component
 {
     use WithPagination, WithFileUploads;
@@ -98,7 +99,7 @@ class ProductsController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Medical Inventory.');
+            abort(403, __('cms.abort.products'));
         }
     }
 
@@ -170,10 +171,10 @@ class ProductsController extends Component
             if ($this->editingId) {
                 $product = Product::findOrFail($this->editingId);
                 $product->update($payload);
-                $msg = 'Producto actualizado correctamente.';
+                $msg = __('cms.controllers.products.updated');
             } else {
                 $product = Product::create($payload);
-                $msg = 'Producto creado exitosamente.';
+                $msg = __('cms.controllers.products.created');
             }
 
             // --- Procesamiento de Archivos (Usando tu Service) ---
@@ -222,7 +223,7 @@ class ProductsController extends Component
                 }
             }
 
-            Activities::saveActivity("Producto gestionado: {$product->name} (SKU: {$product->sku})");
+            Activities::saveActivity(__('cms.controllers.products.activity_managed', ['name' => $product->name, 'sku' => $product->sku]));
             DB::commit();
 
             $this->dispatch('toast', message: $msg, type: 'success');
@@ -231,7 +232,7 @@ class ProductsController extends Component
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Product Error: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Error en el catálogo: ' . $e->getMessage(), type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.products.process_error', ['message' => $e->getMessage()]), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -274,7 +275,7 @@ class ProductsController extends Component
         try {
             $original = Product::findOrFail($id);
             $new = $original->replicate();
-            $new->name = $original->name . ' (Copia)';
+            $new->name = $original->name . __('cms.controllers.products.copy_suffix');
             $new->sku = $original->sku . '-' . strtoupper(Str::random(4));
             $new->is_active = false;
             $new->save();
@@ -286,10 +287,10 @@ class ProductsController extends Component
                 $newMedia->save();
             }
 
-            Activities::saveActivity("Producto duplicado: SKU {$new->sku}");
-            $this->dispatch('toast', message: 'Producto duplicado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.products.activity_duplicated', ['sku' => $new->sku]));
+            $this->dispatch('toast', message: __('cms.controllers.products.duplicated'), type: 'success');
         } catch (\Exception $e) {
-            $this->dispatch('toast', message: 'Error al duplicar', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.products.duplicate_error'), type: 'error');
         }
     }
 
@@ -310,8 +311,8 @@ class ProductsController extends Component
         }
 
         $product->delete();
-        Activities::saveActivity("Producto eliminado: {$product->name}");
-        $this->dispatch('toast', message: 'Producto y archivos eliminados', type: 'success');
+        Activities::saveActivity(__('cms.controllers.products.activity_deleted', ['name' => $product->name]));
+        $this->dispatch('toast', message: __('cms.controllers.products.deleted'), type: 'success');
 
         $this->showDeleteModal = false;
         $this->deleteId = null;

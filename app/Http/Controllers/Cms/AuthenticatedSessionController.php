@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\User;
 use App\Models\Activities;
-use App\Utils\Messages;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -121,17 +120,17 @@ class AuthenticatedSessionController extends Component
                     'user_agent' => request()->userAgent(),
                 ]);
 
-                Activities::saveActivity("Usuario inició sesión en el sistema: {$user->email}");
+                Activities::saveActivity(__('cms.controllers.auth.activity_login', ['email' => $user->email]));
 
                 $this->redirectIntended('/cms/dashboard');
                 return;
             }
 
-            $this->dispatch('toast', message: Messages::LABEL_ERROR_LOGIN, type: 'error');
+            $this->dispatch('toast', message: __('cms.messages.error.login'), type: 'error');
 
         } catch (Exception $e) {
             Log::error("Authentication failure: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Error del sistema durante la autenticación', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.auth.login_system_error'), type: 'error');
         }
     }
 
@@ -151,13 +150,13 @@ class AuthenticatedSessionController extends Component
                 session()->forget('locked_user_id');
                 session()->regenerate();
 
-                Activities::saveActivity("Sesión desbloqueada exitosamente para: {$this->email}");
+                Activities::saveActivity(__('cms.controllers.auth.activity_unlock', ['email' => $this->email]));
 
                 $this->redirectIntended('/cms/dashboard');
                 return;
             }
 
-            $this->addError('password', Messages::LABEL_ERROR_LOGIN);
+            $this->addError('password', __('cms.messages.error.login'));
 
         } catch (Exception $e) {
             Log::error("Unlock attempt failed: " . $e->getMessage());
@@ -187,14 +186,14 @@ class AuthenticatedSessionController extends Component
      */
     public function logout(): void
     {
-        $userEmail = Auth::user() ? Auth::user()->email : 'Unknown';
+        $userEmail = Auth::user() ? Auth::user()->email : __('cms.controllers.auth.unknown_user');
 
         Auth::guard('web')->logout();
         session()->invalidate();
         session()->regenerateToken();
         session()->flush();
 
-        Activities::saveActivity("Usuario cerró sesión: {$userEmail}");
+        Activities::saveActivity(__('cms.controllers.auth.activity_logout', ['email' => $userEmail]));
 
         // Verificar si estamos en contexto Livewire o ruta normal
         if (request()->expectsJson() || request()->header('X-Livewire')) {

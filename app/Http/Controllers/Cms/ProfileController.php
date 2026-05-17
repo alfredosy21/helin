@@ -95,7 +95,7 @@ class ProfileController extends Component
         $user = Auth::user();
 
         if (!$user) {
-            abort(403, 'User context not found.');
+            abort(403, __('cms.abort.profile'));
         }
 
         $this->name = $user->name;
@@ -154,10 +154,10 @@ class ProfileController extends Component
             // Save if data changed or a new image was uploaded
             if ($user->isDirty() || $hasNewImage) {
                 $user->save();
-                Activities::saveActivity('Usuario actualizó información personal y activos del perfil');
-                $this->dispatch('toast', message: 'Perfil actualizado correctamente.', type: 'success');
+                Activities::saveActivity(__('cms.controllers.profile.activity_updated'));
+                $this->dispatch('toast', message: __('cms.controllers.profile.updated'), type: 'success');
             } else {
-                $this->dispatch('toast', message: 'No se detectaron cambios en el perfil.', type: 'info');
+                $this->dispatch('toast', message: __('cms.controllers.profile.no_changes'), type: 'info');
             }
 
             DB::commit();
@@ -168,7 +168,7 @@ class ProfileController extends Component
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Profile update failed: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Failed to update profile data.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.profile.update_error'), type: 'error');
         }
     }
 
@@ -189,7 +189,7 @@ class ProfileController extends Component
             $user = Auth::user();
 
             if (!Hash::check($this->current_password, $user->password)) {
-                $this->addError('current_password', 'The current password provided is incorrect.');
+                $this->addError('current_password', __('cms.controllers.profile.current_password_error'));
                 return;
             }
 
@@ -199,12 +199,12 @@ class ProfileController extends Component
 
             $this->reset(['current_password', 'new_password', 'password_confirmation']);
 
-            Activities::saveActivity('Actualización de seguridad de cuenta: Contraseña cambiada');
-            $this->dispatch('toast', message: 'Password updated successfully.', type: 'success');
+            Activities::saveActivity(__('cms.controllers.profile.activity_password'));
+            $this->dispatch('toast', message: __('cms.controllers.profile.password_updated'), type: 'success');
 
         } catch (Exception $e) {
             Log::error("Password update failed: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Error updating security credentials.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.profile.password_error'), type: 'error');
         }
     }
 
@@ -225,12 +225,12 @@ class ProfileController extends Component
                 $user->save();
 
                 $this->current_image = null;
-                Activities::saveActivity('Usuario eliminó foto de perfil');
-                $this->dispatch('toast', message: 'Profile picture removed.', type: 'info');
+                Activities::saveActivity(__('cms.controllers.profile.activity_image_removed'));
+                $this->dispatch('toast', message: __('cms.controllers.profile.image_removed'), type: 'info');
             }
         } catch (Exception $e) {
             Log::error("Profile image removal failed: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Error removing asset.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.profile.image_remove_error'), type: 'error');
         }
     }
 
@@ -246,7 +246,7 @@ class ProfileController extends Component
             $userId = Auth::id();
             DB::table('sessions')->where('user_id', $userId)->delete();
 
-            Activities::saveActivity('Usuario terminó todas las sesiones activas');
+            Activities::saveActivity(__('cms.controllers.profile.activity_sessions_closed'));
 
             Auth::guard('web')->logout();
             session()->invalidate();
@@ -258,7 +258,7 @@ class ProfileController extends Component
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Session termination failed: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Error during session cleanup.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.profile.session_cleanup_error'), type: 'error');
         }
     }
 }

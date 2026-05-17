@@ -95,7 +95,7 @@ class SettingsController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin System Settings.');
+            abort(403, __('cms.abort.settings'));
         }
 
         $this->loadSettings();
@@ -168,7 +168,7 @@ class SettingsController extends Component
 
             $settings->save();
 
-            Activities::saveActivity("Configuración del sistema actualizada por Usuario #" . Auth::id());
+            Activities::saveActivity(__('cms.controllers.settings.activity_updated', ['user_id' => Auth::id()]));
             DB::commit();
 
             $this->current_image = $settings->image;
@@ -176,7 +176,7 @@ class SettingsController extends Component
             $this->isEditing = false;
 
             // Enviar toast de éxito
-            $this->dispatch('toast', message: 'Configuración actualizada correctamente', type: 'success');
+            $this->dispatch('toast', message: __('cms.controllers.settings.updated'), type: 'success');
 
             // Logging para debugging
             Log::info('Toast dispatched successfully: Configuración actualizada correctamente');
@@ -184,7 +184,7 @@ class SettingsController extends Component
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error("Settings Persistence Failure: " . $ex->getMessage());
-            $this->dispatch('toast', message: 'Error al sincronizar los ajustes corporativos', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.settings.process_error'), type: 'error');
         }
     }
 

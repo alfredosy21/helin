@@ -10,8 +10,6 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -19,7 +17,7 @@ use Livewire\Attributes\Layout;
 
 /**
  * DashboardController
- * 
+ *
  * This controller manages the main administrative interface, handling
  * real-time statistics, system health metrics, and activity tracking.
  */
@@ -42,8 +40,8 @@ class DashboardController extends Component
 
     /**
      * Fetch fresh metrics from the database.
-     * 
-     * Uses the query() builder on Eloquent models to ensure clean 
+     *
+     * Uses the query() builder on Eloquent models to ensure clean
      * implementation and better IDE autocompletion.
      */
     public function refreshStats(): void
@@ -59,7 +57,7 @@ class DashboardController extends Component
                 'total_categories' => Category::query()->count(['id']),
                 'total_brands'     => Brand::query()->count(['id']),
                 'total_users'      => User::query()->count(['id']),
-                
+
                 // Growth Indicators (Current Month)
                 'new_users' => User::query()
                     ->whereMonth('created_at', '=', $currentMonth, true)
@@ -84,13 +82,13 @@ class DashboardController extends Component
 
     /**
      * Render the dashboard view with dynamic data.
-     * 
+     *
      * @return View The dashboard index view with activity and distribution data.
      */
     public function render(): View
     {
         /**
-         * Fetch the latest 10 system activities, eager-loading users 
+         * Fetch the latest 10 system activities, eager-loading users
          * to avoid N+1 query performance issues.
          */
         $recentActivities = Activities::query()
@@ -103,7 +101,7 @@ class DashboardController extends Component
                     'description' => $activity->activity,
                     'time'        => $activity->created_at->diffForHumans(),
                     'icon'        => $this->getActivityIcon($activity->activity),
-                    'user'        => $activity->user ? $activity->user->name : 'System'
+                    'user'        => $activity->user ? $activity->user->name : __('cms.controllers.dashboard.system_user')
                 ];
             });
 
@@ -123,7 +121,7 @@ class DashboardController extends Component
 
     /**
      * Map activity descriptions to specific UI icons.
-     * 
+     *
      * @param string $activity The raw activity description string.
      * @return string The icon identifier for the frontend component.
      */

@@ -28,7 +28,7 @@ class CategoriesController extends Component
     use WithPagination;
 
     /** @var string Display name of the category */
-    #[Validate('required|string|max:255', as: 'nombre de categoría')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string|null Slug or internal reference */
@@ -68,7 +68,7 @@ class CategoriesController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Taxonomy modules.');
+            abort(403, __('cms.abort.categories'));
         }
     }
 
@@ -120,8 +120,8 @@ class CategoriesController extends Component
                 $category = Category::findOrFail($this->editingId);
                 $category->update($data);
 
-                Activities::saveActivity("Taxonomía actualizada: Categoría ID #{$category->id}");
-                $this->dispatch('toast', message: 'Categoría actualizada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.categories.activity_updated', ['id' => $category->id]));
+                $this->dispatch('toast', message: __('cms.controllers.categories.updated'), type: 'success');
             } else {
                 // Insertar al principio: desplazar todas las existentes +1
                 Category::query()->increment('order');
@@ -129,14 +129,14 @@ class CategoriesController extends Component
 
                 $category = Category::create($data);
 
-                Activities::saveActivity("Taxonomía creada: Categoría ID #{$category->id}");
-                $this->dispatch('toast', message: 'Categoría creada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.categories.activity_created', ['id' => $category->id]));
+                $this->dispatch('toast', message: __('cms.controllers.categories.created'), type: 'success');
             }
 
             $this->cancel();
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la categoría', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.categories.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -169,11 +169,11 @@ class CategoriesController extends Component
             $categoryName = $category->name;
             $category->delete();
 
-            Activities::saveActivity("Elemento de taxonomía eliminado: {$categoryName}");
-            $this->dispatch('toast', message: 'Categoría eliminada correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.categories.activity_deleted', ['name' => $categoryName]));
+            $this->dispatch('toast', message: __('cms.controllers.categories.deleted'), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar la categoría. Verifique productos asociados.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.categories.delete_error'), type: 'error');
         }
     }
 
@@ -188,11 +188,11 @@ class CategoriesController extends Component
                 Category::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Taxonomía reordenada por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.categories.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.categories.order_updated'), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al reordenar las categorías', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.categories.order_error'), type: 'error');
         }
     }
 
@@ -204,6 +204,13 @@ class CategoriesController extends Component
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
+    }
+
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.category_name'),
+        ];
     }
 
     private function resetForm(): void

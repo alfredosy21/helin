@@ -31,19 +31,19 @@ class UserController extends Component
     use WithPagination;
 
     /** @var string Full name of the administrative user */
-    #[Validate('required|string|max:255', as: 'nombre')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string Unique email address for authentication */
-    #[Validate('required|email|max:255|unique:users,email', as: 'correo electrónico')]
+    #[Validate('required|email|max:255|unique:users,email')]
     public string $email = '';
 
     /** @var int|null Associated security role ID */
-    #[Validate('required|exists:roles,id', as: 'rol')]
+    #[Validate('required|exists:roles,id')]
     public ?int $rol_id = null;
 
     /** @var string|null Plain text password (hashed before persistence) */
-    #[Validate('nullable|string|min:8', as: 'contraseña')]
+    #[Validate('nullable|string|min:8')]
     public ?string $password = '';
 
     /** @var int|null ID of the user being modified */
@@ -74,7 +74,7 @@ class UserController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin User Directory.');
+            abort(403, __('cms.abort.users'));
         }
 
         $this->suggestedPassword = Str::password(12);
@@ -150,20 +150,20 @@ class UserController extends Component
                 $user = User::findOrFail($this->editingId);
                 $user->update($data);
 
-                Activities::saveActivity("Perfil de usuario sincronizado: Admin ID #{$user->id}");
-                $this->dispatch('toast', message: 'Usuario actualizado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.users.activity_updated', ['id' => $user->id]));
+                $this->dispatch('toast', message: __('cms.controllers.users.updated'), type: 'success');
             } else {
                 $user = User::create($data);
 
-                Activities::saveActivity("Usuario provisionado: Admin ID #{$user->id}");
-                $this->dispatch('toast', message: 'Usuario creado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.users.activity_created', ['id' => $user->id]));
+                $this->dispatch('toast', message: __('cms.controllers.users.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la solicitud del usuario', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.users.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -196,12 +196,12 @@ class UserController extends Component
             $userName = $user->name;
             $user->delete();
 
-            Activities::saveActivity("Terminación de usuario: {$userName}");
-            $this->dispatch('toast', message: 'Usuario eliminado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.users.activity_deleted', ['name' => $userName]));
+            $this->dispatch('toast', message: __('cms.controllers.users.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar el usuario. Datos relacionados activos.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.users.delete_error'), type: 'error');
         }
     }
 
@@ -228,6 +228,16 @@ class UserController extends Component
     /**
      * Clean all form-related properties.
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.user_name'),
+            'email' => __('cms.validation_attributes.user_email'),
+            'rol_id' => __('cms.validation_attributes.user_role'),
+            'password' => __('cms.validation_attributes.user_password'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['name', 'email', 'rol_id', 'password', 'editingId']);

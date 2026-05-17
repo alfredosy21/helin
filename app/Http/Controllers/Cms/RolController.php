@@ -34,7 +34,7 @@ class RolController extends Component
     /**
      * @var string The unique identifier name of the role.
      */
-    #[Validate('required|string|max:255|unique:roles,name', as: 'role name')]
+    #[Validate('required|string|max:255|unique:roles,name')]
     public string $name = '';
 
     /**
@@ -76,7 +76,7 @@ class RolController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin security modules.');
+            abort(403, __('cms.abort.roles'));
         }
     }
 
@@ -132,30 +132,30 @@ class RolController extends Component
             if ($this->editingId) {
                 // Prevent updating roles with ID <= 1 (protected system roles)
                 if ($this->editingId <= 1) {
-                    $this->dispatch('toast', message: 'No se puede modificar roles del sistema', type: 'error');
+                    $this->dispatch('toast', message: __('cms.controllers.roles.system_role_edit_error'), type: 'error');
                     return;
                 }
 
                 $role = Role::findOrFail($this->editingId);
                 $role->update(['name' => $this->name]);
 
-                Activities::saveActivity("Rol de seguridad actualizado: {$this->name} (ID: #{$role->id})");
-                $this->dispatch('toast', message: 'Rol actualizado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.roles.activity_updated', ['name' => $this->name, 'id' => $role->id]));
+                $this->dispatch('toast', message: __('cms.controllers.roles.updated'), type: 'success');
             } else {
                 $role = Role::create(['name' => $this->name]);
 
                 // Create permissions for the new role
                 Permission::createPermissions($role->id);
 
-                Activities::saveActivity("Nuevo rol de seguridad creado: {$this->name} (ID: #{$role->id}) con permisos");
-                $this->dispatch('toast', message: 'Rol creado correctamente con permisos', type: 'success');
+                Activities::saveActivity(__('cms.controllers.roles.activity_created', ['name' => $this->name, 'id' => $role->id]));
+                $this->dispatch('toast', message: __('cms.controllers.roles.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la solicitud', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.roles.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -171,7 +171,7 @@ class RolController extends Component
     {
         // Prevent editing roles with ID <= 1 (protected system roles)
         if ($id <= 1) {
-            $this->dispatch('toast', message: 'No se puede editar roles del sistema', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.roles.system_role_edit_error'), type: 'error');
             return;
         }
 
@@ -194,7 +194,7 @@ class RolController extends Component
     {
         // Prevent deleting roles with ID <= 1 (protected system roles)
         if ($id <= 1) {
-            $this->dispatch('toast', message: 'No se puede eliminar roles del sistema', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.roles.system_role_edit_error'), type: 'error');
             return;
         }
 
@@ -203,12 +203,12 @@ class RolController extends Component
             $roleName = $role->name;
             $role->delete();
 
-            Activities::saveActivity("Rol de seguridad eliminado: {$roleName}");
-            $this->dispatch('toast', message: 'Rol eliminado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.roles.activity_deleted', ['name' => $roleName]));
+            $this->dispatch('toast', message: __('cms.controllers.roles.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar el rol. Datos relacionados activos.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.roles.system_role_delete_error'), type: 'error');
         }
     }
 
@@ -229,6 +229,13 @@ class RolController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.role_name'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['name', 'editingId']);

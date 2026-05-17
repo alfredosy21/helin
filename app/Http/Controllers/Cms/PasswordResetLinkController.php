@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Cms;
 
 use App\Models\User;
-use App\Utils\Messages;
 use App\Services\CustomMail;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -60,7 +59,7 @@ class PasswordResetLinkController extends Component
         $this->validate();
 
         if ($this->isRateLimited()) {
-            $this->addError('email', Messages::get('password.reset.too_many_attempts'));
+            $this->addError('email', __('cms.messages.password_reset.too_many_attempts'));
             return;
         }
 
@@ -68,13 +67,13 @@ class PasswordResetLinkController extends Component
             $user = User::query()->where('email', strtolower(trim($this->email)))->first();
 
             if (!$user) {
-                $this->dispatch('toast', message: 'Si el correo existe en nuestro sistema, recibirás una nueva contraseña en breve.', type: 'success');
+                $this->dispatch('toast', message: __('cms.controllers.password_reset.email_not_found'), type: 'success');
                 $this->requestSent = true;
                 return;
             }
 
             if (!$user->is_active) {
-                $this->dispatch('toast', message: Messages::get('password.reset.inactive'), type: 'error');
+                $this->dispatch('toast', message: __('cms.messages.password_reset.inactive'), type: 'error');
                 return;
             }
 
@@ -101,12 +100,12 @@ class PasswordResetLinkController extends Component
             // 5. Set Cooldown for this IP
             cache()->put('rate-limit-reset-' . request()->ip(), true, 60);
 
-            $this->dispatch('toast', message: 'Se envió un correo con tu nueva contraseña.', type: 'success');
+            $this->dispatch('toast', message: __('cms.controllers.password_reset.email_sent'), type: 'success');
             $this->requestSent = true;
 
         } catch (Exception $e) {
             Log::error("Password Reset Flow Failure: " . $e->getMessage());
-            $this->dispatch('toast', message: 'Ocurrió un error interno. Inténtalo más tarde.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.password_reset.internal_error'), type: 'error');
         }
     }
 

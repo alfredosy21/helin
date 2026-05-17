@@ -61,11 +61,11 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuarios Totales</p>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('cms.dashboard.total_users') }}</p>
                             <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ number_format($stats['total_users'] ?? 0) }}</p>
                             <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                 <x-ui-icon name="trending-up" class="w-3 h-3 text-green-500" />
-                                <span>{{ $stats['new_users'] ?? 0 }} nuevos este mes</span>
+                                <span>{{ $stats['new_users'] ?? 0 }} {{ __('cms.dashboard.new_this_month') }}</span>
                             </div>
                         </div>
                     </div>
@@ -85,11 +85,11 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Productos</p>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('cms.dashboard.products') }}</p>
                             <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ number_format($stats['total_products'] ?? 0) }}</p>
                             <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                 <x-ui-icon name="trending-up" class="w-3 h-3 text-green-500" />
-                                <span>{{ $stats['new_products'] ?? 0 }} nuevos este mes</span>
+                                <span>{{ $stats['new_products'] ?? 0 }} {{ __('cms.dashboard.new_this_month') }}</span>
                             </div>
                         </div>
                     </div>
@@ -106,11 +106,11 @@
                             <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Categorías</p>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('cms.dashboard.categories') }}</p>
                             <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ number_format($stats['total_categories'] ?? 0) }}</p>
                             <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                 <x-ui-icon name="layers" class="w-3 h-3 text-purple-500" />
-                                <span>Organización completa</span>
+                                <span>{{ __('cms.dashboard.organization_complete') }}</span>
                             </div>
                         </div>
                     </div>
@@ -127,11 +127,11 @@
                             <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Sistema</p>
-                            <p class="text-3xl font-bold text-green-600 dark:text-green-400">Online</p>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ __('cms.dashboard.system') }}</p>
+                            <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ __('cms.dashboard.online') }}</p>
                             <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                 <x-ui-icon name="check-circle" class="w-3 h-3 text-green-500" />
-                                <span>{{ $stats['uptime'] ?? '99.9%' }} uptime</span>
+                                <span>{{ $stats['uptime'] ?? '99.9%' }} {{ __('cms.dashboard.uptime') }}</span>
                             </div>
                         </div>
                     </div>
@@ -162,14 +162,14 @@
                                     </div>
                                     <div>
                                         <h3 class="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                                            Live Feed
+                                            {{ __('cms.dashboard.live_feed') }}
                                         </h3>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400">Tiempo real del sistema</p>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('cms.dashboard.real_time') }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                    <span class="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider">En Vivo</span>
+                                    <span class="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider">{{ __('cms.dashboard.live') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -218,9 +218,9 @@
                                         <div class="absolute inset-0 rounded-full border-2 border-slate-200 dark:border-gray-600 animate-ping opacity-20"></div>
                                     </div>
                                     <div class="mt-6 space-y-2">
-                                        <h4 class="text-lg font-semibold text-slate-900 dark:text-white">Sistema en Espera</h4>
+                                        <h4 class="text-lg font-semibold text-slate-900 dark:text-white">{{ __('cms.dashboard.system_waiting') }}</h4>
                                         <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                                            No hay actividad registrada en este momento. El sistema está listo para recibir acciones.
+                                            {{ __('cms.dashboard.no_activity') }}
                                         </p>
                                     </div>
                                 </div>
@@ -243,8 +243,8 @@
                                     <x-ui-icon name="zap" class="w-6 h-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-white">Acciones Rápidas</h3>
-                                    <p class="text-sm text-white/80">Crea y gestiona rápido</p>
+                                    <h3 class="text-xl font-bold text-white">{{ __('cms.general.quick_actions') }}</h3>
+                                    <p class="text-sm text-white/80">{{ __('cms.dashboard.quick_actions_subtitle') }}</p>
                                 </div>
                             </div>
 
@@ -253,25 +253,25 @@
                                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <x-ui-icon name="plus" class="w-5 h-5 text-white" />
                                     </div>
-                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">Producto</span>
+                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">{{ __('cms.general.product') }}</span>
                                 </a>
                                 <a href="{{ route('catalog.categories.create') }}" class="group flex flex-col items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-sm transition-all">
                                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <x-ui-icon name="folder" class="w-5 h-5 text-white" />
                                     </div>
-                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">Categoría</span>
+                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">{{ __('cms.general.category') }}</span>
                                 </a>
                                 <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-sm transition-all">
                                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <x-ui-icon name="tag" class="w-5 h-5 text-white" />
                                     </div>
-                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">Marca</span>
+                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">{{ __('cms.general.brand') }}</span>
                                 </a>
                                 <a href="{{ route('settings.index') }}" class="group flex flex-col items-center gap-3 p-4 bg-white/10 hover:bg-white/20 rounded-2xl backdrop-blur-sm transition-all">
                                     <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <x-ui-icon name="settings" class="w-5 h-5 text-white" />
                                     </div>
-                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">Config</span>
+                                    <span class="text-xs font-semibold text-white uppercase tracking-wider">{{ __('cms.general.config') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -284,8 +284,8 @@
                                 <x-ui-icon name="pie-chart" class="w-5 h-5 text-purple-600 dark:text-purple-400" />
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Distribución</h3>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Inventario por categoría</p>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ __('cms.general.distribution') }}</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('cms.general.inventory_by_category') }}</p>
                             </div>
                         </div>
 

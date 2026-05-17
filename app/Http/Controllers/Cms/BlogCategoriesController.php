@@ -39,7 +39,7 @@ class BlogCategoriesController extends Component
     use WithPagination;
 
     /** @var string Display name of the blog category */
-    #[Validate('required|string|max:255', as: 'nombre de categoría')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string|null SEO-friendly slug for URL generation */
@@ -97,7 +97,7 @@ class BlogCategoriesController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Blog Categories module.');
+            abort(403, __('cms.abort.blog_categories'));
         }
     }
 
@@ -173,22 +173,22 @@ class BlogCategoriesController extends Component
                 $blogCategory = BlogCategory::findOrFail($this->editingId);
                 $blogCategory->update($data);
 
-                Activities::saveActivity("Categoría de blog actualizada: ID #{$blogCategory->id}");
-                $this->dispatch('toast', message: 'Categoría de blog actualizada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.blog_categories.activity_updated', ['id' => $blogCategory->id]));
+                $this->dispatch('toast', message: __('cms.controllers.blog_categories.updated'), type: 'success');
             } else {
                 BlogCategory::query()->increment('order');
                 $data['order'] = 1;
 
                 $blogCategory = BlogCategory::create($data);
 
-                Activities::saveActivity("Categoría de blog creada: ID #{$blogCategory->id}");
-                $this->dispatch('toast', message: 'Categoría de blog creada correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.blog_categories.activity_created', ['id' => $blogCategory->id]));
+                $this->dispatch('toast', message: __('cms.controllers.blog_categories.created'), type: 'success');
             }
 
             $this->cancel();
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar la categoría de blog', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_categories.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -237,11 +237,11 @@ class BlogCategoriesController extends Component
             $blogCategoryName = $blogCategory->name;
             $blogCategory->delete();
 
-            Activities::saveActivity("Categoría de blog eliminada: {$blogCategoryName}");
-            $this->dispatch('toast', message: 'Categoría de blog eliminada correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_categories.activity_deleted', ['name' => $blogCategoryName]));
+            $this->dispatch('toast', message: __('cms.controllers.blog_categories.deleted'), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar la categoría. Verifique blogs asociados.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_categories.delete_error'), type: 'error');
         }
     }
 
@@ -261,11 +261,11 @@ class BlogCategoriesController extends Component
                 BlogCategory::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Categorías de blog reordenadas por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden de categorías actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.blog_categories.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.blog_categories.order_updated'), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al reordenar las categorías de blog', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.blog_categories.order_error'), type: 'error');
         }
     }
 
@@ -292,6 +292,13 @@ class BlogCategoriesController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.category_name'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset([

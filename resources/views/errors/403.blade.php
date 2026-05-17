@@ -1,6 +1,6 @@
 @extends('cms.layouts.auth')
 
-@section('title', 'Acceso Denegado')
+@section('title', __('cms.errors.403_title'))
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-red-50 via-orange-50 to-amber-100 dark:from-red-900 dark:via-orange-900 dark:to-amber-900">
@@ -27,12 +27,12 @@
 
             <!-- Error Title -->
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Acceso Denegado
+                {{ __('cms.errors.403_title') }}
             </h1>
 
             <!-- Error Description -->
             <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                Lo sentimos, no tienes permisos para acceder a esta página.
+                {{ __('cms.errors.403_description') }}
             </p>
 
             <!-- Additional Info -->
@@ -45,10 +45,10 @@
                     </div>
                     <div class="text-left">
                         <p class="text-sm text-red-800 dark:text-red-200">
-                            Esta página requiere permisos de administrador para ser accedida.
+                            {{ __('cms.errors.403_admin_required') }}
                         </p>
                         <p class="text-xs text-red-700 dark:text-red-300 mt-1">
-                            Contacta al administrador del sistema si crees que esto es un error.
+                            {{ __('cms.errors.403_contact_admin') }}
                         </p>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    Volver Atrás
+                    {{ __('cms.errors.go_back') }}
                 </button>
 
                 <!-- Go Home Button -->
@@ -69,32 +69,32 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a2 2 0 002 2h10a2 2 0 002-2v-10a2 2 0 00-2-2H5a2 2 0 00-2 2v-10a2 2 0 00-2-2H2a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2z"></path>
                     </svg>
-                    Ir al Inicio
+                    {{ __('cms.errors.go_home') }}
                 </a>
             </div>
 
             <!-- Help Text -->
             <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-600">
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Si necesitas acceso a esta página, por favor contacta al administrador del sistema.
+                    {{ __('cms.errors.403_help') }}
                 </p>
             </div>
 
             <!-- Quick Links -->
             <div class="mt-6 flex justify-center space-x-4">
                 <a href="{{ route('dashboard') }}" class="text-sm text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors">
-                    Dashboard
+                    {{ __('cms.errors.dashboard') }}
                 </a>
                 <a href="{{ route('profile.show') }}" class="text-sm text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors">
-                    Mi Perfil
+                    {{ __('cms.errors.my_profile') }}
                 </a>
                 @if(auth()->check())
                     <a href="{{ route('logout') }}" class="text-sm text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors">
-                        Cerrar Sesión
+                        {{ __('cms.errors.logout') }}
                     </a>
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors">
-                        Iniciar Sesión
+                        {{ __('cms.errors.login') }}
                     </a>
                 @endif
             </div>

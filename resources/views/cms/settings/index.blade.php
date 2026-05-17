@@ -19,15 +19,15 @@
                     <x-ui-icon name="chevron-right" class="w-4 h-4 mx-2 text-slate-400" />
                     <span class="flex items-center text-slate-900 dark:text-white font-medium">
                         <x-ui-icon name="settings" class="w-4 h-4 mr-2 text-primary-600" />
-                        Configuración
+                        {{ __('cms.settings.title') }}
                     </span>
                 </nav>
                 <div class="space-y-2">
                     <h1 class="text-5xl font-black bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 dark:from-white dark:via-blue-200 dark:to-white bg-clip-text text-transparent tracking-tight">
-                        {{ $isEditing ? 'Editando' : 'Configuración del sistema' }}
+                        {{ $isEditing ? __('cms.settings.editing') : __('cms.settings.title') }}
                     </h1>
                     <p class="text-slate-600 dark:text-slate-400 text-lg">
-                        {{ $isEditing ? 'Modifica los parámetros globales del sistema' : 'Administra la configuración global de la aplicación' }}
+                        {{ $isEditing ? __('cms.settings.edit_subtitle') : __('cms.settings.view_subtitle') }}
                     </p>
                 </div>
             </div>
@@ -37,14 +37,14 @@
                     <x-ui-button variant="secondary" wire:click="toggleEdit" class="group relative overflow-hidden hover:scale-105 transition-all duration-200">
                         <span class="relative z-10 flex items-center">
                             <x-ui-icon name="x" class="w-4 h-4 mr-2" />
-                            Cancelar
+                            {{ __('cms.settings.cancel') }}
                         </span>
                         <div class="absolute inset-0 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-gray-700 dark:to-gray-600 group-hover:from-slate-200 group-hover:to-slate-300 dark:group-hover:from-gray-600 dark:group-hover:to-gray-500 transition-all duration-200"></div>
                     </x-ui-button>
                     <x-ui-button variant="primary" wire:click="save" class="group relative overflow-hidden hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl shadow-blue-500/20">
                         <span class="relative z-10 flex items-center">
                             <x-ui-icon name="save" class="w-4 h-4 mr-2" />
-                            Guardar cambios
+                            {{ __('cms.settings.save') }}
                         </span>
                         <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 group-hover:from-blue-700 group-hover:to-blue-800 transition-all duration-200"></div>
                     </x-ui-button>
@@ -52,7 +52,7 @@
                     <x-ui-button variant="primary" wire:click="toggleEdit" class="group relative overflow-hidden hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl shadow-slate-900/20 dark:shadow-blue-600/20">
                         <span class="relative z-10 flex items-center">
                             <x-ui-icon name="edit-3" class="w-4 h-4 mr-2" />
-                            Editar parámetros
+                            {{ __('cms.settings.edit_params') }}
                         </span>
                         <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-blue-600 dark:to-blue-700 group-hover:from-slate-800 group-hover:to-slate-900 dark:group-hover:from-blue-700 dark:group-hover:to-blue-800 transition-all duration-200"></div>
                     </x-ui-button>
@@ -73,15 +73,15 @@
                     <div class="relative">
                         <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
                             <div class="w-3 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full shadow-lg shadow-blue-500/30"></div>
-                            <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Información corporativa</span>
+                            <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{ __('cms.settings.corporate_info') }}</span>
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <x-ui-input label="Nombre de la empresa" wire:model="name" />
-                            <x-ui-input label="Email de contacto" wire:model="email" />
-                            <x-ui-input label="Teléfono principal" wire:model="phone" />
-                            <x-ui-input label="Horarios de atención" wire:model="shedule" />
+                            <x-ui-input label="{{ __('cms.settings.company_name') }}" wire:model="name" />
+                            <x-ui-input label="{{ __('cms.settings.contact_email') }}" wire:model="email" />
+                            <x-ui-input label="{{ __('cms.settings.main_phone') }}" wire:model="phone" />
+                            <x-ui-input label="{{ __('cms.settings.business_hours') }}" wire:model="shedule" />
                             <div class="md:col-span-2">
-                                <x-ui-textarea label="Dirección física" wire:model="address" rows="2" />
+                                <x-ui-textarea label="{{ __('cms.settings.physical_address') }}" wire:model="address" rows="2" />
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                     <div class="relative">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
                             <div class="w-3 h-8 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full shadow-lg shadow-emerald-500/30"></div>
-                            <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Imagen corporativa</span>
+                            <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{{ __('cms.settings.corporate_image') }}</span>
                         </h2>
                         <div class="flex flex-col items-center">
                             <div class="relative group">
@@ -112,14 +112,14 @@
                                         <div class="relative z-10">
                                             <img src="{{ $image->temporaryUrl() }}" class="h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500 rounded-xl shadow-lg group-hover:shadow-emerald-500/20" />
                                             <div class="absolute top-2 right-2 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                Nueva
+                                                {{ __('cms.settings.new_image') }}
                                             </div>
                                         </div>
                                     @elseif($current_image)
                                         <div class="relative z-10">
                                             <img src="{{ asset('storage/' . $current_image) }}" class="h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500 rounded-xl shadow-lg group-hover:shadow-emerald-500/20" />
                                             <div class="absolute top-2 right-2 bg-primary-500 text-white px-3 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                Actual
+                                                {{ __('cms.settings.current_image') }}
                                             </div>
                                         </div>
                                     @else
@@ -128,8 +128,8 @@
                                                 <x-ui-icon name="image" class="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
                                             </div>
                                             <div>
-                                                <p class="text-base font-semibold text-slate-700 dark:text-slate-300 mb-1">Sin imagen corporativa</p>
-                                                <p class="text-sm text-slate-500 dark:text-slate-400">Arrastra una imagen aquí</p>
+                                                <p class="text-base font-semibold text-slate-700 dark:text-slate-300 mb-1">{{ __('cms.settings.no_image') }}</p>
+                                                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('cms.settings.drag_image') }}</p>
                                             </div>
                                         </div>
                                     @endif

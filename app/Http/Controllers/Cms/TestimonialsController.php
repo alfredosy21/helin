@@ -42,15 +42,15 @@ class TestimonialsController extends Component
     use WithPagination;
 
     /** @var string Author's name */
-    #[Validate('required|string|max:255', as: 'nombre')]
+    #[Validate('required|string|max:255')]
     public string $name = '';
 
     /** @var string Professional role or charge of the author */
-    #[Validate('required|string|max:255', as: 'cargo')]
+    #[Validate('required|string|max:255')]
     public string $charge = '';
 
     /** @var string The actual feedback content */
-    #[Validate('required|string|max:2000', as: 'descripción')]
+    #[Validate('required|string|max:2000')]
     public string $description = '';
 
     /** @var string|null Media path (comma-separated or single string) */
@@ -87,7 +87,7 @@ class TestimonialsController extends Component
     {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, 'Unauthorized access to Helin Testimonials module.');
+            abort(403, __('cms.abort.testimonials'));
         }
     }
 
@@ -157,23 +157,23 @@ class TestimonialsController extends Component
                 $testimonial = Testimonial::findOrFail($this->editingId);
                 $testimonial->update($data);
 
-                Activities::saveActivity("Testimonio sincronizado: Activo ID #{$testimonial->id}");
-                $this->dispatch('toast', message: 'Testimonio actualizado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.testimonials.activity_updated', ['id' => $testimonial->id]));
+                $this->dispatch('toast', message: __('cms.controllers.testimonials.updated'), type: 'success');
             } else {
                 Testimonial::query()->increment('order');
                 $data['order'] = 1;
 
                 $testimonial = Testimonial::create($data);
 
-                Activities::saveActivity("Testimonio registrado: Activo ID #{$testimonial->id}");
-                $this->dispatch('toast', message: 'Testimonio registrado correctamente', type: 'success');
+                Activities::saveActivity(__('cms.controllers.testimonials.activity_created', ['id' => $testimonial->id]));
+                $this->dispatch('toast', message: __('cms.controllers.testimonials.created'), type: 'success');
             }
 
             $this->cancel();
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al procesar el testimonio', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.testimonials.process_error'), type: 'error');
         } finally {
             $this->isLoading = false;
         }
@@ -219,12 +219,12 @@ class TestimonialsController extends Component
             $testimonialName = $testimonial->name;
             $testimonial->delete();
 
-            Activities::saveActivity("Testimonio eliminado: {$testimonialName}");
-            $this->dispatch('toast', message: 'Testimonio eliminado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.testimonials.activity_deleted', ['name' => $testimonialName]));
+            $this->dispatch('toast', message: __('cms.controllers.testimonials.deleted'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'No se puede eliminar el testimonio. Verifique asociaciones.', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.testimonials.delete_error'), type: 'error');
         }
     }
 
@@ -244,12 +244,12 @@ class TestimonialsController extends Component
                 Testimonial::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
-            Activities::saveActivity("Testimonios reordenados por Usuario ID #" . Auth::id());
-            $this->dispatch('toast', message: 'Orden de testimonios actualizado correctamente', type: 'success');
+            Activities::saveActivity(__('cms.controllers.testimonials.activity_reordered', ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.testimonials.order_updated'), type: 'success');
 
         } catch (\Exception $ex) {
             report($ex);
-            $this->dispatch('toast', message: 'Error al reordenar los testimonios', type: 'error');
+            $this->dispatch('toast', message: __('cms.controllers.testimonials.order_error'), type: 'error');
         }
     }
 
@@ -287,6 +287,15 @@ class TestimonialsController extends Component
      *
      * @return void
      */
+    protected function validationAttributes(): array
+    {
+        return [
+            'name' => __('cms.validation_attributes.testimonial_name'),
+            'charge' => __('cms.validation_attributes.testimonial_charge'),
+            'description' => __('cms.validation_attributes.testimonial_description'),
+        ];
+    }
+
     private function resetForm(): void
     {
         $this->reset(['name', 'charge', 'description', 'image', 'editingId']);

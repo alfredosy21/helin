@@ -52,7 +52,7 @@
                     <a href="{{ route('dashboard') }}" wire:navigate
                        class="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-white/10 text-white font-semibold' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200' }}">
                         <x-ui-icon name="monitor" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-[#09b6a2]' : 'text-slate-400 group-hover:text-slate-300' }}" />
-                        <span>Escritorio</span>
+                        <span>{{ __('cms.general.desktop') }}</span>
                     </a>
 
                     @php
@@ -174,15 +174,15 @@
                                 class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 z-50"
                             >
                                 <div class="px-4 py-2 border-b border-gray-50 dark:border-gray-700 mb-1">
-                                    <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">Mi Cuenta</p>
+                                    <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">{{ __('cms.general.my_account') }}</p>
                                 </div>
                                 <a href="{{ route('profile.show') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-[#09b6a2]/10 hover:text-[#09b6a2]">
                                     <x-ui-icon name="user" class="w-4 h-4" />
-                                    <span>Mi Perfil</span>
+                                    <span>{{ __('cms.general.my_profile') }}</span>
                                 </a>
                                 <button onclick="window.showLogoutAlert()" class="w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                                     <x-ui-icon name="log-out" class="w-4 h-4" />
-                                    <span>Cerrar Sesión</span>
+                                    <span>{{ __('cms.general.logout') }}</span>
                                 </button>
                             </div>
                         </div>

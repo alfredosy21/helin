@@ -14,10 +14,10 @@
                     <span class="text-white font-bold text-2xl">H</span>
                 </div>
                 <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
-                    {{ $isLocked ? 'Desbloquear Sesión' : 'Bienvenido de nuevo' }}
+                    {{ $isLocked ? __('cms.login.unlock_session') : __('cms.login.welcome_back') }}
                 </h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                    {{ $isLocked ? 'Ingresa tu contraseña para continuar' : 'Ingresa tus credenciales para acceder al sistema' }}
+                    {{ $isLocked ? __('cms.login.enter_password_continue') : __('cms.login.enter_credentials') }}
                 </p>
             </div>
 
@@ -27,7 +27,7 @@
                     <!-- Email Field -->
                     <div class="group">
                         <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Correo electrónico
+                            {{ __('cms.login.email') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -40,7 +40,7 @@
                                 required
                                 @if($isLocked) readonly @endif
                                 class="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-0 focus:border-slate-200 dark:focus:border-slate-600 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
-                                placeholder="tu@correo.com"
+                                placeholder="{{ __('cms.login.email') }}"
                             >
                         </div>
                         @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -49,7 +49,7 @@
                     <!-- Password Field -->
                     <div class="group">
                         <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                            Contraseña
+                            {{ __('cms.login.password') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -82,11 +82,11 @@
                             onchange="console.log('Remember checkbox changed:', this.checked)"
                         >
                         <label for="remember" class="ml-2 block text-sm text-slate-700 dark:text-slate-300 cursor-pointer hover:text-primary-600 transition-colors">
-                            Recordarme
+                            {{ __('cms.login.remember_me') }}
                         </label>
                     </div>
                     <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500">¿Olvidaste tu contraseña?</a>
+                        <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500">{{ __('cms.login.forgot_password') }}</a>
                     </div>
                 </div>
                 @endif
@@ -106,7 +106,7 @@
                         </span>
 
                         <span>
-                            {{ $isLocked ? 'Desbloquear' : 'Iniciar sesión' }}
+                            {{ $isLocked ? __('cms.login.unlock_button') : __('cms.login.login_button') }}
                         </span>
 
                         <x-ui-icon name="arrow-right" class="w-4 h-4 ml-2" />
