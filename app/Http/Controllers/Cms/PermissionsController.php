@@ -66,6 +66,7 @@ class PermissionsController extends Component
         }
 
         $this->roleId = $roleId;
+        $this->getRoleInfo();
         $this->loadPermissions();
     }
 
@@ -120,7 +121,7 @@ class PermissionsController extends Component
                     ->update(['status' => $newStatus]);
 
             $action = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.module_activated') : __('cms.controllers.permissions.module_deactivated');
-            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.action_activated') : __('cms.controllers.permissions.action_deactivated');
             Activities::saveActivity(__('cms.controllers.permissions.activity_single_module', ['action' => $actionWord, 'role_id' => $this->roleId, 'module_id' => $moduleId]));
 
             $this->dispatch('toast',
@@ -167,7 +168,7 @@ class PermissionsController extends Component
             $permission->update(['status' => $newStatus]);
 
             $action = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.submodule_activated') : __('cms.controllers.permissions.submodule_deactivated');
-            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? 'Activado' : 'Desactivado';
+            $actionWord = $newStatus === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.action_activated') : __('cms.controllers.permissions.action_deactivated');
             Activities::saveActivity(__('cms.controllers.permissions.activity_single_submodule', ['action' => $actionWord, 'permission_id' => $permissionId]));
 
             $this->dispatch('toast',
@@ -208,7 +209,7 @@ class PermissionsController extends Component
             }
 
             $action = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.all_activated') : __('cms.controllers.permissions.all_deactivated');
-            $actionWord = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            $actionWord = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.action_all_activated') : __('cms.controllers.permissions.action_all_deactivated');
             Activities::saveActivity(__('cms.controllers.permissions.activity_module', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',
@@ -232,25 +233,29 @@ class PermissionsController extends Component
      * @param int $status The status to set
      * @return void
      */
-    public function toggleAllSubmodules(int $status): void
+    public function toggleAllSubmodules(int $status, ?int $moduleId = null): void
     {
         $this->isLoading = true;
 
         try {
-            // Get active module IDs
-            $activeModuleIds = Permission::where('rol_id', $this->roleId)
-                    ->where('type', Permission::MAIN_MODULE_TYPE)
-                    ->where('status', Permission::ACTIVE_STATUS)
-                    ->pluck('module_id')
-                    ->toArray();
+            $query = Permission::where('rol_id', $this->roleId)
+                    ->where('type', Permission::SUB_MODULE_TYPE);
 
-            Permission::where('rol_id', $this->roleId)
-                    ->where('type', Permission::SUB_MODULE_TYPE)
-                    ->whereIn('module_id', $activeModuleIds)
-                    ->update(['status' => $status]);
+            if ($moduleId !== null) {
+                $query->where('module_id', $moduleId);
+            } else {
+                $activeModuleIds = Permission::where('rol_id', $this->roleId)
+                        ->where('type', Permission::MAIN_MODULE_TYPE)
+                        ->where('status', Permission::ACTIVE_STATUS)
+                        ->pluck('module_id')
+                        ->toArray();
+                $query->whereIn('module_id', $activeModuleIds);
+            }
+
+            $query->update(['status' => $status]);
 
             $action = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.all_sub_activated') : __('cms.controllers.permissions.all_sub_deactivated');
-            $actionWord = $status === Permission::ACTIVE_STATUS ? 'Activados todos' : 'Desactivados todos';
+            $actionWord = $status === Permission::ACTIVE_STATUS ? __('cms.controllers.permissions.action_all_activated') : __('cms.controllers.permissions.action_all_deactivated');
             Activities::saveActivity(__('cms.controllers.permissions.activity_submodule', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',

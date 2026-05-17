@@ -43,10 +43,12 @@ function initializeToastListeners() {
                     duration: 3000,
                     gravity: "top",
                     position: "right",
-                    backgroundColor: type === 'error' ? 'linear-gradient(to right, #ff5f56, #ff3b30)' :
-                                   type === 'success' ? 'linear-gradient(to right, #00b09b, #96c93d)' :
-                                   type === 'warning' ? 'linear-gradient(to right, #ff9500, #ff6200)' :
-                                   'linear-gradient(to right, #007aff, #0051d5)',
+                    style: {
+                        background: type === 'error' ? '#ef4444' :
+                                    type === 'success' ? '#10b981' :
+                                    type === 'warning' ? '#f59e0b' :
+                                    '#3b82f6',
+                    },
                     stopOnFocus: true
                 }).showToast();
             } else {
@@ -257,6 +259,53 @@ function initializeLogoutAlert() {
         }
     };
 }
+
+// Generic confirmation dialog using SweetAlert2
+window.confirmAction = function(config) {
+    const {
+        title = '¿Eliminar?',
+        text = 'Esta acción no se puede deshacer.',
+        confirmButtonText = 'Eliminar',
+        cancelButtonText = 'Cancelar',
+        confirmButtonColor = '#09B6A2',
+        cancelButtonColor = '#f1f5f9',
+        onConfirm = () => {},
+        onCancel = null
+    } = config;
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert2 not found');
+        if (confirm(text)) onConfirm();
+        return;
+    }
+
+    Swal.fire({
+        title,
+        text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor,
+        cancelButtonColor,
+        confirmButtonText,
+        cancelButtonText,
+        customClass: {
+            popup: 'rounded-xl border border-slate-100',
+            title: 'text-base font-bold text-[#222]',
+            htmlContainer: 'text-xs text-slate-500',
+            confirmButton: '!rounded-lg !px-4 !py-2 !text-xs !font-medium shadow-none',
+            cancelButton: '!rounded-lg !px-4 !py-2 !text-xs !font-medium !text-slate-600 shadow-none border border-slate-100'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            onConfirm();
+        } else if (onCancel) {
+            onCancel();
+        }
+    });
+};
+
+// Backward-compatible alias
+window.confirmDelete = window.confirmAction;
 
 // Update configuration from server
 window.updateDashboardConfig = function(config) {

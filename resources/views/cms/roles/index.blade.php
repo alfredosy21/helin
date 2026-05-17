@@ -36,7 +36,7 @@
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
-                    <input type="text" wire:model.live="search" placeholder="Buscar roles por nombre..."
+                    <input type="text" wire:model.live="search" placeholder="{{ __('cms.roles.search_placeholder') }}"
                         class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
@@ -90,7 +90,7 @@
                                         </x-cms-tooltip>
                                         {{-- Botón Eliminar --}}
                                         <x-cms-tooltip text="{{ __('cms.general.delete') }}">
-                                            <button onclick="openDeleteModal({{ $role->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                            <button onclick="deleteRole({{ $role->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                                                 </svg>
@@ -104,7 +104,7 @@
                                 <td colspan="3" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
                                         <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                        <p class="text-xs font-medium">No se encontraron roles</p>
+                                        <p class="text-xs font-medium">{{ __('cms.roles.no_roles') }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -131,9 +131,9 @@
             <div class="p-6 border-b border-slate-50 flex justify-between items-center">
                 <div>
                     <h2 class="text-base font-bold text-[#222]">
-                        {{ $editingId ? 'Actualizar' : 'Crear nuevo' }} rol
+                        {{ $editingId ? __('cms.roles.form_title_edit') : __('cms.roles.form_title_new') }}
                     </h2>
-                    <p class="text-xs text-[#c0c1c6]">Nivel de acceso y perfil del sistema</p>
+                    <p class="text-xs text-[#c0c1c6]">{{ __('cms.roles.form_subtitle') }}</p>
                 </div>
                 <button wire:click="cancel" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors border-none bg-transparent cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
@@ -143,8 +143,8 @@
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre del rol</label>
-                        <input type="text" wire:model="name" placeholder="ej. ADMINISTRADOR, VENDEDOR, INVITADO"
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.roles.name_label') }}</label>
+                        <input type="text" wire:model="name" placeholder="{{ __('cms.roles.name_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name')
                             <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span>
@@ -158,7 +158,7 @@
                     </button>
                     <button type="submit" wire:loading.attr="disabled" class="flex-1 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors py-2 border-none cursor-pointer flex items-center justify-center">
                         <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? 'Guardar cambios' : 'Crear rol' }}
+                            {{ $editingId ? __('cms.general.save') : __('cms.roles.create_button') }}
                         </span>
                         <span wire:loading wire:target="save">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -173,50 +173,17 @@
     </div>
     @endif
 
-    {{-- Modal de Confirmación de Eliminación Refinado (Nativo/Tailwind/SweetAlert2 compatible style) --}}
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-slate-900/20 backdrop-blur-xs transition-opacity" onclick="closeDeleteModal()"></div>
-
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="relative bg-white rounded-xl shadow-xl w-full max-w-sm border border-slate-100 transform transition-all p-6 text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-50 mb-4">
-                    <svg class="h-6 w-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-[#222] mb-1">¿Eliminar este rol?</h3>
-                <p class="text-xs text-slate-400 mb-6">Esta acción no se puede deshacer y eliminará permanentemente el perfil del sistema.</p>
-
-                <div class="flex gap-3">
-                    <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors rounded-lg">
-                              {{ __('cms.general.cancel') }}
-                    </button>
-                    <button onclick="confirmDelete()" class="flex-1 px-4 py-2 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors border-none cursor-pointer">
-                        Eliminar rol
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        let deleteRoleId = null;
-
-        function openDeleteModal(roleId) {
-            deleteRoleId = roleId;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            deleteRoleId = null;
-            document.getElementById('deleteModal').classList.add('hidden');
-        }
-
-        function confirmDelete() {
-            if (deleteRoleId) {
-                Livewire.find('{{ $this->getId() }}').confirmDelete(deleteRoleId);
-                closeDeleteModal();
-            }
+        function deleteRole(roleId) {
+            window.confirmDelete({
+                title: '{{ __('cms.roles.delete_title') }}',
+                text: '{{ __('cms.roles.delete_warning') }}',
+                confirmButtonText: '{{ __('cms.general.yes_delete') }}',
+                cancelButtonText: '{{ __('cms.general.cancel') }}',
+                onConfirm: function() {
+                    Livewire.find('{{ $this->getId() }}').confirmDelete(roleId);
+                }
+            });
         }
     </script>
 </div>

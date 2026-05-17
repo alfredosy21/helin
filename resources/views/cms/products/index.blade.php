@@ -151,7 +151,7 @@
                                             </button>
                                         </x-cms-tooltip>
                                         <x-cms-tooltip text="{{ __('cms.general.delete') }}">
-                                            <button onclick="openDeleteModal({{ $product->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                            <button onclick="deleteProduct({{ $product->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                                                 </svg>
@@ -384,41 +384,24 @@
 </div>
 @endif
 
-{{-- Modal de Eliminación --}}
-@if($showDeleteModal)
-<div class="fixed inset-0 z-[100] flex items-center justify-center">
-    <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="$set('showDeleteModal', false)"></div>
-    <div class="relative w-full max-w-sm bg-white rounded-xl shadow-2xl p-6 text-center border border-slate-100">
-        <div class="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
-            </svg>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">{{ __('cms.products.delete_title') }}</h3>
-        <p class="text-sm text-slate-500 mb-6">{{ __('cms.products.delete_warning') }}</p>
-        <div class="flex gap-3">
-            <button wire:click="$set('showDeleteModal', false)" class="flex-1 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors py-2.5 cursor-pointer">
-                {{ __('cms.general.cancel') }}
-            </button>
-            <button wire:click="delete" wire:loading.attr="disabled" class="flex-1 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition-colors py-2.5 border-none cursor-pointer flex items-center justify-center gap-2">
-                <span wire:loading.remove wire:target="delete">{{ __('cms.general.delete') }}</span>
-                <span wire:loading wire:target="delete">
-                    <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </span>
-            </button>
-        </div>
-    </div>
-</div>
-@endif
-
 <script>
-function openDeleteModal(id) {
-    if (typeof Livewire !== 'undefined') {
-        Livewire.dispatch('openDeleteModal', { id: id });
-    }
+function deleteProduct(id) {
+    const component = window.Livewire ? Livewire.find(
+        document.querySelector('[wire\\:id]').getAttribute('wire:id')
+    ) : null;
+    if (!component) return;
+
+    window.confirmAction({
+        title: '{{ __('cms.products.delete_title') }}',
+        text: '{{ __('cms.products.delete_warning') }}',
+        confirmButtonText: '{{ __('cms.general.yes_delete') }}',
+        cancelButtonText: '{{ __('cms.general.cancel') }}',
+        confirmButtonColor: '#ef4444',
+        onConfirm: function() {
+            component.call('openDeleteModal', id);
+            component.call('delete');
+        }
+    });
 }
 </script>
 </div>

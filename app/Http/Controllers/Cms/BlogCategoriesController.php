@@ -54,18 +54,6 @@ class BlogCategoriesController extends Component
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
 
-    /** @var string|null Hex color code for visual theme */
-    #[Validate('nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/')]
-    public ?string $color = '';
-
-    /** @var string|null Icon identifier for UI display */
-    #[Validate('nullable|string|max:50')]
-    public ?string $icon = '';
-
-    /** @var string|null Image path or URL for category banner */
-    #[Validate('nullable|string|max:255')]
-    public ?string $image = '';
-
     /** @var int|null ID of the blog category being modified */
     public ?int $editingId = null;
 
@@ -138,8 +126,6 @@ class BlogCategoriesController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Set default color
-        $this->color = '#3B82F6';
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -164,9 +150,6 @@ class BlogCategoriesController extends Component
                 'slug'        => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
                 'description'     => $this->description,
                 'seo_description' => $this->seo_description,
-                'color'           => $this->color ?: '#3B82F6',
-                'icon'        => $this->icon,
-                'image'       => $this->image,
             ];
 
             if ($this->editingId) {
@@ -212,10 +195,6 @@ class BlogCategoriesController extends Component
         $this->slug       = $blogCategory->slug;
         $this->description     = $blogCategory->description;
         $this->seo_description  = $blogCategory->seo_description;
-        $this->color            = $blogCategory->color;
-        $this->icon       = $blogCategory->icon;
-        $this->image      = $blogCategory->image;
-
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -302,7 +281,7 @@ class BlogCategoriesController extends Component
     private function resetForm(): void
     {
         $this->reset([
-            'name', 'slug', 'description', 'seo_description', 'color', 'icon', 'image',
+            'name', 'slug', 'description', 'seo_description',
             'editingId'
         ]);
         $this->resetValidation();

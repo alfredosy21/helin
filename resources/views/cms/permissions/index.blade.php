@@ -26,7 +26,7 @@
                     {{ __('cms.permissions.title') }}
                 </h1>
                 <p class="text-sm text-slate-500 mt-1">
-                    {{ __('cms.permissions.role_access') }} <span class="font-semibold text-slate-700">{{ $roleName ?? 'Unknown Role' }}</span>
+                    {{ __('cms.permissions.role_access') }} <span class="font-semibold text-slate-700">{{ $roleName ?: 'Unknown Role' }}</span>
                 </p>
             </div>
             <div class="flex items-center gap-3">
@@ -91,11 +91,11 @@
                                 <div class="flex items-center justify-between mb-4">
                                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ __('cms.permissions.submodules_actions') }}</h4>
                                     <div class="flex items-center gap-2">
-                                        <button wire:click="toggleAllSubmodules(1)"
+                                        <button wire:click="toggleAllSubmodules(1, {{ $module['module_id'] }})"
                                             class="text-xs px-3 py-1 bg-green-50 text-green-700 border border-green-100 rounded-full hover:bg-green-100 transition-colors font-medium">
                                             {{ __('cms.permissions.activate_all_sub') }}
                                         </button>
-                                        <button wire:click="toggleAllSubmodules(0)"
+                                        <button wire:click="toggleAllSubmodules(0, {{ $module['module_id'] }})"
                                             class="text-xs px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded-full hover:bg-red-100 transition-colors font-medium">
                                             {{ __('cms.permissions.deactivate_all_sub') }}
                                         </button>

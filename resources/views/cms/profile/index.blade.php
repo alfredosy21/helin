@@ -176,18 +176,14 @@
 
 <script>
 function confirmCloseAllSessions() {
-    Swal.fire({
+    window.confirmAction({
         title: '{{ __('cms.profile.close_all_sessions_title') }}',
         text: '{{ __('cms.profile.close_all_sessions_text') }}',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ef4444',
-        cancelButtonColor: '#cbd5e1',
         confirmButtonText: '{{ __('cms.profile.confirm_close_sessions') }}',
         cancelButtonText: '{{ __('cms.general.cancel') }}',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#f1f5f9',
+        onConfirm: function() {
             const wireEl = document.querySelector('[wire\\:id]');
             if (wireEl) {
                 Livewire.find(wireEl.getAttribute('wire:id')).closeAllSessions();

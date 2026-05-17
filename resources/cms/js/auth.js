@@ -35,10 +35,12 @@ function initializeToastListeners() {
                     duration: 3000,
                     gravity: "top",
                     position: "right",
-                    backgroundColor: type === 'error' ? 'linear-gradient(to right, #ff5f56, #ff3b30)' :
-                                   type === 'success' ? 'linear-gradient(to right, #00b09b, #96c93d)' :
-                                   type === 'warning' ? 'linear-gradient(to right, #ff9500, #ff6200)' :
-                                   'linear-gradient(to right, #007aff, #0051d5)',
+                    style: {
+                        background: type === 'error' ? '#ef4444' :
+                                    type === 'success' ? '#10b981' :
+                                    type === 'warning' ? '#f59e0b' :
+                                    '#3b82f6',
+                    },
                     stopOnFocus: true
                 }).showToast();
             } else {
