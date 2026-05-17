@@ -35,9 +35,13 @@ class CategoriesController extends Component
     #[Validate('nullable|string|max:255')]
     public ?string $slug = '';
 
-    /** @var int Numerical order for frontend display */
-    #[Validate('required|integer|min:0')]
-    public int $order = 0;
+    /** @var string|null Category description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $description = '';
+
+    /** @var string|null SEO description for meta tags */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $seo_description = '';
 
     /** @var int|null ID of the category being modified */
     public ?int $editingId = null;
@@ -92,8 +96,6 @@ class CategoriesController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Auto-assign the next position
-        $this->order = Category::max('order') + 1;
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -108,9 +110,10 @@ class CategoriesController extends Component
 
         try {
             $data = [
-                'name'     => $this->name,
-                'slug'     => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
-                'order' => $this->order,
+                'name'            => $this->name,
+                'slug'            => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
+                'description'     => $this->description,
+                'seo_description' => $this->seo_description,
             ];
 
             if ($this->editingId) {
@@ -120,6 +123,10 @@ class CategoriesController extends Component
                 Activities::saveActivity("Taxonomía actualizada: Categoría ID #{$category->id}");
                 $this->dispatch('toast', message: 'Categoría actualizada correctamente', type: 'success');
             } else {
+                // Insertar al principio: desplazar todas las existentes +1
+                Category::query()->increment('order');
+                $data['order'] = 1;
+
                 $category = Category::create($data);
 
                 Activities::saveActivity("Taxonomía creada: Categoría ID #{$category->id}");
@@ -142,10 +149,11 @@ class CategoriesController extends Component
     {
         $category = Category::findOrFail($id);
 
-        $this->editingId = $id;
-        $this->name      = $category->name;
-        $this->slug      = $category->slug;
-        $this->order      = $category->order;
+        $this->editingId       = $id;
+        $this->name            = $category->name;
+        $this->slug            = $category->slug;
+        $this->description     = $category->description;
+        $this->seo_description = $category->seo_description;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -177,7 +185,7 @@ class CategoriesController extends Component
     {
         try {
             foreach ($orderedIds as $index => $id) {
-                Category::query()->where('id', $id)->update(['order' => $index]);
+                Category::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
             Activities::saveActivity("Taxonomía reordenada por Usuario ID #" . Auth::id());
@@ -200,7 +208,7 @@ class CategoriesController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'slug', 'order', 'editingId']);
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'editingId']);
         $this->resetValidation();
     }
 

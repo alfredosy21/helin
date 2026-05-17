@@ -51,7 +51,6 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5 text-center w-16">ID</th>
                             <th class="px-6 py-3.5">Artículo</th>
                             <th class="px-6 py-3.5">Autor</th>
                             <th class="px-6 py-3.5">Categoría</th>
@@ -59,15 +58,16 @@
                             <th class="px-6 py-3.5 text-right w-40">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody id="articles-table-body" class="divide-y divide-slate-50 text-sm">
                         @forelse($articles as $article)
-                            <tr wire:key="article-{{ $article->id }}" class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4 text-center font-mono text-xs text-slate-400">
-                                    #{{ str_pad((string)$article->id, 4, '0', STR_PAD_LEFT) }}
-                                </td>
+                            <tr wire:key="article-{{ $article->id }}" data-id="{{ $article->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-[#222]">{{ $article->title }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-[#222]">{{ $article->title }}</span>
                                         <div class="flex gap-1 mt-1">
                                             @if($article->is_featured)
                                                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-50 text-yellow-600 border border-yellow-100">Destacado</span>
@@ -77,6 +77,7 @@
                                             @endif
                                         </div>
                                     </div>
+                                </div>
                                 </td>
                                 <td class="px-6 py-4 text-slate-600 text-xs">
                                     {{ $article->author ?? 'Sin autor' }}
@@ -119,11 +120,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-16 text-center">
+                                <td colspan="5" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
-                                        <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
-                                        </svg>
+                                        <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                         <p class="text-xs font-medium">No se encontraron artículos</p>
                                     </div>
                                 </td>
@@ -211,8 +210,18 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">Contenido del Artículo</label>
-                    <textarea wire:model="content" rows="6" required placeholder="Escribe aquí el contenido completo del artículo..."
-                        class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none transition-all resize-none"></textarea>
+                    <div x-data="{ quill: null }"
+                         x-init="
+                            quill = new Quill($refs.editor, {
+                                theme: 'snow',
+                                placeholder: 'Escribe aquí el contenido completo del artículo...'
+                            });
+                            quill.root.innerHTML = $wire.content || '';
+                            quill.on('text-change', () => { $wire.content = quill.root.innerHTML });
+                         "
+                         @open-form.window="setTimeout(() => { if(quill) quill.root.innerHTML = $wire.content || ''; }, 100)">
+                        <div x-ref="editor" class="bg-white min-h-[200px] rounded-lg border border-slate-200"></div>
+                    </div>
                     @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
@@ -324,6 +333,27 @@
 </div>
 
 <script>
+    // Drag & Drop con SortableJS
+    (function() {
+        const tbody = document.getElementById('articles-table-body');
+        if (!tbody || typeof Sortable === 'undefined') return;
+
+        new Sortable(tbody, {
+            handle: '.drag-handle',
+            animation: 150,
+            ghostClass: 'bg-emerald-50',
+            onEnd: function() {
+                const rows = tbody.querySelectorAll('tr[data-id]');
+                const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+
+                const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                if (component && orderedIds.length > 0) {
+                    component.updateOrder(orderedIds);
+                }
+            }
+        });
+    })();
+
     function openDeleteModal(id) {
         const component = window.Livewire.find(
             document.querySelector('[wire\\:id]').getAttribute('wire:id')

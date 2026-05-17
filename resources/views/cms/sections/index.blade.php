@@ -54,7 +54,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-50 text-sm">
                         @forelse($sections as $section)
-                            <tr class="hover:bg-slate-50/50 transition-colors">
+                            <tr wire:key="section-{{ $section->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4 text-center font-semibold text-slate-400">
                                     #{{ $section->id }}
                                 </td>
@@ -79,7 +79,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        <button wire:click="edit({{ $section->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Editar bloque">
+                                        <button type="button" wire:click="edit({{ $section->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Editar bloque">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
@@ -110,11 +110,9 @@
                 </div>
             @endif
         </div>
-    </div>
-</div>
 
-{{-- Drawer lateral de edición --}}
-@if($showEditForm)
+        {{-- Drawer lateral de edición --}}
+        @if($showEditForm)
 <div class="fixed inset-0 z-[100] flex items-center justify-end">
     <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancelEdit"></div>
 
@@ -142,8 +140,18 @@
                 {{-- Contenido --}}
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Contenido</label>
-                    <textarea wire:model="content" rows="4" placeholder="Contenido HTML o texto..."
-                        class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                    <div x-data="{ quill: null }"
+                         x-init="
+                            quill = new Quill($refs.editor, {
+                                theme: 'snow',
+                                placeholder: 'Contenido HTML o texto...'
+                            });
+                            quill.root.innerHTML = $wire.content || '';
+                            quill.on('text-change', () => { $wire.content = quill.root.innerHTML });
+                         "
+                         @open-edit-form.window="setTimeout(() => { if(quill) quill.root.innerHTML = $wire.content || ''; }, 100)">
+                        <div x-ref="editor" class="bg-white min-h-[200px] rounded-lg border border-slate-100"></div>
+                    </div>
                     @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                 </div>
 
@@ -213,7 +221,9 @@
         </form>
     </div>
 </div>
-@endif
+        @endif
+    </div>
+</div>
 
 <script>
 // Normalizar parámetro de Livewire 3 (puede venir como array u objeto)

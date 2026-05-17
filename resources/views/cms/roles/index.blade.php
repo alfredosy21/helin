@@ -2,7 +2,7 @@
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
-        
+
         {{-- Header Section & Breadcrumb Refinado --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
@@ -27,7 +27,7 @@
 
         {{-- Main Unified Card: Filtros y Tabla en una sola estructura --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
-            
+
             {{-- Search & Filter Section --}}
             <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
                 <div class="relative flex-1">
@@ -49,7 +49,6 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5 w-32">Identificador</th>
                             <th class="px-6 py-3.5">Nombre del rol</th>
                             <th class="px-6 py-3.5 text-center w-32">Estado</th>
                             <th class="px-6 py-3.5 text-right w-40">Acciones</th>
@@ -58,9 +57,6 @@
                     <tbody class="divide-y divide-slate-50 text-sm">
                         @forelse($roles as $role)
                             <tr wire:key="role-{{ $role->id }}" class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4 font-mono text-xs text-slate-400">
-                                    #{{ str_pad((string)$role->id, 4, '0', STR_PAD_LEFT) }}
-                                </td>
                                 <td class="px-6 py-4">
                                     <span class="font-bold text-[#222] uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
                                         {{ $role->name }}
@@ -97,7 +93,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-16 text-center">
+                                <td colspan="3" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
                                         <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                         <p class="text-xs font-medium">No se encontraron roles</p>
@@ -142,8 +138,8 @@
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre del rol</label>
                         <input type="text" wire:model="name" placeholder="ej. ADMINISTRADOR, VENDEDOR, INVITADO"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                        @error('name') 
-                            <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> 
+                        @error('name')
+                            <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>

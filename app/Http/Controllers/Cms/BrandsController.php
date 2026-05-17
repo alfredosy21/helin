@@ -47,9 +47,13 @@ class BrandsController extends Component
     #[Validate('nullable|string|max:255')]
     public ?string $image = '';
 
-    /** @var int Numerical order for frontend display */
-    #[Validate('required|integer|min:0')]
-    public int $order = 0;
+    /** @var string|null Brand description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $description = '';
+
+    /** @var string|null SEO description for meta tags */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $seo_description = '';
 
     /** @var int|null ID of the brand being modified */
     public ?int $editingId = null;
@@ -122,8 +126,6 @@ class BrandsController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Auto-assign the next position
-        $this->order = Brand::max('order') + 1;
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -143,9 +145,10 @@ class BrandsController extends Component
 
         try {
             $data = [
-                'name'     => $this->name,
-                'image'    => $this->image,
-                'order'    => $this->order,
+                'name'            => $this->name,
+                'image'           => $this->image,
+                'description'     => $this->description,
+                'seo_description' => $this->seo_description,
             ];
 
             if ($this->editingId) {
@@ -155,6 +158,9 @@ class BrandsController extends Component
                 Activities::saveActivity("Marca actualizada: ID #{$brand->id}");
                 $this->dispatch('toast', message: 'Marca actualizada correctamente', type: 'success');
             } else {
+                Brand::query()->increment('order');
+                $data['order'] = 1;
+
                 $brand = Brand::create($data);
 
                 Activities::saveActivity("Marca creada: ID #{$brand->id}");
@@ -184,10 +190,11 @@ class BrandsController extends Component
     {
         $brand = Brand::findOrFail($id);
 
-        $this->editingId = $id;
-        $this->name      = $brand->name;
-        $this->image     = $brand->image;
-        $this->order     = $brand->order;
+        $this->editingId      = $id;
+        $this->name           = $brand->name;
+        $this->image          = $brand->image;
+        $this->description    = $brand->description;
+        $this->seo_description = $brand->seo_description;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -232,7 +239,7 @@ class BrandsController extends Component
     {
         try {
             foreach ($orderedIds as $index => $id) {
-                Brand::query()->where('id', $id)->update(['order' => $index]);
+                Brand::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
             Activities::saveActivity("Marcas reordenadas por Usuario ID #" . Auth::id());
@@ -269,7 +276,7 @@ class BrandsController extends Component
      */
     private function resetForm(): void
     {
-        $this->reset(['name', 'image', 'order', 'editingId']);
+        $this->reset(['name', 'image', 'description', 'seo_description', 'editingId']);
         $this->resetValidation();
     }
 

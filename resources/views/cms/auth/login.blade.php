@@ -105,7 +105,7 @@
                             </svg>
                         </span>
 
-                        <span wire:loading.remove wire:target="{{ $isLocked ? 'unlock' : 'login' }}">
+                        <span>
                             {{ $isLocked ? 'Desbloquear' : 'Iniciar sesión' }}
                         </span>
 

@@ -31,6 +31,7 @@ class BlogCategory extends Model
         'color',
         'icon',
         'image',
+        'seo_description',
         'is_active',
         'order'
     ];

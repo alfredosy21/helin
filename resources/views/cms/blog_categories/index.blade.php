@@ -56,13 +56,16 @@
                             <th class="px-6 py-3.5 text-right w-40">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody id="blog-categories-table-body" class="divide-y divide-slate-50 text-sm">
                         @forelse($blogCategories as $blogCategory)
-                            <tr wire:key="blog-category-{{ $blogCategory->id }}" class="hover:bg-slate-50/50 transition-colors">
+                            <tr wire:key="blog-category-{{ $blogCategory->id }}" data-id="{{ $blogCategory->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4 text-center">
-                                    <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
-                                        {{ $blogCategory->order }}
-                                    </span>
+                                    <div class="drag-handle flex items-center justify-center gap-1 cursor-move">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
+                                            {{ $blogCategory->order }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -168,18 +171,18 @@
                     </div>
 
                     <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Descripción (opcional)</label>
+                        <textarea wire:model="seo_description" rows="2"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug (opcional)</label>
                         <input type="text" wire:model="slug" placeholder="ej. tecnologia"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         <p class="text-xs text-[#c0c1c6] italic">Si se deja vacío, se generará automáticamente.</p>
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Posición en menú</label>
-                        <input type="number" wire:model="order" min="0"
-                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                        @error('order') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
@@ -258,6 +261,27 @@
 
     <script>
         let deleteBlogCategoryId = null;
+
+        // Drag & Drop con SortableJS
+        (function() {
+            const tbody = document.getElementById('blog-categories-table-body');
+            if (!tbody || typeof Sortable === 'undefined') return;
+
+            new Sortable(tbody, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'bg-emerald-50',
+                onEnd: function() {
+                    const rows = tbody.querySelectorAll('tr[data-id]');
+                    const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+
+                    const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                    if (component && orderedIds.length > 0) {
+                        component.updateOrder(orderedIds);
+                    }
+                }
+            });
+        })();
 
         function openDeleteModal(blogCategoryId) {
             deleteBlogCategoryId = blogCategoryId;

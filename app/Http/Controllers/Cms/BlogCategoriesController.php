@@ -50,6 +50,10 @@ class BlogCategoriesController extends Component
     #[Validate('nullable|string|max:1000')]
     public ?string $description = '';
 
+    /** @var string|null SEO description for meta tags */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $seo_description = '';
+
     /** @var string|null Hex color code for visual theme */
     #[Validate('nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/')]
     public ?string $color = '';
@@ -61,10 +65,6 @@ class BlogCategoriesController extends Component
     /** @var string|null Image path or URL for category banner */
     #[Validate('nullable|string|max:255')]
     public ?string $image = '';
-
-    /** @var int Numerical order for frontend display */
-    #[Validate('required|integer|min:0')]
-    public int $order = 0;
 
     /** @var int|null ID of the blog category being modified */
     public ?int $editingId = null;
@@ -138,8 +138,6 @@ class BlogCategoriesController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Auto-assign the next position
-        $this->order = BlogCategory::max('order') + 1;
         // Set default color
         $this->color = '#3B82F6';
         $this->showForm = true;
@@ -164,11 +162,11 @@ class BlogCategoriesController extends Component
             $data = [
                 'name'        => $this->name,
                 'slug'        => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
-                'description' => $this->description,
-                'color'       => $this->color ?: '#3B82F6',
+                'description'     => $this->description,
+                'seo_description' => $this->seo_description,
+                'color'           => $this->color ?: '#3B82F6',
                 'icon'        => $this->icon,
                 'image'       => $this->image,
-                'order'       => $this->order,
             ];
 
             if ($this->editingId) {
@@ -178,6 +176,9 @@ class BlogCategoriesController extends Component
                 Activities::saveActivity("Categoría de blog actualizada: ID #{$blogCategory->id}");
                 $this->dispatch('toast', message: 'Categoría de blog actualizada correctamente', type: 'success');
             } else {
+                BlogCategory::query()->increment('order');
+                $data['order'] = 1;
+
                 $blogCategory = BlogCategory::create($data);
 
                 Activities::saveActivity("Categoría de blog creada: ID #{$blogCategory->id}");
@@ -209,11 +210,11 @@ class BlogCategoriesController extends Component
         $this->editingId  = $id;
         $this->name       = $blogCategory->name;
         $this->slug       = $blogCategory->slug;
-        $this->description = $blogCategory->description;
-        $this->color      = $blogCategory->color;
+        $this->description     = $blogCategory->description;
+        $this->seo_description  = $blogCategory->seo_description;
+        $this->color            = $blogCategory->color;
         $this->icon       = $blogCategory->icon;
         $this->image      = $blogCategory->image;
-        $this->order      = $blogCategory->order;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -257,7 +258,7 @@ class BlogCategoriesController extends Component
     {
         try {
             foreach ($orderedIds as $index => $id) {
-                BlogCategory::query()->where('id', $id)->update(['order' => $index]);
+                BlogCategory::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
             Activities::saveActivity("Categorías de blog reordenadas por Usuario ID #" . Auth::id());
@@ -294,8 +295,8 @@ class BlogCategoriesController extends Component
     private function resetForm(): void
     {
         $this->reset([
-            'name', 'slug', 'description', 'color', 'icon', 'image',
-            'order', 'editingId'
+            'name', 'slug', 'description', 'seo_description', 'color', 'icon', 'image',
+            'editingId'
         ]);
         $this->resetValidation();
     }

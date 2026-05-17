@@ -56,10 +56,6 @@ class TestimonialsController extends Component
     /** @var string|null Media path (comma-separated or single string) */
     public ?string $image = '';
 
-    /** @var int Numerical order for frontend display */
-    #[Validate('required|integer|min:0')]
-    public int $order = 0;
-
     /** @var int|null ID of the testimonial being modified */
     public ?int $editingId = null;
 
@@ -132,8 +128,6 @@ class TestimonialsController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Auto-assign the next position
-        $this->order = Testimonial::max('order') + 1;
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -157,7 +151,6 @@ class TestimonialsController extends Component
                 'charge'      => $this->charge,
                 'description' => $this->description,
                 'image'       => $this->image,
-                'order'       => $this->order,
             ];
 
             if ($this->editingId) {
@@ -167,6 +160,9 @@ class TestimonialsController extends Component
                 Activities::saveActivity("Testimonio sincronizado: Activo ID #{$testimonial->id}");
                 $this->dispatch('toast', message: 'Testimonio actualizado correctamente', type: 'success');
             } else {
+                Testimonial::query()->increment('order');
+                $data['order'] = 1;
+
                 $testimonial = Testimonial::create($data);
 
                 Activities::saveActivity("Testimonio registrado: Activo ID #{$testimonial->id}");
@@ -201,7 +197,6 @@ class TestimonialsController extends Component
         $this->charge     = $testimonial->charge;
         $this->description = $testimonial->description;
         $this->image      = $testimonial->image;
-        $this->order      = $testimonial->order;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -246,7 +241,7 @@ class TestimonialsController extends Component
     {
         try {
             foreach ($orderedIds as $index => $id) {
-                Testimonial::query()->where('id', $id)->update(['order' => $index]);
+                Testimonial::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
             Activities::saveActivity("Testimonios reordenados por Usuario ID #" . Auth::id());
@@ -294,7 +289,7 @@ class TestimonialsController extends Component
      */
     private function resetForm(): void
     {
-        $this->reset(['name', 'charge', 'description', 'image', 'order', 'editingId']);
+        $this->reset(['name', 'charge', 'description', 'image', 'editingId']);
         $this->resetValidation();
     }
 

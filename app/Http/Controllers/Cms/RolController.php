@@ -88,6 +88,7 @@ class RolController extends Component
     public function render(): View
     {
         $roles = Role::query()
+            ->where('id', '>', 1)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', "%{$this->search}%");
             })

@@ -9,7 +9,7 @@
                 <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide uppercase">
                     <span>Escritorio</span>
                     <span class="text-slate-300">/</span>
-                    <span class="text-primary-600 font-semibold">marcas</span>
+                    <span class="text-primary-600 font-semibold">Marcas</span>
                 </div>
                 <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
                     Gestión de <span class="text-primary-600">marcas</span>
@@ -49,24 +49,23 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5 text-center w-20">orden</th>
                             <th class="px-6 py-3.5">Marca</th>
                             <th class="px-6 py-3.5">Imagen</th>
                             <th class="px-6 py-3.5 text-right w-40">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody id="brands-table-body" class="divide-y divide-slate-50 text-sm">
                         @forelse($brands as $brand)
-                            <tr wire:key="brand-{{ $brand->id }}" class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4 text-center">
-                                    <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
-                                        {{ $brand->order }}
-                                    </span>
-                                </td>
+                            <tr wire:key="brand-{{ $brand->id }}" data-id="{{ $brand->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <span class="font-bold text-[#222] uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
-                                        {{ $brand->name }}
-                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        </div>
+                                        <span class="font-bold text-[#222] uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
+                                            {{ $brand->name }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     @if($brand->image)
@@ -81,12 +80,12 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        <button wire:click="edit({{ $brand->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="editar marca">
+                                        <button wire:click="edit({{ $brand->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Editar marca">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
                                         </button>
-                                        <button onclick="openDeleteModal({{ $brand->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="eliminar marca">
+                                        <button onclick="openDeleteModal({{ $brand->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Eliminar marca">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                                             </svg>
@@ -96,7 +95,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-16 text-center">
+                                <td colspan="3" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
                                         <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                         <p class="text-xs font-medium">No se encontraron marcas</p>
@@ -126,7 +125,7 @@
             <div class="p-6 border-b border-slate-50 flex justify-between items-center">
                 <div>
                     <h2 class="text-base font-bold text-[#222]">
-                        {{ $editingId ? 'Actualizar' : 'Crear nuevo' }} marca
+                        {{ $editingId ? 'Actualizar' : 'Nueva' }} marca
                     </h2>
                     <p class="text-xs text-[#c0c1c6]">Marcas comerciales del catálogo</p>
                 </div>
@@ -145,6 +144,20 @@
                     </div>
 
                     <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Descripción (opcional)</label>
+                        <textarea wire:model="description" rows="3"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Descripción (opcional)</label>
+                        <textarea wire:model="seo_description" rows="2"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Logo o imagen (opcional)</label>
                         <input type="text" wire:model="image" placeholder="URL o ruta del logo..."
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
@@ -152,12 +165,6 @@
                         <p class="text-xs text-[#c0c1c6] italic">URL del logo o referencia de imagen para la marca</p>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Posición en menú</label>
-                        <input type="number" wire:model="order" min="0"
-                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                        @error('order') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
                 </div>
 
                 <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">
@@ -209,6 +216,27 @@
 
     <script>
         let deleteBrandId = null;
+
+        // Drag & Drop con SortableJS
+        (function() {
+            const tbody = document.getElementById('brands-table-body');
+            if (!tbody || typeof Sortable === 'undefined') return;
+
+            new Sortable(tbody, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'bg-emerald-50',
+                onEnd: function() {
+                    const rows = tbody.querySelectorAll('tr[data-id]');
+                    const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+
+                    const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                    if (component && orderedIds.length > 0) {
+                        component.updateOrder(orderedIds);
+                    }
+                }
+            });
+        })();
 
         function openDeleteModal(brandId) {
             deleteBrandId = brandId;

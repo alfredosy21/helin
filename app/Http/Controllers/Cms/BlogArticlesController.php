@@ -147,6 +147,7 @@ class BlogArticlesController extends Component
                     ->orWhere('author', 'like', "%{$this->search}%")
                     ->orWhere('content', 'like', "%{$this->search}%");
             })
+            ->orderBy('order', 'asc')
             ->orderBy('is_pinned', 'desc')
             ->orderBy('published_at', 'desc')
             ->orderBy('created_at', 'desc')
@@ -228,6 +229,9 @@ class BlogArticlesController extends Component
                 Activities::saveActivity("Artículo de blog actualizado: ID #{$article->id}");
                 $this->dispatch('toast', message: 'Artículo de blog actualizado correctamente', type: 'success');
             } else {
+                Blog::query()->increment('order');
+                $data['order'] = 1;
+
                 $article = Blog::create($data);
 
                 Activities::saveActivity("Artículo de blog creado: ID #{$article->id}");
@@ -393,6 +397,27 @@ class BlogArticlesController extends Component
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: 'Error al cambiar el estado destacado', type: 'error');
+        }
+    }
+
+    /**
+     * Reorder the display sequence of blog articles via drag & drop data.
+     *
+     * @param array $orderedIds Array of IDs in the new order
+     * @return void
+     */
+    public function updateOrder(array $orderedIds): void
+    {
+        try {
+            foreach ($orderedIds as $index => $id) {
+                Blog::query()->where('id', $id)->update(['order' => $index + 1]);
+            }
+
+            Activities::saveActivity("Artículos de blog reordenados por Usuario ID #" . Auth::id());
+            $this->dispatch('toast', message: 'Orden actualizado correctamente', type: 'success');
+        } catch (\Exception $ex) {
+            report($ex);
+            $this->dispatch('toast', message: 'Error al reordenar los artículos', type: 'error');
         }
     }
 }

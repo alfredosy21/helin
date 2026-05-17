@@ -17,7 +17,7 @@
                 </h1>
             </div>
 
-            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+            <button type="button" wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/>
                 </svg>
@@ -52,13 +52,13 @@
                             <th class="px-6 py-3.5 text-center w-20">autor</th>
                             <th class="px-6 py-3.5">Información</th>
                             <th class="px-6 py-3.5">Testimonio</th>
-                            <th class="px-6 py-3.5 text-center w-20">Orden</th>
+                            <th class="px-6 py-3.5 text-center w-20">orden</th>
                             <th class="px-6 py-3.5 text-right w-32">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody id="testimonials-table-body" wire:ignore class="divide-y divide-slate-50 text-sm">
                         @forelse($testimonials as $testimonial)
-                            <tr class="hover:bg-slate-50/50 transition-colors">
+                            <tr wire:key="testimonial-{{ $testimonial->id }}" data-id="{{ $testimonial->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4 flex justify-center">
                                     @if($testimonial->image)
                                         <div class="w-9 h-9 rounded-lg overflow-hidden border border-slate-100">
@@ -80,11 +80,14 @@
                                     <p class="text-xs text-slate-600 line-clamp-2">{{ $testimonial->description }}</p>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="text-xs font-medium text-slate-600">{{ $testimonial->order }}</span>
+                                    <div class="drag-handle flex items-center justify-center gap-1 cursor-move">
+                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">{{ $testimonial->order }}</span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        <button wire:click="edit({{ $testimonial->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="editar testimonio">
+                                        <button type="button" wire:click="edit({{ $testimonial->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="editar testimonio">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
@@ -101,7 +104,7 @@
                             <tr>
                                 <td colspan="5" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
-                                        <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                                        <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                         <p class="text-xs font-medium">No se encontraron registros</p>
                                     </div>
                                 </td>
@@ -164,11 +167,6 @@
                         <input type="text" wire:model="image" placeholder="https://..." class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                         @error('image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                     </div>
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Orden</label>
-                        <input type="number" wire:model="order" min="0" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                        @error('order') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                    </div>
                 </div>
             </div>
 
@@ -187,6 +185,27 @@
 
     {{-- JavaScript de SweetAlert2 --}}
     <script>
+        // Drag & Drop con SortableJS
+        (function() {
+            const tbody = document.getElementById('testimonials-table-body');
+            if (!tbody || typeof Sortable === 'undefined') return;
+
+            new Sortable(tbody, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'bg-emerald-50',
+                onEnd: function() {
+                    const rows = tbody.querySelectorAll('tr[data-id]');
+                    const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+
+                    const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                    if (component && orderedIds.length > 0) {
+                        component.updateOrder(orderedIds);
+                    }
+                }
+            });
+        })();
+
         function confirmDelete(button, testimonialId) {
             Swal.fire({
                 title: '¿eliminar este testimonio?',

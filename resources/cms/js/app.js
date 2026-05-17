@@ -1,8 +1,13 @@
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import Sortable from 'sortablejs'
+import Quill from 'quill'
+import 'quill/dist/quill.snow.css'
 
-// Para que esté disponible globalmente si lo necesitas
+// Para que estén disponibles globalmente si lo necesitas
 window.Toastify = Toastify;
+window.Sortable = Sortable;
+window.Quill = Quill;
 
 /**
  * Helin Latam CMS Application JavaScript

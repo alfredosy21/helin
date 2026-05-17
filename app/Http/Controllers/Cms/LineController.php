@@ -47,9 +47,13 @@ class LineController extends Component
     #[Validate('nullable|string|max:255')]
     public ?string $slug = '';
 
-    /** @var int Numerical order for frontend display */
-    #[Validate('required|integer|min:0')]
-    public int $order = 0;
+    /** @var string|null Line description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $description = '';
+
+    /** @var string|null SEO description for meta tags */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $seo_description = '';
 
     /** @var int|null ID of the line being modified */
     public ?int $editingId = null;
@@ -122,8 +126,6 @@ class LineController extends Component
     public function create(): void
     {
         $this->resetForm();
-        // Auto-assign the next position
-        $this->order = Line::max('order') + 1;
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -145,14 +147,14 @@ class LineController extends Component
         $this->validate([
             'name' => 'required|string|max:255|unique:lines,name' . ($this->editingId ? ",{$this->editingId}" : ''),
             'slug' => 'nullable|string|max:255|unique:lines,slug' . ($this->editingId ? ",{$this->editingId}" : ''),
-            'order' => 'required|integer|min:0',
         ]);
 
         try {
             $data = [
-                'name'     => $this->name,
-                'slug'     => $this->slug ?: Str::slug($this->name),
-                'order'    => $this->order,
+                'name'            => $this->name,
+                'slug'            => $this->slug ?: Str::slug($this->name),
+                'description'     => $this->description,
+                'seo_description' => $this->seo_description,
             ];
 
             if ($this->editingId) {
@@ -162,6 +164,9 @@ class LineController extends Component
                 Activities::saveActivity("Línea de producto actualizada: ID #{$line->id}");
                 $this->dispatch('toast', message: 'Línea actualizada correctamente', type: 'success');
             } else {
+                Line::query()->increment('order');
+                $data['order'] = 1;
+
                 $line = Line::create($data);
 
                 Activities::saveActivity("Línea de producto creada: ID #{$line->id}");
@@ -191,10 +196,11 @@ class LineController extends Component
     {
         $line = Line::findOrFail($id);
 
-        $this->editingId = $id;
-        $this->name      = $line->name;
-        $this->slug      = $line->slug;
-        $this->order     = $line->order;
+        $this->editingId       = $id;
+        $this->name            = $line->name;
+        $this->slug            = $line->slug;
+        $this->description     = $line->description;
+        $this->seo_description = $line->seo_description;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -239,7 +245,7 @@ class LineController extends Component
     {
         try {
             foreach ($orderedIds as $index => $id) {
-                Line::query()->where('id', $id)->update(['order' => $index]);
+                Line::query()->where('id', $id)->update(['order' => $index + 1]);
             }
 
             Activities::saveActivity("Líneas de producto reordenadas por Usuario ID #" . Auth::id());
@@ -276,7 +282,7 @@ class LineController extends Component
      */
     private function resetForm(): void
     {
-        $this->reset(['name', 'slug', 'order', 'editingId']);
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'editingId']);
         $this->resetValidation();
     }
 

@@ -3,17 +3,17 @@
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
-        
+
         {{-- Header Section & Breadcrumb Refinado --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
              <div>
             <div class="flex items-center gap-2 text-xs text-slate-400 mb-1 font-medium tracking-wide uppercase">
                 <span>Escritorio</span>
                 <span class="text-slate-300">/</span>
-                <span class="text-primary-600 font-semibold">administradores</span>
+                <span class="text-primary-600 font-semibold">Administradores</span>
             </div>
             <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
-                Gestión de <span class="text-primary-600">administradores</span>
+                Gestión de <span class="text-primary-600">Administradores</span>
             </h1>
         </div>
 
@@ -28,7 +28,7 @@
 
         {{-- Main Unified Card: Filtros y Tabla en una sola estructura --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
-            
+
             {{-- Search & Filter Section --}}
             <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
                 <div class="relative flex-1">
@@ -50,9 +50,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5 text-center w-20">admin</th>
+                            <th class="px-6 py-3.5 text-center w-20">Admin</th>
                             <th class="px-6 py-3.5">Información</th>
-                            <th class="px-6 py-3.5">rol de seguridad</th>
+                            <th class="px-6 py-3.5">Rol de seguridad</th>
                             <th class="px-6 py-3.5">Estado</th>
                             <th class="px-6 py-3.5 text-right w-32">Acciones</th>
                         </tr>
@@ -79,7 +79,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
-                                        {{ $user->role->name ?? 'sin rol' }}
+                                        {{ $user->role->name ?? 'Sin rol' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
@@ -94,13 +94,13 @@
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
                                         {{-- Botón de Lápiz (Editar) --}}
-                                        <button wire:click="edit({{ $user->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="editar usuario">
+                                        <button wire:click="edit({{ $user->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Editar usuario">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
                                         </button>
                                         {{-- Botón de Basura (Eliminar) --}}
-                                        <button onclick="confirmDelete(this, {{ $user->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="eliminar usuario">
+                                        <button onclick="confirmDelete(this, {{ $user->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Eliminar usuario">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                                             </svg>
@@ -180,10 +180,10 @@
                             generar aleatoria
                         </button>
                     </div>
-                    
+
                     <div class="space-y-1.5">
                         <input type="text" placeholder="contraseña de acceso" wire:model="password" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                        
+
                         @if($suggestedPassword && !$password)
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-lg">
                                 <p class="text-xs font-medium text-primary">sugerencia segura:</p>
