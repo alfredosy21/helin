@@ -289,6 +289,80 @@
                         class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none placeholder-slate-300"></textarea>
                 </div>
 
+                {{-- Imágenes y Documentos --}}
+                <div class="border-t border-slate-100 pt-5 space-y-4">
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.media_section') }}</h4>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.featured_image_label') }}</label>
+                        @if($featured_image)
+                            <div class="mb-2 relative group">
+                                <img src="{{ $featured_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('featured_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        @endif
+                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                </svg>
+                                <p class="text-xs text-slate-500">{{ __('cms.products.featured_image_placeholder') }}</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                            </div>
+                            <input type="file" wire:model="featured_image" class="hidden" accept="image/*" />
+                        </label>
+                        @error('featured_image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.gallery_label') }}</label>
+                        @if(!empty($gallery))
+                            <div class="grid grid-cols-4 gap-2 mb-2">
+                                @foreach($gallery as $index => $img)
+                                    <div class="relative group">
+                                        <img src="{{ $img->temporaryUrl() }}" class="w-full h-16 object-cover rounded-lg border border-slate-100">
+                                        <button type="button" wire:click="$set('gallery', {{ json_encode(array_values(array_filter($gallery, fn($_, $i) => $i !== $index, ARRAY_FILTER_USE_BOTH))) }})" class="absolute top-1 right-1 p-0.5 bg-white rounded text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                </svg>
+                                <p class="text-xs text-slate-500">{{ __('cms.products.gallery_placeholder') }}</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB c/u)</p>
+                            </div>
+                            <input type="file" wire:model="gallery" class="hidden" accept="image/*" multiple />
+                        </label>
+                        @error('gallery.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.documents_label') }}</label>
+                        @if(!empty($documents))
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                @foreach($documents as $doc)
+                                    <span class="inline-flex items-center px-2 py-1 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600">{{ $doc->getClientOriginalName() }}</span>
+                                @endforeach
+                            </div>
+                        @endif
+                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                                </svg>
+                                <p class="text-xs text-slate-500">{{ __('cms.products.documents_placeholder') }}</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">PDF, DOC (Máx. 5MB c/u)</p>
+                            </div>
+                            <input type="file" wire:model="documents" class="hidden" accept=".pdf,.doc,.docx" multiple />
+                        </label>
+                        @error('documents.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
                 {{-- SEO --}}
                 <div class="border-t border-slate-100 pt-5 space-y-4">
                     <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.seo_section') }}</h4>
@@ -344,21 +418,25 @@
 
                 {{-- Toggles de estado --}}
                 <div class="flex flex-wrap items-center gap-6 pt-2">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" wire:model="is_active" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.products.active') }}</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" wire:model="is_active" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-3 text-xs font-medium text-slate-600">{{ __('cms.products.active') }}</span>
                     </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" wire:model="is_featured" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.products.featured') }}</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" wire:model="is_featured" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                        <span class="ml-3 text-xs font-medium text-slate-600">{{ __('cms.products.featured') }}</span>
                     </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" wire:model="is_new" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.products.new') }}</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" wire:model="is_new" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                        <span class="ml-3 text-xs font-medium text-slate-600">{{ __('cms.products.new') }}</span>
                     </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" wire:model="is_on_sale" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary" />
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.products.on_sale') }}</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" wire:model="is_on_sale" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                        <span class="ml-3 text-xs font-medium text-slate-600">{{ __('cms.products.on_sale') }}</span>
                     </label>
                 </div>
             </div>

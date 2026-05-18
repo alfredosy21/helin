@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Activities;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
@@ -66,6 +67,9 @@ class BrandsController extends Component
 
     /** @var bool Modal visibility state */
     public bool $showForm = false;
+
+    /** @var bool Active status */
+    public bool $is_active = true;
 
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
@@ -146,9 +150,11 @@ class BrandsController extends Component
         try {
             $data = [
                 'name'            => $this->name,
+                'slug'            => Str::slug($this->name),
                 'image'           => $this->image,
                 'description'     => $this->description,
                 'seo_description' => $this->seo_description,
+                'is_active'       => $this->is_active,
             ];
 
             if ($this->editingId) {
@@ -195,6 +201,7 @@ class BrandsController extends Component
         $this->image          = $brand->image;
         $this->description    = $brand->description;
         $this->seo_description = $brand->seo_description;
+        $this->is_active      = $brand->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -283,7 +290,8 @@ class BrandsController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'image', 'description', 'seo_description', 'editingId']);
+        $this->reset(['name', 'image', 'description', 'seo_description', 'is_active', 'editingId']);
+        $this->is_active = true;
         $this->resetValidation();
     }
 

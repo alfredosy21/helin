@@ -61,6 +61,9 @@ class UserController extends Component
     /** @var bool Modal visibility state */
     public bool $showForm = false;
 
+    /** @var bool Active status */
+    public bool $is_active = true;
+
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
 
@@ -138,7 +141,7 @@ class UserController extends Component
                 'email'  => $this->email,
                 'rol_id' => $this->rol_id,
                 'level'  => 2,
-                'is_active' => true,
+                'is_active' => $this->is_active,
             ];
 
             if (!empty($this->password)) {
@@ -181,7 +184,8 @@ class UserController extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->rol_id = $user->rol_id;
-        $this->password = ''; // Clear password field for security
+        $this->is_active = $user->is_active;
+        $this->password = null; // Clear password field for security
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -241,7 +245,8 @@ class UserController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'email', 'rol_id', 'password', 'editingId']);
+        $this->reset(['name', 'email', 'rol_id', 'password', 'is_active', 'editingId']);
+        $this->is_active = true;
         $this->resetValidation();
         $this->suggestedPassword = Str::password(12, symbols: false);
     }

@@ -6,10 +6,12 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\Testimonial;
 use App\Models\Activities;
+use App\Services\FileUploadService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -39,7 +41,7 @@ use Livewire\Attributes\Validate;
 #[Layout('cms.layouts.dashboard')]
 class TestimonialsController extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     /** @var string Author's name */
     #[Validate('required|string|max:255')]
@@ -53,8 +55,11 @@ class TestimonialsController extends Component
     #[Validate('required|string|max:2000')]
     public string $description = '';
 
-    /** @var string|null Media path (comma-separated or single string) */
-    public ?string $image = '';
+    /** @var mixed Temporary uploaded image file */
+    public $image;
+
+    /** @var string|null Current image path stored in DB */
+    public ?string $current_image = null;
 
     /** @var int|null ID of the testimonial being modified */
     public ?int $editingId = null;
@@ -67,6 +72,9 @@ class TestimonialsController extends Component
 
     /** @var bool Modal visibility state */
     public bool $showForm = false;
+
+    /** @var bool Active status */
+    public bool $is_active = true;
 
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
@@ -140,7 +148,7 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    public function save(): void
+    public function save(FileUploadService $fileUpload): void
     {
         $this->isLoading = true;
         $this->validate();
@@ -150,8 +158,15 @@ class TestimonialsController extends Component
                 'name'        => $this->name,
                 'charge'      => $this->charge,
                 'description' => $this->description,
-                'image'       => $this->image,
+                'is_active'   => $this->is_active,
             ];
+
+            if ($this->image) {
+                $upload = $fileUpload->save($this->image, 'testimonials');
+                $data['image'] = $upload['path'];
+            } elseif ($this->editingId) {
+                $data['image'] = $this->current_image;
+            }
 
             if ($this->editingId) {
                 $testimonial = Testimonial::findOrFail($this->editingId);
@@ -196,7 +211,8 @@ class TestimonialsController extends Component
         $this->name       = $testimonial->name;
         $this->charge     = $testimonial->charge;
         $this->description = $testimonial->description;
-        $this->image      = $testimonial->image;
+        $this->current_image = $testimonial->image;
+        $this->is_active  = (bool) $testimonial->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -298,7 +314,8 @@ class TestimonialsController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'charge', 'description', 'image', 'editingId']);
+        $this->reset(['name', 'charge', 'description', 'image', 'current_image', 'is_active', 'editingId']);
+        $this->is_active = true;
         $this->resetValidation();
     }
 

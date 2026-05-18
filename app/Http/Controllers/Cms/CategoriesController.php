@@ -55,6 +55,9 @@ class CategoriesController extends Component
     /** @var bool Modal visibility state */
     public bool $showForm = false;
 
+    /** @var bool Active status */
+    public bool $is_active = true;
+
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
 
@@ -114,6 +117,7 @@ class CategoriesController extends Component
                 'slug'            => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
                 'description'     => $this->description,
                 'seo_description' => $this->seo_description,
+                'is_active'       => $this->is_active,
             ];
 
             if ($this->editingId) {
@@ -154,6 +158,7 @@ class CategoriesController extends Component
         $this->slug            = $category->slug;
         $this->description     = $category->description;
         $this->seo_description = $category->seo_description;
+        $this->is_active       = $category->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -215,7 +220,8 @@ class CategoriesController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'slug', 'description', 'seo_description', 'editingId']);
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'is_active', 'editingId']);
+        $this->is_active = true;
         $this->resetValidation();
     }
 

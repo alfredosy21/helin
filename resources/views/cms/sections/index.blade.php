@@ -125,7 +125,7 @@
 
             {{-- Contenedor del Drawer --}}
             <div class="relative w-full max-w-lg h-full bg-white shadow-2xl flex flex-col border-l border-slate-100 z-10 animate-in slide-in-from-right duration-200">
-                
+
                 {{-- Header del Drawer --}}
                 <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-white flex-shrink-0">
                     <div>
@@ -143,7 +143,7 @@
                 <form wire:submit.prevent="update" class="flex flex-col flex-1 overflow-hidden bg-white">
                     {{-- Cuerpo con Scroll --}}
                     <div class="flex-1 overflow-y-auto p-6 space-y-5">
-                        
+
                         {{-- Título --}}
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.title_label') }}</label>
@@ -211,12 +211,18 @@
 
                         {{-- Toggles de estado --}}
                         <div class="flex items-center gap-6 pt-2">
-                            <label class="flex items-center gap-2 cursor-pointer select-none">
-                                <input type="checkbox" wire:model="status" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer" />
+                            <label class="flex items-center gap-3 cursor-pointer select-none">
+                                <div class="relative">
+                                    <input type="checkbox" wire:model="status" class="sr-only peer">
+                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </div>
                                 <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.active') }}</span>
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer select-none">
-                                <input type="checkbox" wire:model="status_content" class="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer" />
+                            <label class="flex items-center gap-3 cursor-pointer select-none">
+                                <div class="relative">
+                                    <input type="checkbox" wire:model="status_content" class="sr-only peer">
+                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </div>
                                 <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.visible') }}</span>
                             </label>
                         </div>

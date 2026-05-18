@@ -202,6 +202,14 @@
                         {{ $editingId ? __('cms.users.password_hint_edit') : __('cms.users.password_hint_new') }}
                     </p>
                 </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <label for="is_active" class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                    </label>
+                </div>
             </div>
 
             <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">

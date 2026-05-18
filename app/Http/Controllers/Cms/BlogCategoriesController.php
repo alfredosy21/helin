@@ -66,6 +66,9 @@ class BlogCategoriesController extends Component
     /** @var bool Modal visibility state */
     public bool $showForm = false;
 
+    /** @var bool Active status */
+    public bool $is_active = true;
+
     /** @var bool Global loading indicator */
     public bool $isLoading = false;
 
@@ -150,6 +153,7 @@ class BlogCategoriesController extends Component
                 'slug'        => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
                 'description'     => $this->description,
                 'seo_description' => $this->seo_description,
+                'is_active'   => $this->is_active,
             ];
 
             if ($this->editingId) {
@@ -195,6 +199,7 @@ class BlogCategoriesController extends Component
         $this->slug       = $blogCategory->slug;
         $this->description     = $blogCategory->description;
         $this->seo_description  = $blogCategory->seo_description;
+        $this->is_active  = $blogCategory->is_active;
         $this->showForm = true;
         $this->dispatch('open-form');
     }
@@ -281,9 +286,10 @@ class BlogCategoriesController extends Component
     private function resetForm(): void
     {
         $this->reset([
-            'name', 'slug', 'description', 'seo_description',
+            'name', 'slug', 'description', 'seo_description', 'is_active',
             'editingId'
         ]);
+        $this->is_active = true;
         $this->resetValidation();
     }
 

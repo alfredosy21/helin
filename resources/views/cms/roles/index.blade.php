@@ -72,14 +72,16 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
-                                        {{-- Botón Permisos --}}
-                                        <x-cms-tooltip text="{{ __('cms.general.edit') }}">
-                                            <a href="{{ route('cms.permissions.index', $role->id) }}" class="p-2 text-slate-400 hover:text-purple-600 hover:bg-slate-50 rounded-lg transition-colors inline-flex">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                                </svg>
-                                            </a>
-                                        </x-cms-tooltip>
+                                        @if(Auth::user()->rol_id === \App\Models\Role::ADMINISTRATOR)
+                                            {{-- Botón Permisos --}}
+                                            <x-cms-tooltip text="{{ __('cms.general.permissions') }}">
+                                                <a href="{{ route('cms.permissions.index', $role->id) }}" class="p-2 text-slate-400 hover:text-purple-600 hover:bg-slate-50 rounded-lg transition-colors inline-flex">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                    </svg>
+                                                </a>
+                                            </x-cms-tooltip>
+                                        @endif
                                         {{-- Botón Editar --}}
                                         <x-cms-tooltip text="{{ __('cms.general.edit') }}">
                                             <button wire:click="edit({{ $role->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">

@@ -241,9 +241,34 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ __('cms.blog_articles.featured_image_label') }}</label>
-                    <input type="text" wire:model="featured_image" placeholder="{{ __('cms.blog_articles.featured_image_placeholder') }}"
-                        class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none transition-all" />
-                    @error('featured_image') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    <div class="relative">
+                        @if($featured_image)
+                            <div class="mb-2 relative group">
+                                <img src="{{ $featured_image->temporaryUrl() }}" class="w-full h-40 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('featured_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        @elseif($current_featured_image)
+                            <div class="mb-2 relative group">
+                                <img src="{{ asset('storage/' . $current_featured_image) }}" class="w-full h-40 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('current_featured_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        @endif
+                        <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                </svg>
+                                <p class="text-xs text-slate-500">{{ __('cms.blog_articles.featured_image_placeholder') }}</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                            </div>
+                            <input type="file" wire:model="featured_image" class="hidden" accept="image/*" />
+                        </label>
+                        @error('featured_image') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <div class="border-t border-slate-100 pt-4">
@@ -321,23 +346,30 @@
 <script>
     // Drag & Drop con SortableJS
     (function() {
-        const tbody = document.getElementById('articles-table-body');
-        if (!tbody || typeof Sortable === 'undefined') return;
+        let sortableInstance = null;
 
-        new Sortable(tbody, {
-            handle: '.drag-handle',
-            animation: 150,
-            ghostClass: 'bg-emerald-50',
-            onEnd: function() {
-                const rows = tbody.querySelectorAll('tr[data-id]');
-                const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+        function initSortable() {
+            const tbody = document.getElementById('articles-table-body');
+            if (!tbody || typeof Sortable === 'undefined') return;
+            if (sortableInstance) sortableInstance.destroy();
 
-                const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
-                if (component && orderedIds.length > 0) {
-                    component.updateOrder(orderedIds);
+            sortableInstance = new Sortable(tbody, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'bg-emerald-50',
+                onEnd: function() {
+                    const rows = tbody.querySelectorAll('tr[data-id]');
+                    const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+                    const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                    if (component && orderedIds.length > 0) {
+                        component.updateOrder(orderedIds);
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        initSortable();
+        document.addEventListener('livewire:updated', initSortable);
     })();
 
     function openDeleteModal(id) {

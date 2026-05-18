@@ -7,10 +7,12 @@ namespace App\Http\Controllers\Cms;
 use App\Models\Blog;
 use App\Models\Activities;
 use App\Models\BlogCategory;
+use App\Services\FileUploadService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -38,7 +40,7 @@ use Livewire\Attributes\Validate;
 #[Layout('cms.layouts.dashboard')]
 class BlogArticlesController extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     /** @var string Article title */
     #[Validate('required|string|max:255')]
@@ -60,9 +62,11 @@ class BlogArticlesController extends Component
     #[Validate('nullable|string|max:500')]
     public ?string $excerpt = '';
 
-    /** @var string|null Featured image URL or path */
-    #[Validate('nullable|string|max:255')]
-    public ?string $featured_image = '';
+    /** @var mixed Temporary uploaded featured image file */
+    public $featured_image;
+
+    /** @var string|null Current featured image path stored in DB */
+    public ?string $current_featured_image = null;
 
     /** @var string|null Meta title for SEO */
     #[Validate('nullable|string|max:255')]
@@ -184,7 +188,7 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    public function save(): void
+    public function save(FileUploadService $fileUpload): void
     {
         $this->isLoading = true;
 
@@ -195,7 +199,7 @@ class BlogArticlesController extends Component
             'author' => 'nullable|string|max:255',
             'content' => 'required|string',
             'excerpt' => 'nullable|string|max:500',
-            'featured_image' => 'nullable|string|max:255',
+            'featured_image' => 'nullable|image|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255',
@@ -212,7 +216,6 @@ class BlogArticlesController extends Component
                 'author' => $this->author,
                 'content' => $this->content,
                 'excerpt' => $this->excerpt,
-                'featured_image' => $this->featured_image,
                 'meta_title' => $this->meta_title,
                 'meta_description' => $this->meta_description,
                 'meta_keywords' => $this->meta_keywords,
@@ -222,6 +225,13 @@ class BlogArticlesController extends Component
                 'is_pinned' => $this->is_pinned,
                 'published_at' => $this->is_active ? now() : null,
             ];
+
+            if ($this->featured_image) {
+                $upload = $fileUpload->save($this->featured_image, 'blog');
+                $data['featured_image'] = $upload['path'];
+            } elseif ($this->editingId) {
+                $data['featured_image'] = $this->current_featured_image;
+            }
 
             if ($this->editingId) {
                 $article = Blog::findOrFail($this->editingId);
@@ -268,7 +278,7 @@ class BlogArticlesController extends Component
         $this->author = $article->author;
         $this->content = $article->content;
         $this->excerpt = $article->excerpt;
-        $this->featured_image = $article->featured_image;
+        $this->current_featured_image = $article->featured_image;
         $this->meta_title = $article->meta_title;
         $this->meta_description = $article->meta_description;
         $this->meta_keywords = $article->meta_keywords;
@@ -342,7 +352,7 @@ class BlogArticlesController extends Component
     {
         $this->reset([
             'title', 'slug', 'author', 'content', 'excerpt', 'featured_image',
-            'meta_title', 'meta_description', 'meta_keywords', 'blog_category_id',
+            'current_featured_image', 'meta_title', 'meta_description', 'meta_keywords', 'blog_category_id',
             'is_active', 'is_featured', 'is_pinned', 'editingId'
         ]);
         $this->resetValidation();

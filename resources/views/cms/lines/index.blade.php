@@ -165,6 +165,14 @@
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
+                    <div class="flex items-center gap-3 pt-2">
+                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                        </label>
+                    </div>
+
                 </div>
 
                 <div class="p-6 border-t border-slate-50 bg-slate-50/50 flex gap-3">
@@ -203,23 +211,30 @@
 
         // Drag & Drop con SortableJS
         (function() {
-            const tbody = document.getElementById('lines-table-body');
-            if (!tbody || typeof Sortable === 'undefined') return;
+            let sortableInstance = null;
 
-            new Sortable(tbody, {
-                handle: '.drag-handle',
-                animation: 150,
-                ghostClass: 'bg-emerald-50',
-                onEnd: function() {
-                    const rows = tbody.querySelectorAll('tr[data-id]');
-                    const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+            function initSortable() {
+                const tbody = document.getElementById('lines-table-body');
+                if (!tbody || typeof Sortable === 'undefined') return;
+                if (sortableInstance) sortableInstance.destroy();
 
-                    const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
-                    if (component && orderedIds.length > 0) {
-                        component.updateOrder(orderedIds);
+                sortableInstance = new Sortable(tbody, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    ghostClass: 'bg-emerald-50',
+                    onEnd: function() {
+                        const rows = tbody.querySelectorAll('tr[data-id]');
+                        const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+                        const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+                        if (component && orderedIds.length > 0) {
+                            component.updateOrder(orderedIds);
+                        }
                     }
-                }
-            });
+                });
+            }
+
+            initSortable();
+            document.addEventListener('livewire:updated', initSortable);
         })();
     </script>
 </div>
