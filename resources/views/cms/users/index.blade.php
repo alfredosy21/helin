@@ -7,16 +7,10 @@
         {{-- Header Section & Breadcrumb Refinado --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
              <div>
-                <x-cms-breadcrumb module="cms.users.breadcrumb">
-                    <x-slot name="moduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.548-.365A5.605 5.605 0 011.5 15.5a5.608 5.608 0 011.316-3.484m3.742-1.411A5.951 5.951 0 0112 9.756V8.25a2.25 2.25 0 012.25-2.25h.872M12 9.756V8.25a2.25 2.25 0 00-2.25-2.25H9M12 9.756c1.916.597 3.438 1.582 4.442 2.955"/>
-                        </svg>
-                    </x-slot>
-                </x-cms-breadcrumb>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                <x-cms-breadcrumb :module-id="1" :submodule-id="1" />
+                   <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.users.title') }}
-                </h1>
+</p>
             </div>
 
             {{-- Botón Principal Nativo con el Color Institucional Forzado --}}

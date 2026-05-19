@@ -2,30 +2,15 @@
     <div class="relative z-10 p-6 space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb
-                    module="cms.permissions.parent_breadcrumb"
-                    submodule="cms.permissions.roles_breadcrumb"
-                    section="cms.permissions.breadcrumb">
-                    <x-slot name="moduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
-                        </svg>
-                    </x-slot>
-                    <x-slot name="submoduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.548-.365A5.605 5.605 0 011.5 15.5a5.608 5.608 0 011.316-3.484m3.742-1.411A5.951 5.951 0 0112 9.756V8.25a2.25 2.25 0 012.25-2.25h.872M12 9.756V8.25a2.25 2.25 0 00-2.25-2.25H9M12 9.756c1.916.597 3.438 1.582 4.442 2.955"/>
-                        </svg>
-                    </x-slot>
+
+                           <x-cms-breadcrumb :module-id="1" :submodule-id="2" section="cms.permissions.breadcrumb" >
                     <x-slot name="sectionIcon">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
                         </svg>
                     </x-slot>
                 </x-cms-breadcrumb>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
-                    {{ __('cms.permissions.title') }}
-                </h1>
-                <p class="text-sm text-slate-500 mt-1">
+           <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.permissions.role_access') }} <span class="font-semibold text-slate-700">{{ $roleName ?: 'Unknown Role' }}</span>
                 </p>
             </div>

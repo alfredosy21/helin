@@ -6,17 +6,10 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb module="cms.brands.breadcrumb">
-                    <x-slot name="moduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.096 18.096 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"/>
-                        </svg>
-                    </x-slot>
-                </x-cms-breadcrumb>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                <x-cms-breadcrumb :module-id="3" :submodule-id="7" />
+                   <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.brands.title') }}
-                </h1>
+</p>
             </div>
 
             {{-- Botón Principal --}}

@@ -6,23 +6,10 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb
-                    module="cms.blog_articles.parent_breadcrumb"
-                    submodule="cms.blog_articles.breadcrumb">
-                    <x-slot name="moduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/>
-                        </svg>
-                    </x-slot>
-                    <x-slot name="submoduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A9 9 0 006 18c2.305 0 4.408.867 6 2.292m0-14.25a8.967 8.967 0 016-3.75c1.052 0 2.062.18 3 .512v14.25A9 9 0 0118 18a8.962 8.962 0 01-6 2.292m0-14.25v14.25"/>
-                        </svg>
-                    </x-slot>
-                </x-cms-breadcrumb>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                               <x-cms-breadcrumb :module-id="4" :submodule-id="10" />
+                  <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.blog_articles.title') }}
-                </h1>
+</p>
             </div>
 
             {{-- Botón Principal --}}

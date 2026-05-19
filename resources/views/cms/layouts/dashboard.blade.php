@@ -51,7 +51,7 @@
                     @endphp
                     <a href="{{ route('dashboard') }}" wire:navigate
                        class="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-white/10 text-white font-semibold' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200' }}">
-                        <x-ui-icon name="monitor" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-[#09b6a2]' : 'text-slate-400 group-hover:text-slate-300' }}" />
+                        <x-ui-icon name="home" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-[#09b6a2]' : 'text-slate-400 group-hover:text-slate-300' }}" />
                         <span>{{ __('cms.general.desktop') }}</span>
                     </a>
 

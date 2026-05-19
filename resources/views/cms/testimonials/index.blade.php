@@ -7,16 +7,10 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb module="cms.testimonials.breadcrumb">
-                    <x-slot name="moduleIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.251 2.251 0 00-2.15-1.588H6.911c-.99 0-1.868.66-2.148 1.588L2.35 13.177a2.25 2.25 0 00-.1.661v.287c0 .653.437 1.237.995 1.406l.234.078c.785.262 1.594.422 2.415.48.32.025.64.052.96.078v3l2.25-2.25c.682.028 1.36.05 2.032.058 1.336.017 2.673-.018 3.995-.102l.231-.018c.893-.074 1.65-.82 1.65-1.72v-.78c0-.917-.58-1.69-1.397-1.944z"/>
-                        </svg>
-                    </x-slot>
-                </x-cms-breadcrumb>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                           <x-cms-breadcrumb :module-id="5" :submodule-id="11" />
+                <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.testimonials.title') }}
-                </h1>
+</p>
             </div>
 
             <button type="button" wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
