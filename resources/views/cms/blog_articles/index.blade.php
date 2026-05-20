@@ -50,6 +50,7 @@
                             <th class="px-6 py-3.5">{{ __('cms.tables.article') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.author') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.category') }}</th>
+                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
                             <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
@@ -84,6 +85,11 @@
                                     @else
                                         <span class="text-xs text-slate-400 italic">{{ __('cms.blog_articles.no_category') }}</span>
                                     @endif
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs text-slate-500">
+                                        {{ $article->updated_at->format('d/m/Y H:i') }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <button wire:click="toggleStatus({{ $article->id }})"
@@ -142,7 +148,7 @@
         </div>
         {{-- Drawer Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[60] overflow-hidden">
+    <div class="fixed inset-0 z-[50] overflow-hidden">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" wire:click="cancel"></div>
 
         <div class="absolute inset-y-0 right-0 max-w-2xl w-full bg-white shadow-[0_0_40px_-10px_rgba(0,0,0,0.1)] flex flex-col transform transition-transform duration-300 ease-out"
@@ -166,9 +172,34 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                {{-- Toggles de estado --}}
+                <div class="flex flex-wrap gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <label class="flex items-center cursor-pointer gap-2">
+                        <input type="checkbox" wire:model="is_active" class="hidden peer">
+                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-emerald-500 rounded-full relative transition-colors">
+                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
+                        </div>
+                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.published') }}</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer gap-2">
+                        <input type="checkbox" wire:model="is_featured" class="hidden peer">
+                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-yellow-500 rounded-full relative transition-colors">
+                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
+                        </div>
+                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.featured') }}</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer gap-2">
+                        <input type="checkbox" wire:model="is_pinned" class="hidden peer">
+                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-primary rounded-full relative transition-colors">
+                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
+                        </div>
+                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.pinned') }}</span>
+                    </label>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ __('cms.blog_articles.title_label') }}</label>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ __('cms.blog_articles.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" required placeholder="{{ __('cms.blog_articles.title_placeholder') }}"
                             class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/10 focus:outline-none transition-all" />
                         @error('title') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
@@ -210,7 +241,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ __('cms.blog_articles.content_label') }}</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ __('cms.blog_articles.content_label') }} <span class="text-red-500">*</span></label>
                     <div x-data="{ quill: null }"
                          x-init="
                             quill = new Quill($refs.editor, {
@@ -280,30 +311,6 @@
                             @error('meta_keywords') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
                     </div>
-                </div>
-
-                <div class="flex flex-wrap gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <label class="flex items-center cursor-pointer gap-2">
-                        <input type="checkbox" wire:model="is_active" class="hidden peer">
-                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-emerald-500 rounded-full relative transition-colors">
-                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
-                        </div>
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.published') }}</span>
-                    </label>
-                    <label class="flex items-center cursor-pointer gap-2">
-                        <input type="checkbox" wire:model="is_featured" class="hidden peer">
-                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-yellow-500 rounded-full relative transition-colors">
-                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
-                        </div>
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.featured') }}</span>
-                    </label>
-                    <label class="flex items-center cursor-pointer gap-2">
-                        <input type="checkbox" wire:model="is_pinned" class="hidden peer">
-                        <div class="w-9 h-5 bg-slate-300 peer-checked:bg-primary rounded-full relative transition-colors">
-                            <div class="absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
-                        </div>
-                        <span class="text-xs font-medium text-slate-600">{{ __('cms.general.pinned') }}</span>
-                    </label>
                 </div>
             </div>
 

@@ -26,7 +26,7 @@
     <div class="flex min-h-screen">
 
         {{-- Ultra Clean & Modern Sidebar --}}
-        <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:static lg:inset-0 flex-shrink-0">
+        <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:static lg:inset-0 flex-shrink-0 z-40">
             <div class="flex flex-col flex-grow bg-[#1e293b] dark:bg-slate-950 overflow-hidden border-r border-slate-800/50">
 
                 {{-- Logo Area - Identical to your exact brand header --}}

@@ -112,7 +112,7 @@
 
     {{-- Formulario Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -130,8 +130,17 @@
 
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                    {{-- Toggle de estado --}}
+                    <div class="flex items-center gap-3 pt-2">
+                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                        </label>
+                    </div>
+
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.lines.name_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.lines.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="{{ __('cms.lines.name_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
@@ -157,14 +166,6 @@
                         <textarea wire:model="seo_description" rows="2"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="flex items-center gap-3 pt-2">
-                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                        </label>
                     </div>
 
                 </div>

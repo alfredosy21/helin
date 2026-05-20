@@ -48,7 +48,8 @@
                             <th class="px-6 py-3.5 text-center w-20">{{ __('cms.testimonials.author') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.testimonials.info') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.testimonials.testimony') }}</th>
-                            <th class="px-6 py-3.5 text-center w-20">{{ __('cms.testimonials.order') }}</th>
+                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
+                            <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-32">{{ __('cms.testimonials.actions') }}</th>
                         </tr>
                     </thead>
@@ -75,10 +76,17 @@
                                 <td class="px-6 py-4">
                                     <p class="text-xs text-slate-600 line-clamp-2">{{ $testimonial->description }}</p>
                                 </td>
+                                                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs text-slate-500">
+                                        {{ $testimonial->updated_at->format('d/m/Y H:i') }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4 text-center">
-                                    <div class="drag-handle flex items-center justify-center gap-1 cursor-move">
-                                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
-                                        <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">{{ $testimonial->order }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full {{ $testimonial->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
+                                        <span class="text-xs font-medium {{ $testimonial->is_active ? 'text-slate-700' : 'text-slate-400' }}">
+                                            {{ $testimonial->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
+                                        </span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
@@ -125,7 +133,7 @@
 
     {{-- Formulario Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -144,19 +152,19 @@
             <div class="flex-1 overflow-y-auto p-6 space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.name_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                         @error('name') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.charge_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.charge_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="charge" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                         @error('charge') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.description_label') }}</label>
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.description_label') }} <span class="text-red-500">*</span></label>
                     <textarea wire:model="description" rows="4" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
                     @error('description') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                 </div>

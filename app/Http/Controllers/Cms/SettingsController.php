@@ -34,7 +34,7 @@ class SettingsController extends Component
     use WithFileUploads;
 
     /** @var bool UI state controller to toggle between view and edit modes */
-    public bool $isEditing = false;
+    public bool $isEditing = true;
 
     /** @var string Company official name */
     public string $name = '';
@@ -173,7 +173,6 @@ class SettingsController extends Component
 
             $this->current_image = $settings->image;
             $this->image = null;
-            $this->isEditing = false;
 
             // Enviar toast de éxito
             $this->dispatch('toast', message: __('cms.controllers.settings.updated'), type: 'success');

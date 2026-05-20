@@ -46,7 +46,7 @@ Route::prefix('cms')->group(function () {
     Route::middleware('guest')->group(function () {
 
         // Login & Session Management
-        Route::get('/login', AuthenticatedSessionController::class)->name('login');
+        Route::get('/', AuthenticatedSessionController::class)->name('login');
 
         // Password Recovery Flow
         Route::get('/forgot-password', PasswordResetLinkController::class)->name('password.request');

@@ -133,7 +133,7 @@
 
     {{-- Formulario Lateral Nativo Limpio --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -150,20 +150,29 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                {{-- Toggle de estado --}}
+                <div class="flex items-center gap-3 pt-2">
+                    <label for="is_active" class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                    </label>
+                </div>
+
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.name_label') }}</label>
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.name_label') }} <span class="text-red-500">*</span></label>
                     <input type="text" wire:model="name" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                     @error('name') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.email_label') }}</label>
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.email_label') }} <span class="text-red-500">*</span></label>
                     <input type="email" wire:model="email" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                     @error('email') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.role_label') }}</label>
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.role_label') }} <span class="text-red-500">*</span></label>
                     <select wire:model="rol_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
                         <option value="">{{ __('cms.users.role_placeholder') }}</option>
                         @foreach($roles as $id => $name)
@@ -175,7 +184,7 @@
 
                 <div class="pt-4 border-t border-slate-50 space-y-3">
                     <div class="flex items-center justify-between">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.credentials') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.users.credentials') }} <span class="text-red-500">*</span></label>
                         <button type="button" wire:click="generatePassword" class="text-xs font-medium text-primary hover:underline bg-transparent border-none p-0 cursor-pointer">
                             {{ __('cms.users.generate_password') }}
                         </button>
@@ -195,14 +204,6 @@
                     <p class="text-xs text-[#c0c1c6] italic">
                         {{ $editingId ? __('cms.users.password_hint_edit') : __('cms.users.password_hint_new') }}
                     </p>
-                </div>
-
-                <div class="flex items-center gap-3 pt-2">
-                    <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                        <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                    </label>
                 </div>
             </div>
 

@@ -47,6 +47,8 @@
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.category') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.slug_url') }}</th>
+                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
+                            <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
                     </thead>
@@ -67,6 +69,19 @@
                                     <span class="font-mono text-xs text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded">
                                         {{ $category->slug }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs text-slate-500">
+                                        {{ $category->updated_at->format('d/m/Y H:i') }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full {{ $category->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
+                                        <span class="text-xs font-medium {{ $category->is_active ? 'text-slate-700' : 'text-slate-400' }}">
+                                            {{ $category->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
@@ -112,7 +127,7 @@
 
     {{-- Formulario Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -130,6 +145,15 @@
 
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                    {{-- Toggle de estado --}}
+                    <div class="flex items-center gap-3 pt-2">
+                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                        </label>
+                    </div>
+
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="{{ __('cms.categories.name_placeholder') }}"
@@ -138,7 +162,7 @@
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.slug_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.categories.slug_label') }}</label>
                         <input type="text" wire:model="slug" placeholder="{{ __('cms.categories.slug_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
@@ -157,14 +181,6 @@
                         <textarea wire:model="seo_description" rows="2"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="flex items-center gap-3 pt-2">
-                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                        </label>
                     </div>
 
                 </div>

@@ -374,6 +374,7 @@ return [
     'profile' => [
         'title' => 'Actualiza tus credenciales profesionales y mantén tu cuenta segura para un control impecable',
         'breadcrumb' => 'Mi Perfil',
+        'my_profile' => 'Mi Perfil',
         'cms_breadcrumb' => 'CMS',
         'update_button' => 'Actualizar Perfil',
         'avatar_title' => 'Avatar de Usuario',
@@ -457,6 +458,7 @@ return [
         'slug_url' => 'Slug / URL',
         'section_title' => 'Sección / Título',
         'visibility_status' => 'Estado visibilidad',
+        'updated_at' => 'Actualizado',
         'content' => 'Contenido',
         'information' => 'Información',
         'role_security' => 'Rol',
@@ -589,6 +591,7 @@ return [
     'controllers' => [
         'auth' => [
             'login_system_error' => 'Error del sistema durante la autenticación.',
+            'activity_login' => 'Usuario inició sesión',
         ],
         'blog_articles' => [
             'updated' => 'Artículo actualizado correctamente.',

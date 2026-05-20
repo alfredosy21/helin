@@ -120,7 +120,7 @@
 
     {{-- Formulario Lateral / Drawer Refinado --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -139,7 +139,7 @@
             <form wire:submit.prevent="save" class="flex flex-col flex-1 h-full">
                 <div class="flex-1 overflow-y-auto p-6 space-y-5">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.roles.name_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.roles.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="{{ __('cms.roles.name_placeholder') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name')

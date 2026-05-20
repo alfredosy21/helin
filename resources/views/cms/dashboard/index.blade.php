@@ -46,79 +46,79 @@
             <!-- Stats Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Users Card -->
-                <div class="bg-white rounded-xl p-6 border border-slate-100">
+                <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="users" class="w-5 h-5 text-slate-600" />
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <x-ui-icon name="users" class="w-5 h-5 text-blue-600" />
                         </div>
-                        <div class="flex items-center gap-1 px-2 py-0.5 bg-green-50 rounded-full">
-                            <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                            <span class="text-[10px] font-semibold text-green-700">+{{ $stats['new_users'] ?? 0 }}</span>
+                        <div class="flex items-center gap-1 px-2 py-0.5 bg-blue-100 rounded-full">
+                            <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                            <span class="text-[10px] font-semibold text-blue-700">+{{ $stats['new_users'] ?? 0 }}</span>
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-[#c0c1c6] uppercase tracking-wide">{{ __('cms.dashboard.total_users') }}</p>
+                        <p class="text-xs font-medium text-blue-400 uppercase tracking-wide">Usuarios Totales</p>
                         <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_users'] ?? 0) }}</p>
                         <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="trending-up" class="w-3 h-3 text-green-500" />
-                            <span>{{ $stats['new_users'] ?? 0 }} {{ __('cms.dashboard.new_this_month') }}</span>
+                            <x-ui-icon name="trending-up" class="w-3 h-3 text-blue-500" />
+                            <span>{{ $stats['new_users'] ?? 0 }} nuevos este mes</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Products Card -->
-                <div class="bg-white rounded-xl p-6 border border-slate-100">
+                <div class="bg-emerald-50 rounded-xl p-6 border border-emerald-100">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="package" class="w-5 h-5 text-slate-600" />
+                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <x-ui-icon name="package" class="w-5 h-5 text-emerald-600" />
                         </div>
-                        <div class="flex items-center gap-1 px-2 py-0.5 bg-green-50 rounded-full">
-                            <div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                            <span class="text-[10px] font-semibold text-green-700">+{{ $stats['new_products'] ?? 0 }}</span>
+                        <div class="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 rounded-full">
+                            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                            <span class="text-[10px] font-semibold text-emerald-700">+{{ $stats['new_products'] ?? 0 }}</span>
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-[#c0c1c6] uppercase tracking-wide">{{ __('cms.dashboard.products') }}</p>
+                        <p class="text-xs font-medium text-emerald-400 uppercase tracking-wide">Productos</p>
                         <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_products'] ?? 0) }}</p>
                         <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="trending-up" class="w-3 h-3 text-green-500" />
-                            <span>{{ $stats['new_products'] ?? 0 }} {{ __('cms.dashboard.new_this_month') }}</span>
+                            <x-ui-icon name="trending-up" class="w-3 h-3 text-emerald-500" />
+                            <span>{{ $stats['new_products'] ?? 0 }} nuevos este mes</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Categories Card -->
-                <div class="bg-white rounded-xl p-6 border border-slate-100">
+                <div class="bg-purple-50 rounded-xl p-6 border border-purple-100">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="folder" class="w-5 h-5 text-slate-600" />
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <x-ui-icon name="folder" class="w-5 h-5 text-purple-600" />
                         </div>
                         <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
                     </div>
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-[#c0c1c6] uppercase tracking-wide">{{ __('cms.dashboard.categories') }}</p>
+                        <p class="text-xs font-medium text-purple-400 uppercase tracking-wide">Categorías</p>
                         <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_categories'] ?? 0) }}</p>
                         <div class="flex items-center gap-2 text-xs text-slate-500">
                             <x-ui-icon name="layers" class="w-3 h-3 text-purple-500" />
-                            <span>{{ __('cms.dashboard.organization_complete') }}</span>
+                            <span>Organización completa</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- System Status Card -->
-                <div class="bg-white rounded-xl p-6 border border-slate-100">
+                <div class="bg-green-50 rounded-xl p-6 border border-green-100">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="zap" class="w-5 h-5 text-slate-600" />
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <x-ui-icon name="zap" class="w-5 h-5 text-green-600" />
                         </div>
                         <div class="w-2 h-2 bg-green-500 rounded-full"></div>
                     </div>
                     <div class="space-y-1">
-                        <p class="text-xs font-medium text-[#c0c1c6] uppercase tracking-wide">{{ __('cms.dashboard.system') }}</p>
-                        <p class="text-2xl font-bold text-green-600">{{ __('cms.dashboard.online') }}</p>
+                        <p class="text-xs font-medium text-green-400 uppercase tracking-wide">Sistema</p>
+                        <p class="text-2xl font-bold text-green-600">Online</p>
                         <div class="flex items-center gap-2 text-xs text-slate-500">
                             <x-ui-icon name="check-circle" class="w-3 h-3 text-green-500" />
-                            <span>{{ $stats['uptime'] ?? '99.9%' }} {{ __('cms.dashboard.uptime') }}</span>
+                            <span>99.9% uptime</span>
                         </div>
                     </div>
                 </div>
@@ -191,13 +191,13 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions & Distribution -->
+                <!-- Quick Actions -->
                 <div class="space-y-8">
                     <!-- Quick Actions -->
-                    <div class="bg-white rounded-xl p-6 border border-slate-100">
+                    <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                                <x-ui-icon name="zap" class="w-5 h-5 text-slate-600" />
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <x-ui-icon name="zap" class="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-slate-900">{{ __('cms.general.quick_actions') }}</h3>
@@ -206,80 +206,30 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <a href="{{ route('catalog.products.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-slate-100">
-                                    <x-ui-icon name="plus" class="w-4 h-4 text-slate-600" />
+                            <a href="{{ route('catalog.products.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
+                                    <x-ui-icon name="package" class="w-4 h-4 text-blue-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-slate-600 uppercase tracking-wider">{{ __('cms.general.product') }}</span>
+                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.product') }}</span>
                             </a>
-                            <a href="{{ route('catalog.categories.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-slate-100">
-                                    <x-ui-icon name="folder" class="w-4 h-4 text-slate-600" />
+                            <a href="{{ route('catalog.categories.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
+                                    <x-ui-icon name="folder" class="w-4 h-4 text-blue-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-slate-600 uppercase tracking-wider">{{ __('cms.general.category') }}</span>
+                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.category') }}</span>
                             </a>
-                            <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-slate-100">
-                                    <x-ui-icon name="tag" class="w-4 h-4 text-slate-600" />
+                            <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
+                                    <x-ui-icon name="tag" class="w-4 h-4 text-blue-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-slate-600 uppercase tracking-wider">{{ __('cms.general.brand') }}</span>
+                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.brand') }}</span>
                             </a>
-                            <a href="{{ route('settings.index') }}" class="group flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-slate-100">
-                                    <x-ui-icon name="settings" class="w-4 h-4 text-slate-600" />
+                            <a href="{{ route('settings.index') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
+                                    <x-ui-icon name="settings" class="w-4 h-4 text-blue-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-slate-600 uppercase tracking-wider">{{ __('cms.general.config') }}</span>
+                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.config') }}</span>
                             </a>
-                        </div>
-                    </div>
-
-                    <!-- Inventory Distribution -->
-                    <div class="bg-white rounded-xl border border-slate-100 p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                                <x-ui-icon name="pie-chart" class="w-5 h-5 text-slate-600" />
-                            </div>
-                            <div>
-                                <h3 class="text-base font-bold text-slate-900">{{ __('cms.general.distribution') }}</h3>
-                                <p class="text-xs text-[#c0c1c6]">{{ __('cms.general.inventory_by_category') }}</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3">
-                            @foreach($inventoryDistribution as $item)
-                                <div class="space-y-1.5">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs font-medium text-slate-700">{{ $item->name }}</span>
-                                        <span class="text-xs font-bold text-primary">{{ $item->products_count }}</span>
-                                    </div>
-                                    <div class="w-full h-1.5 bg-slate-50 rounded-full overflow-hidden">
-                                        <div class="h-full bg-primary rounded-full transition-all duration-500"
-                                             @class([
-                                                 'w-0',
-                                                 'w-[5%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 5,
-                                                 'w-[10%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 10,
-                                                 'w-[15%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 15,
-                                                 'w-[20%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 20,
-                                                 'w-[25%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 25,
-                                                 'w-[30%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 30,
-                                                 'w-[35%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 35,
-                                                 'w-[40%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 40,
-                                                 'w-[45%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 45,
-                                                 'w-[50%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 50,
-                                                 'w-[55%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 55,
-                                                 'w-[60%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 60,
-                                                 'w-[65%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 65,
-                                                 'w-[70%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 70,
-                                                 'w-[75%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 75,
-                                                 'w-[80%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 80,
-                                                 'w-[85%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 85,
-                                                 'w-[90%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 90,
-                                                 'w-[95%]' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 95,
-                                                 'w-full' => $item->products_count / ($stats['total_products'] ?: 1) * 100 >= 100,
-                                             ])></div>
-                                    </div>
-                                </div>
-                            @endforeach
                         </div>
                     </div>
                 </div>

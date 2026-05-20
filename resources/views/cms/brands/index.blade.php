@@ -46,7 +46,8 @@
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.brand') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.tables.image') }}</th>
+                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
+                            <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
                     </thead>
@@ -63,16 +64,18 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    @if($brand->image)
-                                        <div class="w-9 h-9 rounded-lg overflow-hidden border border-slate-100">
-                                            <img src="{{ $brand->image }}" alt="{{ $brand->name }}" class="w-full h-full object-cover">
-                                        </div>
-                                    @else
-                                        <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs border border-slate-200">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                        </div>
-                                    @endif
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs text-slate-500">
+                                        {{ $brand->updated_at->format('d/m/Y H:i') }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full {{ $brand->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
+                                        <span class="text-xs font-medium {{ $brand->is_active ? 'text-slate-700' : 'text-slate-400' }}">
+                                            {{ $brand->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-1">
@@ -118,7 +121,7 @@
 
     {{-- Formulario Lateral --}}
     @if($showForm)
-    <div class="fixed inset-0 z-[100] flex items-center justify-end">
+    <div class="fixed inset-0 z-[50] flex items-center justify-end">
         <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
         <div class="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -157,13 +160,6 @@
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.brands.logo_label') }} <span class="text-red-500">*</span></label>
-                        <input type="text" wire:model="image" placeholder="{{ __('cms.brands.logo_placeholder') }}"
-                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                        @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        <p class="text-xs text-[#c0c1c6] italic">{{ __('cms.brands.logo_helper') }}</p>
-                    </div>
 
                     <div class="flex items-center gap-3 pt-2">
                         <label for="is_active" class="relative inline-flex items-center cursor-pointer">

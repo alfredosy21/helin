@@ -23,7 +23,7 @@ class PermissionMiddleware
     public function handle(Request $request, Closure $next, string $module, ?string $submodule = null)
     {
         if (!Auth::check()) {
-            return redirect('/login');
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
@@ -115,7 +115,7 @@ class PermissionMiddleware
     {
         // Find submodule by URL
         $submodule = Submodule::where('url', $route)->first();
-        
+
         if (!$submodule) {
             return false;
         }

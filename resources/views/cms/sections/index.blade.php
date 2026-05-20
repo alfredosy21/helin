@@ -39,19 +39,16 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                        <th class="px-6 py-3.5 text-center w-20">{{ __('cms.tables.id') }}</th>
                         <th class="px-6 py-3.5">{{ __('cms.tables.section_title') }}</th>
                         <th class="px-6 py-3.5">{{ __('cms.tables.visibility_status') }}</th>
                         <th class="px-6 py-3.5">{{ __('cms.tables.content') }}</th>
+                        <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
                         <th class="px-6 py-3.5 text-right w-32">{{ __('cms.tables.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50 text-sm">
                     @forelse($sections as $section)
                         <tr wire:key="section-{{ $section->id }}" class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 text-center font-semibold text-slate-400">
-                                #{{ $section->id }}
-                            </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
                                     <span class="font-medium text-[#222]">{{ $section->title }}</span>
@@ -60,15 +57,20 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $section->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
-                                    <span class="text-xs font-medium {{ $section->is_active ? 'text-slate-700' : 'text-slate-400' }}">
-                                        {{ $section->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
+                                    <span class="w-2 h-2 rounded-full {{ $section->status ? 'bg-primary' : 'bg-slate-300' }}"></span>
+                                    <span class="text-xs font-medium {{ $section->status ? 'text-slate-700' : 'text-slate-400' }}">
+                                        {{ $section->status ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
-                                    {{ $section->is_visible ? __('cms.sections.visible') : __('cms.sections.hidden') }}
+                                    {{ $section->status_content ? __('cms.sections.visible') : __('cms.sections.hidden') }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-xs text-slate-500">
+                                    {{ $section->updated_at->format('d/m/Y H:i') }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
@@ -109,7 +111,7 @@
 
     {{-- Drawer lateral de edición --}}
     @if($showEditForm)
-        <div class="fixed inset-0 z-[100] flex justify-end">
+        <div class="fixed inset-0 z-[50] flex justify-end">
             {{-- Backdrop sutil --}}
             <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs transition-opacity" wire:click="cancelEdit"></div>
 
@@ -120,7 +122,6 @@
                 <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-white flex-shrink-0">
                     <div>
                         <h2 class="text-base font-bold text-[#222]">{{ __('cms.sections.edit_title') }}</h2>
-                        <p class="text-xs text-[#c0c1c6] mt-0.5">{{ __('cms.general.id') }} #{{ $editingId }}</p>
                     </div>
                     <button type="button" wire:click="cancelEdit" class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full transition-colors border-none bg-transparent cursor-pointer flex items-center justify-center">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -134,9 +135,27 @@
                     {{-- Cuerpo con Scroll --}}
                     <div class="flex-1 overflow-y-auto p-6 space-y-5">
 
+                        {{-- Toggles de estado --}}
+                        <div class="flex items-center gap-6 pt-2">
+                            <label class="flex items-center gap-3 cursor-pointer select-none">
+                                <div class="relative">
+                                    <input type="checkbox" wire:model="status" class="sr-only peer">
+                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </div>
+                                <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.active') }}</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer select-none">
+                                <div class="relative">
+                                    <input type="checkbox" wire:model="status_content" class="sr-only peer">
+                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </div>
+                                <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.visible') }}</span>
+                            </label>
+                        </div>
+
                         {{-- Título --}}
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.title_label') }}</label>
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="title" placeholder="{{ __('cms.sections.title_placeholder') }}"
                                 class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                             @error('title') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
@@ -144,7 +163,7 @@
 
                         {{-- Contenido con Quill Editor integrado correctamente --}}
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }}</label>
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
                             <div x-data="{ quill: null }"
                                  x-init="
                                     quill = new Quill($refs.editor, {
@@ -198,24 +217,6 @@
                                 </div>
                             </div>
                         @endif
-
-                        {{-- Toggles de estado --}}
-                        <div class="flex items-center gap-6 pt-2">
-                            <label class="flex items-center gap-3 cursor-pointer select-none">
-                                <div class="relative">
-                                    <input type="checkbox" wire:model="status" class="sr-only peer">
-                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </div>
-                                <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.active') }}</span>
-                            </label>
-                            <label class="flex items-center gap-3 cursor-pointer select-none">
-                                <div class="relative">
-                                    <input type="checkbox" wire:model="status_content" class="sr-only peer">
-                                    <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </div>
-                                <span class="text-xs font-medium text-slate-600">{{ __('cms.sections.visible') }}</span>
-                            </label>
-                        </div>
                     </div>
 
                     {{-- Footer fijo abajo del Drawer --}}

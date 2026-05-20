@@ -75,6 +75,7 @@
                             <th class="px-6 py-3.5">{{ __('cms.tables.category_brand') }}</th>
                             <th class="px-6 py-3.5 text-right">{{ __('cms.tables.price') }}</th>
                             <th class="px-6 py-3.5 text-center w-20">{{ __('cms.tables.stock') }}</th>
+                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
                             <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
@@ -106,6 +107,11 @@
                                 </td>
                                 <td class="px-6 py-4 text-center text-xs text-slate-600">
                                     {{ $product->stock ?? 0 }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="text-xs text-slate-500">
+                                        {{ $product->updated_at->format('d/m/Y H:i') }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-1">
@@ -172,7 +178,7 @@
 
 {{-- Drawer lateral de Producto --}}
 @if($showForm)
-<div class="fixed inset-0 z-[100] flex items-center justify-end">
+<div class="fixed inset-0 z-[50] flex items-center justify-end">
     <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" wire:click="cancel"></div>
 
     <div class="relative w-full max-w-2xl h-full bg-white shadow-xl flex flex-col border-l border-slate-100">
@@ -193,13 +199,13 @@
                 {{-- Básico --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.name_label') }} *</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" required
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.sku_label') }} *</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.sku_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="sku" required
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         @error('sku') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
@@ -208,7 +214,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.category_label') }} *</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
                         <select wire:model="category_id" required
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
                             <option value="">Seleccionar</option>
@@ -219,7 +225,7 @@
                         @error('category_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.brand_label') }} *</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.brand_label') }} <span class="text-red-500">*</span></label>
                         <select wire:model="brand_id" required
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
                             <option value="">{{ __('cms.products.select_option') }}</option>
@@ -233,7 +239,7 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.price_label') }} *</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.price_label') }} <span class="text-red-500">*</span></label>
                         <input type="number" step="0.01" wire:model="price" required
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                         @error('price') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
@@ -249,7 +255,7 @@
                         </select>
                     </div>
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.stock_label') }}</label>
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.stock_label') }} <span class="text-red-500">*</span></label>
                         <input type="number" wire:model="stock"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
                         @error('stock') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror

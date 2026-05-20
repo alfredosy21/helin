@@ -44,9 +44,6 @@ class BrandsController extends Component
     #[Validate('required|string|max:255')]
     public string $name = '';
 
-    /** @var string|null Brand logo path or reference */
-    #[Validate('nullable|string|max:255')]
-    public ?string $image = '';
 
     /** @var string|null Brand description */
     #[Validate('nullable|string|max:1000')]
@@ -107,8 +104,7 @@ class BrandsController extends Component
     {
         $brands = Brand::query()
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('image', 'like', "%{$this->search}%");
+                $query->where('name', 'like', "%{$this->search}%");
             })
             ->orderBy('order', 'asc')
             ->orderBy('name', 'asc')
@@ -151,7 +147,6 @@ class BrandsController extends Component
             $data = [
                 'name'            => $this->name,
                 'slug'            => Str::slug($this->name),
-                'image'           => $this->image,
                 'description'     => $this->description,
                 'seo_description' => $this->seo_description,
                 'is_active'       => $this->is_active,
@@ -198,7 +193,6 @@ class BrandsController extends Component
 
         $this->editingId      = $id;
         $this->name           = $brand->name;
-        $this->image          = $brand->image;
         $this->description    = $brand->description;
         $this->seo_description = $brand->seo_description;
         $this->is_active      = $brand->is_active;
@@ -290,7 +284,7 @@ class BrandsController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'image', 'description', 'seo_description', 'is_active', 'editingId']);
+        $this->reset(['name', 'description', 'seo_description', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }
