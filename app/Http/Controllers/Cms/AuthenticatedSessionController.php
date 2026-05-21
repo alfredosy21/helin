@@ -26,8 +26,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Iniciar Sesión | Helin CMS')]
 #[Layout('cms.layouts.auth')]
-class AuthenticatedSessionController extends Component
-{
+class AuthenticatedSessionController extends Component {
+
     /** @var string|null User email input */
     public ?string $email = '';
 
@@ -52,7 +52,7 @@ class AuthenticatedSessionController extends Component
      * @return array<string, string>
      */
     protected array $rules = [
-        'email'    => 'required|email',
+        'email' => 'required|email',
         'password' => 'required|min:8',
     ];
 
@@ -61,8 +61,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return void
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         if (session()->has('locked_user_id')) {
             $this->isLocked = true;
             $user = User::query()->find(session('locked_user_id'));
@@ -79,8 +78,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         return view('cms.auth.login');
     }
 
@@ -89,8 +87,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return void
      */
-    public function login(): void
-    {
+    public function login(): void {
         $this->validate();
 
         try {
@@ -127,7 +124,6 @@ class AuthenticatedSessionController extends Component
             }
 
             $this->dispatch('toast', message: __('cms.messages.error.login'), type: 'error');
-
         } catch (Exception $e) {
             Log::error("Authentication failure: " . $e->getMessage());
             $this->dispatch('toast', message: __('cms.controllers.auth.login_system_error'), type: 'error');
@@ -139,8 +135,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return void
      */
-    public function unlock(): void
-    {
+    public function unlock(): void {
         $this->validate(['password' => 'required']);
 
         try {
@@ -157,7 +152,6 @@ class AuthenticatedSessionController extends Component
             }
 
             $this->addError('password', __('cms.messages.error.login'));
-
         } catch (Exception $e) {
             Log::error("Unlock attempt failed: " . $e->getMessage());
             $this->redirectRoute('login');
@@ -169,8 +163,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return void
      */
-    public function lock(): void
-    {
+    public function lock(): void {
         if (Auth::check()) {
             session(['locked_user_id' => Auth::id()]);
             Auth::guard('web')->logout();
@@ -184,8 +177,7 @@ class AuthenticatedSessionController extends Component
      *
      * @return void
      */
-    public function logout(): void
-    {
+    public function logout(): void {
         $userEmail = Auth::user() ? Auth::user()->email : __('cms.controllers.auth.unknown_user');
 
         Auth::guard('web')->logout();

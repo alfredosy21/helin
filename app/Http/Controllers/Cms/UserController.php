@@ -26,8 +26,8 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Usuarios | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class UserController extends Component
-{
+class UserController extends Component {
+
     use WithPagination;
 
     /** @var string Full name of the administrative user */
@@ -73,8 +73,7 @@ class UserController extends Component
     /**
      * Component Lifecycle: Security check and initial state.
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.users'));
@@ -86,19 +85,18 @@ class UserController extends Component
     /**
      * Render the component with paginated and filtered administrative users.
      */
-    public function render(): View
-    {
+    public function render(): View {
         $users = User::with('role')
-            ->where('level', 2)
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('email', 'like', "%{$this->search}%")
-                      ->orWhereHas('role', fn($rq) => $rq->where('name', 'like', "%{$this->search}%"));
-                });
-            })
-            ->latest()
-            ->paginate($this->perPage);
+                ->where('level', 2)
+                ->when($this->search, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('name', 'like', "%{$this->search}%")
+                        ->orWhere('email', 'like', "%{$this->search}%")
+                        ->orWhereHas('role', fn($rq) => $rq->where('name', 'like', "%{$this->search}%"));
+                    });
+                })
+                ->latest()
+                ->paginate($this->perPage);
 
         $roles = Role::pluck('name', 'id');
 
@@ -111,8 +109,7 @@ class UserController extends Component
     /**
      * Prepare the interface for a new user record.
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -121,8 +118,7 @@ class UserController extends Component
     /**
      * Persist or synchronize user data.
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->isLoading = true;
 
         // Dynamic validation logic for email uniqueness and password requirements
@@ -137,10 +133,10 @@ class UserController extends Component
 
         try {
             $data = [
-                'name'   => $this->name,
-                'email'  => $this->email,
+                'name' => $this->name,
+                'email' => $this->email,
                 'rol_id' => $this->rol_id,
-                'level'  => 2,
+                'level' => 2,
                 'is_active' => $this->is_active,
             ];
 
@@ -164,7 +160,6 @@ class UserController extends Component
             }
 
             $this->cancel();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.users.process_error'), type: 'error');
@@ -176,8 +171,7 @@ class UserController extends Component
     /**
      * Hydrate form with existing user data.
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $user = User::findOrFail($id);
 
         $this->editingId = $id;
@@ -194,8 +188,7 @@ class UserController extends Component
     /**
      * Execute user termination after UI confirmation.
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         try {
             $user = User::findOrFail($id);
             $userName = $user->name;
@@ -203,7 +196,6 @@ class UserController extends Component
 
             Activities::saveActivity(__('cms.controllers.users.activity_deleted', ['name' => $userName]));
             $this->dispatch('toast', message: __('cms.controllers.users.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.users.delete_error'), type: 'error');
@@ -213,8 +205,7 @@ class UserController extends Component
     /**
      * Securely generate a new random password.
      */
-    public function generatePassword(): void
-    {
+    public function generatePassword(): void {
         $newPass = Str::password(12, symbols: false);
         $this->password = $newPass;
         $this->suggestedPassword = $newPass;
@@ -223,8 +214,7 @@ class UserController extends Component
     /**
      * Close form and reset internal state.
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -233,8 +223,7 @@ class UserController extends Component
     /**
      * Clean all form-related properties.
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.user_name'),
             'email' => __('cms.validation_attributes.user_email'),
@@ -243,28 +232,25 @@ class UserController extends Component
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['name', 'email', 'rol_id', 'password', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
         $this->suggestedPassword = Str::password(12, symbols: false);
     }
 
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
     /**
      * Compatibility bridge for legacy API/Frontend calls.
      */
-    public function getUserLists(): array
-    {
+    public function getUserLists(): array {
         return User::with('role')
-            ->where('level', 2)
-            ->latest()
-            ->get()
-            ->toArray();
+                        ->where('level', 2)
+                        ->latest()
+                        ->get()
+                        ->toArray();
     }
 }

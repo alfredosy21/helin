@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class AttributeValue extends Model
-{
+class AttributeValue extends Model {
+
     use HasFactory;
 
     /**
@@ -52,8 +52,7 @@ class AttributeValue extends Model
      *
      * @return BelongsTo<Attribute, AttributeValue>
      */
-    public function attribute(): BelongsTo
-    {
+    public function attribute(): BelongsTo {
         return $this->belongsTo(Attribute::class);
     }
 
@@ -62,11 +61,10 @@ class AttributeValue extends Model
      *
      * @return BelongsToMany<Product, AttributeValue>
      */
-    public function products(): BelongsToMany
-    {
+    public function products(): BelongsToMany {
         return $this->belongsToMany(Product::class, 'attribute_value_product')
-                    ->withPivot(['notes', 'numeric_value', 'text_value'])
-                    ->withTimestamps();
+                        ->withPivot(['notes', 'numeric_value', 'text_value'])
+                        ->withTimestamps();
     }
 
     /**
@@ -75,8 +73,7 @@ class AttributeValue extends Model
      * @param Builder<AttributeValue> $query
      * @return Builder<AttributeValue>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -86,8 +83,7 @@ class AttributeValue extends Model
      * @param Builder<AttributeValue> $query
      * @return Builder<AttributeValue>
      */
-    public function scopeOrdered(Builder $query): Builder
-    {
+    public function scopeOrdered(Builder $query): Builder {
         return $query->orderBy('position', 'asc');
     }
 
@@ -98,8 +94,7 @@ class AttributeValue extends Model
      * @param int $attributeId
      * @return Builder<AttributeValue>
      */
-    public function scopeByAttribute(Builder $query, int $attributeId): Builder
-    {
+    public function scopeByAttribute(Builder $query, int $attributeId): Builder {
         return $query->where('attribute_id', $attributeId);
     }
 
@@ -108,8 +103,7 @@ class AttributeValue extends Model
      *
      * @return string
      */
-    public function getDisplayLabelAttribute(): string
-    {
+    public function getDisplayLabelAttribute(): string {
         return $this->label ?: $this->value;
     }
 
@@ -118,8 +112,7 @@ class AttributeValue extends Model
      *
      * @return string
      */
-    public function getFormattedValueAttribute(): string
-    {
+    public function getFormattedValueAttribute(): string {
         $value = $this->display_label;
 
         if ($this->attribute && $this->attribute->unit) {
@@ -134,8 +127,7 @@ class AttributeValue extends Model
      *
      * @return string
      */
-    public function getColorAttribute(): string
-    {
+    public function getColorAttribute(): string {
         return $this->color ?? '#6B7280';
     }
 
@@ -144,8 +136,7 @@ class AttributeValue extends Model
      *
      * @return array<string, string>
      */
-    public function getStyleAttributesAttribute(): array
-    {
+    public function getStyleAttributesAttribute(): array {
         return [
             'color' => $this->color,
             'background-color' => $this->color . '20',
@@ -158,8 +149,7 @@ class AttributeValue extends Model
      *
      * @return bool
      */
-    public function hasColor(): bool
-    {
+    public function hasColor(): bool {
         return !empty($this->color);
     }
 
@@ -168,8 +158,7 @@ class AttributeValue extends Model
      *
      * @return float|null
      */
-    public function getNumericValue(): ?float
-    {
+    public function getNumericValue(): ?float {
         if (is_numeric($this->value)) {
             return (float) $this->value;
         }
@@ -182,8 +171,7 @@ class AttributeValue extends Model
      *
      * @return string
      */
-    public function getTextValue(): string
-    {
+    public function getTextValue(): string {
         return strtolower($this->display_label);
     }
 
@@ -192,8 +180,7 @@ class AttributeValue extends Model
      *
      * @return bool
      */
-    public function isBoolean(): bool
-    {
+    public function isBoolean(): bool {
         return $this->attribute && $this->attribute->type === 'boolean';
     }
 
@@ -202,8 +189,7 @@ class AttributeValue extends Model
      *
      * @return bool
      */
-    public function isNumeric(): bool
-    {
+    public function isNumeric(): bool {
         return $this->attribute && $this->attribute->type === 'number';
     }
 
@@ -212,8 +198,7 @@ class AttributeValue extends Model
      *
      * @return bool
      */
-    public function isSelect(): bool
-    {
+    public function isSelect(): bool {
         return $this->attribute && $this->attribute->type === 'select';
     }
 
@@ -222,8 +207,7 @@ class AttributeValue extends Model
      *
      * @return bool
      */
-    public function isText(): bool
-    {
+    public function isText(): bool {
         return $this->attribute && $this->attribute->type === 'text';
     }
 }

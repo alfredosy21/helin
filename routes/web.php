@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-
 // Importación de Componentes Livewire (Controladores de Nueva Generación)
 use App\Http\Controllers\Cms\{
     AuthenticatedSessionController,
@@ -25,20 +24,20 @@ use App\Http\Controllers\Cms\{
 };
 
 /*
-|--------------------------------------------------------------------------
-| Public Website Routes
-|--------------------------------------------------------------------------
-*/
+  |--------------------------------------------------------------------------
+  | Public Website Routes
+  |--------------------------------------------------------------------------
+ */
 
 Route::get('/', function () {
     return 'Acceso bloqueado - Helin Medical Platform';
 })->name('home');
 
 /*
-|--------------------------------------------------------------------------
-| CMS Main Architecture
-|--------------------------------------------------------------------------
-*/
+  |--------------------------------------------------------------------------
+  | CMS Main Architecture
+  |--------------------------------------------------------------------------
+ */
 
 Route::prefix('cms')->group(function () {
 
@@ -57,7 +56,7 @@ Route::prefix('cms')->group(function () {
 
         /* 1. Main Dashboard */
         Route::get('/dashboard', DashboardController::class)->name('dashboard')
-            ->middleware('permission:Administradores');
+                ->middleware('permission:Administradores');
 
         /* 2. Account & Profile ("Me" Module) */
         // Un solo componente Livewire maneja toda la lógica del perfil
@@ -66,67 +65,67 @@ Route::prefix('cms')->group(function () {
         /* 3. Catalog & Medical Inventory */
         Route::prefix('catalog')->name('catalog.')->group(function () {
             Route::get('/products', ProductsController::class)->name('products.index')
-                ->middleware('permission:Catálogo,Productos');
+                    ->middleware('permission:Catálogo,Productos');
             Route::get('/products/create', ProductsController::class)->name('products.create')
-                ->middleware('permission:Catálogo,Productos');
+                    ->middleware('permission:Catálogo,Productos');
             Route::get('/categories', CategoriesController::class)->name('categories.index')
-                ->middleware('permission:Catálogo,Categorías');
+                    ->middleware('permission:Catálogo,Categorías');
             Route::get('/categories/create', CategoriesController::class)->name('categories.create')
-                ->middleware('permission:Catálogo,Categorías');
+                    ->middleware('permission:Catálogo,Categorías');
             Route::get('/brands', BrandsController::class)->name('brands.index')
-                ->middleware('permission:Catálogo,Marcas');
+                    ->middleware('permission:Catálogo,Marcas');
             Route::get('/brands/create', BrandsController::class)->name('brands.create')
-                ->middleware('permission:Catálogo,Marcas');
+                    ->middleware('permission:Catálogo,Marcas');
             Route::get('/lines', LineController::class)->name('lines.index')
-                ->middleware('permission:Catálogo,Líneas');
+                    ->middleware('permission:Catálogo,Líneas');
             Route::get('/lines/create', LineController::class)->name('lines.create')
-                ->middleware('permission:Catálogo,Líneas');
+                    ->middleware('permission:Catálogo,Líneas');
         });
 
         /* 3.5. Content Management */
         Route::get('/testimonials', TestimonialsController::class)->name('testimonials.index')
-            ->middleware('permission:Contenido,Testimonios');
+                ->middleware('permission:Contenido,Testimonios');
         Route::get('/testimonials/create', TestimonialsController::class)->name('testimonials.create')
-            ->middleware('permission:Contenido,Testimonios');
+                ->middleware('permission:Contenido,Testimonios');
 
         /* 3.6. Blog Management */
         Route::prefix('blog')->name('blog.')->group(function () {
             Route::get('/categories', BlogCategoriesController::class)->name('categories.index')
-                ->middleware('permission:Blog,Categorías');
+                    ->middleware('permission:Blog,Categorías');
             Route::get('/categories/create', BlogCategoriesController::class)->name('categories.create')
-                ->middleware('permission:Blog,Categorías');
+                    ->middleware('permission:Blog,Categorías');
             Route::get('/articles', BlogArticlesController::class)->name('articles.index')
-                ->middleware('permission:Blog,Artículos');
+                    ->middleware('permission:Blog,Artículos');
             Route::get('/articles/create', BlogArticlesController::class)->name('articles.create')
-                ->middleware('permission:Blog,Artículos');
+                    ->middleware('permission:Blog,Artículos');
         });
 
         /* 4. Global System Settings */
         Route::get('/settings', SettingsController::class)->name('settings.index')
-            ->middleware('permission:Configuración,Configuración General');
+                ->middleware('permission:Configuración,Configuración General');
 
         Route::get('/sections', SectionController::class)->name('sections.index')
-            ->middleware('permission:Configuración,Secciones');
+                ->middleware('permission:Configuración,Secciones');
 
         /* 5. System Administration (RBAC & Users) */
         Route::prefix('system')->name('admin.')->group(function () {
             Route::get('/users', UserController::class)->name('users.index')
-                ->middleware('permission:Administradores,Usuarios');
+                    ->middleware('permission:Administradores,Usuarios');
             Route::get('/roles', RolController::class)->name('roles.index')
-                ->middleware('permission:Administradores,Roles');
+                    ->middleware('permission:Administradores,Roles');
 
             // Legacy permissions route (Si no se ha migrado a componente único aún)
             Route::get('/roles/{role}/permissions', [RolController::class, 'permission'])->name('roles.permissions')
-                ->middleware('permission:Administradores,Permisos');
+                    ->middleware('permission:Administradores,Permisos');
         });
 
         // Permisos detallados por Rol (Nuevo componente Livewire) - Ruta CMS
         Route::get('/system/permissions/{roleId}', PermissionsController::class)->name('cms.permissions.index')
-            ->middleware('permission:Administradores,Permisos');
+                ->middleware('permission:Administradores,Permisos');
 
         // Ruta CMS para roles (compatibilidad con vistas)
         Route::get('/system/roles', RolController::class)->name('cms.roles')
-            ->middleware('permission:Administradores,Roles');
+                ->middleware('permission:Administradores,Roles');
 
         /* 6. Session Utilities & Security */
         // El componente AuthenticatedSessionController suele manejar el logout internamente,
@@ -139,10 +138,10 @@ Route::prefix('cms')->group(function () {
 });
 
 /*
-|--------------------------------------------------------------------------
-| Internal API & Debugging
-|--------------------------------------------------------------------------
-*/
+  |--------------------------------------------------------------------------
+  | Internal API & Debugging
+  |--------------------------------------------------------------------------
+ */
 
 Route::middleware(['auth'])->prefix('api/internal')->group(function () {
     Route::get('/session-check', [AuthenticatedSessionController::class, 'checkSession'])->name('api.session.check');
@@ -153,22 +152,20 @@ if (app()->environment('local')) {
     Route::prefix('debug')->name('debug.')->group(function () {
         Route::get('/routes', function () {
             return response()->json(collect(Route::getRoutes())->map(fn($r) => [
-                'method' => implode('|', $r->methods()),
-                'uri'    => $r->uri(),
-                'name'   => $r->getName()
+                        'method' => implode('|', $r->methods()),
+                        'uri' => $r->uri(),
+                        'name' => $r->getName()
             ]));
         })->name('routes');
     });
 }
 
 /*
-|--------------------------------------------------------------------------
-| Global Fallback Route
-|--------------------------------------------------------------------------
-*/
+  |--------------------------------------------------------------------------
+  | Global Fallback Route
+  |--------------------------------------------------------------------------
+ */
 
 Route::fallback(function () {
-    return request()->expectsJson()
-        ? response()->json(['message' => 'Resource not found in Helin CMS'], 404)
-        : view('errors.404');
+    return request()->expectsJson() ? response()->json(['message' => 'Resource not found in Helin CMS'], 404) : view('errors.404');
 })->name('fallback');

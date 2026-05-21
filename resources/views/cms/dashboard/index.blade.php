@@ -9,13 +9,13 @@
                     <!-- User Avatar -->
                     <div class="relative">
                         @if(auth()->user()->image)
-                            <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-100">
-                                <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
-                            </div>
+                        <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-100">
+                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
+                        </div>
                         @else
-                            <div class="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center">
-                                <span class="text-white font-bold text-lg">{{ substr(auth()->user()->name, 0, 1) }}</span>
-                            </div>
+                        <div class="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                        </div>
                         @endif
                         <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                     </div>
@@ -150,43 +150,43 @@
                     <!-- Activity Cards -->
                     <div class="p-4 space-y-3 max-h-96 overflow-y-auto">
                         @forelse ($recentActivity as $activity)
-                            <div class="bg-white rounded-xl p-4 border border-slate-100">
-                                <div class="flex items-start gap-3">
-                                    <!-- User Avatar -->
-                                    <div class="relative flex-shrink-0">
-                                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
-                                            <span class="text-slate-600 font-bold text-sm">{{ substr($activity['user'], 0, 1) }}</span>
-                                        </div>
+                        <div class="bg-white rounded-xl p-4 border border-slate-100">
+                            <div class="flex items-start gap-3">
+                                <!-- User Avatar -->
+                                <div class="relative flex-shrink-0">
+                                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
+                                        <span class="text-slate-600 font-bold text-sm">{{ substr($activity['user'], 0, 1) }}</span>
                                     </div>
+                                </div>
 
-                                    <!-- Activity Content -->
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-start justify-between gap-2">
-                                            <div class="space-y-1">
-                                                <div class="flex items-center gap-2">
-                                                    <span class="font-semibold text-sm text-slate-900">{{ $activity['user'] }}</span>
-                                                    <span class="text-[10px] text-[#c0c1c6] font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
-                                                </div>
-                                                <p class="text-xs text-slate-600 leading-relaxed">
-                                                    {{ $activity['description'] }}
-                                                </p>
+                                <!-- Activity Content -->
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-semibold text-sm text-slate-900">{{ $activity['user'] }}</span>
+                                                <span class="text-[10px] text-[#c0c1c6] font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
                                             </div>
+                                            <p class="text-xs text-slate-600 leading-relaxed">
+                                                {{ $activity['description'] }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         @empty
-                            <div class="text-center py-12">
-                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-                                    <x-ui-icon name="monitor-off" class="w-8 h-8 text-slate-300" />
-                                </div>
-                                <div class="mt-4 space-y-1">
-                                    <h4 class="text-sm font-semibold text-slate-900">{{ __('cms.dashboard.system_waiting') }}</h4>
-                                    <p class="text-xs text-slate-500 max-w-sm mx-auto">
-                                        {{ __('cms.dashboard.no_activity') }}
-                                    </p>
-                                </div>
+                        <div class="text-center py-12">
+                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
+                                <x-ui-icon name="monitor-off" class="w-8 h-8 text-slate-300" />
                             </div>
+                            <div class="mt-4 space-y-1">
+                                <h4 class="text-sm font-semibold text-slate-900">{{ __('cms.dashboard.system_waiting') }}</h4>
+                                <p class="text-xs text-slate-500 max-w-sm mx-auto">
+                                    {{ __('cms.dashboard.no_activity') }}
+                                </p>
+                            </div>
+                        </div>
                         @endforelse
                     </div>
                 </div>

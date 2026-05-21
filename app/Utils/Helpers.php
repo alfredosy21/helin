@@ -18,8 +18,8 @@ use Illuminate\Support\Str;
  * @author  Helin Latam Development Team
  * @version 1.0.0
  */
-class Helpers
-{
+class Helpers {
+
     /**
      * Get client IP address with proxy and Cloudflare support.
      *
@@ -28,22 +28,21 @@ class Helpers
      *
      * @return string The validated client IP address
      */
-    public static function getIp(): string
-    {
+    public static function getIp(): string {
         $ipAddresses = [];
 
         // Check for various IP headers in order of preference
         $ipHeaders = [
-            'HTTP_CF_CONNECTING_IP',    // Cloudflare
-            'HTTP_X_FORWARDED_FOR',     // Load balancers, proxies
-            'HTTP_X_REAL_IP',           // Nginx
-            'HTTP_CLIENT_IP',           // Some proxies
+            'HTTP_CF_CONNECTING_IP', // Cloudflare
+            'HTTP_X_FORWARDED_FOR', // Load balancers, proxies
+            'HTTP_X_REAL_IP', // Nginx
+            'HTTP_CLIENT_IP', // Some proxies
             'REMOTE_ADDR'               // Default
         ];
 
         foreach ($ipHeaders as $header) {
             $ip = Request::server($header);
-            
+
             if ($ip && !empty($ip)) {
                 // X_FORWARDED_FOR can contain multiple IPs, get the first one (client)
                 if ($header === 'HTTP_X_FORWARDED_FOR') {
@@ -73,8 +72,7 @@ class Helpers
      * @param int|null $excludeId Optional ID to ignore (useful for updates)
      * @return string The generated unique slug
      */
-    public static function generateSlug(string $string, string $table, ?int $excludeId = null): string
-    {
+    public static function generateSlug(string $string, string $table, ?int $excludeId = null): string {
         $slug = Str::slug($string);
         $originalSlug = $slug;
         $counter = 1;

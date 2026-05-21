@@ -17,9 +17,10 @@ use Illuminate\Support\Facades\Hash;
  * Represents an administrative or client user within the system.
  * Handles authentication, security roles, and profile metadata.
  */
-class User extends Authenticatable implements MustVerifyEmail 
-{
-    use HasFactory, Notifiable;
+class User extends Authenticatable implements MustVerifyEmail {
+
+    use HasFactory,
+        Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -27,15 +28,15 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 
-        'email', 
-        'password', 
-        'rol_id',    // Foreign Key para la relación con roles
-        'level', 
+        'name',
+        'email',
+        'password',
+        'rol_id', // Foreign Key para la relación con roles
+        'level',
         'image',
-        'phone', 
-        'department', 
-        'position', 
+        'phone',
+        'department',
+        'position',
         'biography',
         'is_active', // Estado del usuario
     ];
@@ -68,8 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * 
      * @return BelongsTo
      */
-    public function role(): BelongsTo
-    {
+    public function role(): BelongsTo {
         // Vincula el usuario con un rol usando la columna 'rol_id'
         return $this->belongsTo(Role::class, 'rol_id');
     }
@@ -80,13 +80,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param string|null $value
      * @return void
      */
-    public function setPasswordAttribute(?string $value): void
-    {
+    public function setPasswordAttribute(?string $value): void {
         if (!empty($value)) {
             // Verifica si el valor ya es un hash para no re-encriptar
-            $this->attributes['password'] = Hash::needsRehash($value) 
-                ? Hash::make($value) 
-                : $value;
+            $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
         }
     }
 
@@ -95,8 +92,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * 
      * @return bool
      */
-    public function isRoot(): bool
-    {
+    public function isRoot(): bool {
         return $this->level === 1;
     }
 }

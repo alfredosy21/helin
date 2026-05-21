@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * Class Resource
  * Manages digital assets like case studies, manuals, and videos.
  */
-class Resource extends Model
-{
+class Resource extends Model {
+
     protected $fillable = [
         'title',
         'description',
@@ -25,8 +25,7 @@ class Resource extends Model
      * Get the parent resourceable model (Product or Category).
      * * @return MorphTo
      */
-    public function resourceable(): MorphTo
-    {
+    public function resourceable(): MorphTo {
         return $this->morphTo();
     }
 }

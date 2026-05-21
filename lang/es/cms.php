@@ -70,7 +70,7 @@ return [
 
     // Categorías
     'categories' => [
-        'title' => 'Estructura tu catálogo de forma estratégica para facilitar la búsqueda y potenciar tus ventas',
+        'title' => 'Organiza tus productos por categorías para facilitar la navegación y mejorar la experiencia de compra',
         'breadcrumb' => 'Categorías',
         'new_button' => 'Nueva categoría',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -91,7 +91,7 @@ return [
 
     // Blog Categorías
     'blog_categories' => [
-        'title' => 'Organiza tus publicaciones por temáticas clave para atraer audiencias específicas y mejorar tu posicionamiento',
+        'title' => 'Agrupa tus artículos por temas para que los visitantes encuentren fácilmente el contenido que les interesa',
         'breadcrumb' => 'Categorías de blog',
         'new_button' => 'Nueva categoría',
         'name_label' => 'Nombre de la categoría',
@@ -118,7 +118,7 @@ return [
 
     // Marcas
     'brands' => [
-        'title' => 'Destaca el respaldo de los fabricantes líderes y genera máxima confianza en tus clientes profesionales',
+        'title' => 'Muestra las marcas que representas para generar confianza y reconocer a los fabricantes',
         'breadcrumb' => 'Marcas',
         'new_button' => 'Nueva marca',
         'search_placeholder' => 'Buscar por nombre o imagen...',
@@ -136,7 +136,7 @@ return [
 
     // Líneas
     'lines' => [
-        'title' => 'Segmenta tus especialidades médicas en grandes familias y define la identidad principal de tu oferta',
+        'title' => 'Agrupa tus productos por especialidades para organizar mejor tu catálogo',
         'breadcrumb' => 'Líneas',
         'new_button' => 'Nueva línea',
         'name_label' => 'Nombre de la línea',
@@ -157,7 +157,7 @@ return [
 
     // Testimonios
     'testimonials' => [
-        'title' => 'Da voz a tus clientes más satisfechos para construir credibilidad e impulsar nuevas decisiones de compra',
+        'title' => 'Comparte las experiencias de tus clientes para construir confianza y credibilidad',
         'breadcrumb' => 'Testimonios',
         'new_button' => 'Nuevo testimonio',
         'name_label' => 'Nombre completo',
@@ -182,7 +182,7 @@ return [
 
     // Artículos de blog
     'blog_articles' => [
-        'title' => 'Crea artículos de valor que eduquen a tu sector, demuestren autoridad e incrementen tus visitas orgánicas',
+        'title' => 'Publica artículos útiles para informar a tus clientes y mejorar tu posicionamiento en buscadores',
         'breadcrumb' => 'Blog',
         'parent_breadcrumb' => 'Contenido',
         'new_button' => 'Nuevo artículo',
@@ -221,7 +221,7 @@ return [
 
     // Productos
     'products' => [
-        'title' => 'Muestra tus soluciones médicas con fichas comerciales de alto impacto que cautiven a clínicas y profesionales',
+        'title' => 'Presenta tus productos médicos con información clara y completa para profesionales de la salud',
         'breadcrumb' => 'Productos',
         'parent_breadcrumb' => 'Catálogo',
         'new_button' => 'Nuevo Producto',
@@ -280,7 +280,7 @@ return [
 
     // Usuarios
     'users' => [
-        'title' => 'Asigna responsabilidades a los miembros de tu equipo para asegurar un flujo de trabajo controlado y eficiente',
+        'title' => 'Administra los usuarios de tu equipo y define sus roles y permisos de acceso',
         'breadcrumb' => 'Usuarios',
         'new_button' => 'Nuevo usuario',
         'role' => 'Rol',
@@ -305,7 +305,7 @@ return [
 
     // Roles
     'roles' => [
-        'title' => 'Establece perfiles y jerarquías claras de acceso para blindar la protección operativa de tu plataforma',
+        'title' => 'Define los roles y niveles de acceso para proteger la información de tu sistema',
         'breadcrumb' => 'Roles',
         'new_button' => 'Nuevo rol',
         'search_placeholder' => 'Buscar roles por nombre...',
@@ -322,7 +322,7 @@ return [
 
     // Permisos
     'permissions' => [
-        'title' => 'Otorga y restringe funciones específicas por usuario para mantener el orden, la privacidad y la confidencialidad',
+        'title' => 'Configura los permisos específicos para cada usuario y mantener el control del sistema',
         'breadcrumb' => 'Permisos',
         'parent_breadcrumb' => 'Administración',
         'roles_breadcrumb' => 'Roles',
@@ -342,7 +342,7 @@ return [
 
     // Secciones
     'sections' => [
-        'title' => 'Diseña y optimiza las zonas interactivas de tu web para guiar al usuario hacia la conversión y el contacto',
+        'title' => 'Crea y edita las secciones de tu sitio web para organizar el contenido y guiar a los visitantes',
         'breadcrumb' => 'Secciones',
         'parent_breadcrumb' => 'Contenido',
         'edit_title' => 'Editar sección',
@@ -372,7 +372,7 @@ return [
 
     // Perfil
     'profile' => [
-        'title' => 'Actualiza tus credenciales profesionales y mantén tu cuenta segura para un control impecable',
+        'title' => 'Mantén tu perfil actualizado y seguro para proteger tu acceso al sistema',
         'breadcrumb' => 'Mi Perfil',
         'my_profile' => 'Mi Perfil',
         'cms_breadcrumb' => 'CMS',

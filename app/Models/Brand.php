@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class Brand extends Model
-{
+class Brand extends Model {
+
     use HasFactory;
 
     /**
@@ -42,8 +42,8 @@ class Brand extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_active'  => 'boolean',
-        'order'      => 'integer',
+        'is_active' => 'boolean',
+        'order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -53,8 +53,7 @@ class Brand extends Model
      *
      * @return HasMany<Product>
      */
-    public function products(): HasMany
-    {
+    public function products(): HasMany {
         return $this->hasMany(Product::class);
     }
 
@@ -63,8 +62,7 @@ class Brand extends Model
      *
      * @return HasMany<Product>
      */
-    public function activeProducts(): HasMany
-    {
+    public function activeProducts(): HasMany {
         return $this->products()->where('is_active', true);
     }
 
@@ -74,8 +72,7 @@ class Brand extends Model
      * @param Builder<Brand> $query
      * @return Builder<Brand>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -85,10 +82,9 @@ class Brand extends Model
      * @param Builder<Brand> $query
      * @return Builder<Brand>
      */
-    public function scopeOrdered(Builder $query): Builder
-    {
+    public function scopeOrdered(Builder $query): Builder {
         return $query->orderBy('order', 'asc')
-                    ->orderBy('name', 'asc');
+                        ->orderBy('name', 'asc');
     }
 
     /**
@@ -96,8 +92,7 @@ class Brand extends Model
      *
      * @return int
      */
-    public function getProductCountAttribute(): int
-    {
+    public function getProductCountAttribute(): int {
         return $this->products()->count();
     }
 
@@ -106,8 +101,7 @@ class Brand extends Model
      *
      * @return int
      */
-    public function getActiveProductCountAttribute(): int
-    {
+    public function getActiveProductCountAttribute(): int {
         return $this->activeProducts()->count();
     }
 
@@ -116,8 +110,7 @@ class Brand extends Model
      *
      * @return bool
      */
-    public function hasProducts(): bool
-    {
+    public function hasProducts(): bool {
         return $this->products()->exists();
     }
 
@@ -126,8 +119,7 @@ class Brand extends Model
      *
      * @return bool
      */
-    public function hasActiveProducts(): bool
-    {
+    public function hasActiveProducts(): bool {
         return $this->activeProducts()->exists();
     }
 }

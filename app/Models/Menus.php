@@ -56,41 +56,36 @@ class Menus extends Model {
     /**
      * Parent relationship for nested menus
      */
-    public function parent()
-    {
+    public function parent() {
         return $this->belongsTo(Menus::class, 'parent_id');
     }
 
     /**
      * Children relationship for nested menus
      */
-    public function children()
-    {
+    public function children() {
         return $this->hasMany(Menus::class, 'parent_id')
-                    ->orderBy('position', 'asc');
+                        ->orderBy('position', 'asc');
     }
 
     /**
      * Scope to get active menus
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('status', true);
     }
 
     /**
      * Scope to get menus by type
      */
-    public function scopeByType(Builder $query, int $type): Builder
-    {
+    public function scopeByType(Builder $query, int $type): Builder {
         return $query->where('type', $type);
     }
 
     /**
      * Scope to get root menus (no parent)
      */
-    public function scopeRoot(Builder $query): Builder
-    {
+    public function scopeRoot(Builder $query): Builder {
         return $query->whereNull('parent_id');
     }
 
@@ -126,13 +121,13 @@ class Menus extends Model {
      */
     public static function getHeaderItems() {
         return self::active()
-                   ->byType(self::TYPE_HEADER)
-                   ->root()
-                   ->with(['children' => function($query) {
-                       $query->active()->orderBy('position', 'asc');
-                   }])
-                   ->orderBy('position', 'asc')
-                   ->get();
+                        ->byType(self::TYPE_HEADER)
+                        ->root()
+                        ->with(['children' => function ($query) {
+                                $query->active()->orderBy('position', 'asc');
+                            }])
+                        ->orderBy('position', 'asc')
+                        ->get();
     }
 
     /**
@@ -141,13 +136,13 @@ class Menus extends Model {
      */
     public static function getFooterItems() {
         return self::active()
-                   ->byType(self::TYPE_FOOTER)
-                   ->root()
-                   ->with(['children' => function($query) {
-                       $query->active()->orderBy('position', 'asc');
-                   }])
-                   ->orderBy('position', 'asc')
-                   ->get();
+                        ->byType(self::TYPE_FOOTER)
+                        ->root()
+                        ->with(['children' => function ($query) {
+                                $query->active()->orderBy('position', 'asc');
+                            }])
+                        ->orderBy('position', 'asc')
+                        ->get();
     }
 
     /**
@@ -156,13 +151,13 @@ class Menus extends Model {
      */
     public static function getSidebarItems() {
         return self::active()
-                   ->byType(self::TYPE_SIDEBAR)
-                   ->root()
-                   ->with(['children' => function($query) {
-                       $query->active()->orderBy('position', 'asc');
-                   }])
-                   ->orderBy('position', 'asc')
-                   ->get();
+                        ->byType(self::TYPE_SIDEBAR)
+                        ->root()
+                        ->with(['children' => function ($query) {
+                                $query->active()->orderBy('position', 'asc');
+                            }])
+                        ->orderBy('position', 'asc')
+                        ->get();
     }
 
     /**
@@ -171,16 +166,15 @@ class Menus extends Model {
      */
     public static function getAvailableItems() {
         return self::active()
-                   ->orderBy('position', 'asc')
-                   ->get();
+                        ->orderBy('position', 'asc')
+                        ->get();
     }
 
     /**
      * Get menu types as array
      * @return array
      */
-    public static function getTypes(): array
-    {
+    public static function getTypes(): array {
         return [
             self::TYPE_HEADER => 'Header',
             self::TYPE_FOOTER => 'Footer',
@@ -192,8 +186,7 @@ class Menus extends Model {
      * Get type label
      * @return string
      */
-    public function getTypeLabelAttribute(): string
-    {
+    public function getTypeLabelAttribute(): string {
         $types = self::getTypes();
         return $types[$this->type] ?? 'Unknown';
     }
@@ -202,8 +195,7 @@ class Menus extends Model {
      * Check if menu has children
      * @return bool
      */
-    public function hasChildren(): bool
-    {
+    public function hasChildren(): bool {
         return $this->children()->count() > 0;
     }
 
@@ -211,8 +203,7 @@ class Menus extends Model {
      * Get full URL with protocol
      * @return string
      */
-    public function getFullUrlAttribute(): string
-    {
+    public function getFullUrlAttribute(): string {
         $url = $this->url;
 
         // If it's a relative URL, prepend base URL

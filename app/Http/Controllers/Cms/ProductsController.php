@@ -30,9 +30,10 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Catálogo de Productos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class ProductsController extends Component
-{
-    use WithPagination, WithFileUploads;
+class ProductsController extends Component {
+
+    use WithPagination,
+        WithFileUploads;
 
     // --- Propiedades del Formulario (Vinculadas al modelo Product) ---
     public ?int $editingId = null;
@@ -58,12 +59,10 @@ class ProductsController extends Component
     public ?string $sale_start_date = null;
     public ?string $sale_end_date = null;
     public ?string $published_at = null;
-
     // --- Gestión de Archivos (Temporary uploads) ---
     public $featured_image;
     public $gallery = [];
     public $documents = [];
-
     // --- Filtros y UI ---
     public string $search = '';
     public ?int $filterCategory = null;
@@ -74,14 +73,12 @@ class ProductsController extends Component
     public bool $showDeleteModal = false;
     public ?int $deleteId = null;
     public bool $isLoading = false;
-
     protected string $paginationTheme = 'tailwind';
 
     /**
      * Reglas de validación dinámicas.
      */
-    protected function rules(): array
-    {
+    protected function rules(): array {
         return [
             'name' => 'required|string|max:255',
             'sku' => 'required|string|max:100|unique:products,sku,' . $this->editingId,
@@ -95,77 +92,73 @@ class ProductsController extends Component
         ];
     }
 
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.products'));
         }
     }
 
-    public function render(): View
-    {
+    public function render(): View {
         $products = Product::with(['category', 'brand', 'media'])
-            ->when($this->search, function ($q) {
-                $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('sku', 'like', "%{$this->search}%");
-            })
-            ->when($this->filterCategory, fn($q) => $q->where('category_id', $this->filterCategory))
-            ->when($this->filterBrand, fn($q) => $q->where('brand_id', $this->filterBrand))
-            ->when($this->filterStatus !== 'all', function ($q) {
-                match($this->filterStatus) {
-                    'active'   => $q->where('is_active', true),
-                    'inactive' => $q->where('is_active', false),
-                    'featured' => $q->where('is_featured', true),
-                };
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+                ->when($this->search, function ($q) {
+                    $q->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('sku', 'like', "%{$this->search}%");
+                })
+                ->when($this->filterCategory, fn($q) => $q->where('category_id', $this->filterCategory))
+                ->when($this->filterBrand, fn($q) => $q->where('brand_id', $this->filterBrand))
+                ->when($this->filterStatus !== 'all', function ($q) {
+                    match ($this->filterStatus) {
+                        'active' => $q->where('is_active', true),
+                        'inactive' => $q->where('is_active', false),
+                        'featured' => $q->where('is_featured', true),
+                    };
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate($this->perPage);
 
         return view('cms.products.index', [
-            'products'   => $products,
+            'products' => $products,
             'categories' => Category::all(),
-            'brands'     => Brand::all(),
+            'brands' => Brand::all(),
         ]);
     }
 
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
     }
 
-    public function save(FileUploadService $fileUpload): void
-    {
+    public function save(FileUploadService $fileUpload): void {
         $this->validate();
         $this->isLoading = true;
 
         DB::beginTransaction();
         try {
             $payload = [
-                'name'            => $this->name,
-                'slug'            => $this->slug ?: Str::slug($this->name),
-                'sku'             => strtoupper($this->sku),
-                'category_id'     => $this->category_id,
-                'brand_id'        => $this->brand_id,
-                'description'     => $this->description,
-                'clinical_specs'  => $this->clinical_specs,
-                'price'           => $this->price,
-                'currency'        => $this->currency,
-                'stock'           => $this->stock,
-                'unit'            => $this->unit,
-                'meta_title'      => $this->meta_title,
+                'name' => $this->name,
+                'slug' => $this->slug ?: Str::slug($this->name),
+                'sku' => strtoupper($this->sku),
+                'category_id' => $this->category_id,
+                'brand_id' => $this->brand_id,
+                'description' => $this->description,
+                'clinical_specs' => $this->clinical_specs,
+                'price' => $this->price,
+                'currency' => $this->currency,
+                'stock' => $this->stock,
+                'unit' => $this->unit,
+                'meta_title' => $this->meta_title,
                 'meta_description' => $this->meta_description,
-                'meta_keywords'   => $this->meta_keywords,
-                'is_active'       => $this->is_active,
-                'is_featured'     => $this->is_featured,
-                'is_new'          => $this->is_new,
-                'is_on_sale'      => $this->is_on_sale,
-                'sale_price'      => $this->sale_price,
+                'meta_keywords' => $this->meta_keywords,
+                'is_active' => $this->is_active,
+                'is_featured' => $this->is_featured,
+                'is_new' => $this->is_new,
+                'is_on_sale' => $this->is_on_sale,
+                'sale_price' => $this->sale_price,
                 'sale_start_date' => $this->sale_start_date,
-                'sale_end_date'   => $this->sale_end_date,
-                'published_at'     => $this->published_at ?: ($this->is_active ? now() : null),
+                'sale_end_date' => $this->sale_end_date,
+                'published_at' => $this->published_at ?: ($this->is_active ? now() : null),
             ];
 
             if ($this->editingId) {
@@ -178,7 +171,6 @@ class ProductsController extends Component
             }
 
             // --- Procesamiento de Archivos (Usando tu Service) ---
-
             // 1. Imagen Principal
             if ($this->featured_image) {
                 // Limpiar anterior si existe
@@ -190,9 +182,9 @@ class ProductsController extends Component
                     'file_name' => $upload['name'],
                     'mime_type' => $upload['mime_type'],
                     'file_size' => $upload['size'],
-                    'type'      => 'image',
-                    'is_main'   => true,
-                    'position'  => 0
+                    'type' => 'image',
+                    'is_main' => true,
+                    'position' => 0
                 ]);
             }
 
@@ -203,9 +195,9 @@ class ProductsController extends Component
                     $product->media()->create([
                         'file_path' => $upload['path'],
                         'mime_type' => $upload['mime_type'],
-                        'type'      => 'image',
-                        'is_main'   => false,
-                        'position'  => 99
+                        'type' => 'image',
+                        'is_main' => false,
+                        'position' => 99
                     ]);
                 }
             }
@@ -216,9 +208,9 @@ class ProductsController extends Component
                     $upload = $fileUpload->save($doc, 'products/documents');
                     $product->media()->create([
                         'file_path' => $upload['path'],
-                        'type'      => 'document',
-                        'title'     => $doc->getClientOriginalName(),
-                        'is_main'   => false
+                        'type' => 'document',
+                        'title' => $doc->getClientOriginalName(),
+                        'is_main' => false
                     ]);
                 }
             }
@@ -228,7 +220,6 @@ class ProductsController extends Component
 
             $this->dispatch('toast', message: $msg, type: 'success');
             $this->cancel();
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Product Error: " . $e->getMessage());
@@ -238,8 +229,7 @@ class ProductsController extends Component
         }
     }
 
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $product = Product::findOrFail($id);
         $this->editingId = $id;
 
@@ -270,8 +260,7 @@ class ProductsController extends Component
         $this->dispatch('open-form');
     }
 
-    public function duplicate(int $id): void
-    {
+    public function duplicate(int $id): void {
         try {
             $original = Product::findOrFail($id);
             $new = $original->replicate();
@@ -294,15 +283,14 @@ class ProductsController extends Component
         }
     }
 
-    public function openDeleteModal(int $id): void
-    {
+    public function openDeleteModal(int $id): void {
         $this->deleteId = $id;
         $this->showDeleteModal = true;
     }
 
-    public function delete(FileUploadService $fileUpload): void
-    {
-        if (!$this->deleteId) return;
+    public function delete(FileUploadService $fileUpload): void {
+        if (!$this->deleteId)
+            return;
 
         $product = Product::findOrFail($this->deleteId);
 
@@ -318,15 +306,13 @@ class ProductsController extends Component
         $this->deleteId = null;
     }
 
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset([
             'name', 'slug', 'sku', 'category_id', 'brand_id', 'description',
             'clinical_specs', 'price', 'currency', 'stock', 'unit',

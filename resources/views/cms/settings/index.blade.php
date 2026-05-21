@@ -4,8 +4,8 @@
     <div class="p-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                   <x-cms-breadcrumb :module-id="2" :submodule-id="3" />
-                   <p class="text-sm text-slate-500 mt-2.5">
+                <x-cms-breadcrumb :module-id="2" :submodule-id="3" />
+                <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.settings.edit_subtitle') }}
                 </p>
             </div>
@@ -49,18 +49,18 @@
                     </h2>
                     <div class="relative">
                         @if($image)
-                            <div class="mb-3 relative">
-                                <img src="{{ $image->temporaryUrl() }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
+                        <div class="mb-3 relative">
+                            <img src="{{ $image->temporaryUrl() }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
+                        </div>
                         @elseif($current_image)
-                            <div class="mb-3 relative">
-                                <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
+                        <div class="mb-3 relative">
+                            <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
+                        </div>
                         @endif
                         <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
                             <div class="flex flex-col items-center justify-center pt-4 pb-4">
                                 <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
                                 </svg>
                                 <p class="text-xs text-slate-500">{{ __('cms.settings.select_image') }}</p>
                                 <p class="text-[10px] text-slate-400 mt-0.5">{{ __('cms.settings.image_formats_hint') }}</p>

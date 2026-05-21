@@ -35,8 +35,8 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Líneas | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class LineController extends Component
-{
+class LineController extends Component {
+
     use WithPagination;
 
     /** @var string Display name of the product line */
@@ -85,8 +85,7 @@ class LineController extends Component
      * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.lines'));
@@ -102,16 +101,15 @@ class LineController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         $lines = Line::query()
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('slug', 'like', "%{$this->search}%");
-            })
-            ->orderBy('order', 'asc')
-            ->orderBy('name', 'asc')
-            ->paginate($this->perPage);
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('slug', 'like', "%{$this->search}%");
+                })
+                ->orderBy('order', 'asc')
+                ->orderBy('name', 'asc')
+                ->paginate($this->perPage);
 
         return view('cms.lines.index', [
             'lines' => $lines
@@ -126,8 +124,7 @@ class LineController extends Component
      *
      * @return void
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -142,8 +139,7 @@ class LineController extends Component
      *
      * @return void
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->isLoading = true;
 
         // Dynamic unique validation
@@ -154,11 +150,11 @@ class LineController extends Component
 
         try {
             $data = [
-                'name'            => $this->name,
-                'slug'            => $this->slug ?: Str::slug($this->name),
-                'description'     => $this->description,
+                'name' => $this->name,
+                'slug' => $this->slug ?: Str::slug($this->name),
+                'description' => $this->description,
                 'seo_description' => $this->seo_description,
-                'is_active'       => $this->is_active,
+                'is_active' => $this->is_active,
             ];
 
             if ($this->editingId) {
@@ -178,7 +174,6 @@ class LineController extends Component
             }
 
             $this->cancel();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.lines.process_error'), type: 'error');
@@ -196,16 +191,15 @@ class LineController extends Component
      * @param int $id The line identifier
      * @return void
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $line = Line::findOrFail($id);
 
-        $this->editingId       = $id;
-        $this->name            = $line->name;
-        $this->slug            = $line->slug;
-        $this->description     = $line->description;
+        $this->editingId = $id;
+        $this->name = $line->name;
+        $this->slug = $line->slug;
+        $this->description = $line->description;
         $this->seo_description = $line->seo_description;
-        $this->is_active       = $line->is_active;
+        $this->is_active = $line->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -221,8 +215,7 @@ class LineController extends Component
      * @param int $id The line identifier
      * @return void
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         try {
             $line = Line::findOrFail($id);
             $lineName = $line->name;
@@ -230,7 +223,6 @@ class LineController extends Component
 
             Activities::saveActivity(__('cms.controllers.lines.activity_deleted', ['name' => $lineName]));
             $this->dispatch('toast', message: __('cms.controllers.lines.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.lines.delete_error'), type: 'error');
@@ -246,8 +238,7 @@ class LineController extends Component
      * @param array $orderedIds Array of IDs in the new order
      * @return void
      */
-    public function updateOrder(array $orderedIds): void
-    {
+    public function updateOrder(array $orderedIds): void {
         try {
             foreach ($orderedIds as $index => $id) {
                 Line::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -255,7 +246,6 @@ class LineController extends Component
 
             Activities::saveActivity(__('cms.controllers.lines.activity_reordered', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.lines.order_updated'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.lines.order_error'), type: 'error');
@@ -270,8 +260,7 @@ class LineController extends Component
      *
      * @return void
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -285,15 +274,13 @@ class LineController extends Component
      *
      * @return void
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.line_name'),
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['name', 'slug', 'description', 'seo_description', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
@@ -307,8 +294,7 @@ class LineController extends Component
      *
      * @return void
      */
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
@@ -320,11 +306,10 @@ class LineController extends Component
      *
      * @return array
      */
-    public function getLineLists(): array
-    {
+    public function getLineLists(): array {
         return Line::orderBy('order', 'asc')
-                   ->orderBy('name', 'asc')
-                   ->get()
-                   ->toArray();
+                        ->orderBy('name', 'asc')
+                        ->get()
+                        ->toArray();
     }
 }

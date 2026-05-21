@@ -27,8 +27,8 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Roles | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class RolController extends Component
-{
+class RolController extends Component {
+
     use WithPagination;
 
     /**
@@ -72,8 +72,7 @@ class RolController extends Component
      *
      * @return void
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== Role::ADMINISTRATOR && $user->level !== Role::ADMINISTRATOR)) {
             abort(403, __('cms.abort.roles'));
@@ -85,15 +84,14 @@ class RolController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         $roles = Role::query()
-            ->where('id', '>', 1)
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', "%{$this->search}%");
-            })
-            ->orderBy('id', 'desc')
-            ->paginate($this->perPage);
+                ->where('id', '>', 1)
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%");
+                })
+                ->orderBy('id', 'desc')
+                ->paginate($this->perPage);
 
         return view('cms.roles.index', [
             'roles' => $roles
@@ -105,8 +103,7 @@ class RolController extends Component
      *
      * @return void
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -117,8 +114,7 @@ class RolController extends Component
      *
      * @return void
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->isLoading = true;
 
         // Dynamic validation to exclude the current ID from the unique check during updates
@@ -152,7 +148,6 @@ class RolController extends Component
             }
 
             $this->cancel();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.roles.process_error'), type: 'error');
@@ -167,8 +162,7 @@ class RolController extends Component
      * @param int $id The unique identifier of the role.
      * @return void
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         // Prevent editing roles with ID <= 1 (protected system roles)
         if ($id <= 1) {
             $this->dispatch('toast', message: __('cms.controllers.roles.system_role_edit_error'), type: 'error');
@@ -190,8 +184,7 @@ class RolController extends Component
      * @param int $id The unique identifier of the role.
      * @return void
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         // Prevent deleting roles with ID <= 1 (protected system roles)
         if ($id <= 1) {
             $this->dispatch('toast', message: __('cms.controllers.roles.system_role_edit_error'), type: 'error');
@@ -205,7 +198,6 @@ class RolController extends Component
 
             Activities::saveActivity(__('cms.controllers.roles.activity_deleted', ['name' => $roleName]));
             $this->dispatch('toast', message: __('cms.controllers.roles.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.roles.system_role_delete_error'), type: 'error');
@@ -217,8 +209,7 @@ class RolController extends Component
      *
      * @return void
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -229,15 +220,13 @@ class RolController extends Component
      *
      * @return void
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.role_name'),
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['name', 'editingId']);
         $this->resetValidation();
     }
@@ -247,8 +236,7 @@ class RolController extends Component
      *
      * @return void
      */
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 }

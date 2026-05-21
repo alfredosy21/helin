@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * 
  * @package App\Models
  */
-class BlogGallery extends Model
-{
+class BlogGallery extends Model {
+
     use HasFactory;
 
     /**
@@ -57,8 +57,7 @@ class BlogGallery extends Model
      * 
      * @return BelongsTo<Blog, BlogGallery>
      */
-    public function blog(): BelongsTo
-    {
+    public function blog(): BelongsTo {
         return $this->belongsTo(Blog::class);
     }
 
@@ -67,8 +66,7 @@ class BlogGallery extends Model
      * 
      * @return string
      */
-    public function getFileUrlAttribute(): string
-    {
+    public function getFileUrlAttribute(): string {
         return asset('storage/' . $this->file_path);
     }
 
@@ -77,11 +75,8 @@ class BlogGallery extends Model
      * 
      * @return string
      */
-    public function getThumbnailUrlAttribute(): string
-    {
-        return $this->thumbnail 
-            ? asset('storage/' . $this->thumbnail)
-            : $this->file_url;
+    public function getThumbnailUrlAttribute(): string {
+        return $this->thumbnail ? asset('storage/' . $this->thumbnail) : $this->file_url;
     }
 
     /**
@@ -89,10 +84,9 @@ class BlogGallery extends Model
      * 
      * @return string
      */
-    public function getFormattedFileSizeAttribute(): string
-    {
+    public function getFormattedFileSizeAttribute(): string {
         $bytes = $this->file_size;
-        
+
         if ($bytes >= 1073741824) {
             return number_format($bytes / 1073741824, 2) . ' GB';
         } elseif ($bytes >= 1048576) {
@@ -100,7 +94,7 @@ class BlogGallery extends Model
         } elseif ($bytes >= 1024) {
             return number_format($bytes / 1024, 2) . ' KB';
         }
-        
+
         return $bytes . ' bytes';
     }
 
@@ -109,8 +103,7 @@ class BlogGallery extends Model
      * 
      * @return string
      */
-    public function getExtensionAttribute(): string
-    {
+    public function getExtensionAttribute(): string {
         return pathinfo($this->file_name, PATHINFO_EXTENSION);
     }
 
@@ -119,8 +112,7 @@ class BlogGallery extends Model
      * 
      * @return bool
      */
-    public function isImage(): bool
-    {
+    public function isImage(): bool {
         return str_starts_with($this->mime_type, 'image/');
     }
 
@@ -129,15 +121,14 @@ class BlogGallery extends Model
      * 
      * @return string
      */
-    public function getIconAttribute(): string
-    {
+    public function getIconAttribute(): string {
         if ($this->isImage()) {
             return 'image';
         }
-        
+
         $extension = strtolower($this->extension);
-        
-        return match($extension) {
+
+        return match ($extension) {
             'pdf' => 'file-text',
             'doc', 'docx' => 'file-text',
             'xls', 'xlsx' => 'file-spreadsheet',
@@ -152,8 +143,7 @@ class BlogGallery extends Model
      * 
      * @return array<string, int>|null
      */
-    public function getImageDimensions(): ?array
-    {
+    public function getImageDimensions(): ?array {
         // This would require intervention/image package
         return null;
     }
@@ -163,8 +153,7 @@ class BlogGallery extends Model
      * 
      * @return bool
      */
-    public function canBeDisplayedInline(): bool
-    {
+    public function canBeDisplayedInline(): bool {
         return $this->isImage();
     }
 }

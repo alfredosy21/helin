@@ -39,9 +39,10 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Testimonios | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class TestimonialsController extends Component
-{
-    use WithPagination, WithFileUploads;
+class TestimonialsController extends Component {
+
+    use WithPagination,
+        WithFileUploads;
 
     /** @var string Author's name */
     #[Validate('required|string|max:255')]
@@ -91,8 +92,7 @@ class TestimonialsController extends Component
      * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.testimonials'));
@@ -108,17 +108,16 @@ class TestimonialsController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         $testimonials = Testimonial::query()
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('charge', 'like', "%{$this->search}%")
-                      ->orWhere('description', 'like', "%{$this->search}%");
-            })
-            ->orderBy('order', 'asc')
-            ->orderBy('name', 'asc')
-            ->paginate($this->perPage);
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('charge', 'like', "%{$this->search}%")
+                    ->orWhere('description', 'like', "%{$this->search}%");
+                })
+                ->orderBy('order', 'asc')
+                ->orderBy('name', 'asc')
+                ->paginate($this->perPage);
 
         return view('cms.testimonials.index', [
             'testimonials' => $testimonials
@@ -133,8 +132,7 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -148,17 +146,16 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    public function save(FileUploadService $fileUpload): void
-    {
+    public function save(FileUploadService $fileUpload): void {
         $this->isLoading = true;
         $this->validate();
 
         try {
             $data = [
-                'name'        => $this->name,
-                'charge'      => $this->charge,
+                'name' => $this->name,
+                'charge' => $this->charge,
                 'description' => $this->description,
-                'is_active'   => $this->is_active,
+                'is_active' => $this->is_active,
             ];
 
             if ($this->image) {
@@ -185,7 +182,6 @@ class TestimonialsController extends Component
             }
 
             $this->cancel();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.testimonials.process_error'), type: 'error');
@@ -203,16 +199,15 @@ class TestimonialsController extends Component
      * @param int $id The testimonial identifier
      * @return void
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $testimonial = Testimonial::findOrFail($id);
 
-        $this->editingId  = $id;
-        $this->name       = $testimonial->name;
-        $this->charge     = $testimonial->charge;
+        $this->editingId = $id;
+        $this->name = $testimonial->name;
+        $this->charge = $testimonial->charge;
         $this->description = $testimonial->description;
         $this->current_image = $testimonial->image;
-        $this->is_active  = (bool) $testimonial->is_active;
+        $this->is_active = (bool) $testimonial->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -228,8 +223,7 @@ class TestimonialsController extends Component
      * @param int $id The testimonial identifier
      * @return void
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         try {
             $testimonial = Testimonial::findOrFail($id);
             $testimonialName = $testimonial->name;
@@ -237,7 +231,6 @@ class TestimonialsController extends Component
 
             Activities::saveActivity(__('cms.controllers.testimonials.activity_deleted', ['name' => $testimonialName]));
             $this->dispatch('toast', message: __('cms.controllers.testimonials.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.testimonials.delete_error'), type: 'error');
@@ -253,8 +246,7 @@ class TestimonialsController extends Component
      * @param array $orderedIds Array of IDs in the new order
      * @return void
      */
-    public function updateOrder(array $orderedIds): void
-    {
+    public function updateOrder(array $orderedIds): void {
         try {
             foreach ($orderedIds as $index => $id) {
                 Testimonial::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -262,7 +254,6 @@ class TestimonialsController extends Component
 
             Activities::saveActivity(__('cms.controllers.testimonials.activity_reordered', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.testimonials.order_updated'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.testimonials.order_error'), type: 'error');
@@ -272,12 +263,11 @@ class TestimonialsController extends Component
     /**
      * Parses the image collection for specialized UI components (Compatibility).
      */
-    public function getPhotosProperty(): \Illuminate\Support\Collection
-    {
+    public function getPhotosProperty(): \Illuminate\Support\Collection {
         return collect(explode(',', $this->image ?? ''))
-            ->filter()
-            ->map(fn($img) => ['name' => trim($img)])
-            ->values();
+                        ->filter()
+                        ->map(fn($img) => ['name' => trim($img)])
+                        ->values();
     }
 
     /**
@@ -288,8 +278,7 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -303,8 +292,7 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.testimonial_name'),
             'charge' => __('cms.validation_attributes.testimonial_charge'),
@@ -312,8 +300,7 @@ class TestimonialsController extends Component
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['name', 'charge', 'description', 'image', 'current_image', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
@@ -327,8 +314,7 @@ class TestimonialsController extends Component
      *
      * @return void
      */
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
@@ -340,11 +326,10 @@ class TestimonialsController extends Component
      *
      * @return array
      */
-    public function getTestimonialLists(): array
-    {
+    public function getTestimonialLists(): array {
         return Testimonial::orderBy('order', 'asc')
-                          ->orderBy('name', 'asc')
-                          ->get()
-                          ->toArray();
+                        ->orderBy('name', 'asc')
+                        ->get()
+                        ->toArray();
     }
 }

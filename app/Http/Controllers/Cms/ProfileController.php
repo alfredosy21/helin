@@ -29,8 +29,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Mi Perfil | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class ProfileController extends Component
-{
+class ProfileController extends Component {
+
     use WithFileUploads;
 
     /** @var string User's full name */
@@ -71,16 +71,15 @@ class ProfileController extends Component
      *
      * @return array<string, string>
      */
-    protected function rules(): array
-    {
+    protected function rules(): array {
         return [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|max:255|unique:users,email,' . Auth::id(),
-            'department'=> 'nullable|string|max:255',
-            'position'  => 'nullable|string|max:255',
-            'phone'     => 'nullable|string|max:20',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+            'department' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
             'biography' => 'nullable|string|max:1000',
-            'image'     => 'nullable|image|max:2048', // 2MB Max
+            'image' => 'nullable|image|max:2048', // 2MB Max
         ];
     }
 
@@ -89,8 +88,7 @@ class ProfileController extends Component
      *
      * @return void
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         /** @var User $user */
         $user = Auth::user();
 
@@ -112,8 +110,7 @@ class ProfileController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         return view('cms.profile.index');
     }
 
@@ -122,8 +119,7 @@ class ProfileController extends Component
      *
      * @return void
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->validate();
 
         DB::beginTransaction();
@@ -133,11 +129,11 @@ class ProfileController extends Component
             $hasNewImage = false;
 
             $user->fill([
-                'name'      => $this->name,
-                'email'     => $this->email,
-                'department'=> $this->department,
-                'position'  => $this->position,
-                'phone'     => $this->phone,
+                'name' => $this->name,
+                'email' => $this->email,
+                'department' => $this->department,
+                'position' => $this->position,
+                'phone' => $this->phone,
                 'biography' => $this->biography,
             ]);
 
@@ -164,7 +160,6 @@ class ProfileController extends Component
 
             $this->current_image = $user->image;
             $this->image = null;
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Profile update failed: " . $e->getMessage());
@@ -177,8 +172,7 @@ class ProfileController extends Component
      *
      * @return void
      */
-    public function savePassword(): void
-    {
+    public function savePassword(): void {
         $this->validate([
             'current_password' => 'required|string',
             'new_password' => 'required|string|min:8|confirmed',
@@ -201,7 +195,6 @@ class ProfileController extends Component
 
             Activities::saveActivity(__('cms.controllers.profile.activity_password'));
             $this->dispatch('toast', message: __('cms.controllers.profile.password_updated'), type: 'success');
-
         } catch (Exception $e) {
             Log::error("Password update failed: " . $e->getMessage());
             $this->dispatch('toast', message: __('cms.controllers.profile.password_error'), type: 'error');
@@ -213,8 +206,7 @@ class ProfileController extends Component
      *
      * @return void
      */
-    public function removeImage(): void
-    {
+    public function removeImage(): void {
         try {
             /** @var User $user */
             $user = Auth::user();
@@ -239,8 +231,7 @@ class ProfileController extends Component
      *
      * @return mixed
      */
-    public function closeAllSessions()
-    {
+    public function closeAllSessions() {
         DB::beginTransaction();
         try {
             $userId = Auth::id();
@@ -254,7 +245,6 @@ class ProfileController extends Component
 
             DB::commit();
             return redirect()->route('login');
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("Session termination failed: " . $e->getMessage());

@@ -23,8 +23,8 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Categorías | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class CategoriesController extends Component
-{
+class CategoriesController extends Component {
+
     use WithPagination;
 
     /** @var string Display name of the category */
@@ -67,8 +67,7 @@ class CategoriesController extends Component
     /**
      * Component Lifecycle: Authorization Check.
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.categories'));
@@ -78,15 +77,14 @@ class CategoriesController extends Component
     /**
      * Render the component with paginated and sorted categories.
      */
-    public function render(): View
-    {
+    public function render(): View {
         $categories = Category::query()
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
+                ->when($this->search, function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%");
-            })
-            ->orderBy('order', 'asc')
-            ->paginate($this->perPage);
+                })
+                ->orderBy('order', 'asc')
+                ->paginate($this->perPage);
 
         return view('cms.categories.index', [
             'categories' => $categories
@@ -96,8 +94,7 @@ class CategoriesController extends Component
     /**
      * Prepare the interface for a new category record.
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -106,18 +103,17 @@ class CategoriesController extends Component
     /**
      * Persist or synchronize category data.
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->isLoading = true;
         $this->validate();
 
         try {
             $data = [
-                'name'            => $this->name,
-                'slug'            => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
-                'description'     => $this->description,
+                'name' => $this->name,
+                'slug' => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
+                'description' => $this->description,
                 'seo_description' => $this->seo_description,
-                'is_active'       => $this->is_active,
+                'is_active' => $this->is_active,
             ];
 
             if ($this->editingId) {
@@ -149,16 +145,15 @@ class CategoriesController extends Component
     /**
      * Hydrate form with existing category data.
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $category = Category::findOrFail($id);
 
-        $this->editingId       = $id;
-        $this->name            = $category->name;
-        $this->slug            = $category->slug;
-        $this->description     = $category->description;
+        $this->editingId = $id;
+        $this->name = $category->name;
+        $this->slug = $category->slug;
+        $this->description = $category->description;
         $this->seo_description = $category->seo_description;
-        $this->is_active       = $category->is_active;
+        $this->is_active = $category->is_active;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -167,8 +162,7 @@ class CategoriesController extends Component
     /**
      * Execute category removal after UI confirmation.
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         try {
             $category = Category::findOrFail($id);
             $categoryName = $category->name;
@@ -186,8 +180,7 @@ class CategoriesController extends Component
      * Reorder the display sequence of categories via drag & drop data.
      * * @param array $orderedIds Array of IDs in the new order
      */
-    public function updateOrder(array $orderedIds): void
-    {
+    public function updateOrder(array $orderedIds): void {
         try {
             foreach ($orderedIds as $index => $id) {
                 Category::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -204,37 +197,32 @@ class CategoriesController extends Component
     /**
      * Close form and reset internal state.
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
     }
 
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.category_name'),
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['name', 'slug', 'description', 'seo_description', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }
 
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
     /**
      * Compatibility bridge for legacy frontend calls.
      */
-    public function getCategoryLists(): array
-    {
+    public function getCategoryLists(): array {
         return Category::orderBy('order', 'asc')->get()->toArray();
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Quote
  * Manages the quotation requests that act as orders in the commercial platform.
  */
-class Quote extends Model
-{
+class Quote extends Model {
+
     protected $fillable = [
         'reference_number',
         'customer_name',
@@ -25,8 +25,7 @@ class Quote extends Model
      * Get the items associated with the quote.
      * * @return HasMany
      */
-    public function items(): HasMany
-    {
+    public function items(): HasMany {
         return $this->hasMany(QuoteItem::class);
     }
 }

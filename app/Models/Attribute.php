@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class Attribute extends Model
-{
+class Attribute extends Model {
+
     use HasFactory;
 
     /**
@@ -57,8 +57,7 @@ class Attribute extends Model
      *
      * @return HasMany<AttributeValue, Attribute>
      */
-    public function values(): HasMany
-    {
+    public function values(): HasMany {
         return $this->hasMany(AttributeValue::class)->orderBy('position', 'asc');
     }
 
@@ -67,11 +66,10 @@ class Attribute extends Model
      *
      * @return HasMany<AttributeValue, Attribute>
      */
-    public function activeValues(): HasMany
-    {
+    public function activeValues(): HasMany {
         return $this->hasMany(AttributeValue::class)
-                    ->where('is_active', true)
-                    ->orderBy('position', 'asc');
+                        ->where('is_active', true)
+                        ->orderBy('position', 'asc');
     }
 
     /**
@@ -80,8 +78,7 @@ class Attribute extends Model
      * @param Builder<Attribute> $query
      * @return Builder<Attribute>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -91,8 +88,7 @@ class Attribute extends Model
      * @param Builder<Attribute> $query
      * @return Builder<Attribute>
      */
-    public function scopeFilterable(Builder $query): Builder
-    {
+    public function scopeFilterable(Builder $query): Builder {
         return $query->where('is_filterable', true);
     }
 
@@ -102,8 +98,7 @@ class Attribute extends Model
      * @param Builder<Attribute> $query
      * @return Builder<Attribute>
      */
-    public function scopeRequired(Builder $query): Builder
-    {
+    public function scopeRequired(Builder $query): Builder {
         return $query->where('is_required', true);
     }
 
@@ -113,10 +108,9 @@ class Attribute extends Model
      * @param Builder<Attribute> $query
      * @return Builder<Attribute>
      */
-    public function scopeOrdered(Builder $query): Builder
-    {
+    public function scopeOrdered(Builder $query): Builder {
         return $query->orderBy('position', 'asc')
-                    ->orderBy('name', 'asc');
+                        ->orderBy('name', 'asc');
     }
 
     /**
@@ -126,8 +120,7 @@ class Attribute extends Model
      * @param string $type
      * @return Builder<Attribute>
      */
-    public function scopeByType(Builder $query, string $type): Builder
-    {
+    public function scopeByType(Builder $query, string $type): Builder {
         return $query->where('type', $type);
     }
 
@@ -136,9 +129,8 @@ class Attribute extends Model
      *
      * @return string
      */
-    public function getTypeLabelAttribute(): string
-    {
-        return match($this->type) {
+    public function getTypeLabelAttribute(): string {
+        return match ($this->type) {
             'text' => 'Text',
             'number' => 'Number',
             'select' => 'Select',
@@ -152,9 +144,8 @@ class Attribute extends Model
      *
      * @return string
      */
-    public function getInputTypeAttribute(): string
-    {
-        return match($this->type) {
+    public function getInputTypeAttribute(): string {
+        return match ($this->type) {
             'text' => 'text',
             'number' => 'number',
             'select' => 'select',
@@ -168,15 +159,14 @@ class Attribute extends Model
      *
      * @return array<string, string>
      */
-    public function getValidationRulesAttribute(): array
-    {
+    public function getValidationRulesAttribute(): array {
         $rules = [];
 
         if ($this->is_required) {
             $rules['required'] = 'required';
         }
 
-        return match($this->type) {
+        return match ($this->type) {
             'text' => array_merge($rules, ['string', 'max:255']),
             'number' => array_merge($rules, ['numeric', 'min:0']),
             'boolean' => array_merge($rules, ['boolean']),
@@ -190,8 +180,7 @@ class Attribute extends Model
      *
      * @return bool
      */
-    public function hasOptions(): bool
-    {
+    public function hasOptions(): bool {
         return !empty($this->options);
     }
 
@@ -200,8 +189,7 @@ class Attribute extends Model
      *
      * @return string
      */
-    public function getFormattedUnitAttribute(): string
-    {
+    public function getFormattedUnitAttribute(): string {
         return $this->unit ? " ({$this->unit})" : '';
     }
 
@@ -210,8 +198,7 @@ class Attribute extends Model
      *
      * @return string
      */
-    public function getDisplayNameAttribute(): string
-    {
+    public function getDisplayNameAttribute(): string {
         return $this->name . $this->formatted_unit;
     }
 
@@ -220,8 +207,7 @@ class Attribute extends Model
      *
      * @return bool
      */
-    public function supportsFiltering(): bool
-    {
+    public function supportsFiltering(): bool {
         return $this->is_filterable && in_array($this->type, ['select', 'boolean', 'number']);
     }
 
@@ -230,9 +216,8 @@ class Attribute extends Model
      *
      * @return mixed
      */
-    public function getDefaultValue(): mixed
-    {
-        return match($this->type) {
+    public function getDefaultValue(): mixed {
+        return match ($this->type) {
             'boolean' => false,
             'number' => 0,
             'text' => '',

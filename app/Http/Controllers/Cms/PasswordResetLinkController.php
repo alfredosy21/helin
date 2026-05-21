@@ -24,8 +24,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Restablecer Contraseña | Helin CMS')]
 #[Layout('cms.layouts.auth')]
-class PasswordResetLinkController extends Component
-{
+class PasswordResetLinkController extends Component {
+
     /** @var string The email address for the reset request */
     public string $email = '';
 
@@ -44,8 +44,7 @@ class PasswordResetLinkController extends Component
      * Render the password reset request interface.
      * * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         return view('cms.auth.forgot-password');
     }
 
@@ -54,8 +53,7 @@ class PasswordResetLinkController extends Component
      *
      * @return void
      */
-    public function sendResetLink(): void
-    {
+    public function sendResetLink(): void {
         $this->validate();
 
         if ($this->isRateLimited()) {
@@ -89,20 +87,19 @@ class PasswordResetLinkController extends Component
 
             // 4. Audit Logging
             activity()
-                ->causedBy($user)
-                ->performedOn($user)
-                ->withProperties([
-                    'ip_address' => request()->ip(),
-                    'user_agent' => request()->userAgent(),
-                ])
-                ->log('Password reset (auto-generated) via Livewire Component');
+                    ->causedBy($user)
+                    ->performedOn($user)
+                    ->withProperties([
+                        'ip_address' => request()->ip(),
+                        'user_agent' => request()->userAgent(),
+                    ])
+                    ->log('Password reset (auto-generated) via Livewire Component');
 
             // 5. Set Cooldown for this IP
             cache()->put('rate-limit-reset-' . request()->ip(), true, 60);
 
             $this->dispatch('toast', message: __('cms.controllers.password_reset.email_sent'), type: 'success');
             $this->requestSent = true;
-
         } catch (Exception $e) {
             Log::error("Password Reset Flow Failure: " . $e->getMessage());
             $this->dispatch('toast', message: __('cms.controllers.password_reset.internal_error'), type: 'error');
@@ -116,8 +113,7 @@ class PasswordResetLinkController extends Component
      * @param string $plainPassword The generated plain-text password
      * @return void
      */
-    protected function sendNotification(User $user, string $plainPassword): void
-    {
+    protected function sendNotification(User $user, string $plainPassword): void {
         try {
             CustomMail::passwordReset($user->email, $plainPassword, $user->name);
         } catch (Exception $e) {
@@ -131,8 +127,7 @@ class PasswordResetLinkController extends Component
      * Check if the current IP address is exceeding the request frequency.
      * * @return bool
      */
-    private function isRateLimited(): bool
-    {
+    private function isRateLimited(): bool {
         return cache()->has('rate-limit-reset-' . request()->ip());
     }
 
@@ -140,8 +135,7 @@ class PasswordResetLinkController extends Component
      * Reset the component state to allow a new attempt.
      * * @return void
      */
-    public function resetForm(): void
-    {
+    public function resetForm(): void {
         $this->reset(['email', 'requestSent']);
     }
 }

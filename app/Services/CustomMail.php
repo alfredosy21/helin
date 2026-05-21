@@ -18,8 +18,8 @@ use Exception;
  * @author  Helin Latam Development Team
  * @version 1.1.0
  */
-class CustomMail
-{
+class CustomMail {
+
     /**
      * Send password reset email with the new generated password.
      *
@@ -28,19 +28,18 @@ class CustomMail
      * @param string|null $name Recipient name (defaults to 'Usuario')
      * @return bool Success status of the operation
      */
-    public static function passwordReset(string $email, string $password, ?string $name = null): bool
-    {
+    public static function passwordReset(string $email, string $password, ?string $name = null): bool {
         try {
             $data = [
-                'name'     => $name ?? 'Usuario',
+                'name' => $name ?? 'Usuario',
                 'password' => $password,
-                'loginLink'=> route('login'),
-                'company'  => config('app.name')
+                'loginLink' => route('login'),
+                'company' => config('app.name')
             ];
 
             Mail::send('emails.password-reset', $data, function ($message) use ($email) {
                 $message->to($email)
-                    ->subject('Nueva Contraseña - ' . config('app.name'));
+                        ->subject('Nueva Contraseña - ' . config('app.name'));
             });
 
             return true;
@@ -57,20 +56,19 @@ class CustomMail
      * @param string|null $temporaryPassword Generated password for first access
      * @return bool Success status
      */
-    public static function welcome(array $user, ?string $temporaryPassword = null): bool
-    {
+    public static function welcome(array $user, ?string $temporaryPassword = null): bool {
         try {
             $data = [
-                'name'      => $user['name'],
-                'email'     => $user['email'],
-                'password'  => $temporaryPassword,
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'password' => $temporaryPassword,
                 'loginLink' => route('login'),
-                'company'   => config('app.name')
+                'company' => config('app.name')
             ];
 
             Mail::send('emails.welcome', $data, function ($message) use ($user) {
                 $message->to($user['email'])
-                    ->subject('Welcome to ' . config('app.name') . ' CMS');
+                        ->subject('Welcome to ' . config('app.name') . ' CMS');
             });
 
             return true;
@@ -88,8 +86,7 @@ class CustomMail
      * @param string $content Main message body
      * @return bool Success status
      */
-    public static function systemNotification(string $email, string $subject, string $content): bool
-    {
+    public static function systemNotification(string $email, string $subject, string $content): bool {
         try {
             Mail::send('emails.system-notification', ['content' => $content], function ($message) use ($email, $subject) {
                 $message->to($email)->subject($subject);
@@ -107,15 +104,14 @@ class CustomMail
      *
      * @return array{status: bool, driver: string, host: string, timestamp: string}
      */
-    public static function checkHealth(): array
-    {
+    public static function checkHealth(): array {
         $transport = config('mail.default');
         $host = config("mail.mailers.{$transport}.host", 'N/A');
 
         return [
-            'status'    => !empty($host),
-            'driver'    => $transport,
-            'host'      => $host,
+            'status' => !empty($host),
+            'driver' => $transport,
+            'host' => $host,
             'timestamp' => now()->toDateTimeString()
         ];
     }

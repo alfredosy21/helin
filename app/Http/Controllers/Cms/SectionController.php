@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace App\Http\Controllers\Cms;
 
 use App\Models\Sections;
@@ -26,8 +25,8 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Secciones | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class SectionController extends Component
-{
+class SectionController extends Component {
+
     use WithPagination;
 
     /** @var string Primary title of the section content block */
@@ -81,8 +80,7 @@ class SectionController extends Component
      * Component Lifecycle: Authorization Check.
      * Ensure only verified administrators can access the section management.
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.sections'));
@@ -92,12 +90,11 @@ class SectionController extends Component
     /**
      * Render the component view with paginated and filtered data.
      */
-    public function render(): View
-    {
+    public function render(): View {
         $sections = Sections::query()
-            ->when($this->search, fn($query) => $query->where('title', 'like', "%{$this->search}%"))
-            ->orderBy('id', 'asc')
-            ->paginate($this->perPage);
+                ->when($this->search, fn($query) => $query->where('title', 'like', "%{$this->search}%"))
+                ->orderBy('id', 'asc')
+                ->paginate($this->perPage);
 
         return view('cms.sections.index', [
             'sections' => $sections
@@ -109,8 +106,7 @@ class SectionController extends Component
      *
      * @param int $id
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $section = Sections::findOrFail($id);
 
         $this->editingId = $id;
@@ -130,8 +126,7 @@ class SectionController extends Component
     /**
      * Commit section modifications to the database.
      */
-    public function update(): void
-    {
+    public function update(): void {
         $this->validate();
         $this->isLoading = true;
 
@@ -152,7 +147,6 @@ class SectionController extends Component
 
             $this->dispatch('toast', message: __('cms.controllers.sections.updated'), type: 'success');
             $this->cancelEdit();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.sections.process_error'), type: 'error');
@@ -166,12 +160,11 @@ class SectionController extends Component
      *
      * @param int $id
      */
-    public function delete(int $id): void
-    {
+    public function delete(int $id): void {
         $this->dispatch('confirm-delete',
-            id: $id,
-            message: __('cms.controllers.sections.delete_confirm_message'),
-            title: __('cms.controllers.sections.delete_confirm_title')
+                id: $id,
+                message: __('cms.controllers.sections.delete_confirm_message'),
+                title: __('cms.controllers.sections.delete_confirm_title')
         );
     }
 
@@ -180,8 +173,7 @@ class SectionController extends Component
      *
      * @param int $id
      */
-    public function confirmDelete(int $id): void
-    {
+    public function confirmDelete(int $id): void {
         try {
             $section = Sections::findOrFail($id);
             $title = $section->title;
@@ -189,7 +181,6 @@ class SectionController extends Component
 
             Activities::saveActivity(__('cms.controllers.sections.activity_deleted', ['title' => $title]));
             $this->dispatch('toast', message: __('cms.controllers.sections.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.sections.delete_error'), type: 'error');
@@ -201,16 +192,16 @@ class SectionController extends Component
      *
      * @param string $photoName
      */
-    public function removePhoto(string $photoName): void
-    {
-        if (!$this->image) return;
+    public function removePhoto(string $photoName): void {
+        if (!$this->image)
+            return;
 
         try {
             $images = collect(explode(',', $this->image))
-                ->filter()
-                ->map(fn($img) => trim($img))
-                ->reject(fn($img) => $img === $photoName)
-                ->implode(',');
+                    ->filter()
+                    ->map(fn($img) => trim($img))
+                    ->reject(fn($img) => $img === $photoName)
+                    ->implode(',');
 
             $this->image = $images;
 
@@ -221,7 +212,6 @@ class SectionController extends Component
 
             $this->loadPhotos();
             $this->dispatch('toast', message: __('cms.controllers.sections.image_removed'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.sections.image_remove_error'), type: 'error');
@@ -231,20 +221,18 @@ class SectionController extends Component
     /**
      * Parse the raw image string into a renderable array for the UI.
      */
-    private function loadPhotos(): void
-    {
+    private function loadPhotos(): void {
         $this->photos = collect(explode(',', $this->image ?? ''))
-            ->filter()
-            ->map(fn($img) => ['name' => trim($img)])
-            ->values()
-            ->toArray();
+                ->filter()
+                ->map(fn($img) => ['name' => trim($img)])
+                ->values()
+                ->toArray();
     }
 
     /**
      * Revert form state and hide management interface.
      */
-    public function cancelEdit(): void
-    {
+    public function cancelEdit(): void {
         $this->resetForm();
         $this->showEditForm = false;
         $this->dispatch('close-edit-form');
@@ -253,8 +241,7 @@ class SectionController extends Component
     /**
      * Reset internal state properties and validation errors.
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'title' => __('cms.validation_attributes.section_title'),
             'content' => __('cms.validation_attributes.section_content'),
@@ -263,8 +250,7 @@ class SectionController extends Component
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset(['title', 'content', 'name_button', 'url_button', 'image', 'status', 'status_content', 'editingId']);
         $this->resetValidation();
         $this->photos = [];
@@ -273,8 +259,7 @@ class SectionController extends Component
     /**
      * Lifecycle listener: Reset pagination on search update.
      */
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
@@ -283,12 +268,11 @@ class SectionController extends Component
      *
      * @return array
      */
-    public function getSectionLists(): array
-    {
+    public function getSectionLists(): array {
         return Sections::orderBy('id', 'asc')->get()->map(fn($section) => [
-            'id' => $section->id,
-            'title' => strip_tags($section->title),
-            'created_at' => $section->created_at->format('m-d-Y H:i:s'),
-        ])->toArray();
+                    'id' => $section->id,
+                    'title' => strip_tags($section->title),
+                    'created_at' => $section->created_at->format('m-d-Y H:i:s'),
+                        ])->toArray();
     }
 }

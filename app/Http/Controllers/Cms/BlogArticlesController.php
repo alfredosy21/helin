@@ -38,9 +38,10 @@ use Livewire\Attributes\Validate;
  */
 #[Title('Gestión de Artículos del Blog | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class BlogArticlesController extends Component
-{
-    use WithPagination, WithFileUploads;
+class BlogArticlesController extends Component {
+
+    use WithPagination,
+        WithFileUploads;
 
     /** @var string Article title */
     #[Validate('required|string|max:255')]
@@ -125,8 +126,7 @@ class BlogArticlesController extends Component
      * @return void
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.blog_articles'));
@@ -142,24 +142,23 @@ class BlogArticlesController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         $articles = Blog::query()
-            ->with('blogCategory')
-            ->when($this->search, function ($query) {
-                $query->where('title', 'like', "%{$this->search}%")
+                ->with('blogCategory')
+                ->when($this->search, function ($query) {
+                    $query->where('title', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%")
                     ->orWhere('author', 'like', "%{$this->search}%")
                     ->orWhere('content', 'like', "%{$this->search}%");
-            })
-            ->orderBy('order', 'asc')
-            ->orderBy('is_pinned', 'desc')
-            ->orderBy('published_at', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+                })
+                ->orderBy('order', 'asc')
+                ->orderBy('is_pinned', 'desc')
+                ->orderBy('published_at', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate($this->perPage);
 
         return view('cms.blog_articles.index', [
-            'articles'   => $articles,
+            'articles' => $articles,
             'categories' => BlogCategory::query()->orderBy('name')->get()
         ]);
     }
@@ -171,8 +170,7 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    public function create(): void
-    {
+    public function create(): void {
         $this->resetForm();
         $this->is_active = false;
         $this->showForm = true;
@@ -188,8 +186,7 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    public function save(FileUploadService $fileUpload): void
-    {
+    public function save(FileUploadService $fileUpload): void {
         $this->isLoading = true;
 
         // Dynamic unique validation
@@ -250,7 +247,6 @@ class BlogArticlesController extends Component
             }
 
             $this->cancel();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.blog_articles.process_error'), type: 'error');
@@ -268,8 +264,7 @@ class BlogArticlesController extends Component
      * @param int $id The article identifier
      * @return void
      */
-    public function edit(int $id): void
-    {
+    public function edit(int $id): void {
         $article = Blog::findOrFail($id);
 
         $this->editingId = $id;
@@ -291,15 +286,14 @@ class BlogArticlesController extends Component
         $this->dispatch('open-form');
     }
 
-    public function openDeleteModal(int $id): void
-    {
+    public function openDeleteModal(int $id): void {
         $this->deleteId = $id;
         $this->showDeleteModal = true;
     }
 
-    public function delete(): void
-    {
-        if (!$this->deleteId) return;
+    public function delete(): void {
+        if (!$this->deleteId)
+            return;
 
         try {
             $article = Blog::findOrFail($this->deleteId);
@@ -308,7 +302,6 @@ class BlogArticlesController extends Component
 
             Activities::saveActivity(__('cms.controllers.blog_articles.activity_deleted', ['title' => $articleTitle]));
             $this->dispatch('toast', message: __('cms.controllers.blog_articles.deleted'), type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.blog_articles.delete_error'), type: 'error');
@@ -326,8 +319,7 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    public function cancel(): void
-    {
+    public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -341,15 +333,13 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    protected function validationAttributes(): array
-    {
+    protected function validationAttributes(): array {
         return [
             'title' => __('cms.validation_attributes.article_title'),
         ];
     }
 
-    private function resetForm(): void
-    {
+    private function resetForm(): void {
         $this->reset([
             'title', 'slug', 'author', 'content', 'excerpt', 'featured_image',
             'current_featured_image', 'meta_title', 'meta_description', 'meta_keywords', 'blog_category_id',
@@ -366,8 +356,7 @@ class BlogArticlesController extends Component
      *
      * @return void
      */
-    public function updatedSearch(): void
-    {
+    public function updatedSearch(): void {
         $this->resetPage();
     }
 
@@ -377,8 +366,7 @@ class BlogArticlesController extends Component
      * @param int $id The article identifier
      * @return void
      */
-    public function toggleStatus(int $id): void
-    {
+    public function toggleStatus(int $id): void {
         try {
             $article = Blog::findOrFail($id);
             $article->update([
@@ -386,13 +374,10 @@ class BlogArticlesController extends Component
                 'published_at' => !$article->is_active ? now() : null
             ]);
 
-            $toastMsg = $article->is_active
-                ? __('cms.controllers.blog_articles.activated')
-                : __('cms.controllers.blog_articles.deactivated');
+            $toastMsg = $article->is_active ? __('cms.controllers.blog_articles.activated') : __('cms.controllers.blog_articles.deactivated');
             $status = $article->is_active ? 'activado' : 'desactivado';
             Activities::saveActivity(__('cms.controllers.blog_articles.activity_status', ['status' => $status, 'id' => $article->id]));
             $this->dispatch('toast', message: $toastMsg, type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.blog_articles.status_error'), type: 'error');
@@ -405,19 +390,15 @@ class BlogArticlesController extends Component
      * @param int $id The article identifier
      * @return void
      */
-    public function toggleFeatured(int $id): void
-    {
+    public function toggleFeatured(int $id): void {
         try {
             $article = Blog::findOrFail($id);
             $article->update(['is_featured' => !$article->is_featured]);
 
-            $toastMsg = $article->is_featured
-                ? __('cms.controllers.blog_articles.featured_on')
-                : __('cms.controllers.blog_articles.featured_off');
+            $toastMsg = $article->is_featured ? __('cms.controllers.blog_articles.featured_on') : __('cms.controllers.blog_articles.featured_off');
             $status = $article->is_featured ? 'marcado como destacado' : 'desmarcado como destacado';
             Activities::saveActivity(__('cms.controllers.blog_articles.activity_featured', ['status' => $status, 'id' => $article->id]));
             $this->dispatch('toast', message: $toastMsg, type: 'success');
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.blog_articles.featured_error'), type: 'error');
@@ -430,8 +411,7 @@ class BlogArticlesController extends Component
      * @param array $orderedIds Array of IDs in the new order
      * @return void
      */
-    public function updateOrder(array $orderedIds): void
-    {
+    public function updateOrder(array $orderedIds): void {
         try {
             foreach ($orderedIds as $index => $id) {
                 Blog::query()->where('id', $id)->update(['order' => $index + 1]);

@@ -29,8 +29,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Configuración General | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class SettingsController extends Component
-{
+class SettingsController extends Component {
+
     use WithFileUploads;
 
     /** @var bool UI state controller to toggle between view and edit modes */
@@ -76,10 +76,9 @@ class SettingsController extends Component
      *
      * @return array<string, string>
      */
-    protected function rules(): array
-    {
+    protected function rules(): array {
         return [
-            'name'  => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:50',
             'image' => 'nullable|image|max:1024',
@@ -91,8 +90,7 @@ class SettingsController extends Component
      *
      * @return void
      */
-    public function mount(): void
-    {
+    public function mount(): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.settings'));
@@ -106,14 +104,13 @@ class SettingsController extends Component
      *
      * @return void
      */
-    public function loadSettings(): void
-    {
+    public function loadSettings(): void {
         $settings = Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS]);
 
         $this->fill($settings->only([
-            'name', 'email', 'address', 'phone', 'shedule', 'copy',
-            'facebook', 'instagram', 'linkedin', 'youtube',
-            'keywords', 'description', 'settings_description'
+                    'name', 'email', 'address', 'phone', 'shedule', 'copy',
+                    'facebook', 'instagram', 'linkedin', 'youtube',
+                    'keywords', 'description', 'settings_description'
         ]));
 
         $this->current_image = $settings->image;
@@ -124,8 +121,7 @@ class SettingsController extends Component
      *
      * @return void
      */
-    public function toggleEdit(): void
-    {
+    public function toggleEdit(): void {
         $this->isEditing = !$this->isEditing;
         if (!$this->isEditing) {
             $this->loadSettings();
@@ -138,8 +134,7 @@ class SettingsController extends Component
      *
      * @return void
      */
-    public function save(): void
-    {
+    public function save(): void {
         $this->validate();
 
         DB::beginTransaction();
@@ -147,18 +142,18 @@ class SettingsController extends Component
             $settings = Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS]);
 
             $settings->fill([
-                'name'                 => $this->name,
-                'email'                => $this->email,
-                'address'              => $this->address,
-                'phone'                => $this->phone,
-                'shedule'              => $this->shedule,
-                'copy'                 => $this->copy,
-                'facebook'             => $this->facebook,
-                'instagram'            => $this->instagram,
-                'linkedin'             => $this->linkedin,
-                'youtube'              => $this->youtube,
-                'keywords'             => $this->keywords,
-                'description'          => $this->description,
+                'name' => $this->name,
+                'email' => $this->email,
+                'address' => $this->address,
+                'phone' => $this->phone,
+                'shedule' => $this->shedule,
+                'copy' => $this->copy,
+                'facebook' => $this->facebook,
+                'instagram' => $this->instagram,
+                'linkedin' => $this->linkedin,
+                'youtube' => $this->youtube,
+                'keywords' => $this->keywords,
+                'description' => $this->description,
                 'settings_description' => $this->settings_description,
             ]);
 
@@ -179,7 +174,6 @@ class SettingsController extends Component
 
             // Logging para debugging
             Log::info('Toast dispatched successfully: Configuración actualizada correctamente');
-
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error("Settings Persistence Failure: " . $ex->getMessage());
@@ -193,8 +187,7 @@ class SettingsController extends Component
      * @param \App\Models\Settings $settings
      * @return void
      */
-    private function processImage(Settings $settings): void
-    {
+    private function processImage(Settings $settings): void {
         if ($settings->image) {
             Storage::disk('public')->delete($settings->image);
         }
@@ -205,8 +198,7 @@ class SettingsController extends Component
         $settings->image = $path;
     }
 
-    public function render(): View
-    {
+    public function render(): View {
         return view('cms.settings.index', [
             'settings' => Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS])
         ]);

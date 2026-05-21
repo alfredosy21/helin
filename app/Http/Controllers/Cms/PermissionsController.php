@@ -33,8 +33,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Gestión de Permisos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class PermissionsController extends Component
-{
+class PermissionsController extends Component {
+
     use WithPagination;
 
     /** @var int Role ID being managed */
@@ -58,8 +58,7 @@ class PermissionsController extends Component
      * @param int $roleId The role ID to manage permissions for
      * @return void
      */
-    public function mount(int $roleId): void
-    {
+    public function mount(int $roleId): void {
         $user = Auth::user();
         if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
             abort(403, __('cms.abort.permissions'));
@@ -75,8 +74,7 @@ class PermissionsController extends Component
      *
      * @return View
      */
-    public function render(): View
-    {
+    public function render(): View {
         return view('cms.permissions.index');
     }
 
@@ -85,8 +83,7 @@ class PermissionsController extends Component
      *
      * @return void
      */
-    public function loadPermissions(): void
-    {
+    public function loadPermissions(): void {
         $this->isLoading = true;
 
         try {
@@ -105,8 +102,7 @@ class PermissionsController extends Component
      * @param int $moduleId The module ID
      * @return void
      */
-    public function toggleModulePermission(int $moduleId): void
-    {
+    public function toggleModulePermission(int $moduleId): void {
         $this->isLoading = true;
 
         try {
@@ -122,9 +118,7 @@ class PermissionsController extends Component
                 return;
             }
 
-            $newStatus = $permission->status === Permission::ACTIVE_STATUS
-                ? Permission::INACTIVE_STATUS
-                : Permission::ACTIVE_STATUS;
+            $newStatus = $permission->status === Permission::ACTIVE_STATUS ? Permission::INACTIVE_STATUS : Permission::ACTIVE_STATUS;
 
             $permission->update(['status' => $newStatus]);
 
@@ -133,12 +127,11 @@ class PermissionsController extends Component
             Activities::saveActivity(__('cms.controllers.permissions.activity_single_module', ['action' => $actionWord, 'role_id' => $this->roleId, 'module_id' => $moduleId]));
 
             $this->dispatch('toast',
-                message: $action,
-                type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
+                    message: $action,
+                    type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
             $this->loadPermissions();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.permissions.module_error'), type: 'error');
@@ -154,13 +147,12 @@ class PermissionsController extends Component
      * @param int $moduleStatus Parent module status
      * @return void
      */
-    public function toggleSubmodulePermission(int $permissionId, int $moduleStatus): void
-    {
+    public function toggleSubmodulePermission(int $permissionId, int $moduleStatus): void {
         // Only allow submodule permission if parent module is active
         if ($moduleStatus !== Permission::ACTIVE_STATUS) {
             $this->dispatch('toast',
-                message: __('cms.controllers.permissions.parent_module_required'),
-                type: 'warning'
+                    message: __('cms.controllers.permissions.parent_module_required'),
+                    type: 'warning'
             );
             return;
         }
@@ -169,9 +161,7 @@ class PermissionsController extends Component
 
         try {
             $permission = Permission::findOrFail($permissionId);
-            $newStatus = $permission->status === Permission::ACTIVE_STATUS
-                ? Permission::INACTIVE_STATUS
-                : Permission::ACTIVE_STATUS;
+            $newStatus = $permission->status === Permission::ACTIVE_STATUS ? Permission::INACTIVE_STATUS : Permission::ACTIVE_STATUS;
 
             $permission->update(['status' => $newStatus]);
 
@@ -180,12 +170,11 @@ class PermissionsController extends Component
             Activities::saveActivity(__('cms.controllers.permissions.activity_single_submodule', ['action' => $actionWord, 'permission_id' => $permissionId]));
 
             $this->dispatch('toast',
-                message: $action,
-                type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
+                    message: $action,
+                    type: $newStatus === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
             $this->loadPermissions();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.permissions.submodule_error'), type: 'error');
@@ -200,8 +189,7 @@ class PermissionsController extends Component
      * @param int $status The status to set (1 for active, 0 for inactive)
      * @return void
      */
-    public function toggleAllModules(int $status): void
-    {
+    public function toggleAllModules(int $status): void {
         $this->isLoading = true;
 
         try {
@@ -221,12 +209,11 @@ class PermissionsController extends Component
             Activities::saveActivity(__('cms.controllers.permissions.activity_module', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',
-                message: $action,
-                type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
+                    message: $action,
+                    type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
             $this->loadPermissions();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.permissions.all_error'), type: 'error');
@@ -241,8 +228,7 @@ class PermissionsController extends Component
      * @param int $status The status to set
      * @return void
      */
-    public function toggleAllSubmodules(int $status, ?int $moduleId = null): void
-    {
+    public function toggleAllSubmodules(int $status, ?int $moduleId = null): void {
         $this->isLoading = true;
 
         try {
@@ -267,12 +253,11 @@ class PermissionsController extends Component
             Activities::saveActivity(__('cms.controllers.permissions.activity_submodule', ['action' => $actionWord, 'role_id' => $this->roleId]));
 
             $this->dispatch('toast',
-                message: $action,
-                type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
+                    message: $action,
+                    type: $status === Permission::ACTIVE_STATUS ? 'success' : 'warning'
             );
 
             $this->loadPermissions();
-
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.permissions.all_sub_error'), type: 'error');
@@ -286,8 +271,7 @@ class PermissionsController extends Component
      *
      * @return void
      */
-    private function getRoleInfo(): void
-    {
+    private function getRoleInfo(): void {
         try {
             $role = \App\Models\Role::findOrFail($this->roleId);
             $this->roleName = $role->name;

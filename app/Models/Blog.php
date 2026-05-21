@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class Blog extends Model
-{
+class Blog extends Model {
+
     use HasFactory;
 
     /**
@@ -73,8 +73,7 @@ class Blog extends Model
      *
      * @return BelongsTo<BlogCategory, Blog>
      */
-    public function blogCategory(): BelongsTo
-    {
+    public function blogCategory(): BelongsTo {
         return $this->belongsTo(BlogCategory::class);
     }
 
@@ -83,8 +82,7 @@ class Blog extends Model
      *
      * @return HasMany<BlogGallery, Blog>
      */
-    public function gallery(): HasMany
-    {
+    public function gallery(): HasMany {
         return $this->hasMany(BlogGallery::class)->orderBy('position', 'asc');
     }
 
@@ -93,8 +91,7 @@ class Blog extends Model
      *
      * @return HasMany<BlogGallery, Blog>
      */
-    public function featuredImage(): HasMany
-    {
+    public function featuredImage(): HasMany {
         return $this->hasMany(BlogGallery::class)->where('is_featured', true);
     }
 
@@ -103,8 +100,7 @@ class Blog extends Model
      *
      * @return BlogGallery|null
      */
-    public function getMainImage(): ?BlogGallery
-    {
+    public function getMainImage(): ?BlogGallery {
         return $this->featuredImage()->first() ?? $this->gallery()->first();
     }
 
@@ -114,8 +110,7 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -125,8 +120,7 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopeFeatured(Builder $query): Builder
-    {
+    public function scopeFeatured(Builder $query): Builder {
         return $query->where('is_featured', true);
     }
 
@@ -136,8 +130,7 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopePinned(Builder $query): Builder
-    {
+    public function scopePinned(Builder $query): Builder {
         return $query->where('is_pinned', true);
     }
 
@@ -147,11 +140,10 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopePublished(Builder $query): Builder
-    {
+    public function scopePublished(Builder $query): Builder {
         return $query->where('is_active', true)
-                    ->whereNotNull('published_at')
-                    ->where('published_at', '<=', now());
+                        ->whereNotNull('published_at')
+                        ->where('published_at', '<=', now());
     }
 
     /**
@@ -161,8 +153,7 @@ class Blog extends Model
      * @param string $author
      * @return Builder<Blog>
      */
-    public function scopeByAuthor(Builder $query, string $author): Builder
-    {
+    public function scopeByAuthor(Builder $query, string $author): Builder {
         return $query->where('author', $author);
     }
 
@@ -172,8 +163,7 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopeLatest(Builder $query): Builder
-    {
+    public function scopeLatest(Builder $query): Builder {
         return $query->orderBy('published_at', 'desc');
     }
 
@@ -183,10 +173,9 @@ class Blog extends Model
      * @param Builder<Blog> $query
      * @return Builder<Blog>
      */
-    public function scopePopular(Builder $query): Builder
-    {
+    public function scopePopular(Builder $query): Builder {
         return $query->orderBy('view_count', 'desc')
-                    ->orderBy('like_count', 'desc');
+                        ->orderBy('like_count', 'desc');
     }
 
     /**
@@ -194,17 +183,14 @@ class Blog extends Model
      *
      * @return string
      */
-    public function getExcerptAttribute(): string
-    {
+    public function getExcerptAttribute(): string {
         if ($this->excerpt) {
             return $this->excerpt;
         }
 
         // Generate excerpt from content (first 150 characters)
         $content = strip_tags($this->content);
-        return strlen($content) > 150
-            ? substr($content, 0, 147) . '...'
-            : $content;
+        return strlen($content) > 150 ? substr($content, 0, 147) . '...' : $content;
     }
 
     /**
@@ -212,8 +198,7 @@ class Blog extends Model
      *
      * @return string
      */
-    public function getFormattedReadTimeAttribute(): string
-    {
+    public function getFormattedReadTimeAttribute(): string {
         $minutes = $this->read_time ?? $this->estimateReadTime();
 
         return $minutes . ' min read';
@@ -224,8 +209,7 @@ class Blog extends Model
      *
      * @return int
      */
-    public function estimateReadTime(): int
-    {
+    public function estimateReadTime(): int {
         $wordCount = str_word_count(strip_tags($this->content));
         return max(1, ceil($wordCount / 200)); // Average 200 words per minute
     }
@@ -235,8 +219,7 @@ class Blog extends Model
      *
      * @return string
      */
-    public function getMetaTitleAttribute(): string
-    {
+    public function getMetaTitleAttribute(): string {
         return $this->meta_title ?: $this->title;
     }
 
@@ -245,8 +228,7 @@ class Blog extends Model
      *
      * @return string
      */
-    public function getMetaDescriptionAttribute(): string
-    {
+    public function getMetaDescriptionAttribute(): string {
         return $this->meta_description ?: $this->excerpt;
     }
 
@@ -255,11 +237,10 @@ class Blog extends Model
      *
      * @return bool
      */
-    public function isPublished(): bool
-    {
+    public function isPublished(): bool {
         return $this->is_active &&
-               $this->published_at &&
-               $this->published_at->isPast();
+                $this->published_at &&
+                $this->published_at->isPast();
     }
 
     /**
@@ -267,11 +248,10 @@ class Blog extends Model
      *
      * @return bool
      */
-    public function isTrending(): bool
-    {
+    public function isTrending(): bool {
         return $this->view_count > 1000 ||
-               $this->like_count > 50 ||
-               $this->comment_count > 10;
+                $this->like_count > 50 ||
+                $this->comment_count > 10;
     }
 
     /**
@@ -279,11 +259,10 @@ class Blog extends Model
      *
      * @return int
      */
-    public function getEngagementScoreAttribute(): int
-    {
+    public function getEngagementScoreAttribute(): int {
         return ($this->view_count * 1) +
-               ($this->like_count * 5) +
-               ($this->comment_count * 10) +
-               ($this->share_count * 3);
+                ($this->like_count * 5) +
+                ($this->comment_count * 10) +
+                ($this->share_count * 3);
     }
 }

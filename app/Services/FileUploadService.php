@@ -8,8 +8,8 @@ use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Exception;
 
-class FileUploadService
-{
+class FileUploadService {
+
     /**
      * Save uploaded file with validation and processing
      *
@@ -19,15 +19,14 @@ class FileUploadService
      * @return array
      * @throws Exception
      */
-    public function save(UploadedFile $file, string $directory, array $options = []): array
-    {
+    public function save(UploadedFile $file, string $directory, array $options = []): array {
         try {
             // Validate file
             $this->validateFile($file, $options);
 
             // Generate unique filename
             $filename = $this->generateFilename($file);
-            
+
             // Create directory if it doesn't exist
             $fullDirectory = $this->ensureDirectoryExists($directory);
 
@@ -54,7 +53,6 @@ class FileUploadService
                 'url' => Storage::url($path),
                 'thumbnail_url' => $thumbnailPath ? Storage::url($thumbnailPath) : null
             ];
-
         } catch (Exception $e) {
             throw new Exception('Error al subir archivo: ' . $e->getMessage());
         }
@@ -66,21 +64,20 @@ class FileUploadService
      * @param string $path
      * @return bool
      */
-    public function delete(string $path): bool
-    {
+    public function delete(string $path): bool {
         try {
             if (Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
-                
+
                 // Also try to delete thumbnail
                 $thumbnailPath = $this->getThumbnailPath($path);
                 if ($thumbnailPath && Storage::disk('public')->exists($thumbnailPath)) {
                     Storage::disk('public')->delete($thumbnailPath);
                 }
-                
+
                 return true;
             }
-            
+
             return false;
         } catch (Exception $e) {
             return false;
@@ -93,8 +90,7 @@ class FileUploadService
      * @param string $path
      * @return array|null
      */
-    public function getFileInfo(string $path): ?array
-    {
+    public function getFileInfo(string $path): ?array {
         try {
             if (!Storage::disk('public')->exists($path)) {
                 return null;
@@ -115,7 +111,6 @@ class FileUploadService
                 'is_image' => $this->isImageMimeType($mimeType),
                 'extension' => pathinfo($path, PATHINFO_EXTENSION)
             ];
-
         } catch (Exception $e) {
             return null;
         }
@@ -128,8 +123,7 @@ class FileUploadService
      * @param array $options
      * @throws Exception
      */
-    private function validateFile(UploadedFile $file, array $options): void
-    {
+    private function validateFile(UploadedFile $file, array $options): void {
         // Check if file is valid
         if (!$file->isValid()) {
             throw new Exception('Archivo no válido');
@@ -160,13 +154,12 @@ class FileUploadService
      * @param UploadedFile $file
      * @return string
      */
-    private function generateFilename(UploadedFile $file): string
-    {
+    private function generateFilename(UploadedFile $file): string {
         $extension = $file->getClientOriginalExtension();
         $basename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
         $timestamp = now()->format('YmdHis');
         $random = Str::random(4);
-        
+
         return "{$basename}-{$timestamp}-{$random}.{$extension}";
     }
 
@@ -176,14 +169,13 @@ class FileUploadService
      * @param string $directory
      * @return string
      */
-    private function ensureDirectoryExists(string $directory): string
-    {
+    private function ensureDirectoryExists(string $directory): string {
         $fullDirectory = trim($directory, '/');
-        
+
         if (!Storage::disk('public')->exists($fullDirectory)) {
             Storage::disk('public')->makeDirectory($fullDirectory);
         }
-        
+
         return $fullDirectory;
     }
 
@@ -194,8 +186,7 @@ class FileUploadService
      * @param array $options
      * @return UploadedFile
      */
-    private function processFile(UploadedFile $file, array $options): UploadedFile
-    {
+    private function processFile(UploadedFile $file, array $options): UploadedFile {
         if (!$this->isImage($file)) {
             return $file;
         }
@@ -215,8 +206,7 @@ class FileUploadService
      * @param array $options
      * @return UploadedFile
      */
-    private function resizeImage(UploadedFile $file, array $options): UploadedFile
-    {
+    private function resizeImage(UploadedFile $file, array $options): UploadedFile {
         $width = $options['width'] ?? 1200;
         $height = $options['height'] ?? null;
         $quality = $options['quality'] ?? 85;
@@ -250,8 +240,7 @@ class FileUploadService
      * @param array $options
      * @return string|null
      */
-    private function generateThumbnail(string $originalPath, string $filename, string $directory, array $options): ?string
-    {
+    private function generateThumbnail(string $originalPath, string $filename, string $directory, array $options): ?string {
         try {
             $thumbnailSize = $options['thumbnail_size'] ?? 300;
             $thumbnailQuality = $options['thumbnail_quality'] ?? 75;
@@ -267,19 +256,18 @@ class FileUploadService
             // Generate thumbnail filename
             $pathInfo = pathinfo($filename);
             $thumbnailFilename = $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];
-            
+
             // Save thumbnail
             $thumbnailPath = $directory . '/thumbnails/' . $thumbnailFilename;
             Storage::disk('public')->makeDirectory(dirname($thumbnailPath));
-            
+
             $tempThumbnailPath = tempnam(sys_get_temp_dir(), 'thumb_');
             $image->save($tempThumbnailPath, $thumbnailQuality);
-            
+
             Storage::disk('public')->put($thumbnailPath, file_get_contents($tempThumbnailPath));
             unlink($tempThumbnailPath);
 
             return $thumbnailPath;
-
         } catch (Exception $e) {
             return null;
         }
@@ -291,13 +279,12 @@ class FileUploadService
      * @param string $originalPath
      * @return string|null
      */
-    private function getThumbnailPath(string $originalPath): ?string
-    {
+    private function getThumbnailPath(string $originalPath): ?string {
         $pathInfo = pathinfo($originalPath);
         $directory = dirname($originalPath);
         $filename = $pathInfo['filename'];
         $extension = $pathInfo['extension'];
-        
+
         return $directory . '/thumbnails/' . $filename . '_thumb.' . $extension;
     }
 
@@ -307,8 +294,7 @@ class FileUploadService
      * @param UploadedFile $file
      * @return bool
      */
-    private function isImage(UploadedFile $file): bool
-    {
+    private function isImage(UploadedFile $file): bool {
         return $this->isImageMimeType($file->getMimeType());
     }
 
@@ -318,8 +304,7 @@ class FileUploadService
      * @param string $mimeType
      * @return bool
      */
-    private function isImageMimeType(string $mimeType): bool
-    {
+    private function isImageMimeType(string $mimeType): bool {
         return in_array($mimeType, [
             'image/jpeg',
             'image/jpg',
@@ -336,8 +321,7 @@ class FileUploadService
      * @param int $bytes
      * @return string
      */
-    private function formatFileSize(int $bytes): string
-    {
+    private function formatFileSize(int $bytes): string {
         if ($bytes >= 1073741824) {
             return number_format($bytes / 1073741824, 2) . ' GB';
         } elseif ($bytes >= 1048576) {
@@ -354,8 +338,7 @@ class FileUploadService
      *
      * @return array
      */
-    private function getDefaultAllowedMimes(): array
-    {
+    private function getDefaultAllowedMimes(): array {
         return [
             // Images
             'image/jpeg',
@@ -364,7 +347,6 @@ class FileUploadService
             'image/gif',
             'image/webp',
             'image/svg+xml',
-            
             // Documents
             'application/pdf',
             'application/msword',
@@ -373,7 +355,6 @@ class FileUploadService
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'application/vnd.ms-powerpoint',
             'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            
             // Text
             'text/plain',
             'text/csv'
@@ -385,15 +366,12 @@ class FileUploadService
      *
      * @return array
      */
-    private function getDefaultAllowedExtensions(): array
-    {
+    private function getDefaultAllowedExtensions(): array {
         return [
             // Images
             'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg',
-            
             // Documents
             'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
-            
             // Text
             'txt', 'csv'
         ];
@@ -405,8 +383,7 @@ class FileUploadService
      * @param string $path
      * @return array|null
      */
-    public function getImageDimensions(string $path): ?array
-    {
+    public function getImageDimensions(string $path): ?array {
         try {
             if (!Storage::disk('public')->exists($path)) {
                 return null;
@@ -420,7 +397,6 @@ class FileUploadService
                 'height' => $image->height(),
                 'aspect_ratio' => $image->width() / $image->height()
             ];
-
         } catch (Exception $e) {
             return null;
         }
@@ -433,8 +409,7 @@ class FileUploadService
      * @param array $options
      * @return array
      */
-    public function optimizeImage(string $path, array $options = []): array
-    {
+    public function optimizeImage(string $path, array $options = []): array {
         try {
             if (!Storage::disk('public')->exists($path)) {
                 throw new Exception('Archivo no encontrado');
@@ -472,7 +447,7 @@ class FileUploadService
 
             $tempPath = tempnam(sys_get_temp_dir(), 'optimized_');
             $image->save($tempPath, $quality, $extension === 'png' ? 'png' : 'jpg');
-            
+
             Storage::disk('public')->put($optimizedPath, file_get_contents($tempPath));
             unlink($tempPath);
 
@@ -489,7 +464,6 @@ class FileUploadService
                 'compression_ratio' => round($compressionRatio, 2),
                 'size_reduction' => $this->formatFileSize($originalSize - $optimizedSize)
             ];
-
         } catch (Exception $e) {
             return [
                 'success' => false,

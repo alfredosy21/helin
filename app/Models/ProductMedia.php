@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class ProductMedia extends Model
-{
+class ProductMedia extends Model {
+
     use HasFactory;
 
     /**
@@ -59,8 +59,7 @@ class ProductMedia extends Model
      *
      * @return BelongsTo<Product, ProductMedia>
      */
-    public function product(): BelongsTo
-    {
+    public function product(): BelongsTo {
         return $this->belongsTo(Product::class);
     }
 
@@ -69,8 +68,7 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getFileUrlAttribute(): string
-    {
+    public function getFileUrlAttribute(): string {
         return asset('storage/' . $this->file_path);
     }
 
@@ -79,11 +77,8 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getThumbnailUrlAttribute(): string
-    {
-        return $this->thumbnail
-            ? asset('storage/' . $this->thumbnail)
-            : $this->file_url;
+    public function getThumbnailUrlAttribute(): string {
+        return $this->thumbnail ? asset('storage/' . $this->thumbnail) : $this->file_url;
     }
 
     /**
@@ -91,8 +86,7 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getFormattedFileSizeAttribute(): string
-    {
+    public function getFormattedFileSizeAttribute(): string {
         $bytes = $this->file_size;
 
         if ($bytes >= 1073741824) {
@@ -111,9 +105,8 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getTypeLabelAttribute(): string
-    {
-        return match($this->type) {
+    public function getTypeLabelAttribute(): string {
+        return match ($this->type) {
             'image' => 'Image',
             'document' => 'Document',
             'video' => 'Video',
@@ -126,8 +119,7 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getExtensionAttribute(): string
-    {
+    public function getExtensionAttribute(): string {
         return pathinfo($this->file_name, PATHINFO_EXTENSION);
     }
 
@@ -136,8 +128,7 @@ class ProductMedia extends Model
      *
      * @return bool
      */
-    public function isImage(): bool
-    {
+    public function isImage(): bool {
         return $this->type === 'image';
     }
 
@@ -146,8 +137,7 @@ class ProductMedia extends Model
      *
      * @return bool
      */
-    public function isDocument(): bool
-    {
+    public function isDocument(): bool {
         return $this->type === 'document';
     }
 
@@ -156,8 +146,7 @@ class ProductMedia extends Model
      *
      * @return bool
      */
-    public function isVideo(): bool
-    {
+    public function isVideo(): bool {
         return $this->type === 'video';
     }
 
@@ -166,8 +155,7 @@ class ProductMedia extends Model
      *
      * @return bool
      */
-    public function canBeDisplayedInline(): bool
-    {
+    public function canBeDisplayedInline(): bool {
         return $this->isImage() || $this->isVideo();
     }
 
@@ -176,8 +164,7 @@ class ProductMedia extends Model
      *
      * @return string
      */
-    public function getIconAttribute(): string
-    {
+    public function getIconAttribute(): string {
         if ($this->isImage()) {
             return 'image';
         }
@@ -188,7 +175,7 @@ class ProductMedia extends Model
 
         $extension = strtolower($this->extension);
 
-        return match($extension) {
+        return match ($extension) {
             'pdf' => 'file-text',
             'doc', 'docx' => 'file-text',
             'xls', 'xlsx' => 'file-spreadsheet',

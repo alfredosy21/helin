@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Auth;
  * @author  Helin Latam Development Team
  * @version 1.1.0
  */
-class Authenticate extends Middleware
-{
+class Authenticate extends Middleware {
+
     /**
      * Handle an incoming request.
      *
@@ -37,8 +37,7 @@ class Authenticate extends Middleware
      *
      * @throws \Illuminate\Auth\AuthenticationException
      */
-    public function handle($request, \Closure $next, ...$guards)
-    {
+    public function handle($request, \Closure $next, ...$guards) {
         // 1. Validate custom inactivity session timeout
         if (Auth::check() && !$this->isSessionValid($request)) {
             return $this->handleSessionTimeout($request);
@@ -72,11 +71,8 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request): ?string
-    {
-        return $request->expectsJson() || $request->is('api/*')
-            ? null
-            : route('login');
+    protected function redirectTo($request): ?string {
+        return $request->expectsJson() || $request->is('api/*') ? null : route('login');
     }
 
     /**
@@ -91,27 +87,26 @@ class Authenticate extends Middleware
      *
      * @throws \Illuminate\Auth\AuthenticationException
      */
-    protected function unauthenticated($request, array $guards)
-    {
+    protected function unauthenticated($request, array $guards) {
         $this->logUnauthenticatedAttempt($request, $guards);
 
         if ($request->expectsJson() || $request->is('api/*')) {
             abort(response()->json([
-                'success' => false,
-                'message' => __('cms.messages.auth.unauthenticated'),
-                'code' => 401,
-                'data' => [
-                    'redirect' => route('login'),
-                    'requires_auth' => true
-                ]
-            ], 401));
+                        'success' => false,
+                        'message' => __('cms.messages.auth.unauthenticated'),
+                        'code' => 401,
+                        'data' => [
+                            'redirect' => route('login'),
+                            'requires_auth' => true
+                        ]
+                            ], 401));
         }
 
         $message = $this->getRedirectMessage($request, $guards);
 
         abort(redirect()->route('login')
-            ->with('warning', $message)
-            ->with('intended', $request->fullUrl()));
+                        ->with('warning', $message)
+                        ->with('intended', $request->fullUrl()));
     }
 
     /**
@@ -121,8 +116,7 @@ class Authenticate extends Middleware
      * @param  array  $guards
      * @return void
      */
-    protected function logUnauthenticatedAttempt(Request $request, array $guards): void
-    {
+    protected function logUnauthenticatedAttempt(Request $request, array $guards): void {
         $data = [
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
@@ -150,24 +144,23 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    protected function handleApiAuth(Request $request)
-    {
+    protected function handleApiAuth(Request $request) {
         $token = $request->bearerToken();
 
         if (!$token) {
             return response()->json([
-                'success' => false,
-                'message' => __('cms.messages.auth.api_token_required'),
-                'code' => 401,
-            ], 401);
+                        'success' => false,
+                        'message' => __('cms.messages.auth.api_token_required'),
+                        'code' => 401,
+                            ], 401);
         }
 
         if (!$this->isValidApiToken($token)) {
             return response()->json([
-                'success' => false,
-                'message' => __('cms.messages.auth.api_token_invalid'),
-                'code' => 401,
-            ], 401);
+                        'success' => false,
+                        'message' => __('cms.messages.auth.api_token_invalid'),
+                        'code' => 401,
+                            ], 401);
         }
 
         return true;
@@ -179,8 +172,7 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return bool|\Illuminate\Http\RedirectResponse
      */
-    protected function handleAdminAuth(Request $request)
-    {
+    protected function handleAdminAuth(Request $request) {
         /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
@@ -206,8 +198,7 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function isSessionValid(Request $request): bool
-    {
+    protected function isSessionValid(Request $request): bool {
         $loginTime = session()->get('login_time');
         if (!$loginTime) {
             return true;
@@ -224,8 +215,7 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function handleSessionTimeout(Request $request)
-    {
+    protected function handleSessionTimeout(Request $request) {
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
@@ -233,10 +223,10 @@ class Authenticate extends Middleware
 
         if ($request->expectsJson()) {
             return response()->json([
-                'success' => false,
-                'message' => __('cms.messages.auth.session_expired'),
-                'code' => 401
-            ], 401);
+                        'success' => false,
+                        'message' => __('cms.messages.auth.session_expired'),
+                        'code' => 401
+                            ], 401);
         }
 
         return redirect()->route('login')->with('warning', __('cms.messages.auth.session_expired'));
@@ -248,8 +238,7 @@ class Authenticate extends Middleware
      * @param  string  $token
      * @return bool
      */
-    protected function isValidApiToken(string $token): bool
-    {
+    protected function isValidApiToken(string $token): bool {
         return strlen($token) >= 32 && preg_match('/^[a-zA-Z0-9._-]+$/', $token) === 1;
     }
 
@@ -260,8 +249,7 @@ class Authenticate extends Middleware
      * @param  array  $guards
      * @return string
      */
-    protected function getRedirectMessage(Request $request, array $guards): string
-    {
+    protected function getRedirectMessage(Request $request, array $guards): string {
         if (session()->has('auth.timeout')) {
             return __('cms.messages.auth.session_expired');
         }

@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class PermissionMiddleware
-{
+class PermissionMiddleware {
+
     /**
      * Handle an incoming request based on module/submodule permissions.
      *
@@ -20,8 +20,7 @@ class PermissionMiddleware
      * @param  string|null  $submodule
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, string $module, ?string $submodule = null)
-    {
+    public function handle(Request $request, Closure $next, string $module, ?string $submodule = null) {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
@@ -73,14 +72,13 @@ class PermissionMiddleware
      * @param string $moduleName
      * @return bool
      */
-    private function hasModulePermission(int $roleId, string $moduleName): bool
-    {
+    private function hasModulePermission(int $roleId, string $moduleName): bool {
         return Permission::join('modules', 'modules.id', '=', 'permissions.module_id')
-            ->where('permissions.rol_id', $roleId)
-            ->where('modules.name', $moduleName)
-            ->where('permissions.type', Permission::MAIN_MODULE_TYPE)
-            ->where('permissions.status', Permission::ACTIVE_STATUS)
-            ->exists();
+                        ->where('permissions.rol_id', $roleId)
+                        ->where('modules.name', $moduleName)
+                        ->where('permissions.type', Permission::MAIN_MODULE_TYPE)
+                        ->where('permissions.status', Permission::ACTIVE_STATUS)
+                        ->exists();
     }
 
     /**
@@ -91,16 +89,15 @@ class PermissionMiddleware
      * @param string $submoduleName
      * @return bool
      */
-    private function hasSubmodulePermission(int $roleId, string $moduleName, string $submoduleName): bool
-    {
+    private function hasSubmodulePermission(int $roleId, string $moduleName, string $submoduleName): bool {
         return Permission::join('submodules', 'submodules.id', '=', 'permissions.submodule_id')
-            ->join('modules', 'modules.id', '=', 'permissions.module_id')
-            ->where('permissions.rol_id', $roleId)
-            ->where('modules.name', $moduleName)
-            ->where('submodules.name', $submoduleName)
-            ->where('permissions.type', Permission::SUB_MODULE_TYPE)
-            ->where('permissions.status', Permission::ACTIVE_STATUS)
-            ->exists();
+                        ->join('modules', 'modules.id', '=', 'permissions.module_id')
+                        ->where('permissions.rol_id', $roleId)
+                        ->where('modules.name', $moduleName)
+                        ->where('submodules.name', $submoduleName)
+                        ->where('permissions.type', Permission::SUB_MODULE_TYPE)
+                        ->where('permissions.status', Permission::ACTIVE_STATUS)
+                        ->exists();
     }
 
     /**
@@ -111,8 +108,7 @@ class PermissionMiddleware
      * @param string $route
      * @return bool
      */
-    public static function hasRoutePermission(int $roleId, string $route): bool
-    {
+    public static function hasRoutePermission(int $roleId, string $route): bool {
         // Find submodule by URL
         $submodule = Submodule::where('url', $route)->first();
 
@@ -121,11 +117,11 @@ class PermissionMiddleware
         }
 
         return Permission::join('submodules', 'submodules.id', '=', 'permissions.submodule_id')
-            ->where('permissions.rol_id', $roleId)
-            ->where('permissions.submodule_id', $submodule->id)
-            ->where('permissions.type', Permission::SUB_MODULE_TYPE)
-            ->where('permissions.status', Permission::ACTIVE_STATUS)
-            ->exists();
+                        ->where('permissions.rol_id', $roleId)
+                        ->where('permissions.submodule_id', $submodule->id)
+                        ->where('permissions.type', Permission::SUB_MODULE_TYPE)
+                        ->where('permissions.status', Permission::ACTIVE_STATUS)
+                        ->exists();
     }
 
     /**
@@ -134,28 +130,27 @@ class PermissionMiddleware
      * @param int $roleId
      * @return array
      */
-    public static function getUserPermissions(int $roleId): array
-    {
+    public static function getUserPermissions(int $roleId): array {
         $permissions = [];
 
         // Get active modules
         $modules = Permission::join('modules', 'modules.id', '=', 'permissions.module_id')
-            ->where('permissions.rol_id', $roleId)
-            ->where('permissions.type', Permission::MAIN_MODULE_TYPE)
-            ->where('permissions.status', Permission::ACTIVE_STATUS)
-            ->pluck('modules.name')
-            ->toArray();
+                ->where('permissions.rol_id', $roleId)
+                ->where('permissions.type', Permission::MAIN_MODULE_TYPE)
+                ->where('permissions.status', Permission::ACTIVE_STATUS)
+                ->pluck('modules.name')
+                ->toArray();
 
         $permissions['modules'] = $modules;
 
         // Get active submodules
         $submodules = Permission::join('submodules', 'submodules.id', '=', 'permissions.submodule_id')
-            ->join('modules', 'modules.id', '=', 'permissions.module_id')
-            ->where('permissions.rol_id', $roleId)
-            ->where('permissions.type', Permission::SUB_MODULE_TYPE)
-            ->where('permissions.status', Permission::ACTIVE_STATUS)
-            ->get(['modules.name as module', 'submodules.name as submodule', 'submodules.url'])
-            ->toArray();
+                ->join('modules', 'modules.id', '=', 'permissions.module_id')
+                ->where('permissions.rol_id', $roleId)
+                ->where('permissions.type', Permission::SUB_MODULE_TYPE)
+                ->where('permissions.status', Permission::ACTIVE_STATUS)
+                ->get(['modules.name as module', 'submodules.name as submodule', 'submodules.url'])
+                ->toArray();
 
         $permissions['submodules'] = $submodules;
 

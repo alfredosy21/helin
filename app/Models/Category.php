@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class Category extends Model
-{
+class Category extends Model {
+
     use HasFactory;
 
     /**
@@ -43,9 +43,9 @@ class Category extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'parent_id'  => 'integer',
-        'is_active'  => 'boolean',
-        'order'      => 'integer',
+        'parent_id' => 'integer',
+        'is_active' => 'boolean',
+        'order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -55,8 +55,7 @@ class Category extends Model
      *
      * @return HasMany<Product>
      */
-    public function products(): HasMany
-    {
+    public function products(): HasMany {
         return $this->hasMany(Product::class);
     }
 
@@ -65,8 +64,7 @@ class Category extends Model
      *
      * @return BelongsTo<Category, Category>
      */
-    public function parent(): BelongsTo
-    {
+    public function parent(): BelongsTo {
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
@@ -75,8 +73,7 @@ class Category extends Model
      *
      * @return HasMany<Category>
      */
-    public function children(): HasMany
-    {
+    public function children(): HasMany {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
@@ -85,8 +82,7 @@ class Category extends Model
      *
      * @return HasMany<Category>
      */
-    public function activeChildren(): HasMany
-    {
+    public function activeChildren(): HasMany {
         return $this->children()->where('is_active', true);
     }
 
@@ -96,8 +92,7 @@ class Category extends Model
      * @param Builder<Category> $query
      * @return Builder<Category>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -107,10 +102,9 @@ class Category extends Model
      * @param Builder<Category> $query
      * @return Builder<Category>
      */
-    public function scopeOrdered(Builder $query): Builder
-    {
+    public function scopeOrdered(Builder $query): Builder {
         return $query->orderBy('order', 'asc')
-                    ->orderBy('name', 'asc');
+                        ->orderBy('name', 'asc');
     }
 
     /**
@@ -119,8 +113,7 @@ class Category extends Model
      * @param Builder<Category> $query
      * @return Builder<Category>
      */
-    public function scopeRoot(Builder $query): Builder
-    {
+    public function scopeRoot(Builder $query): Builder {
         return $query->whereNull('parent_id');
     }
 
@@ -129,8 +122,7 @@ class Category extends Model
      *
      * @return bool
      */
-    public function isRoot(): bool
-    {
+    public function isRoot(): bool {
         return is_null($this->parent_id);
     }
 
@@ -139,8 +131,7 @@ class Category extends Model
      *
      * @return bool
      */
-    public function hasChildren(): bool
-    {
+    public function hasChildren(): bool {
         return $this->children()->exists();
     }
 
@@ -149,8 +140,7 @@ class Category extends Model
      *
      * @return string
      */
-    public function getFullPathAttribute(): string
-    {
+    public function getFullPathAttribute(): string {
         $path = [];
         $category = $this;
 

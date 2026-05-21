@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @package App\Models
  * @version 1.1.0
  */
-class Role extends Model
-{
+class Role extends Model {
+
     use HasFactory;
 
     /**
@@ -60,8 +60,7 @@ class Role extends Model
      * 
      * @return HasMany
      */
-    public function users(): HasMany
-    {
+    public function users(): HasMany {
         // Links users where 'rol_id' matches this role's ID
         return $this->hasMany(User::class, 'rol_id');
     }
@@ -71,8 +70,7 @@ class Role extends Model
      * 
      * @return HasMany
      */
-    public function permissions(): HasMany
-    {
+    public function permissions(): HasMany {
         // Links the permission matrix entries for this specific role
         return $this->hasMany(Permission::class, 'rol_id');
     }

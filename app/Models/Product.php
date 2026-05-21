@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class Product extends Model
-{
+class Product extends Model {
+
     use HasFactory;
 
     /**
@@ -83,8 +83,7 @@ class Product extends Model
      *
      * @return BelongsTo<Category, Product>
      */
-    public function category(): BelongsTo
-    {
+    public function category(): BelongsTo {
         return $this->belongsTo(Category::class);
     }
 
@@ -93,8 +92,7 @@ class Product extends Model
      *
      * @return BelongsTo<Brand, Product>
      */
-    public function brand(): BelongsTo
-    {
+    public function brand(): BelongsTo {
         return $this->belongsTo(Brand::class);
     }
 
@@ -103,8 +101,7 @@ class Product extends Model
      *
      * @return HasMany<ProductMedia, ProductMedia>
      */
-    public function media(): HasMany
-    {
+    public function media(): HasMany {
         return $this->hasMany(ProductMedia::class)->orderBy('position', 'asc');
     }
 
@@ -113,8 +110,7 @@ class Product extends Model
      *
      * @return HasMany<ProductMedia, ProductMedia>
      */
-    public function mainImage(): HasMany
-    {
+    public function mainImage(): HasMany {
         return $this->hasMany(ProductMedia::class)->where('is_main', true);
     }
 
@@ -123,11 +119,10 @@ class Product extends Model
      *
      * @return HasMany<ProductMedia, ProductMedia>
      */
-    public function images(): HasMany
-    {
+    public function images(): HasMany {
         return $this->hasMany(ProductMedia::class)
-                    ->where('type', 'image')
-                    ->orderBy('position', 'asc');
+                        ->where('type', 'image')
+                        ->orderBy('position', 'asc');
     }
 
     /**
@@ -135,8 +130,7 @@ class Product extends Model
      *
      * @return HasMany<ProductMedia, ProductMedia>
      */
-    public function documents(): HasMany
-    {
+    public function documents(): HasMany {
         return $this->hasMany(ProductMedia::class)->where('type', 'document');
     }
 
@@ -145,11 +139,10 @@ class Product extends Model
      *
      * @return BelongsToMany<AttributeValue, Product>
      */
-    public function attributeValues(): BelongsToMany
-    {
+    public function attributeValues(): BelongsToMany {
         return $this->belongsToMany(AttributeValue::class, 'attribute_value_product')
-                    ->withPivot(['notes', 'numeric_value', 'text_value'])
-                    ->withTimestamps();
+                        ->withPivot(['notes', 'numeric_value', 'text_value'])
+                        ->withTimestamps();
     }
 
     /**
@@ -158,8 +151,7 @@ class Product extends Model
      * @param Builder<Product> $query
      * @return Builder<Product>
      */
-    public function scopeActive(Builder $query): Builder
-    {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('is_active', true);
     }
 
@@ -169,8 +161,7 @@ class Product extends Model
      * @param Builder<Product> $query
      * @return Builder<Product>
      */
-    public function scopeFeatured(Builder $query): Builder
-    {
+    public function scopeFeatured(Builder $query): Builder {
         return $query->where('is_featured', true);
     }
 
@@ -180,8 +171,7 @@ class Product extends Model
      * @param Builder<Product> $query
      * @return Builder<Product>
      */
-    public function scopeNew(Builder $query): Builder
-    {
+    public function scopeNew(Builder $query): Builder {
         return $query->where('is_new', true);
     }
 
@@ -191,14 +181,13 @@ class Product extends Model
      * @param Builder<Product> $query
      * @return Builder<Product>
      */
-    public function scopeOnSale(Builder $query): Builder
-    {
+    public function scopeOnSale(Builder $query): Builder {
         return $query->where('is_on_sale', true)
-                    ->where('sale_start_date', '<=', now())
-                    ->where(function ($query) {
-                        $query->whereNull('sale_end_date')
-                              ->orWhere('sale_end_date', '>=', now());
-                    });
+                        ->where('sale_start_date', '<=', now())
+                        ->where(function ($query) {
+                            $query->whereNull('sale_end_date')
+                            ->orWhere('sale_end_date', '>=', now());
+                        });
     }
 
     /**
@@ -207,11 +196,10 @@ class Product extends Model
      * @param Builder<Product> $query
      * @return Builder<Product>
      */
-    public function scopePublished(Builder $query): Builder
-    {
+    public function scopePublished(Builder $query): Builder {
         return $query->where('is_active', true)
-                    ->whereNotNull('published_at')
-                    ->where('published_at', '<=', now());
+                        ->whereNotNull('published_at')
+                        ->where('published_at', '<=', now());
     }
 
     /**
@@ -219,8 +207,7 @@ class Product extends Model
      *
      * @return bool
      */
-    public function isCurrentlyOnSale(): bool
-    {
+    public function isCurrentlyOnSale(): bool {
         if (!$this->is_on_sale || !$this->sale_price) {
             return false;
         }
@@ -243,8 +230,7 @@ class Product extends Model
      *
      * @return float|null
      */
-    public function getCurrentPriceAttribute(): ?float
-    {
+    public function getCurrentPriceAttribute(): ?float {
         return $this->isCurrentlyOnSale() ? $this->sale_price : $this->price;
     }
 
@@ -253,8 +239,7 @@ class Product extends Model
      *
      * @return string
      */
-    public function getMainImageUrlAttribute(): string
-    {
+    public function getMainImageUrlAttribute(): string {
         $mainImage = $this->mainImage()->first();
 
         if ($mainImage) {
@@ -269,8 +254,7 @@ class Product extends Model
      *
      * @return string
      */
-    public function getFormattedPriceAttribute(): string
-    {
+    public function getFormattedPriceAttribute(): string {
         return number_format($this->price, 2) . ' ' . $this->currency;
     }
 
@@ -279,8 +263,7 @@ class Product extends Model
      *
      * @return string|null
      */
-    public function getFormattedSalePriceAttribute(): ?string
-    {
+    public function getFormattedSalePriceAttribute(): ?string {
         return $this->sale_price ? number_format($this->sale_price, 2) . ' ' . $this->currency : null;
     }
 
@@ -289,8 +272,7 @@ class Product extends Model
      *
      * @return void
      */
-    public function incrementViewCount(): void
-    {
+    public function incrementViewCount(): void {
         $this->increment('view_count');
     }
 
@@ -299,8 +281,7 @@ class Product extends Model
      *
      * @return void
      */
-    public function incrementSearchCount(): void
-    {
+    public function incrementSearchCount(): void {
         $this->increment('search_count');
     }
 
@@ -311,8 +292,7 @@ class Product extends Model
      * @param int $newReviewCount
      * @return void
      */
-    public function updateRating(float $newRating, int $newReviewCount): void
-    {
+    public function updateRating(float $newRating, int $newReviewCount): void {
         $this->update([
             'rating' => $newRating,
             'review_count' => $newReviewCount
