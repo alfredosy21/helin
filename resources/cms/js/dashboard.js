@@ -19,7 +19,6 @@ window.inactivityConfig = {
 
 // Initialize dashboard functionality
 // Módulo ES6 (Vite): ya se ejecuta tras el DOM parseado
-console.log('Dashboard JS initialized');
 initializeInactivitySystem();
 initializeFullscreen();
 initializeLogoutAlert();
@@ -32,16 +31,13 @@ function initializeToastListeners() {
         if (window._dashboardToastSetup) return;
 
         if (!window.Livewire) {
-            console.warn('Livewire not available for toast setup');
             return;
         }
 
         // Marcamos como configurado inmediatamente
         window._dashboardToastSetup = true;
-        console.log('Livewire initialized in dashboard, setting up toast listeners');
 
         Livewire.on('toast', ({ message, type }) => {
-            console.log('Toast received in dashboard:', { message, type });
 
             if (window.Toastify) {
                 // Definición de colores de borde e iconos según el tipo (Estilo moderno / Shadcn)
@@ -88,7 +84,6 @@ function initializeToastListeners() {
                     stopOnFocus: true
                 }).showToast();
             } else {
-                console.warn('No toast system available in dashboard, using alert');
                 alert(`${type.toUpperCase()}: ${message}`);
             }
         });
@@ -113,10 +108,6 @@ function initializeInactivitySystem() {
     let lastActivity = Date.now();
     let warningShown = false;
 
-    console.log('Inactivity system initialized');
-    console.log('Warning time:', window.inactivityConfig.warningTime, 'ms');
-    console.log('Logout time:', window.inactivityConfig.logoutTime, 'ms');
-
     function resetTimers() {
         const now = Date.now();
         lastActivity = now;
@@ -125,13 +116,10 @@ function initializeInactivitySystem() {
         clearTimeout(inactivityTimer);
         clearTimeout(warningTimer);
 
-        console.log('Timers reset at:', new Date().toLocaleTimeString());
-
         // Timer para mostrar advertencia (desde server config: 10 min por defecto)
         const warningTime = window.inactivityConfig.warningTime;
         warningTimer = setTimeout(() => {
             if (!warningShown && (Date.now() - lastActivity) >= warningTime) {
-                console.log('Showing inactivity warning');
                 showInactivityWarning();
             }
         }, warningTime);
@@ -139,14 +127,12 @@ function initializeInactivitySystem() {
         // Timer para logout automático (desde server config: 11 min por defecto)
         const logoutTime = window.inactivityConfig.logoutTime;
         inactivityTimer = setTimeout(() => {
-            console.log('Performing automatic logout');
             performLogout();
         }, logoutTime);
     }
 
     function showInactivityWarning() {
         warningShown = true;
-        console.log('Showing inactivity SweetAlert2');
 
         if (typeof Swal !== 'undefined') {
             Swal.fire({
@@ -169,25 +155,21 @@ function initializeInactivitySystem() {
                 }
             });
         } else {
-            console.error('SweetAlert2 not found');
             alert('Tu sesión está a punto de expirar. Haz clic para continuar.');
         }
     }
 
     function performLogout() {
-        console.log('Executing logout...');
         warningShown = true;
 
         if (typeof window.confirmLogout === 'function') {
             window.confirmLogout();
         } else {
-            console.error('confirmLogout function not found');
             window.location.href = window.inactivityConfig.logoutUrl;
         }
     }
 
     function continueSession() {
-        console.log('Session continued by user');
         warningShown = false;
         resetTimers();
     }
@@ -204,7 +186,6 @@ function initializeInactivitySystem() {
     });
 
     // Iniciar los timers cuando la página carga
-    console.log('Starting initial timers');
     resetTimers();
 
     // Función global para continuar sesión
@@ -222,7 +203,6 @@ function initializeFullscreen() {
     window.toggleFullscreen = function() {
         const fullscreenToggle = document.getElementById('fullscreen-toggle');
         if (!fullscreenToggle) {
-            console.error('Fullscreen toggle button not found');
             return;
         }
 
@@ -237,9 +217,7 @@ function initializeFullscreen() {
                 maximizeIcon.classList.remove('block');
                 minimizeIcon.classList.remove('hidden');
                 minimizeIcon.classList.add('block');
-                console.log('Entered fullscreen mode');
             }).catch(err => {
-                console.error('Error attempting to enable fullscreen:', err);
             });
         } else {
             // Salir de fullscreen
@@ -249,9 +227,7 @@ function initializeFullscreen() {
                 minimizeIcon.classList.remove('block');
                 maximizeIcon.classList.remove('hidden');
                 maximizeIcon.classList.add('block');
-                console.log('Exited fullscreen mode');
             }).catch(err => {
-                console.error('Error attempting to exit fullscreen:', err);
             });
         }
     };
@@ -309,7 +285,6 @@ window.confirmAction = function(config) {
     } = config;
 
     if (typeof Swal === 'undefined') {
-        console.error('SweetAlert2 not found');
         if (confirm(text)) onConfirm();
         return;
     }
@@ -341,7 +316,6 @@ window.updateDashboardConfig = function(config) {
         ...window.inactivityConfig,
         ...config
     };
-    console.log('Dashboard config updated:', window.inactivityConfig);
 };
 
 // Export for external use

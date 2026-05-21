@@ -1,5 +1,5 @@
-import Toastify from 'toastify-js'
-import "toastify-js/src/toastify.css"
+import Toastify from 'toastify-js/src/toastify.js';
+import "toastify-js/src/toastify.css";
 import Sortable from 'sortablejs'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
@@ -50,8 +50,6 @@ window.HelinCMS = {
         this.initAutoSave();
         this.initGlobalSearch();
         this.initNotifications();
-
-        console.log('Helin CMS initialized');
     },
 
     // Theme Management
@@ -444,7 +442,7 @@ window.HelinCMS = {
             }
         })
         .catch(error => {
-            console.error('Auto-save failed:', error);
+            // Auto-save failed silently
         });
     },
 
@@ -467,7 +465,6 @@ window.HelinCMS = {
                 this.displaySearchResults(data);
             })
             .catch(error => {
-                console.error('Search failed:', error);
                 this.showToast('Error en la búsqueda', 'error');
             });
     },
@@ -521,7 +518,6 @@ window.HelinCMS = {
         //     });
 
         // Temporarily disable notifications to avoid errors
-        console.log('Notifications check disabled');
     },
 
     updateNotificationBadge(count) {

@@ -10,7 +10,6 @@
 
 // Initialize auth functionality
 // Módulo ES6 (Vite): ya se ejecuta tras el DOM parseado
-console.log('Auth JS initialized');
 initializeToastListeners();
 initializePasswordToggle();
 
@@ -21,19 +20,16 @@ function initializeToastListeners() {
         if (window._authToastSetup) return;
 
         if (!window.Livewire) {
-            console.warn('Livewire not available for toast setup');
             return;
         }
 
         // Marcamos como configurado inmediatamente
         window._authToastSetup = true;
-        console.log('Livewire initialized, setting up toast listeners');
 
         Livewire.on('toast', (event) => {
             const data = Array.isArray(event) ? event[0] : event;
             const message = data?.message ?? data?.detail?.message ?? 'Mensaje no disponible';
             const type    = data?.type    ?? data?.detail?.type    ?? 'info';
-            console.log('Toast received:', { message, type });
 
             if (window.Toastify) {
                 // Definición de colores de borde e iconos según el tipo (Estilo moderno / Shadcn)
@@ -80,7 +76,6 @@ function initializeToastListeners() {
                     stopOnFocus: true
                 }).showToast();
             } else {
-                console.warn('No toast system available, using alert');
                 alert(`${type.toUpperCase()}: ${message}`);
             }
         });
@@ -102,7 +97,6 @@ function initializeToastListeners() {
 function initializePasswordToggle() {
     // La función togglePassword ya está definida inline
     // pero podemos agregar mejoras aquí si es necesario
-    console.log('Password toggle initialized');
 }
 
 // Password visibility toggle (función global para compatibilidad)
@@ -110,7 +104,6 @@ window.togglePassword = function(fieldId) {
     const field = document.getElementById(fieldId);
     if (field) {
         field.type = field.type === 'password' ? 'text' : 'password';
-        console.log('Password toggled for field:', fieldId);
 
         // Actualizar icono si existe
         const button = field.nextElementSibling;
@@ -123,7 +116,7 @@ window.togglePassword = function(fieldId) {
             }
         }
     } else {
-        console.error('Field not found:', fieldId);
+        // Field not found - silently fail
     }
 };
 
@@ -131,7 +124,6 @@ window.togglePassword = function(fieldId) {
 window.validateAuthForm = function(formId) {
     const form = document.getElementById(formId);
     if (!form) {
-        console.error('Form not found:', formId);
         return false;
     }
 
@@ -261,7 +253,6 @@ async function encryptData(data) {
 
         return btoa(String.fromCharCode.apply(null, combined));
     } catch (error) {
-        console.error('Encryption error:', error);
         // Fallback a base64 simple si Web Crypto API no está disponible
         return btoa(data);
     }

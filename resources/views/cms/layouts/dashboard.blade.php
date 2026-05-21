@@ -235,19 +235,34 @@
     {{-- Third Party Core Production Assets Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     @vite(['resources/cms/js/dashboard.js'])
 
     <script>
-        window.updateDashboardConfig({
-            warningTime: {{ config('app.inactivity.warning_time', 600) }} * 1000,
-            logoutTime: {{ config('app.inactivity.logout_time', 660) }} * 1000,
-            logoutUrl: '{{ route("logout") }}',
-            csrfToken: '{{ csrf_token() }}'
-        });
+        // Wait for dashboard.js to be loaded before calling updateDashboardConfig
+        if (typeof window.updateDashboardConfig === 'function') {
+            window.updateDashboardConfig({
+                warningTime: {{ config('app.inactivity.warning_time', 600) }} * 1000,
+                logoutTime: {{ config('app.inactivity.logout_time', 660) }} * 1000,
+                logoutUrl: '{{ route("logout") }}',
+                csrfToken: '{{ csrf_token() }}'
+            });
+        } else {
+            // If not loaded yet, wait for it
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof window.updateDashboardConfig === 'function') {
+                    window.updateDashboardConfig({
+                        warningTime: {{ config('app.inactivity.warning_time', 600) }} * 1000,
+                        logoutTime: {{ config('app.inactivity.logout_time', 660) }} * 1000,
+                        logoutUrl: '{{ route("logout") }}',
+                        csrfToken: '{{ csrf_token() }}'
+                    });
+                }
+            });
+        }
     </script>
 
     @vite(['resources/cms/js/app.js'])

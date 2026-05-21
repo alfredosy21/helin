@@ -210,7 +210,9 @@
 
             function initSortable() {
                 const tbody = document.getElementById('lines-table-body');
-                if (!tbody || typeof Sortable === 'undefined') return;
+
+                if (!tbody) return;
+                if (typeof Sortable === 'undefined') return;
                 if (sortableInstance) sortableInstance.destroy();
 
                 sortableInstance = new Sortable(tbody, {
@@ -221,6 +223,7 @@
                         const rows = tbody.querySelectorAll('tr[data-id]');
                         const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
                         const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+
                         if (component && orderedIds.length > 0) {
                             component.updateOrder(orderedIds);
                         }
@@ -228,7 +231,14 @@
                 });
             }
 
-            initSortable();
+            // Initialize after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSortable);
+            } else {
+                initSortable();
+            }
+
+            // Reinitialize after Livewire updates
             document.addEventListener('livewire:updated', initSortable);
         })();
     </script>

@@ -80,16 +80,21 @@
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody id="products-table-body" class="divide-y divide-slate-50 text-sm">
                         @forelse($products as $product)
-                            <tr wire:key="product-{{ $product->id }}" class="hover:bg-slate-50/50 transition-colors">
+                            <tr wire:key="product-{{ $product->id }}" data-id="{{ $product->id }}" class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4 text-center font-mono text-xs text-slate-400">
                                     #{{ str_pad((string)$product->id, 4, '0', STR_PAD_LEFT) }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-[#222]">{{ $product->name }}</span>
-                                        <span class="text-xs text-[#c0c1c6]">SKU: {{ $product->sku }}</span>
+                                    <div class="flex items-start gap-2">
+                                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-[#222]">{{ $product->name }}</span>
+                                            <span class="text-xs text-[#c0c1c6]">SKU: {{ $product->sku }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -471,6 +476,44 @@ function deleteProduct(id) {
         }
     });
 }
+
+// Drag & Drop con SortableJS
+(function() {
+    let sortableInstance = null;
+
+    function initSortable() {
+        const tbody = document.getElementById('products-table-body');
+
+        if (!tbody) return;
+        if (typeof Sortable === 'undefined') return;
+        if (sortableInstance) sortableInstance.destroy();
+
+        sortableInstance = new Sortable(tbody, {
+            handle: '.drag-handle',
+            animation: 150,
+            ghostClass: 'bg-emerald-50',
+            onEnd: function() {
+                const rows = tbody.querySelectorAll('tr[data-id]');
+                const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+                const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+
+                if (component && orderedIds.length > 0) {
+                    component.updateOrder(orderedIds);
+                }
+            }
+        });
+    }
+
+    // Initialize after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSortable);
+    } else {
+        initSortable();
+    }
+
+    // Reinitialize after Livewire updates
+    document.addEventListener('livewire:updated', initSortable);
+})();
 </script>
 </div>
 </div>

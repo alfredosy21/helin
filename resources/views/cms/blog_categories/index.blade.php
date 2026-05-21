@@ -56,15 +56,20 @@
                         @forelse($blogCategories as $blogCategory)
                             <tr wire:key="blog-category-{{ $blogCategory->id }}" data-id="{{ $blogCategory->id }}" class="hover:bg-slate-50/50 transition-colors">
                                                                 <td class="px-6 py-4">
-                                    <div>
-                                        <span class="font-bold text-[#222] text-sm block">
-                                            {{ $blogCategory->name }}
-                                        </span>
-                                        @if($blogCategory->description)
-                                            <span class="text-xs text-[#c0c1c6] block truncate max-w-xs">
-                                                {{ $blogCategory->description }}
+                                    <div class="flex items-start gap-2">
+                                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        </div>
+                                        <div>
+                                            <span class="font-bold text-[#222] text-sm block">
+                                                {{ $blogCategory->name }}
                                             </span>
-                                        @endif
+                                            @if($blogCategory->description)
+                                                <span class="text-xs text-[#c0c1c6] block truncate max-w-xs">
+                                                    {{ $blogCategory->description }}
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -273,5 +278,43 @@
             }
         });
     });
+
+        // Drag & Drop con SortableJS
+        (function() {
+            let sortableInstance = null;
+
+            function initSortable() {
+                const tbody = document.getElementById('blog-categories-table-body');
+
+                if (!tbody) return;
+                if (typeof Sortable === 'undefined') return;
+                if (sortableInstance) sortableInstance.destroy();
+
+                sortableInstance = new Sortable(tbody, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    ghostClass: 'bg-emerald-50',
+                    onEnd: function() {
+                        const rows = tbody.querySelectorAll('tr[data-id]');
+                        const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
+                        const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+
+                        if (component && orderedIds.length > 0) {
+                            component.updateOrder(orderedIds);
+                        }
+                    }
+                });
+            }
+
+            // Initialize after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSortable);
+            } else {
+                initSortable();
+            }
+
+            // Reinitialize after Livewire updates
+            document.addEventListener('livewire:updated', initSortable);
+        })();
     </script>
 </div>

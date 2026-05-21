@@ -68,9 +68,14 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-[#222]">{{ $testimonial->name }}</span>
-                                        <span class="text-xs text-[#c0c1c6]">{{ $testimonial->charge }}</span>
+                                    <div class="flex items-start gap-2">
+                                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium text-[#222]">{{ $testimonial->name }}</span>
+                                            <span class="text-xs text-[#c0c1c6]">{{ $testimonial->charge }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -231,7 +236,9 @@
 
             function initSortable() {
                 const tbody = document.getElementById('testimonials-table-body');
-                if (!tbody || typeof Sortable === 'undefined') return;
+
+                if (!tbody) return;
+                if (typeof Sortable === 'undefined') return;
                 if (sortableInstance) sortableInstance.destroy();
 
                 sortableInstance = new Sortable(tbody, {
@@ -242,6 +249,7 @@
                         const rows = tbody.querySelectorAll('tr[data-id]');
                         const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
                         const component = window.Livewire ? Livewire.find('{{ $this->getId() }}') : null;
+
                         if (component && orderedIds.length > 0) {
                             component.updateOrder(orderedIds);
                         }
@@ -249,7 +257,14 @@
                 });
             }
 
-            initSortable();
+            // Initialize after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSortable);
+            } else {
+                initSortable();
+            }
+
+            // Reinitialize after Livewire updates
             document.addEventListener('livewire:updated', initSortable);
         })();
 
