@@ -54,7 +54,6 @@
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
                                     <span class="font-medium text-[#222]">{{ $section->title }}</span>
-                                    <span class="text-xs text-[#c0c1c6] max-w-xl truncate">{{ $section->subtitle ?? __('cms.tables.no_subtitle') }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
@@ -154,22 +153,9 @@
                     {{-- Contenido con Quill Editor --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
-                        <div x-data="{ quill: null, initQuill() {
-                            if (this.quill) { this.quill.off(); }
-                            this.quill = new Quill(this.$refs.editor, {
-                                theme: 'snow',
-                                placeholder: '{{ __('cms.sections.content_placeholder') }}'
-                            });
-                            this.quill.root.innerHTML = $wire.get('content') || '';
-                            this.quill.on('text-change', () => {
-                                $wire.set('content', this.quill.root.innerHTML);
-                            });
-                        }}"
-                             x-init="initQuill()"
-                             @open-edit-form.window="setTimeout(() => initQuill(), 100)"
-                             @image-updated.window="setTimeout(() => initQuill(), 50)"
-                             class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
-                            <div x-ref="editor" class="min-h-[250px] max-h-[400px] overflow-y-auto"></div>
+                        <div wire:ignore class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
+                            <div id="quill-editor" class="min-h-[250px] max-h-[400px] overflow-y-auto"></div>
+                            <textarea wire:model="content" id="content-textarea" class="hidden">{{ $content }}</textarea>
                         </div>
                         @error('content') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
@@ -221,8 +207,8 @@
                                 </svg>
                                 <p class="text-sm text-slate-600 font-medium mb-1">{{ __('cms.sections.upload_images') }}</p>
                                 <p class="text-xs text-slate-400 mb-3">{{ __('cms.sections.upload_images_hint') }}</p>
-                                <input type="file" wire:model="image" class="hidden" accept="image/*" multiple />
-                                <button type="button" onclick="document.querySelector('input[type=\"file\"][wire\\:model=\"image\"]').click()" class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
+                                <input type="file" wire:model="image" id="image-upload" class="hidden" accept="image/*" multiple />
+                                <button type="button" onclick="document.getElementById('image-upload').click()" class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
                                     {{ __('cms.sections.select_images') }}
                                 </button>
                             </div>
@@ -253,3 +239,63 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let quill = null;
+
+    function initQuill() {
+        if (quill) return;
+
+        const editor = document.getElementById('quill-editor');
+        const textarea = document.getElementById('content-textarea');
+
+        if (!editor || !textarea) return;
+
+        quill = new Quill(editor, {
+            theme: 'snow',
+            placeholder: '{{ __('cms.sections.content_placeholder') }}'
+        });
+
+        // Set initial content
+        if (textarea.value) {
+            quill.root.innerHTML = textarea.value;
+        }
+
+        // Sync changes to textarea
+        quill.on('text-change', function() {
+            textarea.value = quill.root.innerHTML;
+            textarea.dispatchEvent(new Event('input'));
+        });
+
+        // Listen for Livewire updates
+        if (window.Livewire) {
+            window.Livewire.on('content-updated', function(content) {
+                if (quill && quill.root.innerHTML !== content) {
+                    quill.root.innerHTML = content || '';
+                }
+            });
+        }
+    }
+
+    // Initialize when form is shown
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                const editor = document.getElementById('quill-editor');
+                if (editor && !quill) {
+                    initQuill();
+                }
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Initial attempt
+    initQuill();
+});
+</script>

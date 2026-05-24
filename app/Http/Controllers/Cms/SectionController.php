@@ -48,8 +48,6 @@ class SectionController extends Component {
     public ?string $url_button = '';
 
     /** @var array Uploaded image files */
-    #[Validate('nullable|array|max:5')]
-    #[Validate('image.*', 'image|max:2048')]
     public $image = [];
 
     /** @var string|null Comma-separated list of image filenames */
@@ -133,7 +131,21 @@ class SectionController extends Component {
      * Commit section modifications to the database.
      */
     public function update(): void {
-        $this->validate();
+        dd('Update method called', [
+            'title' => $this->title,
+            'content' => $this->content,
+            'image' => $this->image,
+            'imagePaths' => $this->imagePaths,
+            'all_data' => request()->all()
+        ]);
+        $this->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'name_button' => 'nullable|string|max:255',
+            'url_button' => 'nullable|string|max:500',
+            'image' => 'nullable|array|max:5',
+            'image.*' => 'image|max:2048',
+        ]);
         $this->isLoading = true;
 
         try {
@@ -141,6 +153,12 @@ class SectionController extends Component {
 
             // Process new images
             $imagePaths = $this->imagePaths;
+            dd('Image processing:', [
+                'imagePaths_before' => $imagePaths,
+                'image_property' => $this->image,
+                'image_count' => count($this->image),
+                'image_details' => $this->image
+            ]);
             if (!empty($this->image)) {
                 foreach ($this->image as $uploadedImage) {
                     $filename = Helpers::generateImageName($uploadedImage, 'section');

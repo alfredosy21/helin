@@ -10,10 +10,9 @@
                 </p>
             </div>
 
-            <div class="flex items-center gap-3">
-                <x-ui-button variant="primary" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed">
+            <div class="flex items-center gap-6">
+                <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="min-w-[120px] flex items-center justify-center px-4 py-2.5 bg-primary hover:bg-[#079d8b] text-white text-sm font-medium rounded-lg transition-colors border-none cursor-pointer">
                     <span wire:loading.remove wire:target="save">
-                        <x-ui-icon name="save" class="w-4 h-4 mr-2" />
                         {{ __('cms.settings.save') }}
                     </span>
                     <span wire:loading wire:target="save" class="flex items-center">
@@ -21,9 +20,11 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
+                    </span>
+                    <span wire:loading wire:target="save" class="ml-1">
                         {{ __('cms.settings.save') }}
                     </span>
-                </x-ui-button>
+                </button>
             </div>
         </div>
     </div>
