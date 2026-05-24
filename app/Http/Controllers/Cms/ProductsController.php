@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\ProductMedia;
 use App\Models\Activities;
 use App\Services\FileUploadService;
+use App\Utils\Helpers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

@@ -154,16 +154,20 @@
                     {{-- Contenido con Quill Editor --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
-                        <div x-data="{ quill: null }"
-                             x-init="
-                             quill = new Quill($refs.editor, {
-                             theme: 'snow',
-                             placeholder: '{{ __('cms.sections.content_placeholder') }}'
-                             });
-                             quill.root.innerHTML = $wire.content || '';
-                             quill.on('text-change', () => { $wire.content = quill.root.innerHTML });
-                             "
-                             @open-edit-form.window="setTimeout(() => { if(quill) quill.root.innerHTML = $wire.content || ''; }, 100)"
+                        <div x-data="{ quill: null, initQuill() {
+                            if (this.quill) { this.quill.off(); }
+                            this.quill = new Quill(this.$refs.editor, {
+                                theme: 'snow',
+                                placeholder: '{{ __('cms.sections.content_placeholder') }}'
+                            });
+                            this.quill.root.innerHTML = $wire.get('content') || '';
+                            this.quill.on('text-change', () => {
+                                $wire.set('content', this.quill.root.innerHTML);
+                            });
+                        }}"
+                             x-init="initQuill()"
+                             @open-edit-form.window="setTimeout(() => initQuill(), 100)"
+                             @image-updated.window="setTimeout(() => initQuill(), 50)"
                              class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
                             <div x-ref="editor" class="min-h-[250px] max-h-[400px] overflow-y-auto"></div>
                         </div>
@@ -184,57 +188,47 @@
                         </div>
                     </div>
 
-                    {{-- Imagen principal adaptada al diseño de Testimonios (Cargador + Previsualización interactiva) --}}
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.main_image_label') }}</label>
-                        <div class="relative">
-                            @if($image && !is_string($image))
-                            <div class="mb-3 relative group max-w-xs">
-                                <img src="{{ $image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                                <button type="button" wire:click="$set('image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-                            @-- Si es un string, significa que proviene de la base de datos --}}
-                            @elseif($image && is_string($image))
-                            <div class="mb-3 relative group max-w-xs">
-                                <img src="{{ asset('storage/' . $image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                                <button type="button" wire:click="$set('image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-                            @endif
-
-                            <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors bg-slate-50/30">
-                                <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                                    <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                    </svg>
-                                    <p class="text-xs text-slate-500 font-medium">{{ __('cms.sections.main_image_placeholder') }}</p>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
-                                </div>
-                                <input type="file" wire:model="image" class="hidden" accept="image/*" />
-                            </label>
-                            @error('image') <span class="text-xs text-red-500 font-medium italic mt-1 block">{{ $message }}</span> @enderror
+                    {{-- Galería de imágenes múltiples --}}
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
+                            <span class="text-xs text-slate-500">{{ count($photos) }} {{ __('cms.sections.images_count') }}</span>
                         </div>
-                    </div>
 
-                    {{-- Fotos vinculadas --}}
-                    @if(count($photos) > 0)
-                    <div class="space-y-3">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.linked_photos') }}</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                        {{-- Imágenes existentes --}}
+                        @if(count($photos) > 0)
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                             @foreach($photos as $photo)
-                            <div class="relative group bg-slate-50 rounded-lg border border-slate-100 p-2 flex flex-col items-center shadow-[0_1px_2px_0_rgba(0,0,0,0.01)]">
-                                <img src="{{ asset('storage/' . $photo['name']) }}" class="w-full h-20 object-cover rounded mb-2" alt="" />
-                                <button type="button" wire:click="removePhoto('{{ $photo['name'] }}')" class="text-xs text-red-500 hover:text-red-700 font-medium border-none bg-transparent cursor-pointer">
-                                    {{ __('cms.sections.delete_photo') }}
-                                </button>
+                            <div class="relative group bg-slate-50 rounded-lg border border-slate-100 overflow-hidden shadow-[0_1px_2px_0_rgba(0,0,0,0.01)]">
+                                <img src="{{ asset('storage/' . $photo['name']) }}" class="w-full h-24 object-cover" alt="" />
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <button type="button" wire:click="removePhoto('{{ $photo['name'] }}')" class="p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 border-none cursor-pointer" title="{{ __('cms.sections.delete_photo') }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             @endforeach
                         </div>
+                        @endif
+
+                        {{-- Cargador de nuevas imágenes --}}
+                        <div class="border-2 border-dashed border-slate-200 rounded-lg p-6 hover:border-primary hover:bg-slate-50/50 transition-colors bg-slate-50/30">
+                            <div class="flex flex-col items-center justify-center">
+                                <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                </svg>
+                                <p class="text-sm text-slate-600 font-medium mb-1">{{ __('cms.sections.upload_images') }}</p>
+                                <p class="text-xs text-slate-400 mb-3">{{ __('cms.sections.upload_images_hint') }}</p>
+                                <input type="file" wire:model="image" class="hidden" accept="image/*" multiple />
+                                <button type="button" onclick="document.querySelector('input[type=\"file\"][wire\\:model=\"image\"]').click()" class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
+                                    {{ __('cms.sections.select_images') }}
+                                </button>
+                            </div>
+                        </div>
+                        @error('image') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
-                    @endif
                 </div>
 
                 {{-- Acciones alineadas a la derecha en la base del formulario --}}
@@ -242,14 +236,15 @@
                     <button type="button" wire:click="cancelEdit" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
-                    <button type="submit" wire:loading.attr="disabled" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center">
-                        <span wire:loading.remove wire:target="update">{{ __('cms.general.save') }}</span>
-                        <span wire:loading wire:target="update" class="flex items-center justify-center">
+                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                        <span wire:loading wire:target="update">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                         </span>
+                        <span wire:loading.remove wire:target="update">{{ __('cms.general.save') }}</span>
+                        <span wire:loading wire:target="update">{{ __('cms.general.save') }}</span>
                     </button>
                 </div>
             </form>

@@ -151,8 +151,6 @@ class UserController extends Component {
                 Activities::saveActivity(__('cms.controllers.users.activity_updated', ['id' => $user->id]));
                 $this->dispatch('toast', message: __('cms.controllers.users.updated'), type: 'success');
             } else {
-                // Establecer imagen por defecto solo al crear nuevo usuario
-                $data['image'] = 'default-avatar.png';
                 $user = User::create($data);
 
                 Activities::saveActivity(__('cms.controllers.users.activity_created', ['id' => $user->id]));

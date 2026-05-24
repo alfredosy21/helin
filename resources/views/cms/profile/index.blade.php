@@ -178,9 +178,15 @@
                             <button onclick="confirmCloseAllSessions()" class="rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors px-4 py-2.5 cursor-pointer">
                                 {{ __('cms.profile.close_sessions') }}
                             </button>
-                            <button wire:click="savePassword" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                            <button wire:click="savePassword" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer gap-2">
+                                <span wire:loading wire:target="savePassword">
+                                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </span>
                                 <span wire:loading.remove wire:target="savePassword">{{ __('cms.profile.update_password') }}</span>
-                                <x-ui-icon wire:loading wire:target="savePassword" name="loader" class="w-4 h-4 animate-spin" />
+                                <span wire:loading wire:target="savePassword">{{ __('cms.profile.update_password') }}</span>
                             </button>
                         </div>
                     </div>

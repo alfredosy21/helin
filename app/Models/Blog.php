@@ -30,8 +30,8 @@ class Blog extends Model {
         'slug',
         'author',
         'content',
-        'excerpt',
         'featured_image',
+        'excerpt',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -179,21 +179,6 @@ class Blog extends Model {
     }
 
     /**
-     * Get the excerpt with fallback from content.
-     *
-     * @return string
-     */
-    public function getExcerptAttribute(): string {
-        if ($this->excerpt) {
-            return $this->excerpt;
-        }
-
-        // Generate excerpt from content (first 150 characters)
-        $content = strip_tags($this->content);
-        return strlen($content) > 150 ? substr($content, 0, 147) . '...' : $content;
-    }
-
-    /**
      * Get the formatted read time.
      *
      * @return string
@@ -212,24 +197,6 @@ class Blog extends Model {
     public function estimateReadTime(): int {
         $wordCount = str_word_count(strip_tags($this->content));
         return max(1, ceil($wordCount / 200)); // Average 200 words per minute
-    }
-
-    /**
-     * Get the meta title with fallback.
-     *
-     * @return string
-     */
-    public function getMetaTitleAttribute(): string {
-        return $this->meta_title ?: $this->title;
-    }
-
-    /**
-     * Get the meta description with fallback.
-     *
-     * @return string
-     */
-    public function getMetaDescriptionAttribute(): string {
-        return $this->meta_description ?: $this->excerpt;
     }
 
     /**

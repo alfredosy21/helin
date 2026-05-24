@@ -7,11 +7,12 @@ namespace App\Utils;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 /**
  * Helpers Utility Class
  *
- * Essential utility functions for network identification and 
+ * Essential utility functions for network identification and
  * database-friendly string transformations.
  *
  * @package App\Utils
@@ -94,5 +95,23 @@ class Helpers {
         }
 
         return $slug;
+    }
+
+    /**
+     * Generate unique image filename with timestamp and random string.
+     *
+     * Creates a unique filename to prevent duplicates while maintaining
+     * the original file extension for proper MIME type handling.
+     *
+     * @param UploadedFile $file The uploaded file instance
+     * @param string $prefix Optional prefix for the filename (e.g., 'product', 'blog', 'testimonial')
+     * @return string The generated unique filename
+     */
+    public static function generateImageName(UploadedFile $file, string $prefix = 'img'): string {
+        $extension = $file->getClientOriginalExtension();
+        $timestamp = now()->format('YmdHis');
+        $random = Str::random(8);
+
+        return sprintf('%s-%s-%s.%s', $prefix, $timestamp, $random, $extension);
     }
 }

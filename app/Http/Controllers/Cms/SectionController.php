@@ -6,10 +6,12 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\Sections;
 use App\Models\Activities;
+use App\Utils\Helpers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -27,7 +29,7 @@ use Livewire\Attributes\Validate;
 #[Layout('cms.layouts.dashboard')]
 class SectionController extends Component {
 
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     /** @var string Primary title of the section content block */
     #[Validate('required|string|max:255')]
@@ -45,9 +47,13 @@ class SectionController extends Component {
     #[Validate('nullable|string|max:500')]
     public ?string $url_button = '';
 
+    /** @var array Uploaded image files */
+    #[Validate('nullable|array|max:5')]
+    #[Validate('image.*', 'image|max:2048')]
+    public $image = [];
+
     /** @var string|null Comma-separated list of image filenames */
-    #[Validate('nullable|string')]
-    public ?string $image = '';
+    public ?string $imagePaths = '';
 
     /** @var bool Public visibility status */
     public bool $status = false;
@@ -114,7 +120,7 @@ class SectionController extends Component {
         $this->content = $section->content;
         $this->name_button = $section->name_button;
         $this->url_button = $section->url_button;
-        $this->image = $section->image;
+        $this->imagePaths = $section->image;
         $this->status = (bool) $section->status;
         $this->status_content = (bool) $section->status_content;
 
@@ -133,18 +139,37 @@ class SectionController extends Component {
         try {
             $section = Sections::findOrFail($this->editingId);
 
+            // Process new images
+            $imagePaths = $this->imagePaths;
+            if (!empty($this->image)) {
+                foreach ($this->image as $uploadedImage) {
+                    $filename = Helpers::generateImageName($uploadedImage, 'section');
+                    $path = $uploadedImage->storeAs('sections', $filename, 'public');
+
+                    if ($imagePaths) {
+                        $imagePaths .= ',' . $path;
+                    } else {
+                        $imagePaths = $path;
+                    }
+                }
+            }
+
             $section->update([
-                'title' => $this->title,
-                'content' => $this->content,
-                'name_button' => $this->name_button,
-                'url_button' => $this->url_button,
-                'image' => $this->image,
-                'status' => $this->status ? 1 : 0,
-                'status_content' => $this->status_content ? 1 : 0,
-            ]);
+            'title' => $this->title,
+            'content' => $this->content,
+            'name_button' => $this->name_button,
+            'url_button' => $this->url_button,
+            'image' => $imagePaths,
+            'status' => $this->status ? 1 : 0,
+            'status_content' => $this->status_content ? 1 : 0,
+        ]);
 
             Activities::saveActivity(__('cms.controllers.sections.activity_updated', ['id' => $section->id, 'title' => $this->title]));
 
+            $this->imagePaths = $imagePaths;
+            $this->image = [];
+            $this->loadPhotos();
+            $this->dispatch('image-updated');
             $this->dispatch('toast', message: __('cms.controllers.sections.updated'), type: 'success');
             $this->cancelEdit();
         } catch (\Exception $ex) {
@@ -193,17 +218,17 @@ class SectionController extends Component {
      * @param string $photoName
      */
     public function removePhoto(string $photoName): void {
-        if (!$this->image)
+        if (!$this->imagePaths)
             return;
 
         try {
-            $images = collect(explode(',', $this->image))
+            $images = collect(explode(',', $this->imagePaths))
                     ->filter()
                     ->map(fn($img) => trim($img))
                     ->reject(fn($img) => $img === $photoName)
                     ->implode(',');
 
-            $this->image = $images;
+            $this->imagePaths = $images;
 
             if ($this->editingId) {
                 Sections::query()->where('id', $this->editingId)->update(['image' => $images]);
@@ -222,7 +247,7 @@ class SectionController extends Component {
      * Parse the raw image string into a renderable array for the UI.
      */
     private function loadPhotos(): void {
-        $this->photos = collect(explode(',', $this->image ?? ''))
+        $this->photos = collect(explode(',', $this->imagePaths ?? ''))
                 ->filter()
                 ->map(fn($img) => ['name' => trim($img)])
                 ->values()
@@ -251,7 +276,7 @@ class SectionController extends Component {
     }
 
     private function resetForm(): void {
-        $this->reset(['title', 'content', 'name_button', 'url_button', 'image', 'status', 'status_content', 'editingId']);
+        $this->reset(['title', 'content', 'name_button', 'url_button', 'image', 'imagePaths', 'status', 'status_content', 'editingId']);
         $this->resetValidation();
         $this->photos = [];
     }

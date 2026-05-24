@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\Settings;
 use App\Models\Activities;
+use App\Utils\Helpers;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -192,7 +193,7 @@ class SettingsController extends Component {
             Storage::disk('public')->delete($settings->image);
         }
 
-        $filename = 'logo-' . Str::random(12) . '.' . $this->image->getClientOriginalExtension();
+        $filename = Helpers::generateImageName($this->image, 'setting');
         $path = $this->image->storeAs('settings', $filename, 'public');
 
         $settings->image = $path;

@@ -232,4 +232,20 @@ class SystemProductsController extends Component
         $this->showForm = false;
         $this->reset();
     }
+
+    /**
+     * Reset pagination when search is updated.
+     */
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    /**
+     * Reset pagination when per page is updated.
+     */
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
 }

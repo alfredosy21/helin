@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use App\Utils\Helpers;
 use Exception;
 
 class FileUploadService {
@@ -155,12 +156,18 @@ class FileUploadService {
      * @return string
      */
     private function generateFilename(UploadedFile $file): string {
-        $extension = $file->getClientOriginalExtension();
-        $basename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-        $timestamp = now()->format('YmdHis');
-        $random = Str::random(4);
+        // Extract directory name to use as prefix
+        $directory = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)[2]['args'][1] ?? 'file';
+        $prefix = match($directory) {
+            'products' => 'product',
+            'testimonials' => 'testimonial',
+            'blog' => 'blog',
+            'sections' => 'section',
+            'settings' => 'setting',
+            default => 'file'
+        };
 
-        return "{$basename}-{$timestamp}-{$random}.{$extension}";
+        return Helpers::generateImageName($file, $prefix);
     }
 
     /**

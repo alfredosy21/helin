@@ -212,11 +212,11 @@
                                 </div>
                                 <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.product') }}</span>
                             </a>
-                            <a href="{{ route('catalog.categories.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
+                            <a href="{{ route('catalog.family.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
                                 <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
                                     <x-ui-icon name="folder" class="w-4 h-4 text-blue-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.category') }}</span>
+                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.family') }}</span>
                             </a>
                             <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
                                 <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">

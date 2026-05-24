@@ -6,6 +6,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ $title ?? 'Helin Latam CMS' }}</title>
 
+        {{-- Favicon --}}
+        <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
+
         {{-- Preload critical resources --}}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -5,7 +5,7 @@
     <div class="relative z-10 p-6 space-y-6">
 
             {{-- SECCIÓN DE LA TABLA (Se muestra solo si showForm es falso) --}}
-            
+
             {{-- Header Section & Breadcrumb Refinado --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
                  <div>
@@ -134,7 +134,7 @@
         @else
             {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
             <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
-                
+
                 {{-- Cabecera limpia sin botón X --}}
                 <div class="p-6 border-b border-slate-50">
                     <h2 class="text-lg font-bold text-[#222]">
@@ -194,8 +194,17 @@
 
                             @if($suggestedPassword && !$password)
                                 <div class="p-3 bg-slate-50 border border-slate-100 rounded-lg mt-2 animate-in fade-in duration-150">
-                                    <p class="text-xs font-medium text-primary">{{ __('cms.users.password_suggestion') }}</p>
-                                    <code class="text-xs font-mono text-[#222] mt-1 block">{{ $suggestedPassword }}</code>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-xs font-medium text-primary">{{ __('cms.users.password_suggestion') }}</p>
+                                            <code class="text-xs font-mono text-[#222] mt-1 block">{{ $suggestedPassword }}</code>
+                                        </div>
+                                        <button type="button" onclick="copySuggestedPassword('{{ $suggestedPassword }}')" class="ml-3 p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Copiar contraseña">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             @endif
                         </div>
@@ -211,14 +220,15 @@
                     <button wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
-                    <button wire:click="save" wire:loading.attr="disabled" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center">
-                        <span wire:loading.remove wire:target="save">{{ __('cms.general.save') }}</span>
-                        <span wire:loading wire:target="save" class="flex items-center justify-center">
+                    <button wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                        <span wire:loading wire:target="save">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                         </span>
+                        <span wire:loading.remove wire:target="save">{{ __('cms.general.save') }}</span>
+                        <span wire:loading wire:target="save">{{ __('cms.general.save') }}</span>
                     </button>
                 </div>
             </div>
@@ -237,6 +247,32 @@
             onConfirm: function() {
                 Livewire.find('{{ $this->getId() }}').confirmDelete(userId);
             }
+        });
+    }
+
+    function copySuggestedPassword(password) {
+        // Copiar al portapapeles
+        navigator.clipboard.writeText(password).then(function() {
+            // Llenar el input de contraseña
+            const passwordInput = document.querySelector('input[wire\\:model="password"]');
+            if (passwordInput) {
+                passwordInput.value = password;
+                // Disparar evento de Livewire para actualizar el modelo
+                passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            // Mostrar feedback visual
+            const button = event.currentTarget;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+            button.setAttribute('title', '¡Contraseña copiada y aplicada!');
+
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.setAttribute('title', 'Copiar contraseña');
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Error al copiar contraseña:', err);
         });
     }
 </script>

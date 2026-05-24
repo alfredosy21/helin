@@ -298,6 +298,7 @@ window.confirmAction = function(config) {
         cancelButtonColor,
         confirmButtonText,
         cancelButtonText,
+        reverseButtons: true,
     }).then((result) => {
         if (result.isConfirmed) {
             onConfirm();

@@ -62,6 +62,7 @@ return [
         'permissions' => 'Permisos',
         'product' => 'Producto',
         'category' => 'Categoría',
+        'family' => 'Familia',
         'brand' => 'Marca',
         'config' => 'Config',
         'distribution' => 'Distribución',

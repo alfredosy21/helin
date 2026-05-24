@@ -70,10 +70,10 @@ Route::prefix('cms')->group(function () {
                     ->middleware('permission:Catálogo,Productos');
             Route::get('/products/create', ProductsController::class)->name('products.create')
                     ->middleware('permission:Catálogo,Productos');
-            Route::get('/categories', CategoriesController::class)->name('categories.index')
-                    ->middleware('permission:Catálogo,Categorías');
-            Route::get('/categories/create', CategoriesController::class)->name('categories.create')
-                    ->middleware('permission:Catálogo,Categorías');
+            Route::get('/family', CategoriesController::class)->name('family.index')
+                    ->middleware('permission:Catálogo,Familias');
+            Route::get('/family/create', CategoriesController::class)->name('family.create')
+                    ->middleware('permission:Catálogo,Familias');
             Route::get('/brands', BrandsController::class)->name('brands.index')
                     ->middleware('permission:Catálogo,Marcas');
             Route::get('/brands/create', BrandsController::class)->name('brands.create')

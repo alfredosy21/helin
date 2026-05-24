@@ -51,7 +51,6 @@
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.category') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.tables.slug_url') }}</th>
                             <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
                             <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
                             <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
@@ -61,26 +60,14 @@
                         @forelse($blogCategories as $blogCategory)
                         <tr wire:key="blog-category-{{ $blogCategory->id }}" data-id="{{ $blogCategory->id }}" class="sortable-row hover:bg-slate-50/50 transition-colors">
                             <td class="px-6 py-4">
-                                <div class="flex items-start gap-2">
-                                    <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                                <div class="flex items-center gap-2">
+                                    <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div>
-                                        <span class="font-bold text-[#222] text-sm block">
-                                            {{ $blogCategory->name }}
-                                        </span>
-                                        @if($blogCategory->description)
-                                        <span class="text-xs text-[#c0c1c6] block truncate max-w-xs">
-                                            {{ $blogCategory->description }}
-                                        </span>
-                                        @endif
-                                    </div>
+                                    <span class="font-bold text-[#222] uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
+                                        {{ $blogCategory->name }}
+                                    </span>
                                 </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="font-mono text-xs text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded">
-                                    {{ $blogCategory->slug }}
-                                </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="text-xs text-slate-500">
@@ -116,7 +103,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
+                            <td colspan="4" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center text-[#c0c1c6]">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">No se encontraron categorías de blog</p>
@@ -200,15 +187,18 @@
                     <button type="button" wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
-                    <button type="submit" wire:loading.attr="disabled" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center">
+                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                        <span wire:loading wire:target="save">
+                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
                         <span wire:loading.remove wire:target="save">
                             {{ $editingId ? __('cms.general.save') : __('cms.blog_categories.new_button') }}
                         </span>
                         <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
+                            {{ $editingId ? __('cms.general.save') : __('cms.blog_categories.new_button') }}
                         </span>
                     </button>
                 </div>
@@ -262,6 +252,6 @@
 
         document.addEventListener('livewire:updated', initSortable);
         })();
-        
+
     </script>
 </div>

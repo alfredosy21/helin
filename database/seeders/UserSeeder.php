@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             'email' => 'editor@helin.com',
             'level' => 2, // Regular user level
             'rol_id' => Role::EDITOR, // Editor role
-            'password' => Hash::make('editor2026'), // Hashed password
+            'password' => 'editor2026', // Hashed password
             'is_active' => true, // Active user
             'email_verified_at' => now(), // Email verified
             'last_login_at' => null, // No login yet

@@ -47,7 +47,7 @@ class ModuleSeeder extends Seeder
                 'order' => 3,
                 'submodules' => [
                     ['name' => 'Productos', 'url' => '/cms/catalog/products', 'icon' => 'package'],
-                    ['name' => 'Familias de Productos', 'url' => '/cms/catalog/categories', 'icon' => 'folder'],
+                    ['name' => 'Familias de Productos', 'url' => '/cms/catalog/family', 'icon' => 'folder'],
                     ['name' => 'Marcas de Productos', 'url' => '/cms/catalog/brands', 'icon' => 'tag'],
                     ['name' => 'Líneas de Productos', 'url' => '/cms/catalog/lines', 'icon' => 'layers'],
                     ['name' => 'Sistema de Productos', 'url' => '/cms/catalog/system-products', 'icon' => 'layers'],
