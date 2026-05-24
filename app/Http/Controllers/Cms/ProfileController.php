@@ -64,7 +64,7 @@ class ProfileController extends Component {
     public string $new_password = '';
 
     /** @var string Confirmation for new password */
-    public string $password_confirmation = '';
+    public string $new_password_confirmation = '';
 
     /**
      * Define validation rules for the component.
@@ -191,7 +191,7 @@ class ProfileController extends Component {
                 'password' => Hash::make($this->new_password),
             ]);
 
-            $this->reset(['current_password', 'new_password', 'password_confirmation']);
+            $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
 
             Activities::saveActivity(__('cms.controllers.profile.activity_password'));
             $this->dispatch('toast', message: __('cms.controllers.profile.password_updated'), type: 'success');

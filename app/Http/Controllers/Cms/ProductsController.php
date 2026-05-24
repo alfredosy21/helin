@@ -60,6 +60,9 @@ class ProductsController extends Component {
     public ?string $sale_start_date = null;
     public ?string $sale_end_date = null;
     public ?string $published_at = null;
+    // --- Propiedades de Relaciones ---
+    public ?int $system_product_id = null;
+    public ?int $product_platform_id = null;
     // --- Gestión de Archivos (Temporary uploads) ---
     public $featured_image;
     public $gallery = [];
@@ -69,6 +72,7 @@ class ProductsController extends Component {
     public ?int $filterCategory = null;
     public ?int $filterBrand = null;
     public string $filterStatus = 'all';
+    public ?bool $filterFeatured = null;
     public int $perPage = 15;
     public bool $showForm = false;
     public bool $showDeleteModal = false;
@@ -100,6 +104,11 @@ class ProductsController extends Component {
         }
     }
 
+    public function resetFilters(): void {
+        $this->reset(['search', 'filterCategory', 'filterBrand', 'filterFeatured']);
+        $this->perPage = 25;
+    }
+
     public function render(): View {
         $products = Product::with(['category', 'brand', 'media'])
                 ->when($this->search, function ($q) {
@@ -122,13 +131,14 @@ class ProductsController extends Component {
             'products' => $products,
             'categories' => Category::all(),
             'brands' => Brand::all(),
+            'systemProducts' => \App\Models\SystemProduct::all(),
+            'productPlatforms' => \App\Models\ProductPlatform::all(),
         ]);
     }
 
     public function create(): void {
         $this->resetForm();
         $this->showForm = true;
-        $this->dispatch('open-form');
     }
 
     public function save(FileUploadService $fileUpload): void {
@@ -267,6 +277,7 @@ class ProductsController extends Component {
             $new = $original->replicate();
             $new->name = $original->name . __('cms.controllers.products.copy_suffix');
             $new->sku = $original->sku . '-' . strtoupper(Str::random(4));
+            $new->slug = Str::slug($new->name) . '-' . strtolower(Str::random(6));
             $new->is_active = false;
             $new->save();
 
@@ -281,6 +292,27 @@ class ProductsController extends Component {
             $this->dispatch('toast', message: __('cms.controllers.products.duplicated'), type: 'success');
         } catch (\Exception $e) {
             $this->dispatch('toast', message: __('cms.controllers.products.duplicate_error'), type: 'error');
+        }
+    }
+
+    public function toggleFeatured(int $id): void {
+        try {
+            $product = Product::findOrFail($id);
+            $product->is_featured = !$product->is_featured;
+            $product->save();
+
+            $message = $product->is_featured
+                ? __('cms.products.featured_added')
+                : __('cms.products.featured_removed');
+
+            Activities::saveActivity(__('cms.products.activity_featured_toggled', [
+                'name' => $product->name,
+                'status' => $product->is_featured ? 'featured' : 'unfeatured'
+            ]));
+
+            $this->dispatch('toast', message: $message, type: 'success');
+        } catch (\Exception $e) {
+            $this->dispatch('toast', message: __('cms.products.featured_error'), type: 'error');
         }
     }
 
@@ -320,6 +352,7 @@ class ProductsController extends Component {
             'meta_title', 'meta_description', 'meta_keywords',
             'is_active', 'is_featured', 'is_new', 'is_on_sale',
             'sale_price', 'sale_start_date', 'sale_end_date', 'published_at',
+            'system_product_id', 'product_platform_id',
             'featured_image', 'gallery', 'documents', 'editingId'
         ]);
         $this->resetValidation();

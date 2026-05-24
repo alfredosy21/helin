@@ -23,7 +23,7 @@ $arrowClasses = match($position) {
 
 <div class="relative inline-flex group/tooltip">
     {{ $slot }}
-    <div class="absolute {{ $positionClasses }} px-2.5 py-1.5 bg-slate-800 text-white text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none whitespace-nowrap shadow-lg z-50">
+    <div class="absolute {{ $positionClasses }} px-2.5 py-1.5 bg-slate-800 text-white text-[10px] font-semibold rounded-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none whitespace-nowrap shadow-lg z-[9999]">
         {{ $text }}
         <div class="absolute {{ $arrowClasses }} w-1.5 h-1.5 bg-slate-800 rotate-45"></div>
     </div>

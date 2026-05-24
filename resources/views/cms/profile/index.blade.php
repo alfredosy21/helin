@@ -18,9 +18,19 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <button wire:click="save" wire:loading.attr="disabled" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                    <x-ui-icon name="save" class="w-4 h-4 mr-2" />
-                    {{ __('cms.profile.update_button') }}
+                <button wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-6 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer gap-2 whitespace-nowrap">
+                    <span wire:loading wire:target="save">
+                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ __('cms.profile.update_button') }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ __('cms.profile.update_button') }}
+                    </span>
                 </button>
             </div>
         </div>
@@ -51,12 +61,7 @@
                             </div>
                         </div>
 
-                        @if($current_image)
-                        <button wire:click="removeImage" class="absolute -top-2 -right-2 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-lg flex items-center justify-center shadow-sm transition-colors cursor-pointer border-none">
-                            <x-ui-icon name="trash-2" class="w-4 h-4" />
-                        </button>
-                        @endif
-                    </div>
+                                            </div>
 
                     <div class="mt-4">
                         <label class="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium cursor-pointer hover:bg-[#079d8b] transition-colors text-sm">
@@ -148,10 +153,10 @@
                     <div class="space-y-1.5">
                         <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider mb-1">{{ __('cms.profile.confirm_password') }}</label>
                         <div class="relative">
-                            <input type="password" id="password_confirmation" wire:model="password_confirmation"
+                            <input type="password" id="new_password_confirmation" wire:model="new_password_confirmation"
                                    class="w-full px-3 py-2 pr-10 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                            <button type="button" onclick="togglePassword('password_confirmation')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-                                <svg id="password_confirmation_icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <button type="button" onclick="togglePassword('new_password_confirmation')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                                <svg id="new_password_confirmation_icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                 </svg>
@@ -230,4 +235,18 @@
         `;
     }
     }
-</script>
+
+    // Listen for Livewire upload:finished event
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('upload:finished', (name, tmpFilenames) => {
+            if (name === 'image') {
+                // Image upload finished, click the update button
+                const updateButton = document.querySelector('button[wire\\3Aclick\\3D"save"]');
+                if (updateButton) {
+                    updateButton.click();
+                }
+            }
+        });
+    });
+
+    </script>
