@@ -16,18 +16,18 @@ use Livewire\Attributes\Validate;
 
 /**
  * Class CategoriesController
- * * Manages the product taxonomy for the Helin eCommerce catalog.
- * Handles primary categories and their organizational sequencing (positioning).
+ * * Manages the product families for the Helin eCommerce catalog.
+ * Handles primary product families and their organizational sequencing (positioning).
  * * @version 1.0.0
  * @package App\Http\Controllers\Cms
  */
-#[Title('Gestión de Categorías | Helin CMS')]
+#[Title('Gestión de Familias de Productos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class CategoriesController extends Component {
 
     use WithPagination;
 
-    /** @var string Display name of the category */
+    /** @var string Display name of the family */
     #[Validate('required|string|max:255')]
     public string $name = '';
 
@@ -35,7 +35,7 @@ class CategoriesController extends Component {
     #[Validate('nullable|string|max:255')]
     public ?string $slug = '';
 
-    /** @var string|null Category description */
+    /** @var string|null Family description */
     #[Validate('nullable|string|max:1000')]
     public ?string $description = '';
 
@@ -43,7 +43,7 @@ class CategoriesController extends Component {
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
 
-    /** @var int|null ID of the category being modified */
+    /** @var int|null ID of the family being modified */
     public ?int $editingId = null;
 
     /** @var string Search query for real-time filtering */
@@ -75,7 +75,7 @@ class CategoriesController extends Component {
     }
 
     /**
-     * Render the component with paginated and sorted categories.
+     * Render the component with paginated and sorted families.
      */
     public function render(): View {
         $categories = Category::query()

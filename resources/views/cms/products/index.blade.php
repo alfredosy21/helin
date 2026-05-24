@@ -73,6 +73,8 @@
                             <th class="px-6 py-3.5 text-center w-16">{{ __('cms.tables.id') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.product') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.category_brand') }}</th>
+                            <th class="px-6 py-3.5">{{ __('cms.tables.system_product') }}</th>
+                            <th class="px-6 py-3.5">{{ __('cms.tables.product_platform') }}</th>
                             <th class="px-6 py-3.5 text-right">{{ __('cms.tables.price') }}</th>
                             <th class="px-6 py-3.5 text-center w-20">{{ __('cms.tables.stock') }}</th>
                             <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
@@ -106,6 +108,20 @@
                                             <span class="text-xs text-slate-400">{{ $product->brand->name }}</span>
                                         @endif
                                     </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($product->systemProduct)
+                                        <span class="text-xs text-slate-600 bg-slate-50 border border-slate-100 px-2 py-1 rounded">{{ $product->systemProduct->name }}</span>
+                                    @else
+                                        <span class="text-xs text-slate-400">-</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($product->productPlatform)
+                                        <span class="text-xs text-slate-600 bg-slate-50 border border-slate-100 px-2 py-1 rounded">{{ $product->productPlatform->name }}</span>
+                                    @else
+                                        <span class="text-xs text-slate-400">-</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-right font-semibold text-[#222]">
                                     ${{ number_format($product->price, 2) }}
@@ -157,7 +173,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-16 text-center">
+                                <td colspan="9" class="px-6 py-16 text-center">
                                     <div class="flex flex-col items-center text-[#c0c1c6]">
                                         <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/>
@@ -239,6 +255,31 @@
                             @endforeach
                         </select>
                         @error('brand_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
+                        <select wire:model="system_product_id"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <option value="">{{ __('cms.products.select_system_option') }}</option>
+                            @foreach($systemProducts as $systemProduct)
+                                <option value="{{ $systemProduct->id }}">{{ $systemProduct->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('system_product_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.product_platform_label') }}</label>
+                        <select wire:model="product_platform_id"
+                            class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <option value="">{{ __('cms.products.select_platform_option') }}</option>
+                            @foreach($productPlatforms as $productPlatform)
+                                <option value="{{ $productPlatform->id }}">{{ $productPlatform->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('product_platform_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
                 </div>
 

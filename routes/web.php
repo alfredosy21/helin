@@ -14,6 +14,8 @@ use App\Http\Controllers\Cms\{
     CategoriesController,
     BrandsController,
     LineController,
+    SystemProductsController,
+    ProductPlatformsController,
     TestimonialsController,
     BlogCategoriesController,
     BlogArticlesController,
@@ -80,6 +82,14 @@ Route::prefix('cms')->group(function () {
                     ->middleware('permission:Catálogo,Líneas');
             Route::get('/lines/create', LineController::class)->name('lines.create')
                     ->middleware('permission:Catálogo,Líneas');
+            Route::get('/system-products', SystemProductsController::class)->name('system-products.index')
+                    ->middleware('permission:Catálogo,Sistema de Productos');
+            Route::get('/system-products/create', SystemProductsController::class)->name('system-products.create')
+                    ->middleware('permission:Catálogo,Sistema de Productos');
+            Route::get('/product-platforms', ProductPlatformsController::class)->name('product-platforms.index')
+                    ->middleware('permission:Catálogo,Plataforma de Productos');
+            Route::get('/product-platforms/create', ProductPlatformsController::class)->name('product-platforms.create')
+                    ->middleware('permission:Catálogo,Plataforma de Productos');
         });
 
         /* 3.5. Content Management */

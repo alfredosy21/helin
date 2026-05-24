@@ -9,7 +9,7 @@ use App\Models\Submodule;
 /**
  * Module Seeder
  *
- * Populates modules and submodules tables using clean, verified Lucide/Feather 
+ * Populates modules and submodules tables using clean, verified Lucide/Feather
  * core naming conventions to guarantee seamless layout rendering.
  */
 class ModuleSeeder extends Seeder
@@ -47,9 +47,11 @@ class ModuleSeeder extends Seeder
                 'order' => 3,
                 'submodules' => [
                     ['name' => 'Productos', 'url' => '/cms/catalog/products', 'icon' => 'package'],
-                    ['name' => 'Categorías', 'url' => '/cms/catalog/categories', 'icon' => 'folder'],
-                    ['name' => 'Marcas', 'url' => '/cms/catalog/brands', 'icon' => 'tag'],
-                    ['name' => 'Líneas', 'url' => '/cms/catalog/lines', 'icon' => 'layers'],
+                    ['name' => 'Familias de Productos', 'url' => '/cms/catalog/categories', 'icon' => 'folder'],
+                    ['name' => 'Marcas de Productos', 'url' => '/cms/catalog/brands', 'icon' => 'tag'],
+                    ['name' => 'Líneas de Productos', 'url' => '/cms/catalog/lines', 'icon' => 'layers'],
+                    ['name' => 'Sistema de Productos', 'url' => '/cms/catalog/system-products', 'icon' => 'layers'],
+                    ['name' => 'Plataforma de Productos', 'url' => '/cms/catalog/product-platforms', 'icon' => 'layers'],
                 ]
             ],
             [

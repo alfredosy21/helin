@@ -19,6 +19,11 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             SectionSeeder::class,
             UserSeeder::class,
+            LineSeeder::class,
+            BrandSeeder::class,
+            CategorySeeder::class,
+            SystemProductSeeder::class,
+            ProductPlatformSeeder::class,
         ]);
     }
 }
