@@ -1,0 +1,194 @@
+/* Helen Components - Shared CSS */
+
+/* Custom Scrollbar Hide */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Product Card Hover Effect */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Mega Menu Styles */
+.mega-menu-column {
+    transition: background-color 0.2s ease;
+}
+
+.mega-menu-column:hover {
+    background-color: #e6f7f7;
+}
+
+.mega-menu-box {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.mega-menu-box:hover {
+    background-color: #e6f7f7;
+    border-color: rgba(21, 170, 175, 0.3);
+}
+
+/* Mobile Navigation */
+.mobile-nav-panel {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Benefits Section Icons */
+.benefit-icon-box {
+    background-color: rgba(77, 212, 209, 0.2);
+    border-radius: 0.75rem;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.benefit-icon-box i {
+    color: #00A3A0;
+    font-size: 1.25rem;
+}
+
+/* Footer Links */
+.footer-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+.footer-bullet {
+    width: 0.375rem;
+    height: 0.375rem;
+    background-color: white;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+/* Icon Containers */
+.icon-circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-circle-sm {
+    width: 2rem;
+    height: 2rem;
+}
+
+.icon-circle-lg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.icon-circle i {
+    font-size: 0.625rem;
+}
+
+/* Search Bar Components */
+.search-container {
+    background-color: white;
+    border-radius: 9999px;
+    padding: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    flex: 1;
+    outline: none;
+    background: transparent;
+}
+
+.search-button {
+    background-color: #00A3A0;
+    color: white;
+    border-radius: 9999px;
+    padding: 0 1.25rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    margin: 0 0.25rem;
+}
+
+.search-button:hover {
+    background-color: #007A78;
+}
+
+/* Category Badge */
+.category-badge {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.625rem;
+    background-color: #15aabf;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    z-index: 10;
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: #00A3A0;
+    color: white;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 50;
+}
+
+.scroll-to-top:hover {
+    background-color: #007A78;
+    transform: scale(1.1);
+}

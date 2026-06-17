@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Helin | Detalle de Producto</title>
+  <style>
+    :root{
+      --helin:#34b1b5;
+      --helin-soft:#97d5d4;
+      --white:#ffffff;
+      --text:#102d44;
+      --muted:#6d7f8d;
+      --line:#dceced;
+      --bg:#fbfdfd;
+      --card:#ffffff;
+      --shadow:0 16px 38px rgba(16,45,68,.08);
+      --shadow-soft:0 8px 22px rgba(16,45,68,.055);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button,input,select{font:inherit}
+    img{max-width:100%;display:block}
+
+    .top-strip{
+      height:34px;
+      background:var(--helin);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .top-strip a{
+      border:1px solid rgba(255,255,255,.72);
+      border-radius:8px;
+      padding:6px 18px;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+
+    .header{
+      background:linear-gradient(90deg,#22aeb2,#14a5a9);
+      color:#fff;
+      border-bottom:1px solid rgba(255,255,255,.18);
+    }
+
+    .header-main{
+      max-width:1420px;
+      height:84px;
+      margin:0 auto;
+      padding:0 38px;
+      display:grid;
+      grid-template-columns:180px 1fr auto;
+      gap:30px;
+      align-items:center;
+    }
+
+    .logo{
+      color:#fff;
+      font-size:50px;
+      line-height:1;
+      font-weight:950;
+      letter-spacing:-.07em;
+    }
+
+    .search{
+      height:56px;
+      max-width:690px;
+      border-radius:999px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      color:#15354b;
+      box-shadow:0 15px 34px rgba(0,0,0,.13);
+    }
+
+    .search-icon{
+      width:58px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#234557;
+      font-size:25px;
+    }
+
+    .search input{
+      flex:1;
+      height:100%;
+      border:0;
+      outline:0;
+      color:#203848;
+      font-size:15px;
+    }
+
+    .search select{
+      width:210px;
+      height:100%;
+      border:0;
+      border-left:1px solid #d7e7e8;
+      background:#fff;
+      outline:0;
+      color:#17394c;
+      font-weight:850;
+      padding:0 14px;
+      font-size:13px;
+    }
+
+    .search button{
+      width:66px;
+      height:50px;
+      margin-right:4px;
+      border:0;
+      border-radius:999px;
+      background:var(--helin);
+      color:#fff;
+      font-size:25px;
+      cursor:pointer;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:26px;
+      font-size:19px;
+      font-weight:850;
+    }
+
+    .whatsapp{
+      height:58px;
+      min-width:164px;
+      border-radius:999px;
+      background:rgba(255,255,255,.36);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      box-shadow:0 14px 30px rgba(0,0,0,.10);
+    }
+
+    .wa-icon{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.82);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+
+    .cart{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      position:relative;
+      white-space:nowrap;
+    }
+
+    .cart-icon{font-size:38px;line-height:1}
+    .cart-badge{
+      position:absolute;
+      top:-8px;
+      left:32px;
+      width:27px;
+      height:27px;
+      border-radius:50%;
+      background:var(--helin-soft);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:950;
+    }
+
+    .nav{
+      height:66px;
+      background:#fff;
+      border-bottom:1px solid #e6f0f1;
+      position:relative;
+      z-index:10;
+    }
+
+    .nav-inner{
+      max-width:1420px;
+      height:100%;
+      margin:0 auto;
+      padding:0 38px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:26px;
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .nav-left,.nav-right{
+      display:flex;
+      align-items:center;
+      gap:28px;
+      white-space:nowrap;
+    }
+
+    .nav-link{
+      min-height:66px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      position:relative;
+      color:#111;
+    }
+
+    .nav-link.active{color:var(--helin)}
+    .contact{
+      color:#28495a;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .resources-btn{
+      height:43px;
+      min-width:142px;
+      border-radius:999px;
+      color:#fff;
+      background:var(--helin);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      line-height:1;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .page{
+      max-width:1320px;
+      margin:0 auto;
+      padding:42px 38px 0;
+    }
+
+    .breadcrumb{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#7c8d98;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:72px;
+    }
+
+    .breadcrumb strong{color:var(--helin)}
+
+    .product-layout{
+      max-width:1040px;
+      margin:0 auto 120px;
+      display:grid;
+      grid-template-columns:470px 1fr;
+      gap:70px;
+      align-items:start;
+    }
+
+    .gallery-main{
+      width:100%;
+      height:470px;
+      border:1px solid #e1e8e9;
+      background:#f7f7f7;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .main-product-visual{
+      position:relative;
+      width:260px;
+      height:330px;
+    }
+
+    .implant-large{
+      position:absolute;
+      left:28px;
+      top:24px;
+      width:105px;
+      height:275px;
+      border-radius:34px 34px 16px 16px;
+      background:linear-gradient(90deg,#5c6468,#f8f8f8 45%,#252b31);
+      transform:rotate(-6deg);
+      box-shadow:0 25px 35px rgba(16,45,68,.15);
+    }
+
+    .implant-large:before{
+      content:"";
+      position:absolute;
+      inset:86px 15px 18px;
+      border-radius:16px;
+      background:repeating-linear-gradient(0deg, rgba(8,20,28,.42) 0 7px, rgba(255,255,255,.18) 7px 14px);
+    }
+
+    .implant-small{
+      position:absolute;
+      right:24px;
+      bottom:34px;
+      width:118px;
+      height:72px;
+      border-radius:20px;
+      background:linear-gradient(90deg,#4c555a,#fff 48%,#384047);
+      transform:rotate(20deg);
+      box-shadow:0 22px 28px rgba(16,45,68,.15);
+    }
+
+    .implant-small:after{
+      content:"";
+      position:absolute;
+      inset:14px 18px;
+      border-radius:14px;
+      background:repeating-linear-gradient(90deg, rgba(8,20,28,.25) 0 6px, transparent 6px 13px);
+    }
+
+    .thumbs{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .thumb{
+      height:106px;
+      background:#f4f6f6;
+      border:1px solid #e5eeee;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .thumb .kit{
+      width:85px;
+      height:55px;
+      border:6px solid rgba(52,177,181,.35);
+      border-radius:12px;
+      background:#e8f9f9;
+      position:relative;
+    }
+
+    .thumb .kit:after{
+      content:"";
+      position:absolute;
+      inset:20px 8px 8px;
+      background:radial-gradient(circle,#7b8990 0 3px,transparent 4px);
+      background-size:15px 12px;
+    }
+
+    .thumb .tool{
+      width:92px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(90deg,#b3bec4,#fff,#8b979d);
+      transform:rotate(-12deg);
+    }
+
+    .thumb .implant-mini{
+      width:48px;
+      height:82px;
+      border-radius:15px 15px 8px 8px;
+      background:linear-gradient(90deg,#677077,#fff,#363f45);
+      position:relative;
+    }
+
+    .thumb .implant-mini:after{
+      content:"";
+      position:absolute;
+      inset:28px 7px 8px;
+      background:repeating-linear-gradient(0deg, rgba(8,20,28,.28) 0 4px, transparent 4px 8px);
+      border-radius:8px;
+    }
+
+    .product-info{
+      position:relative;
+      padding-top:10px;
+    }
+
+    .view-icons{
+      position:absolute;
+      top:0;
+      right:0;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:#111;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .product-info h1{
+      font-size:36px;
+      letter-spacing:-.035em;
+      margin:0 0 18px;
+      color:#282729;
+    }
+
+    .price-main{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:20px;
+      color:var(--helin);
+      font-size:20px;
+      font-weight:950;
+    }
+
+    .price-main span:first-child{
+      color:var(--helin);
+      text-decoration:line-through;
+      opacity:.86;
+    }
+
+    .short-desc{
+      color:#8a969e;
+      font-size:14px;
+      line-height:1.8;
+      max-width:430px;
+      margin:0 0 28px;
+    }
+
+    .available{
+      color:var(--helin);
+      font-size:16px;
+      font-weight:950;
+      margin-bottom:26px;
+    }
+
+    .option-title{
+      font-weight:950;
+      font-size:15px;
+      margin-bottom:14px;
+      color:#333;
+    }
+
+    .sizes{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:42px;
+    }
+
+    .size{
+      height:32px;
+      min-width:94px;
+      padding:0 15px;
+      border:1px solid #cad5d8;
+      border-radius:999px;
+      background:#fff;
+      color:#6f7d87;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .size.active{
+      color:var(--helin);
+      border-color:var(--helin);
+      box-shadow:0 0 0 2px rgba(52,177,181,.08);
+    }
+
+    .purchase-row{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      margin-bottom:34px;
+    }
+
+    .qty{
+      width:144px;
+      height:50px;
+      border-radius:999px;
+      background:#ecfbfb;
+      display:grid;
+      grid-template-columns:44px 1fr 44px;
+      align-items:center;
+      justify-items:center;
+      color:#657884;
+      font-weight:900;
+    }
+
+    .qty button{
+      width:38px;
+      height:38px;
+      border:0;
+      border-radius:50%;
+      background:#fff;
+      color:#cdd8db;
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    .add-btn{
+      height:52px;
+      min-width:220px;
+      padding:0 28px;
+      border:0;
+      border-radius:999px;
+      background:var(--helin);
+      color:#fff;
+      font-size:13px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 13px 24px rgba(52,177,181,.24);
+    }
+
+    .meta{
+      color:#788893;
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .meta strong{
+      color:#2f3e48;
+      font-weight:950;
+    }
+
+    .meta a{
+      color:var(--helin);
+      font-weight:950;
+      text-decoration:underline;
+      display:inline-block;
+      margin-top:3px;
+    }
+
+    .details-layout{
+      max-width:1040px;
+      margin:0 auto 92px;
+      display:grid;
+      grid-template-columns:1fr 230px;
+      gap:94px;
+      align-items:start;
+    }
+
+    .tabs{
+      display:flex;
+      gap:62px;
+      border-bottom:1px solid #dce6e8;
+      margin-bottom:46px;
+    }
+
+    .tab{
+      min-height:62px;
+      display:flex;
+      align-items:center;
+      position:relative;
+      font-size:26px;
+      color:#222;
+      font-weight:500;
+    }
+
+    .tab.active:after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-1px;
+      height:6px;
+      background:var(--helin-soft);
+    }
+
+    .description p{
+      margin:0 0 24px;
+      color:#9aa4ab;
+      font-size:14px;
+      line-height:2;
+    }
+
+    .support-card{
+      width:230px;
+      min-height:338px;
+      background:
+        linear-gradient(135deg,#ffffff, #eafafa);
+      border:1px solid #dbeeee;
+      box-shadow:var(--shadow-soft);
+      padding:22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .support-card:before{
+      content:"";
+      position:absolute;
+      right:-40px;
+      top:-40px;
+      width:135px;
+      height:135px;
+      border-radius:50%;
+      background:rgba(52,177,181,.12);
+    }
+
+    .support-logo{
+      color:var(--helin);
+      font-size:33px;
+      font-weight:950;
+      letter-spacing:-.06em;
+      margin-bottom:20px;
+      position:relative;
+    }
+
+    .support-card h3{
+      position:relative;
+      font-size:23px;
+      line-height:1.12;
+      margin:0 0 12px;
+      color:#143451;
+      letter-spacing:-.03em;
+    }
+
+    .support-card p{
+      position:relative;
+      color:#6c7f8d;
+      font-size:12px;
+      line-height:1.45;
+      max-width:150px;
+      margin:0 0 20px;
+    }
+
+    .assistant-figure{
+      width:96px;
+      height:118px;
+      border-radius:50px 50px 18px 18px;
+      margin:0 auto 18px;
+      background:linear-gradient(#fff,#34b1b5);
+      position:relative;
+      box-shadow:0 12px 20px rgba(16,45,68,.12);
+    }
+
+    .assistant-figure:before{
+      content:"";
+      position:absolute;
+      top:-34px;
+      left:25px;
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:#ffe1c8;
+      box-shadow:0 -10px 0 #3f2c28 inset;
+    }
+
+    .support-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      height:36px;
+      border-radius:999px;
+      background:var(--helin);
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+      margin-bottom:10px;
+    }
+
+    .phone-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      height:36px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #d8eeee;
+      color:var(--helin);
+      font-size:14px;
+      font-weight:950;
+    }
+
+    .related{
+      max-width:1040px;
+      margin:0 auto 90px;
+    }
+
+    .related-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:24px;
+      margin-bottom:22px;
+    }
+
+    .related h2{
+      margin:0;
+      font-size:29px;
+      letter-spacing:-.035em;
+      color:#222;
+    }
+
+    .related p{
+      margin:6px 0 0;
+      color:#9aa4ab;
+      font-size:15px;
+    }
+
+    .related a{
+      color:var(--helin);
+      font-size:12px;
+      font-weight:950;
+      text-transform:uppercase;
+    }
+
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+    }
+
+    .product-card{
+      background:#fff;
+      border:1px solid #edf1f2;
+      min-height:470px;
+      padding:24px 22px 26px;
+      box-shadow:var(--shadow-soft);
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .badge{
+      position:absolute;
+      top:22px;
+      left:0;
+      min-width:58px;
+      height:28px;
+      padding:0 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--helin);
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+      border-radius:0 999px 999px 0;
+    }
+
+    .related-img{
+      width:220px;
+      height:220px;
+      background:#f7f7f7;
+      margin-bottom:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+
+    .related-img .implant-mini{
+      width:66px;
+      height:142px;
+      border-radius:20px 20px 10px 10px;
+      background:linear-gradient(90deg,#778087,#fff,#384047);
+      position:relative;
+    }
+
+    .related-img .implant-mini:after{
+      content:"";
+      position:absolute;
+      inset:46px 9px 12px;
+      background:repeating-linear-gradient(0deg, rgba(8,20,28,.28) 0 5px, transparent 5px 11px);
+      border-radius:10px;
+    }
+
+    .related-img .set{
+      width:145px;
+      height:96px;
+      position:relative;
+    }
+
+    .related-img .set:before{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:#f5f1e8;
+      box-shadow:48px -14px 0 -8px #bfc9ce, 84px -2px 0 -5px #dadfe2, 118px -20px 0 -7px #b6c1c5;
+    }
+
+    .product-card h3{
+      margin:0 0 20px;
+      font-size:20px;
+      text-align:center;
+      color:#132d49;
+      letter-spacing:-.02em;
+    }
+
+    .related-price{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      justify-content:center;
+      color:#808e98;
+      font-size:16px;
+      margin-bottom:10px;
+    }
+
+    .related-price del{
+      color:#d9535f;
+      font-weight:800;
+    }
+
+    .related-rating{
+      color:#f3a93c;
+      font-size:20px;
+      margin-bottom:26px;
+    }
+
+    .related-rating span{
+      color:#6f7d86;
+      font-size:13px;
+      margin-left:5px;
+    }
+
+    .small-cart{
+      width:180px;
+      height:40px;
+      border-radius:999px;
+      border:0;
+      background:var(--helin);
+      color:#fff;
+      font-size:12px;
+      font-weight:950;
+      cursor:pointer;
+      margin-top:auto;
+    }
+
+    .footer{
+      background:
+        linear-gradient(135deg,#11a8aa,#078f93);
+      color:#fff;
+      padding:78px 38px 22px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .footer:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='1000' height='320' viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.14'%3E%3Cpath d='M-10 270C120 80 260 210 430 92s365-84 590 120'/%3E%3Ccircle cx='830' cy='90' r='160'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:cover;
+    }
+
+    .footer-inner{
+      position:relative;
+      max-width:1160px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1.25fr 1fr 1fr 1.25fr;
+      gap:56px;
+    }
+
+    .footer h3,.footer h4{margin-top:0}
+    .footer .footer-logo{
+      color:#fff;
+      font-size:32px;
+      font-weight:500;
+      margin-bottom:20px;
+    }
+
+    .footer p,.footer li{
+      color:rgba(255,255,255,.82);
+      font-size:15px;
+      line-height:1.8;
+    }
+
+    .footer ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+
+    .socials{
+      display:flex;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .socials span{
+      width:31px;
+      height:31px;
+      border-radius:50%;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .locations{
+      display:grid;
+      gap:8px;
+    }
+
+    .loc{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      color:rgba(255,255,255,.88);
+      font-size:14px;
+    }
+
+    .loc span:not(:first-child){
+      width:25px;
+      height:25px;
+      border-radius:50%;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+    }
+
+    .copy{
+      position:relative;
+      max-width:1160px;
+      margin:50px auto 0;
+      padding-top:24px;
+      border-top:1px solid rgba(255,255,255,.16);
+      text-align:center;
+      font-size:13px;
+      color:rgba(255,255,255,.76);
+    }
+
+    @media(max-width:1120px){
+      .header-main{
+        grid-template-columns:1fr;
+        height:auto;
+        padding:18px 24px;
+      }
+      .actions{display:none}
+      .nav-inner{overflow:auto}
+      .breadcrumb{margin-bottom:40px}
+      .product-layout{
+        grid-template-columns:1fr;
+        gap:40px;
+        margin-bottom:70px;
+      }
+      .details-layout{
+        grid-template-columns:1fr;
+        gap:38px;
+      }
+      .support-card{
+        width:100%;
+        max-width:330px;
+      }
+      .related-grid{grid-template-columns:1fr 1fr}
+      .footer-inner{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:720px){
+      .top-strip{display:none}
+      .search{display:none}
+      .logo{font-size:40px}
+      .nav-left,.nav-right{gap:16px}
+      .page{padding:24px 16px 0}
+      .gallery-main{height:360px}
+      .product-info h1{font-size:30px}
+      .purchase-row{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:16px;
+      }
+      .add-btn{width:100%}
+      .tabs{gap:24px}
+      .tab{font-size:21px}
+      .related-head{display:block}
+      .related-grid{grid-template-columns:1fr}
+      .footer{padding:48px 24px 20px}
+      .footer-inner{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-strip">
+    <span>Todo para cirugía odontológica especializada</span>
+    <a href="#">VER PRODUCTOS</a>
+  </div>
+
+  <header class="header">
+    <div class="header-main">
+      <a class="logo" href="#">helin.</a>
+
+      <form class="search">
+        <div class="search-icon">⌕</div>
+        <input type="search" placeholder="¿Qué producto estás buscando?" />
+        <select>
+          <option>Todas las categorías</option>
+          <option>Implantología</option>
+          <option>Regeneración Ósea Guiada</option>
+          <option>Osteosíntesis</option>
+        </select>
+        <button type="submit">⌕</button>
+      </form>
+
+      <div class="actions">
+        <a class="whatsapp" href="#"><span class="wa-icon">☏</span> Escríbenos</a>
+        <a class="cart" href="#"><span class="cart-icon">🛒</span><span class="cart-badge">1</span> Ver carrito</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a class="nav-link" href="#">☰ Productos</a>
+        <a class="nav-link active" href="#">Home</a>
+        <a class="nav-link" href="#">Cirugía Bucal +</a>
+        <a class="nav-link" href="#">Cirugía Maxilofacial +</a>
+        <a class="nav-link" href="#">Periodoncia +</a>
+        <a class="nav-link" href="#">Ortodoncia +</a>
+        <a class="nav-link" href="#">Endodoncia +</a>
+      </div>
+
+      <div class="nav-right">
+        <a class="contact" href="#">☏ Contáctanos</a>
+        <a class="resources-btn" href="#">Recursos<br>Clínicos ☁</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="breadcrumb">
+      <span>Inicio</span>
+      <span>›</span>
+      <span>Productos</span>
+      <span>›</span>
+      <span>Implantología</span>
+      <span>›</span>
+      <strong>Nombre Del Producto</strong>
+    </div>
+
+    <section class="product-layout">
+      <div class="gallery">
+        <div class="gallery-main">
+          <div class="main-product-visual">
+            <div class="implant-large"></div>
+            <div class="implant-small"></div>
+          </div>
+        </div>
+
+        <div class="thumbs">
+          <div class="thumb"><div class="kit"></div></div>
+          <div class="thumb"><div class="tool"></div></div>
+          <div class="thumb"><div class="implant-mini"></div></div>
+          <div class="thumb"><div class="implant-mini"></div></div>
+        </div>
+      </div>
+
+      <article class="product-info">
+        <div class="view-icons">‹ ▦</div>
+        <h1>Producto Helin</h1>
+
+        <div class="price-main">
+          <span>$77.00</span>
+          <strong>$50.00</strong>
+        </div>
+
+        <p class="short-desc">
+          Implante dental diseñado para procedimientos implantológicos seguros,
+          precisos y de alta estabilidad clínica.
+        </p>
+
+        <div class="available">Disponible</div>
+
+        <div class="option-title">Tamaño</div>
+        <div class="sizes">
+          <button class="size">3.5 x 8 mm</button>
+          <button class="size">3.75 x 10 mm</button>
+          <button class="size active">4.0 x 11.5 mm</button>
+          <button class="size">4.5 x 13 mm</button>
+        </div>
+
+        <div class="purchase-row">
+          <div class="qty">
+            <button>-</button>
+            <span>1</span>
+            <button>+</button>
+          </div>
+          <button class="add-btn">AÑADIR AL CARRITO +</button>
+        </div>
+
+        <div class="meta">
+          <div><strong>SKU:</strong> OS14JK74</div>
+          <div><strong>Categorías</strong> Implantología, Instrumentos, Cuidado-bucal, Ofertas</div>
+          <a href="#">Descargar Ficha</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="details-layout">
+      <article class="description">
+        <div class="tabs">
+          <div class="tab active">Descripción</div>
+          <div class="tab">Especificaciones</div>
+        </div>
+
+        <p>
+          Implante dental diseñado para procedimientos de rehabilitación oral que requieren alta precisión,
+          estabilidad primaria y un desempeño clínico confiable. Su estructura permite una adecuada inserción
+          en el tejido óseo, favoreciendo la integración y ofreciendo una base segura para la posterior colocación
+          de aditamentos protésicos.
+        </p>
+
+        <p>
+          Fabricado con materiales de alta resistencia y biocompatibilidad, este implante está pensado para
+          responder a las exigencias de la implantología moderna, facilitando una colocación controlada y una
+          adaptación eficiente según el plan de tratamiento definido por el profesional.
+        </p>
+
+        <p>
+          Su diseño favorece una distribución equilibrada de las cargas, aportando estabilidad durante el proceso
+          de cicatrización y contribuyendo a una rehabilitación funcional y estética. Es una solución indicada para
+          profesionales que buscan precisión, seguridad y respaldo en tratamientos implantológicos.
+        </p>
+      </article>
+
+      <aside class="support-card">
+        <div class="support-logo">helin.</div>
+        <h3>¿Tienes alguna duda?</h3>
+        <p>Contacta a nuestro equipo de soporte comercial.</p>
+        <div class="assistant-figure"></div>
+        <a class="support-btn" href="#">☏ Chatear con ejecutivo</a>
+        <a class="phone-btn" href="#">+58 424 1232025</a>
+      </aside>
+    </section>
+
+    <section class="related">
+      <div class="related-head">
+        <div>
+          <h2>Productos Relacionados</h2>
+          <p>Conoce los productos similares disponibles para ti</p>
+        </div>
+        <a href="#">Ver todos los productos →</a>
+      </div>
+
+      <div class="related-grid">
+        <article class="product-card">
+          <span class="badge">New</span>
+          <div class="related-img"><div class="set"></div></div>
+          <h3>Blood Test Tub</h3>
+          <div class="related-price"><span>£$150.00</span><del>$100.00</del></div>
+          <div class="related-rating">★ <span>4.5k</span></div>
+          <button class="small-cart">AÑADIR AL CARRITO +</button>
+        </article>
+
+        <article class="product-card">
+          <span class="badge">-12%</span>
+          <div class="related-img"><div class="implant-mini"></div></div>
+          <h3>Ear Thermometer</h3>
+          <div class="related-price"><span>£$150.00</span><del>$100.00</del></div>
+          <div class="related-rating">★ <span>4.5k</span></div>
+          <button class="small-cart">AÑADIR AL CARRITO +</button>
+        </article>
+
+        <article class="product-card">
+          <span class="badge">-10%</span>
+          <div class="related-img"><div class="implant-mini"></div></div>
+          <h3>D-Ribose Drug Medicine</h3>
+          <div class="related-price"><span>£$150.00</span><del>$100.00</del></div>
+          <div class="related-rating">★ <span>4.5k</span></div>
+          <button class="small-cart">AÑADIR AL CARRITO +</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Helin</div>
+        <p>Todo en Cirugía Odontológica Especializada.</p>
+        <p>+58 4241112285</p>
+        <div class="socials"><span>f</span><span>x</span><span>ig</span><span>in</span></div>
+      </div>
+
+      <div>
+        <h4>Nuestra Empresa</h4>
+        <ul>
+          <li>Quiénes somos</li>
+          <li>Misión y visión</li>
+          <li>Nuestros Team</li>
+          <li>Nuestros Aliados</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Políticas</h4>
+        <ul>
+          <li>Políticas de envío y garantías</li>
+          <li>Términos y condiciones</li>
+          <li>Política de privacidad</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contáctanos</h4>
+        <p>✉ info@helinlatam.com<br>☎ Central telefónica<br>+58 4242789481</p>
+        <h4>Nuestras sedes:</h4>
+        <div class="locations">
+          <div class="loc"><span>Caracas</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Valencia</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Barquisimeto</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Maracaibo</span><span>⌖</span><span>☏</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="copy">© Copyright 2026. by Helin</div>
+  </footer>
+
+</body>
+</html>

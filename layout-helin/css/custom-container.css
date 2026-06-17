@@ -1,0 +1,72 @@
+/* Custom Container Styles - Responsive for all screen sizes */
+.container {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/* Small screens - up to 640px */
+@media (min-width: 640px) {
+    .container {
+        max-width: 90vw !important;
+    }
+}
+
+/* Medium screens - 641px to 768px */
+@media (min-width: 768px) {
+    .container {
+        max-width: 85vw !important;
+    }
+}
+
+/* Large screens - 769px to 1024px */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 80vw !important;
+    }
+}
+
+/* Extra Large screens - 1025px to 1280px */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 90vw !important;
+    }
+}
+
+/* 2XL screens - 1281px to 1536px (Full HD and beyond) */
+@media (min-width: 1536px) {
+    .container {
+        max-width: 70vw !important;
+    }
+}
+
+/* 3XL screens - 1537px to 1920px (2K and beyond) */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 65vw !important;
+    }
+}
+
+/* 4K screens - 1921px to 2560px */
+@media (min-width: 2560px) {
+    .container {
+        max-width: 60vw !important;
+    }
+}
+
+/* Ultra-wide screens - 2561px and above */
+@media (min-width: 3840px) {
+    .container {
+        max-width: 50vw !important;
+    }
+}
+
+/* Maximum cap for extremely large screens */
+@media (min-width: 5120px) {
+    .container {
+        max-width: 45vw !important;
+        min-width: 1400px !important; /* Ensure minimum width for readability */
+    }
+}

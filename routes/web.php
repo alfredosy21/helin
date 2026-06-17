@@ -24,6 +24,7 @@ use App\Http\Controllers\Cms\{
     UserController,
     PermissionsController
 };
+use App\Http\Controllers\WebController;
 
 /*
   |--------------------------------------------------------------------------
@@ -31,8 +32,21 @@ use App\Http\Controllers\Cms\{
   |--------------------------------------------------------------------------
  */
 
+Route::prefix('web')->name('web.')->group(function () {
+    Route::get('/', [WebController::class, 'home'])->name('home');
+    Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
+    Route::get('/producto', [WebController::class, 'producto'])->name('producto');
+    Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
+    Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
+    Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
+    Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
+    Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
+    Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
+});
+
+// Redirigir la raíz al sitio web público
 Route::get('/', function () {
-    return 'Acceso bloqueado - Helin Medical Platform';
+    return redirect()->route('web.home');
 })->name('home');
 
 /*

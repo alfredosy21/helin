@@ -1,0 +1,233 @@
+/* Políticas Page - Specific Styles from helin-components-new.css */
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    margin: 0 0 70px;
+    color: var(--helin-primary);
+    font-size: 3.4375rem;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    font-weight: 900;
+    position: relative;
+}
+
+.page-title:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -22px;
+    transform: translateX(-50%);
+    width: 76px;
+    height: 4px;
+    border-radius: 9999px;
+    background: var(--helin-primary);
+}
+
+/* Policies Grid */
+.policies {
+    display: grid;
+    gap: 18px;
+}
+
+/* Policy Cards */
+.policy-card {
+    min-height: 230px;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 13px 32px rgba(16, 45, 68, 0.055);
+    display: grid;
+    grid-template-columns: 150px 85px 1fr 130px;
+    gap: 0;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+}
+
+.policy-icon-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 46px;
+    border-right: 1px solid var(--border-color);
+}
+
+.policy-icon {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: #e9f8f8;
+    color: var(--helin-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    box-shadow: 0 10px 24px rgba(52, 177, 181, 0.08);
+}
+
+.policy-number {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 44px;
+    color: var(--helin-primary);
+    font-size: 2.625rem;
+    line-height: 1;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    border-right: 1px solid var(--border-color);
+}
+
+.policy-content {
+    padding: 36px 26px 28px;
+}
+
+.policy-content h2 {
+    margin: 0 0 12px;
+    color: #1d2232;
+    font-size: 1.875rem;
+    line-height: 1.1;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+}
+
+.policy-content > p {
+    color: #63717d;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    margin: 0 0 28px;
+    max-width: 900px;
+}
+
+/* Policy Points */
+.policy-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 34px;
+}
+
+.point {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.point-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--helin-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.point h3 {
+    margin: 0 0 7px;
+    color: var(--helin-primary);
+    font-size: 0.875rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+}
+
+.point p {
+    margin: 0;
+    color: #243847;
+    font-size: 0.75rem;
+    line-height: 1.55;
+    font-weight: 700;
+}
+
+/* Policy Action */
+.policy-action {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 24px 44px 0;
+}
+
+.more-btn {
+    height: 44px;
+    min-width: 116px;
+    border: 2px solid var(--helin-primary);
+    border-radius: 9999px;
+    background: var(--white);
+    color: var(--helin-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.more-btn:hover {
+    background: rgba(52, 177, 181, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1120px) {
+    .policy-card {
+        grid-template-columns: 110px 75px 1fr;
+    }
+
+    .policy-action {
+        grid-column: 1 / -1;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 28px 28px;
+    }
+
+    .policy-points {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 720px) {
+    .page-title {
+        font-size: 2.625rem;
+        margin-bottom: 54px;
+    }
+
+    .policy-card {
+        grid-template-columns: 1fr;
+    }
+
+    .policy-icon-wrap,
+    .policy-number {
+        border-right: 0;
+        padding-top: 24px;
+    }
+
+    .policy-number {
+        padding-top: 10px;
+    }
+
+    .policy-content {
+        padding: 22px;
+        text-align: left;
+    }
+
+    .policy-content h2 {
+        font-size: 1.5625rem;
+    }
+
+    .point {
+        grid-template-columns: 30px 1fr;
+    }
+
+    .policy-action {
+        justify-content: center;
+        padding: 0 22px 24px;
+    }
+
+    .more-btn {
+        width: 100%;
+    }
+}

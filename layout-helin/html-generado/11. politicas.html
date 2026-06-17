@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Helin | Políticas</title>
+  <style>
+    :root{
+      --helin:#34b1b5;
+      --helin-soft:#97d5d4;
+      --white:#ffffff;
+      --text:#102d44;
+      --muted:#6c7f8f;
+      --line:#dceced;
+      --bg:#fbfdfd;
+      --card:#ffffff;
+      --shadow:0 16px 38px rgba(16,45,68,.08);
+      --shadow-soft:0 8px 22px rgba(16,45,68,.055);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button,input,select{font:inherit}
+
+    .top-strip{
+      height:34px;
+      background:var(--helin);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .top-strip a{
+      border:1px solid rgba(255,255,255,.72);
+      border-radius:8px;
+      padding:6px 18px;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+
+    .header{
+      background:linear-gradient(90deg,#22aeb2,#14a5a9);
+      color:#fff;
+      border-bottom:1px solid rgba(255,255,255,.18);
+    }
+
+    .header-main{
+      max-width:1420px;
+      height:84px;
+      margin:0 auto;
+      padding:0 38px;
+      display:grid;
+      grid-template-columns:180px 1fr auto;
+      gap:30px;
+      align-items:center;
+    }
+
+    .logo{
+      color:#fff;
+      font-size:50px;
+      line-height:1;
+      font-weight:950;
+      letter-spacing:-.07em;
+    }
+
+    .search{
+      height:56px;
+      max-width:690px;
+      border-radius:999px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      color:#15354b;
+      box-shadow:0 15px 34px rgba(0,0,0,.13);
+    }
+
+    .search-icon{
+      width:58px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#234557;
+      font-size:25px;
+    }
+
+    .search input{
+      flex:1;
+      height:100%;
+      border:0;
+      outline:0;
+      color:#203848;
+      font-size:15px;
+    }
+
+    .search select{
+      width:210px;
+      height:100%;
+      border:0;
+      border-left:1px solid #d7e7e8;
+      background:#fff;
+      outline:0;
+      color:#17394c;
+      font-weight:850;
+      padding:0 14px;
+      font-size:13px;
+    }
+
+    .search button{
+      width:66px;
+      height:50px;
+      margin-right:4px;
+      border:0;
+      border-radius:999px;
+      background:var(--helin);
+      color:#fff;
+      font-size:25px;
+      cursor:pointer;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:26px;
+      font-size:19px;
+      font-weight:850;
+    }
+
+    .whatsapp{
+      height:58px;
+      min-width:164px;
+      border-radius:999px;
+      background:rgba(255,255,255,.36);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      box-shadow:0 14px 30px rgba(0,0,0,.10);
+    }
+
+    .wa-icon{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.82);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+
+    .cart{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      position:relative;
+      white-space:nowrap;
+    }
+
+    .cart-icon{font-size:38px;line-height:1}
+    .cart-badge{
+      position:absolute;
+      top:-8px;
+      left:32px;
+      width:27px;
+      height:27px;
+      border-radius:50%;
+      background:var(--helin-soft);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:950;
+    }
+
+    .nav{
+      height:66px;
+      background:#fff;
+      border-bottom:1px solid #e6f0f1;
+      position:relative;
+      z-index:10;
+    }
+
+    .nav-inner{
+      max-width:1420px;
+      height:100%;
+      margin:0 auto;
+      padding:0 38px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:26px;
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .nav-left,.nav-right{
+      display:flex;
+      align-items:center;
+      gap:28px;
+      white-space:nowrap;
+    }
+
+    .nav-link{
+      min-height:66px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      color:#111;
+    }
+
+    .nav-link.active{color:var(--helin)}
+    .contact{
+      color:#28495a;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .resources-btn{
+      height:43px;
+      min-width:142px;
+      border-radius:999px;
+      color:#fff;
+      background:var(--helin);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      line-height:1;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .page{
+      max-width:1320px;
+      margin:0 auto;
+      padding:34px 38px 128px;
+    }
+
+    .breadcrumb{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#7c8d98;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:78px;
+    }
+
+    .breadcrumb strong{color:var(--helin)}
+
+    .page-title{
+      text-align:center;
+      margin:0 0 62px;
+      color:var(--helin);
+      font-size:55px;
+      line-height:1;
+      letter-spacing:-.055em;
+      font-weight:950;
+      position:relative;
+    }
+
+    .page-title:after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-22px;
+      transform:translateX(-50%);
+      width:76px;
+      height:4px;
+      border-radius:999px;
+      background:var(--helin);
+    }
+
+    .policies{
+      display:grid;
+      gap:18px;
+    }
+
+    .policy-card{
+      min-height:230px;
+      background:#fff;
+      border:1px solid #e8eeee;
+      border-radius:8px;
+      box-shadow:0 13px 32px rgba(16,45,68,.055);
+      display:grid;
+      grid-template-columns:150px 85px 1fr 130px;
+      gap:0;
+      align-items:stretch;
+      padding:0;
+      overflow:hidden;
+    }
+
+    .policy-icon-wrap{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding-top:46px;
+      border-right:1px solid #e8eeee;
+    }
+
+    .policy-icon{
+      width:82px;
+      height:82px;
+      border-radius:50%;
+      background:#e9f8f8;
+      color:var(--helin);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:38px;
+      box-shadow:0 10px 24px rgba(52,177,181,.08);
+    }
+
+    .policy-number{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding-top:44px;
+      color:var(--helin);
+      font-size:42px;
+      line-height:1;
+      font-family:Georgia, 'Times New Roman', serif;
+      font-weight:700;
+      border-right:1px solid #e8eeee;
+    }
+
+    .policy-content{
+      padding:36px 26px 28px;
+    }
+
+    .policy-content h2{
+      margin:0 0 12px;
+      color:#1d2232;
+      font-size:30px;
+      line-height:1.1;
+      font-family:Georgia, 'Times New Roman', serif;
+      font-weight:700;
+    }
+
+    .policy-content > p{
+      color:#63717d;
+      font-size:14px;
+      line-height:1.55;
+      margin:0 0 28px;
+      max-width:900px;
+    }
+
+    .policy-points{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:34px;
+    }
+
+    .point{
+      display:grid;
+      grid-template-columns:34px 1fr;
+      gap:12px;
+      align-items:start;
+    }
+
+    .point-icon{
+      width:32px;
+      height:32px;
+      color:var(--helin);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      font-weight:900;
+    }
+
+    .point h3{
+      margin:0 0 7px;
+      color:var(--helin);
+      font-size:15px;
+      font-family:Georgia, 'Times New Roman', serif;
+      font-weight:700;
+    }
+
+    .point p{
+      margin:0;
+      color:#243847;
+      font-size:11px;
+      line-height:1.55;
+      font-weight:650;
+    }
+
+    .policy-action{
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding:0 24px 44px 0;
+    }
+
+    .more-btn{
+      height:44px;
+      min-width:116px;
+      border:2px solid var(--helin);
+      border-radius:8px;
+      background:#fff;
+      color:var(--helin);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-size:14px;
+      font-weight:950;
+      cursor:pointer;
+    }
+
+    .footer{
+      background:
+        linear-gradient(135deg,#11a8aa,#078f93);
+      color:#fff;
+      padding:78px 38px 22px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .footer:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='1000' height='320' viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.14'%3E%3Cpath d='M-10 270C120 80 260 210 430 92s365-84 590 120'/%3E%3Ccircle cx='830' cy='90' r='160'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:cover;
+    }
+
+    .footer-inner{
+      position:relative;
+      max-width:1160px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1.25fr 1fr 1fr 1.25fr;
+      gap:56px;
+    }
+
+    .footer h3,.footer h4{margin-top:0}
+    .footer .footer-logo{
+      color:#fff;
+      font-size:32px;
+      font-weight:500;
+      margin-bottom:20px;
+    }
+
+    .footer p,.footer li{
+      color:rgba(255,255,255,.82);
+      font-size:15px;
+      line-height:1.8;
+    }
+
+    .footer ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+
+    .socials{
+      display:flex;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .socials span{
+      width:31px;
+      height:31px;
+      border-radius:50%;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .locations{
+      display:grid;
+      gap:8px;
+    }
+
+    .loc{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      color:rgba(255,255,255,.88);
+      font-size:14px;
+    }
+
+    .loc span:not(:first-child){
+      width:25px;
+      height:25px;
+      border-radius:50%;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+    }
+
+    .copy{
+      position:relative;
+      max-width:1160px;
+      margin:50px auto 0;
+      padding-top:24px;
+      border-top:1px solid rgba(255,255,255,.16);
+      text-align:center;
+      font-size:13px;
+      color:rgba(255,255,255,.76);
+    }
+
+    @media(max-width:1120px){
+      .header-main{
+        grid-template-columns:1fr;
+        height:auto;
+        padding:18px 24px;
+      }
+
+      .actions{display:none}
+      .nav-inner{overflow:auto}
+
+      .policy-card{
+        grid-template-columns:110px 75px 1fr;
+      }
+
+      .policy-action{
+        grid-column:1 / -1;
+        align-items:center;
+        justify-content:flex-end;
+        padding:0 28px 28px;
+      }
+
+      .policy-points{
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+
+      .footer-inner{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:720px){
+      .top-strip{display:none}
+      .search{display:none}
+      .logo{font-size:40px}
+      .nav-left,.nav-right{gap:16px}
+
+      .page{
+        padding:24px 16px 68px;
+      }
+
+      .breadcrumb{
+        margin-bottom:36px;
+      }
+
+      .page-title{
+        font-size:42px;
+        margin-bottom:54px;
+      }
+
+      .policy-card{
+        grid-template-columns:1fr;
+      }
+
+      .policy-icon-wrap,.policy-number{
+        border-right:0;
+        padding-top:24px;
+      }
+
+      .policy-number{
+        padding-top:10px;
+      }
+
+      .policy-content{
+        padding:22px;
+        text-align:left;
+      }
+
+      .policy-content h2{
+        font-size:25px;
+      }
+
+      .point{
+        grid-template-columns:30px 1fr;
+      }
+
+      .policy-action{
+        justify-content:center;
+        padding:0 22px 24px;
+      }
+
+      .more-btn{
+        width:100%;
+      }
+
+      .footer{
+        padding:48px 24px 20px;
+      }
+
+      .footer-inner{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-strip">
+    <span>Todo para cirugía odontológica especializada</span>
+    <a href="#">VER PRODUCTOS</a>
+  </div>
+
+  <header class="header">
+    <div class="header-main">
+      <a class="logo" href="#">helin.</a>
+
+      <form class="search">
+        <div class="search-icon">⌕</div>
+        <input type="search" placeholder="¿Qué producto estás buscando?" />
+        <select>
+          <option>Todas las categorías</option>
+          <option>Implantología</option>
+          <option>Regeneración Ósea Guiada</option>
+          <option>Osteosíntesis</option>
+        </select>
+        <button type="submit">⌕</button>
+      </form>
+
+      <div class="actions">
+        <a class="whatsapp" href="#"><span class="wa-icon">☏</span> Escríbenos</a>
+        <a class="cart" href="#"><span class="cart-icon">🛒</span><span class="cart-badge">1</span> Ver carrito</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a class="nav-link" href="#">☰ Productos</a>
+        <a class="nav-link active" href="#">Home</a>
+        <a class="nav-link" href="#">Cirugía Bucal +</a>
+        <a class="nav-link" href="#">Cirugía Maxilofacial +</a>
+        <a class="nav-link" href="#">Periodoncia +</a>
+        <a class="nav-link" href="#">Ortodoncia +</a>
+        <a class="nav-link" href="#">Endodoncia +</a>
+      </div>
+
+      <div class="nav-right">
+        <a class="contact" href="#">☏ Contáctanos</a>
+        <a class="resources-btn" href="#">Recursos<br>Clínicos ☁</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="breadcrumb">
+      <span>Inicio</span>
+      <span>›</span>
+      <strong>Políticas</strong>
+    </div>
+
+    <h1 class="page-title">Políticas</h1>
+
+    <section class="policies">
+      <article class="policy-card">
+        <div class="policy-icon-wrap">
+          <div class="policy-icon">🚚</div>
+        </div>
+        <div class="policy-number">1.</div>
+        <div class="policy-content">
+          <h2>Políticas de envío y garantías</h2>
+          <p>
+            En Helin, nos comprometemos a que recibas tus productos en óptimas condiciones y con la máxima seguridad. Conoce nuestras condiciones de envío, tiempos de entrega y garantías.
+          </p>
+
+          <div class="policy-points">
+            <div class="point">
+              <div class="point-icon">▱</div>
+              <div>
+                <h3>Envíos</h3>
+                <p>Realizamos envíos a todo el territorio nacional. Los tiempos de entrega varían entre 2 y 7 días hábiles según tu ubicación.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">♡</div>
+              <div>
+                <h3>Garantía</h3>
+                <p>Todos nuestros productos cuentan con garantía contra defectos de fabricación por un período de 30 días desde la fecha de compra.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">↻</div>
+              <div>
+                <h3>Devoluciones</h3>
+                <p>Puedes solicitar una devolución dentro de los 7 días posteriores a la recepción del pedido, si el producto no ha sido usado y está en su empaque original.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="policy-action">
+          <button class="more-btn">Ver más ›</button>
+        </div>
+      </article>
+
+      <article class="policy-card">
+        <div class="policy-icon-wrap">
+          <div class="policy-icon">▤</div>
+        </div>
+        <div class="policy-number">2.</div>
+        <div class="policy-content">
+          <h2>Términos y condiciones</h2>
+          <p>
+            Al acceder y utilizar nuestro sitio web y servicios, aceptas cumplir con los siguientes términos y condiciones. Te recomendamos leerlos cuidadosamente.
+          </p>
+
+          <div class="policy-points">
+            <div class="point">
+              <div class="point-icon">♙</div>
+              <div>
+                <h3>Uso del sitio</h3>
+                <p>El contenido de este sitio es para fines informativos y de compra personal. Queda prohibido su uso comercial no autorizado.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">▭</div>
+              <div>
+                <h3>Pedidos y pagos</h3>
+                <p>Los pedidos están sujetos a disponibilidad y confirmación de pago. Aceptamos pagos con tarjeta de crédito, débito y otros métodos seguros.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">▢</div>
+              <div>
+                <h3>Responsabilidades</h3>
+                <p>Helin no se hace responsable por el uso indebido de los productos adquiridos ni por daños derivados de causas fuera de nuestro control.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="policy-action">
+          <button class="more-btn">Ver más ›</button>
+        </div>
+      </article>
+
+      <article class="policy-card">
+        <div class="policy-icon-wrap">
+          <div class="policy-icon">♙</div>
+        </div>
+        <div class="policy-number">3.</div>
+        <div class="policy-content">
+          <h2>Políticas de privacidad</h2>
+          <p>
+            En Helin, tu privacidad es nuestra prioridad. Esta política explica cómo recopilamos, usamos y protegemos tu información personal de acuerdo con la normativa aplicable.
+          </p>
+
+          <div class="policy-points">
+            <div class="point">
+              <div class="point-icon">▤</div>
+              <div>
+                <h3>Información que recopilamos</h3>
+                <p>Recopilamos datos personales como nombre, correo electrónico, dirección de envío y método de pago para procesar tus pedidos y mejorar tu experiencia.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">▢</div>
+              <div>
+                <h3>Uso de la información</h3>
+                <p>Utilizamos tu información únicamente para gestionar tus pedidos, brindarte soporte y enviarte comunicaciones relevantes sobre nuestros productos y servicios.</p>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="point-icon">♡</div>
+              <div>
+                <h3>Protección de datos</h3>
+                <p>Implementamos medidas técnicas y organizativas para proteger tu información personal. No compartimos tus datos con terceros sin tu consentimiento.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="policy-action">
+          <button class="more-btn">Ver más ›</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Helin</div>
+        <p>Todo en Cirugía Odontológica Especializada.</p>
+        <p>+58 4241112285</p>
+        <div class="socials"><span>f</span><span>x</span><span>ig</span><span>in</span></div>
+      </div>
+
+      <div>
+        <h4>Nuestra Empresa</h4>
+        <ul>
+          <li>Quiénes somos</li>
+          <li>Misión y visión</li>
+          <li>Nuestros Team</li>
+          <li>Nuestros Aliados</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Políticas</h4>
+        <ul>
+          <li>Políticas de envío y garantías</li>
+          <li>Términos y condiciones</li>
+          <li>Política de privacidad</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contáctanos</h4>
+        <p>✉ info@helinlatam.com<br>☎ Central telefónica<br>+58 4242789481</p>
+        <h4>Nuestras sedes:</h4>
+        <div class="locations">
+          <div class="loc"><span>Caracas</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Valencia</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Barquisimeto</span><span>⌖</span><span>☏</span></div>
+          <div class="loc"><span>Maracaibo</span><span>⌖</span><span>☏</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="copy">© Copyright 2026. by Helin</div>
+  </footer>
+
+</body>
+</html>
