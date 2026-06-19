@@ -8,12 +8,12 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav>
-        <a href="{{ route('web.home') }}">Inicio</a>
-        <span>></span>
-        <span>Contacto</span>
-    </nav>
+    @include('web.components.breadcrumb', [
+        'items' => [
+            ['label' => 'Inicio', 'url' => route('web.home')],
+            ['label' => 'Contacto']
+        ]
+    ])
 
     <h1 class="page-title">Contáctanos</h1>
 
@@ -94,17 +94,6 @@
                 <div class="field-full">
                     <label>¿Cómo podemos ayudarte? <span>*</span></label>
                     <textarea name="mensaje" placeholder="Cuéntanos más sobre tu consulta..." required></textarea>
-                </div>
-
-                <div class="field-full captcha">
-                    <div class="captcha-left">
-                        <input type="checkbox" id="robot-check" required>
-                        <label for="robot-check">No soy un robot</label>
-                    </div>
-                    <div class="captcha-right">
-                        <div class="captcha-logo"></div>
-                        <div>reCAPTCHA<br>Privacidad · Términos</div>
-                    </div>
                 </div>
 
                 <button class="submit" type="submit">➤ Contactar a Helin</button>

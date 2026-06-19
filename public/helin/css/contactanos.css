@@ -5,7 +5,7 @@
     text-align: center;
     margin: 0 0 70px;
     color: var(--helin-primary);
-    font-size: 3.4375rem;
+    font-size: var(--text-8xl-lg);
     line-height: 1;
     letter-spacing: -0.055em;
     font-weight: 900;
@@ -41,16 +41,16 @@
 
 .info-block h2 {
     margin: 0 0 18px;
-    color: #0f2448;
-    font-size: 2.375rem;
+    color: var(--text-darker);
+    font-size: var(--text-5xl-lg);
     line-height: 1.05;
     letter-spacing: -0.045em;
 }
 
 .info-block p {
     margin: 0 0 28px;
-    color: #4c6372;
-    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-size: var(--text-base);
     line-height: 1.65;
     max-width: 440px;
 }
@@ -78,27 +78,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: var(--text-22px);
     box-shadow: 0 8px 22px rgba(16, 45, 68, 0.055);
 }
 
 .info-item h3 {
     margin: 0 0 5px;
     color: var(--helin-primary);
-    font-size: 0.875rem;
+    font-size: var(--text-base);
     font-weight: 900;
 }
 
 .info-item p {
     margin: 0;
-    color: #42586a;
-    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
     line-height: 1.55;
 }
 
 /* Sedes */
 .sedes {
-    border-top: 1px solid #e1ecee;
+    border-top: 1px solid var(--border-light);
     padding-top: 18px;
     max-width: 440px;
 }
@@ -106,7 +106,7 @@
 .sedes h3 {
     margin: 0 0 14px;
     color: var(--helin-primary);
-    font-size: 0.875rem;
+    font-size: var(--text-base);
     font-weight: 900;
 }
 
@@ -125,14 +125,14 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #43596a;
-    font-size: 0.75rem;
+    color: var(--text-slate);
+    font-size: var(--text-sm);
     font-weight: 700;
 }
 
 .sede-pill span {
     color: var(--helin-primary);
-    font-size: 16px;
+    font-size: var(--text-16px);
 }
 
 /* Form Card */
@@ -157,8 +157,8 @@
 /* Form Elements */
 label {
     display: block;
-    font-size: 0.75rem;
-    color: #263746;
+    font-size: var(--text-sm);
+    color: var(--text-slate-dark);
     font-weight: 700;
     margin-bottom: 9px;
 }
@@ -172,7 +172,7 @@ label span {
     border: none;
     border-radius: 6px;
     background: var(--white);
-    color: #293f50;
+    color: var(--text-slate-darker);
     outline: 0;
     transition: 0.2s;
 }
@@ -190,7 +190,7 @@ label span {
 }
 
 .form-card input::placeholder, .form-card textarea::placeholder {
-    color: #98a6ae;
+    color: var(--text-slate-light);
 }
 
 .form-card input:focus, .form-card select:focus, .form-card textarea:focus {
@@ -201,9 +201,9 @@ label span {
 /* Captcha */
 .captcha {
     height: 62px;
-    border: 1px solid #d9e2e4;
+    border: 1px solid var(--border-gray);
     border-radius: 5px;
-    background: #fafafa;
+    background: var(--gray-light);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -215,23 +215,23 @@ label span {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #222;
-    font-size: 0.75rem;
+    color: var(--text-dark-black);
+    font-size: var(--text-sm);
     font-weight: 700;
 }
 
 .captcha-left input {
     width: 28px;
     height: 28px;
-    border: 2px solid #d1d6d9;
+    border: 2px solid var(--border-dark);
     background: var(--white);
     margin: 0;
 }
 
 .captcha-right {
     text-align: center;
-    color: #777;
-    font-size: 9px;
+    color: var(--text-medium-gray);
+    font-size: var(--text-9px);
     line-height: 1.2;
 }
 
@@ -239,7 +239,7 @@ label span {
     width: 28px;
     height: 28px;
     margin: 0 auto 2px;
-    background: #4f79d9;
+    background: var(--helin-primary);
     clip-path: polygon(50% 0, 100% 45%, 82% 100%, 18% 100%, 0 45%);
 }
 
@@ -251,7 +251,7 @@ label span {
     border-radius: 9999px;
     background: var(--helin-primary);
     color: var(--white);
-    font-size: 0.875rem;
+    font-size: var(--text-base);
     font-weight: 900;
     cursor: pointer;
     display: flex;
@@ -265,8 +265,8 @@ label span {
 .secure {
     grid-column: 1 / -1;
     text-align: center;
-    color: #7d8d98;
-    font-size: 0.75rem;
+    color: var(--text-gray-blue);
+    font-size: var(--text-sm);
     font-weight: 700;
     display: flex;
     align-items: center;

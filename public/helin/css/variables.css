@@ -1,0 +1,234 @@
+/* Variables CSS Centralizadas - Helin */
+:root {
+    /* Colores Principales - Turquesa */
+    --helin-primary: #34b1b5;
+    --helin-primary-light: #97d5d4;
+    --helin-primary-dark: #289894;
+    --helin-soft: #97d5d4;
+
+    /* Colores de Fondo */
+    --helin-bg: #fbfdfd;
+    --bg-light: #f7fbfb;
+    --bg-gray: #effafa;
+    --bg-white: #ffffff;
+
+    /* Fondos Claros Turquesa */
+    --bg-turquesa-light-1: #e9fbfb;
+    --bg-turquesa-light-2: #effafa;
+    --bg-turquesa-light-3: #f7ffff;
+
+    /* Colores de Texto */
+    --text-primary: #0f2f43;
+    --text-secondary: #102d44;
+    --text-muted: #6f8796;
+    --text-dark: #1d2232;
+    --text-gray: #63717d;
+    --text-darker: #0f2448;
+    --text-navy: #13284a;
+    --text-blue-dark: #1b3046;
+    --text-blue-gray: #152d49;
+    --text-black: #111;
+    --text-blue: #1a609a;
+    --text-blue-light: #4c7aa3;
+    --text-blue-medium: #1a6ea8;
+    --text-red: #cf2b2d;
+    --text-dark-gray: #333;
+    --text-blue-royal: #2873b9;
+    --text-medium-gray: #777;
+    --text-slate: #43596a;
+    --text-slate-dark: #263746;
+    --text-slate-darker: #293f50;
+    --text-slate-light: #98a6ae;
+    --text-dark-black: #222;
+    --text-blue-purple: #4f79d9;
+    --text-gray-blue: #7d8d98;
+    --text-teal-dark: #466273;
+
+    /* Colores de Borde */
+    --border-color: #d9eeee;
+    --border-light: #e1ecee;
+    --border-gray: #d9e2e4;
+    --border-blue: #d6e3e5;
+    --border-cyan: #cceeee;
+    --border-dark: #d1d6d9;
+
+    /* Colores Neutros */
+    --white: #ffffff;
+    --black: #000000;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --gray-light: #fafafa;
+    --gray-slate: #95a7b2;
+    --gray-cool: #7a8b93;
+    --gray-warm: #687781;
+    --gray-metal: #667077;
+    --gray-stone: #69737a;
+    --gray-mist: #859197;
+    --gray-cloud: #8b989e;
+    --gray-smoke: #87949b;
+    --gray-dim: #303941;
+    --gray-darker: #3e474d;
+    --gray-darkest: #323a40;
+    --gray-ash: #cdd5d8;
+    --gray-cement: #cfd8dc;
+    --gray-pebble: #c9d4d7;
+    --gray-fog: #9eaaae;
+    --gray-haze: #9aa8ad;
+    --gray-mist-light: #e8eef0;
+    --gray-blue: #4a6171;
+    --gray-blue-dark: #0b1d2f;
+    --gray-blue-darkest: #1d232a;
+    --gray-brown: #d9a27b;
+
+    /* Colores de Éxito/Error/Advertencia */
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* Tipografía - Familia */
+    --font-family-base: 'Inter', Arial, Helvetica, sans-serif;
+
+    /* Tipografía - Pesos */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    --font-weight-extrablack: 950;
+
+    /* Tipografía - Tamaños (rem) */
+    --text-xs: 0.6875rem; /* 11px */
+    --text-sm: 0.75rem; /* 12px */
+    --text-sm-lg: 0.8125rem; /* 13px */
+    --text-base: 0.875rem; /* 14px */
+    --text-base-lg: 0.9375rem; /* 15px */
+    --text-md: 1rem; /* 16px */
+    --text-lg: 1.125rem; /* 18px */
+    --text-xl: 1.25rem; /* 20px */
+    --text-xl-lg: 1.375rem; /* 22px */
+    --text-2xl: 1.5rem; /* 24px */
+    --text-2xl-lg: 1.625rem; /* 26px */
+    --text-3xl: 1.875rem; /* 30px */
+    --text-3xl-lg: 1.9375rem; /* 31px */
+    --text-4xl: 2rem; /* 32px */
+    --text-4xl-lg: 2.125rem; /* 34px */
+    --text-5xl: 2.25rem; /* 36px */
+    --text-5xl-lg: 2.375rem; /* 38px */
+    --text-6xl: 2.625rem; /* 42px */
+    --text-6xl-lg: 2.6875rem; /* 43px */
+    --text-7xl: 2.75rem; /* 44px */
+    --text-8xl: 3.375rem; /* 54px */
+    --text-8xl-lg: 3.4375rem; /* 55px */
+    --text-9xl: 3.625rem; /* 58px */
+
+    /* Tipografía - Tamaños (px) */
+    --text-9px: 9px;
+    --text-10px: 10px;
+    --text-11px: 11px;
+    --text-12px: 12px;
+    --text-13px: 13px;
+    --text-14px: 14px;
+    --text-15px: 15px;
+    --text-16px: 16px;
+    --text-17px: 17px;
+    --text-18px: 18px;
+    --text-20px: 20px;
+    --text-22px: 22px;
+    --text-24px: 24px;
+    --text-25px: 25px;
+    --text-26px: 26px;
+    --text-30px: 30px;
+    --text-31px: 31px;
+    --text-32px: 32px;
+    --text-34px: 34px;
+    --text-36px: 36px;
+    --text-38px: 38px;
+    --text-42px: 42px;
+    --text-43px: 43px;
+    --text-44px: 44px;
+    --text-48px: 48px;
+    --text-50px: 50px;
+    --text-54px: 54px;
+    --text-55px: 55px;
+    --text-58px: 58px;
+
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Border Radius (rem) */
+    --radius-none: 0;
+    --radius-xs: 0.25rem; /* 4px */
+    --radius-sm: 0.375rem; /* 6px */
+    --radius-md: 0.5rem; /* 8px */
+    --radius-lg: 0.625rem; /* 10px */
+    --radius-xl: 0.75rem; /* 12px */
+    --radius-2xl: 0.875rem; /* 14px */
+    --radius-3xl: 1rem; /* 16px */
+    --radius-4xl: 1.125rem; /* 18px */
+    --radius-5xl: 1.25rem; /* 20px */
+    --radius-6xl: 1.375rem; /* 22px */
+    --radius-7xl: 1.5rem; /* 24px */
+    --radius-8xl: 1.75rem; /* 28px */
+    --radius-9xl: 2rem; /* 32px */
+    --radius-10xl: 2.125rem; /* 34px */
+    --radius-full: 9999px;
+    --radius-circle: 50%;
+
+    /* Border Radius (px) */
+    --radius-4px: 4px;
+    --radius-6px: 6px;
+    --radius-8px: 8px;
+    --radius-10px: 10px;
+    --radius-12px: 12px;
+    --radius-14px: 14px;
+    --radius-16px: 16px;
+    --radius-18px: 18px;
+    --radius-20px: 20px;
+    --radius-22px: 22px;
+    --radius-24px: 24px;
+    --radius-28px: 28px;
+    --radius-30px: 30px;
+    --radius-32px: 32px;
+    --radius-34px: 34px;
+    --radius-40px: 40px;
+    --radius-55px: 55px;
+    --radius-120px: 120px;
+
+    /* Botones */
+    --btn-height-sm: 40px;
+    --btn-height-md: 45px;
+    --btn-height-lg: 48px;
+    --btn-height-xl: 50px;
+    --btn-padding-sm: 0 16px;
+    --btn-padding-md: 0 20px;
+    --btn-padding-lg: 0 24px;
+    --btn-padding-xl: 0 32px;
+    --btn-border-radius: 9999px;
+
+    /* Transiciones */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+}

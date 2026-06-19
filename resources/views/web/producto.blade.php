@@ -4,16 +4,16 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav class="text-sm mb-6">
-        <a href="{{ route('web.home') }}" class="text-gray-500 hover:text-turquesa">Inicio</a>
-        <span class="text-gray-400 mx-2">></span>
-        <a href="{{ route('web.catalogo') }}" class="text-gray-500 hover:text-turquesa">Catálogo</a>
-        <span class="text-gray-400 mx-2">></span>
-        <a href="{{ route('web.catalogo') }}" class="text-gray-500 hover:text-turquesa">Implantología</a>
-        <span class="text-gray-400 mx-2">></span>
-        <span class="text-turquesa font-medium">Implante Straumann BLX</span>
-    </nav>
+    @include('web.components.breadcrumb', [
+        'attributes' => 'class="text-sm mb-6"',
+        'items' => [
+            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Catálogo', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Implantología', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Implante Straumann BLX', 'spanAttributes' => 'class="text-turquesa font-medium"']
+        ],
+        'separatorAttributes' => 'class="text-gray-400 mx-2"'
+    ])
 
     <div class="flex flex-col lg:flex-row gap-8 mb-12">
         <!-- Imagen del Producto -->
