@@ -75,7 +75,7 @@
 }
 
 .benefit-icon-box i {
-    color: #00A3A0;
+    color: #34b1b5;
     font-size: 1.25rem;
 }
 
@@ -139,7 +139,7 @@
 }
 
 .search-button {
-    background-color: #00A3A0;
+    background-color: #34b1b5;
     color: white;
     border-radius: 9999px;
     padding: 0 1.25rem;
@@ -152,7 +152,7 @@
 }
 
 .search-button:hover {
-    background-color: #007A78;
+    background-color: #289894;
 }
 
 /* Category Badge */
@@ -160,7 +160,7 @@
     position: absolute;
     top: 0.625rem;
     left: 0.625rem;
-    background-color: #15aabf;
+    background-color: #34b1b5;
     color: white;
     font-size: 0.75rem;
     font-weight: 600;
@@ -177,7 +177,7 @@
     right: 2rem;
     width: 3rem;
     height: 3rem;
-    background-color: #00A3A0;
+    background-color: #34b1b5;
     color: white;
     border-radius: 9999px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -189,6 +189,6 @@
 }
 
 .scroll-to-top:hover {
-    background-color: #007A78;
+    background-color: #289894;
     transform: scale(1.1);
 }

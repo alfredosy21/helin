@@ -1,9 +1,9 @@
 <!-- Barra de Beneficios -->
-<section class="bg-white py-6 sm:py-8 mt-8">
+<section class="bg-white py-6 sm:py-8">
     <div class="container mx-auto px-4">
         <div class="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide">
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
-                <div class="w-12 h-12 bg-[#4DD4D1]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-[#97d5d4]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-truck text-turquesa text-xl"></i>
                 </div>
                 <div>
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
-                <div class="w-12 h-12 bg-[#4DD4D1]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-[#97d5d4]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-shield-alt text-turquesa text-xl"></i>
                 </div>
                 <div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
-                <div class="w-12 h-12 bg-[#4DD4D1]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-[#97d5d4]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-headset text-turquesa text-xl"></i>
                 </div>
                 <div>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
-                <div class="w-12 h-12 bg-[#4DD4D1]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-[#97d5d4]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-box text-turquesa text-xl"></i>
                 </div>
                 <div>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
-                <div class="w-12 h-12 bg-[#4DD4D1]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-[#97d5d4]/20 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fas fa-file-check text-turquesa text-xl"></i>
                 </div>
                 <div>

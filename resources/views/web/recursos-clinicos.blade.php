@@ -8,86 +8,43 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav>
-        <a href="{{ route('web.home') }}">Inicio</a>
-        <span>></span>
-        <span>Recursos Clínicos</span>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-copy">
-                <span class="hero-badge">Centro de conocimiento clínico</span>
-                <h1>Recursos clínicos para decisiones más precisas.</h1>
-                <p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
-                <div class="hero-buttons">
-                    <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
-                    <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
-                </div>
-            </div>
-            <div class="hero-panel">
-                <div class="panel-title">
-                    <h3>Encuentra contenido por tipo</h3>
-                    <span class="badge">Actualizado</span>
-                </div>
-                <div class="quick-cards">
-                    <article class="quick-card">
-                        <div class="quick-icon">C</div>
-                        <h4>Casos clínicos</h4>
-                        <p>Protocolos, materiales utilizados y resultados.</p>
-                    </article>
-                    <article class="quick-card">
-                        <div class="quick-icon">▶</div>
-                        <h4>Videos</h4>
-                        <p>Contenido audiovisual para soporte técnico.</p>
-                    </article>
-                    <article class="quick-card">
-                        <div class="quick-icon">PDF</div>
-                        <h4>Manuales</h4>
-                        <p>Documentos técnicos y descargables.</p>
-                    </article>
-                    <article class="quick-card">
-                        <div class="quick-icon">F</div>
-                        <h4>Fichas técnicas</h4>
-                        <p>Información clave de productos y soluciones.</p>
-                    </article>
-                </div>
-            </div>
+    <!-- Hero Banner - Estadísticas -->
+    <section class="hero-banner">
+        <div class="banner-content">
+            <span class="hero-badge">Centro de conocimiento clínico</span>
+            <h1>Recursos clínicos para decisiones más precisas.</h1>
+            <p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
         </div>
-    </section>
-
-    <!-- Estadísticas -->
-    <section class="stats">
-        <article class="stat">
-            <div class="stat-icon">+</div>
-            <div>
-                <strong>120</strong>
-                <span>Recursos disponibles</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon">5</div>
-            <div>
-                <strong>5</strong>
-                <span>Especialidades clínicas</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon">PDF</div>
-            <div>
-                <strong>48</strong>
-                <span>Descargables técnicos</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon">24</div>
-            <div>
-                <strong>24</strong>
-                <span>Casos clínicos</span>
-            </div>
-        </article>
+        <div class="banner-stats">
+            <article class="stat">
+                <div class="stat-icon">+</div>
+                <div>
+                    <strong>120</strong>
+                    <span>Recursos disponibles</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon">5</div>
+                <div>
+                    <strong>5</strong>
+                    <span>Especialidades clínicas</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon">PDF</div>
+                <div>
+                    <strong>48</strong>
+                    <span>Descargables técnicos</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon">24</div>
+                <div>
+                    <strong>24</strong>
+                    <span>Casos clínicos</span>
+                </div>
+            </article>
+        </div>
     </section>
 
     <!-- Sección de Búsqueda -->
@@ -167,62 +124,11 @@
             </div>
 
             <div class="resource-grid" id="casos">
-                <article class="resource-card">
-                    <div class="resource-thumb">
-                        <span class="resource-type">Caso clínico</span>
-                        <span class="resource-play">→</span>
-                    </div>
-                    <div class="resource-body">
-                        <div class="resource-tags">
-                            <span class="tag">Cirugía Bucal</span>
-                            <span class="tag">GBR</span>
-                        </div>
-                        <h3>Regeneración ósea guiada en zona posterior</h3>
-                        <p>Protocolo clínico con biomateriales, membrana y seguimiento del caso.</p>
-                        <div class="resource-footer">
-                            <span class="resource-format">▣ Artículo</span>
-                            <a href="#" class="resource-link">Ver caso</a>
-                        </div>
-                    </div>
-                </article>
+                @include('web.components.resource-card', ['resourceType' => 'Caso clínico', 'resourcePlay' => '→', 'resourceTags' => ['Cirugía Bucal', 'GBR'], 'resourceTitle' => 'Regeneración ósea guiada en zona posterior', 'resourceDescription' => 'Protocolo clínico con biomateriales, membrana y seguimiento del caso.', 'resourceFormat' => '▣ Artículo', 'resourceLink' => 'Ver caso', 'resourceUrl' => '#'])
 
-                <article class="resource-card">
-                    <div class="resource-thumb">
-                        <span class="resource-type">Video</span>
-                        <span class="resource-play">▶</span>
-                    </div>
-                    <div class="resource-body">
-                        <div class="resource-tags">
-                            <span class="tag">Implantología</span>
-                            <span class="tag">AB</span>
-                        </div>
-                        <h3>Colocación de implante con protocolo quirúrgico</h3>
-                        <p>Video de referencia para planificación, inserción y control de estabilidad.</p>
-                        <div class="resource-footer">
-                            <span class="resource-format">▶ Video</span>
-                            <a href="#" class="resource-link">Ver video</a>
-                        </div>
-                    </div>
-                </article>
+                @include('web.components.resource-card', ['resourceType' => 'Video', 'resourcePlay' => '▶', 'resourceTags' => ['Implantología', 'AB'], 'resourceTitle' => 'Colocación de implante con protocolo quirúrgico', 'resourceDescription' => 'Video de referencia para planificación, inserción y control de estabilidad.', 'resourceFormat' => '▶ Video', 'resourceLink' => 'Ver video', 'resourceUrl' => '#'])
 
-                <article class="resource-card">
-                    <div class="resource-thumb">
-                        <span class="resource-type">Manual</span>
-                        <span class="resource-play">↓</span>
-                    </div>
-                    <div class="resource-body">
-                        <div class="resource-tags">
-                            <span class="tag">Osteosíntesis</span>
-                            <span class="tag">PDF</span>
-                        </div>
-                        <h3>Manual técnico de placas y tornillos</h3>
-                        <p>Guía descargable para selección, uso y consideraciones clínicas.</p>
-                        <div class="resource-footer">
-                            <span class="resource-format">▤ PDF</span>
-                            <a href="#" class="resource-link">Descargar</a>
-                        </div>
-                    </div>
-                </article>
+                @include('web.components.resource-card', ['resourceType' => 'Manual', 'resourcePlay' => '↓', 'resourceTags' => ['Osteosíntesis', 'PDF'], 'resourceTitle' => 'Manual técnico de placas y tornillos', 'resourceDescription' => 'Guía descargable para selección, uso y consideraciones clínicas.', 'resourceFormat' => '▤ PDF', 'resourceLink' => 'Descargar', 'resourceUrl' => '#'])
 
                 @include('web.components.resource-card', ['resourceType' => 'Ficha técnica', 'resourcePlay' => '↓', 'resourceTags' => ['Biomateriales', 'PDF'], 'resourceTitle' => 'Ficha técnica de membrana reabsorbible', 'resourceDescription' => 'Especificaciones, indicaciones y recomendaciones de manipulación.', 'resourceFormat' => '▤ PDF', 'resourceLink' => 'Descargar', 'resourceUrl' => '#'])
 

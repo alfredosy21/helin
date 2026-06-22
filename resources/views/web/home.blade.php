@@ -108,27 +108,7 @@
 
    <!-- Sección "Estamos cerca de ti" -->
    <div class="container mx-auto px-4">
-      <section class="near my-8 rounded-2xl border border-gray-200 bg-gray-50 flex items-center gap-7 p-6" style="
-         margin: 30px 0;
-         border-radius: 28px;
-         border: 1px solid var(--line);
-         background: #effafa;
-         display: flex;
-         align-items: center;
-         gap: 26px;
-         padding: 24px 30px;
-         box-shadow: 0 10px 25px rgba(15,47,67,.06);
-         ">
-         <div class="circle-icon w-12 h-12 rounded-xl bg-turquesa/10 border border-turquesa/30 flex items-center justify-center text-turquesa font-black text-xl">
-            ⌖
-         </div>
-         <div>
-            <h2 class="text-2xl lg:text-3xl font-bold leading-none" style="letter-spacing: -0.045em;">
-               <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
-            </h2>
-            <p class="text-gray-600 font-bold mt-1">Caracas · Valencia · Barquisimeto · Maracaibo</p>
-         </div>
-      </section>
+      @include('web.partials.near')
    </div>
 
    <!-- Productos Destacados -->
@@ -205,42 +185,17 @@
          </div>
       </div>
       <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-         <article class="testimonial">
-            <div class="stars">★★★★★</div>
-            <p>Excelente atención y muy buen acompañamiento comercial. Encontramos los productos necesarios para implantología.</p>
-            <div class="person">
-               <div class="avatar"></div>
-               <div><strong>Dra. María Fernanda López</strong><span>Odontóloga implantóloga</span></div>
-            </div>
-            <div class="quote">"</div>
-         </article>
-         <article class="testimonial">
-            <div class="stars">★★★★★</div>
-            <p>Helin nos ha brindado soluciones confiables y un portafolio muy completo. Destaco la rapidez en la atención.</p>
-            <div class="person">
-               <div class="avatar"></div>
-               <div><strong>Dr. José Andrés Rivas</strong><span>Especialista en cirugía bucal</span></div>
-            </div>
-            <div class="quote">"</div>
-         </article>
-         <article class="testimonial">
-            <div class="stars">★★★★★</div>
-            <p>Muy buena experiencia de compra. La plataforma es fácil de usar y el equipo comercial responde con rapidez.</p>
-            <div class="person">
-               <div class="avatar"></div>
-               <div><strong>Clínica Sonrisa Integral</strong><span>Centro odontológico</span></div>
-            </div>
-            <div class="quote">"</div>
-         </article>
+         @include('web.components.testimonial-card', ['testimonialText' => 'Excelente atención y muy buen acompañamiento comercial. Encontramos los productos necesarios para implantología.', 'testimonialAuthor' => 'Dra. María Fernanda López', 'testimonialTitle' => 'Odontóloga implantóloga'])
+
+         @include('web.components.testimonial-card', ['testimonialText' => 'Helin nos ha brindado soluciones confiables y un portafolio muy completo. Destaco la rapidez en la atención.', 'testimonialAuthor' => 'Dr. José Andrés Rivas', 'testimonialTitle' => 'Especialista en cirugía bucal'])
+
+         @include('web.components.testimonial-card', ['testimonialText' => 'Muy buena experiencia de compra. La plataforma es fácil de usar y el equipo comercial responde con rapidez.', 'testimonialAuthor' => 'Clínica Sonrisa Integral', 'testimonialTitle' => 'Centro odontológico'])
       </div>
    </section>
 
    <!-- Sección de Opinión -->
    <div class="container mx-auto px-4">
-      <section class="opinion">
-         <h3>¡Nos encantaría conocer tu opinión!</h3>
-         <a href="#">Compartir comentario</a>
-      </section>
+      @include('web.partials.opinion')
    </div>
 </main>
 @endsection

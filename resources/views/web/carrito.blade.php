@@ -4,12 +4,14 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav class="text-sm mb-6">
-        <a href="{{ route('web.home') }}" class="text-gray-500 hover:text-turquesa">Inicio</a>
-        <span class="text-gray-400 mx-2">></span>
-        <span class="text-turquesa font-medium">Carrito</span>
-    </nav>
+    @include('web.components.breadcrumb', [
+        'attributes' => 'class="text-sm mb-6"',
+        'items' => [
+            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Carrito', 'spanAttributes' => 'class="text-turquesa font-medium"']
+        ],
+        'separatorAttributes' => 'class="text-gray-400 mx-2"'
+    ])
 
     <div class="flex flex-col lg:flex-row gap-8">
         <!-- Tabla de Productos (Izquierda - Mayor ancho) -->

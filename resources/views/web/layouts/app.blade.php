@@ -6,6 +6,7 @@
     <title>@yield('title', 'Helin - Material Dental')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('helin/css/variables.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/helin-components.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/custom-container.css') }}">
     @yield('styles')
@@ -14,16 +15,16 @@
             theme: {
                 extend: {
                     colors: {
-                        turquesa: '#00A3A0',
-                        'turquesa-light': '#4DD4D1',
-                        'turquesa-dark': '#007A78'
+                        turquesa: '#34b1b5',
+                        'turquesa-light': '#97d5d4',
+                        'turquesa-dark': '#289894'
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-50">
+<body style="background-color: var(--helin-bg);">
 
 @include('web.partials.header')
 @include('web.partials.mobile-nav')

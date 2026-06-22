@@ -8,14 +8,15 @@
         <!-- Sidebar Filtros -->
         <aside class="hidden lg:block w-64 flex-shrink-0">
             <div class="space-y-6">
-                <!-- Breadcrumb -->
-                <nav class="text-sm text-gray-500 mb-6">
-                    <a href="{{ route('web.home') }}" class="hover:text-turquesa">Inicio</a>
-                    <span class="text-gray-400 mx-1">></span>
-                    <a href="{{ route('web.catalogo') }}" class="hover:text-turquesa">Categorías</a>
-                    <span class="text-gray-400 mx-1">></span>
-                    <span class="text-turquesa font-medium">Implantología</span>
-                </nav>
+                @include('web.components.breadcrumb', [
+                    'attributes' => 'class="text-sm text-gray-500 mb-6"',
+                    'items' => [
+                        ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
+                        ['label' => 'Categorías', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'],
+                        ['label' => 'Implantología', 'spanAttributes' => 'class="text-turquesa font-medium"']
+                    ],
+                    'separatorAttributes' => 'class="text-gray-400 mx-1"'
+                ])
 
                 <!-- Especialidad -->
                 <div class="mb-4">

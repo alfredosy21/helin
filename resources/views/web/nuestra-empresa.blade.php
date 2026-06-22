@@ -8,12 +8,12 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav>
-        <a href="{{ route('web.home') }}">Inicio</a>
-        <span>></span>
-        <span>Nuestra Empresa</span>
-    </nav>
+    @include('web.components.breadcrumb', [
+        'items' => [
+            ['label' => 'Inicio', 'url' => route('web.home')],
+            ['label' => 'Nuestra Empresa']
+        ]
+    ])
 
     <!-- Hero Section -->
     <section class="about-hero">

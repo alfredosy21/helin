@@ -30,9 +30,9 @@ use App\Http\Controllers\WebController;
   |--------------------------------------------------------------------------
   | Public Website Routes
   |--------------------------------------------------------------------------
- */
+  */
 
-Route::prefix('web')->name('web.')->group(function () {
+Route::name('web.')->group(function () {
     Route::get('/', [WebController::class, 'home'])->name('home');
     Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
     Route::get('/producto', [WebController::class, 'producto'])->name('producto');
@@ -43,11 +43,6 @@ Route::prefix('web')->name('web.')->group(function () {
     Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
     Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
 });
-
-// Redirigir la raíz al sitio web público
-Route::get('/', function () {
-    return redirect()->route('web.home');
-})->name('home');
 
 /*
   |--------------------------------------------------------------------------

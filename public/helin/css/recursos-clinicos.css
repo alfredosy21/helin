@@ -1,4 +1,94 @@
-/* Recursos Clínicos Page - Specific Styles from helin-components-new.css */
+/* Recursos Clínicos Page - Specific Styles */
+
+/* Hero Banner - Estadísticas */
+.hero-banner {
+    background: linear-gradient(135deg, var(--helin-primary) 0%, var(--helin-primary-light) 100%);
+    border-radius: 24px;
+    padding: 48px 64px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    color: var(--white);
+}
+
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.banner-content .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: fit-content;
+}
+
+.banner-content h1 {
+    font-size: var(--text-6xl);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    font-weight: 900;
+    margin: 0;
+}
+
+.banner-content p {
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.95;
+}
+
+.banner-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.banner-stats .stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.banner-stats .stat-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xl);
+    font-weight: 900;
+    color: var(--white);
+}
+
+.banner-stats .stat strong {
+    display: block;
+    font-size: var(--text-3xl);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.banner-stats .stat span {
+    font-size: var(--text-sm);
+    opacity: 0.9;
+    font-weight: 500;
+}
 
 /* Hero Section */
 .hero {
@@ -300,7 +390,7 @@
 }
 
 .filter-group {
-    border-top: 1px solid #eef7f7;
+    border-top: 1px solid #d9eeee;
     padding-top: 16px;
     margin-top: 16px;
 }
@@ -326,7 +416,7 @@
 
 .count {
     color: var(--helin-primary);
-    background: #ecfbfb;
+    background: #e9fbfb;
     border-radius: 9999px;
     padding: 3px 8px;
     font-size: 0.6875rem;

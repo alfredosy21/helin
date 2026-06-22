@@ -4,14 +4,15 @@
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav class="text-sm mb-6">
-        <a href="{{ route('web.home') }}" class="text-gray-500 hover:text-turquesa">Inicio</a>
-        <span class="text-gray-400 mx-2">></span>
-        <a href="{{ route('web.carrito') }}" class="text-gray-500 hover:text-turquesa">Carrito</a>
-        <span class="text-gray-400 mx-2">></span>
-        <span class="text-turquesa font-medium">Detalle de la Solicitud</span>
-    </nav>
+    @include('web.components.breadcrumb', [
+        'attributes' => 'class="text-sm mb-6"',
+        'items' => [
+            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Carrito', 'url' => route('web.carrito'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Detalle de la Solicitud', 'spanAttributes' => 'class="text-turquesa font-medium"']
+        ],
+        'separatorAttributes' => 'class="text-gray-400 mx-2"'
+    ])
 
     <form action="#" method="POST" class="flex flex-col lg:flex-row gap-8">
         <!-- Columna Izquierda (70%) - Datos del Cliente -->
@@ -133,14 +134,6 @@
                             <span class="text-gray-800">Total</span>
                             <span class="text-turquesa">$552.00</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- reCAPTCHA -->
-                <div class="mb-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" id="recaptcha" class="w-5 h-5 text-turquesa rounded">
-                        <label for="recaptcha" class="text-sm text-gray-700">No soy un robot</label>
                     </div>
                 </div>
 

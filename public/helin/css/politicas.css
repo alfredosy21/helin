@@ -5,7 +5,7 @@
     text-align: center;
     margin: 0 0 70px;
     color: var(--helin-primary);
-    font-size: 3.4375rem;
+    font-size: var(--text-8xl-lg);
     line-height: 1;
     letter-spacing: -0.055em;
     font-weight: 900;
@@ -57,12 +57,12 @@
     width: 82px;
     height: 82px;
     border-radius: 50%;
-    background: #e9f8f8;
+    background: var(--bg-turquesa-light-1);
     color: var(--helin-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 38px;
+    font-size: var(--text-38px);
     box-shadow: 0 10px 24px rgba(52, 177, 181, 0.08);
 }
 
@@ -85,16 +85,16 @@
 
 .policy-content h2 {
     margin: 0 0 12px;
-    color: #1d2232;
-    font-size: 1.875rem;
+    color: var(--text-dark);
+    font-size: var(--text-3xl);
     line-height: 1.1;
     font-family: Georgia, 'Times New Roman', serif;
     font-weight: 700;
 }
 
 .policy-content > p {
-    color: #63717d;
-    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-size: var(--text-base);
     line-height: 1.55;
     margin: 0 0 28px;
     max-width: 900px;
@@ -121,22 +121,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    font-size: var(--text-25px);
     font-weight: 900;
 }
 
 .point h3 {
     margin: 0 0 7px;
     color: var(--helin-primary);
-    font-size: 0.875rem;
+    font-size: var(--text-base);
     font-family: Georgia, 'Times New Roman', serif;
     font-weight: 700;
 }
 
 .point p {
     margin: 0;
-    color: #243847;
-    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
     line-height: 1.55;
     font-weight: 700;
 }
@@ -160,7 +160,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 0.875rem;
+    font-size: var(--text-base);
     font-weight: 900;
     cursor: pointer;
     transition: all 0.2s ease;
