@@ -260,6 +260,46 @@ HTML,
 HTML,
             ],
             [
+                'title' => '¿Tienes preguntas?',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => '#',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<h2>Hablemos.</h2>
+<p>Estamos aquí para ayudarte. Escríbenos o utiliza el formulario y nuestro equipo se pondrá en contacto contigo lo antes posible.</p>
+HTML,
+            ],
+            [
+                'title' => '¡Nos encantaría conocer tu opinión!',
+                'image' => null,
+                'name_button' => 'Compartir comentario',
+                'url_button' => '#',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>¡Nos encantaría conocer tu opinión! Tu feedback nos ayuda a mejorar nuestros servicios y productos</p>
+HTML,
+            ],
+            [
+                'title' => 'Estamos cerca de ti',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => '#',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>donde construyes salud oral</p>
+<div class="cities-list">
+    <div class="city-item">Caracas</div>
+    <div class="city-item">Valencia</div>
+    <div class="city-item">Barquisimeto</div>
+    <div class="city-item">Maracaibo</div>
+</div>
+HTML,
+            ],
+            [
                 'title' => '¿Listo para transformar tu práctica clínica?',
                 'image' => 'CTA',
                 'name_button' => 'Acciones',

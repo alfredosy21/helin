@@ -10,23 +10,35 @@
 <header class="bg-turquesa sticky top-0 z-50">
     <div class="container mx-auto px-3 sm:px-4 py-2 sm:py-4">
         <div class="flex items-center gap-2 sm:gap-6">
-            <!-- Logo -->
-            <a href="{{ route('web.home') }}" class="text-white text-xl sm:text-3xl font-bold lowercase tracking-tight flex-shrink-0">helin.</a>
+            @php
+                    $settings = \App\Models\Settings::getSettings();
+                @endphp
+                <!-- Logo -->
+                <a href="{{ route('web.home') }}" class="flex items-center gap-2 text-white flex-shrink-0">
+                    @if($settings && $settings->image)
+                        <img src="{{ asset('storage/' . $settings->image) }}" alt="Helin" class="h-10 sm:h-12 w-auto">
+                    @else
+                        <span class="text-2xl sm:text-4xl font-bold lowercase tracking-tight">helin.</span>
+                    @endif
+                </a>
 
             <!-- Buscador - Solo en tablet/desktop -->
-            <div class="hidden sm:block flex-1 max-w-xl mx-auto">
-                <div class="bg-white rounded-full p-1.5 shadow-sm">
+            <div class="hidden sm:block flex-1 max-w-4xl mx-auto">
+                <div class="bg-white rounded-full p-0.5 shadow-sm">
                     <div class="flex items-center">
                         <div class="flex-1 flex items-center px-3">
                             <i class="fas fa-search text-gray-400 mr-2 text-sm"></i>
                             <input type="text" placeholder="¿Qué producto estás buscando?" class="flex-1 outline-none text-gray-700 text-sm w-full">
                         </div>
                         <div class="border-l flex items-center px-3 hidden md:flex min-w-[140px]">
+                            @php
+                                $categories = \App\Models\Category::active()->ordered()->get();
+                            @endphp
                             <select class="bg-transparent text-gray-700 text-xs outline-none cursor-pointer w-full font-semibold">
-                                <option>Todas las categorías</option>
-                                <option>Cirugía</option>
-                                <option>Periodoncia</option>
-                                <option>Endodoncia</option>
+                                <option value="">Todas las categorías</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->slug }}">{{ $category->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <button class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
@@ -38,8 +50,11 @@
 
             <!-- Acciones -->
             <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+                @php
+                    $settings = \App\Models\Settings::getSettings();
+                @endphp
                 <!-- WhatsApp - solo desktop -->
-                <a href="https://wa.me/584127398580" target="_blank" class="hidden lg:flex items-center gap-2 bg-[#4DD4D1]/60 text-white px-4 h-11 rounded-full hover:bg-[#4DD4D1]/80 transition text-sm">
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '584127398580') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-[#4DD4D1]/60 text-white px-4 h-11 rounded-full hover:bg-[#4DD4D1]/80 transition text-sm">
                     <i class="fab fa-whatsapp text-2xl"></i>
                     <span>Escríbenos</span>
                 </a>
@@ -226,11 +241,14 @@
                     <a href="#" class="text-gray-800 hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
-                    <a href="tel:+584244669150" class="hidden lg:flex items-center gap-3 text-gray-800 text-sm hover:text-turquesa">
+                    @php
+                    $settings = \App\Models\Settings::getSettings();
+                @endphp
+                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 4244669150') }}" class="hidden lg:flex items-center gap-3 text-gray-800 text-sm hover:text-turquesa">
                         <i class="fas fa-phone text-turquesa text-2xl"></i>
                         <div class="flex flex-col">
                             <span class="font-medium">Contáctanos</span>
-                            <span class="text-red-500 font-bold">+58 4244669150</span>
+                            <span class="text-red-500 font-bold">{{ $settings->phone ?? '+58 4244669150' }}</span>
                         </div>
                     </a>
                     <a href="{{ route('web.recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors">

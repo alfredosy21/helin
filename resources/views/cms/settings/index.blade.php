@@ -46,7 +46,13 @@
                         <x-ui-input label="{{ __('cms.settings.main_phone') }}" wire:model="phone" />
                         <x-ui-input label="{{ __('cms.settings.business_hours') }}" wire:model="shedule" />
                         <div class="md:col-span-2">
-                            <x-ui-textarea label="{{ __('cms.settings.physical_address') }}" wire:model="address" rows="2" />
+                            <x-ui-textarea label="Eslogan / Slogan" wire:model="tagline" rows="2" placeholder="Todo en Cirugía Odontológica Especializada" />
+                        </div>
+                        <div class="md:col-span-2">
+                            <x-ui-textarea label="{{ __('cms.settings.physical_address') }}" wire:model="address" rows="2" placeholder="Dirección general de la empresa" />
+                        </div>
+                        <div class="md:col-span-2">
+                            <x-ui-textarea label="Dirección de Contacto (Página de contacto)" wire:model="contact_address" rows="2" placeholder="Dirección completa que se mostrará en la página de contacto" />
                         </div>
                     </div>
                 </div>
@@ -97,6 +103,7 @@
                         <x-ui-input label="{{ __('cms.settings.keywords') }}" wire:model="keywords" />
                         <x-ui-textarea label="{{ __('cms.settings.short_description_seo') }}" wire:model="description" rows="2" />
                         <x-ui-textarea label="{{ __('cms.settings.system_description') }}" wire:model="settings_description" rows="3" />
+                        <x-ui-textarea label="Google Analytics Code" wire:model="analytics_code" rows="4" placeholder="Pega aquí tu código de Google Analytics (gtag.js)" />
                     </div>
                 </div>
             </div>
@@ -112,6 +119,43 @@
                     <p class="text-sm text-slate-500 mt-2">
                         {{ __('cms.settings.copyright_help') }}
                     </p>
+                </div>
+            </div>
+
+            <!-- Fourth Row: Offices Configuration - Full Width -->
+            <div class="bg-white p-6 rounded-xl border border-slate-100">
+                <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <div class="w-1.5 h-6 bg-primary rounded-full"></div>
+                    Nuestras Sedes
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Caracas Office -->
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Caracas</h3>
+                        <x-ui-input label="WhatsApp Caracas" wire:model="caracas_whatsapp" placeholder="+58 414 XXXXXXX" />
+                        <x-ui-textarea label="Ubicación Caracas" wire:model="caracas_location" rows="2" placeholder="Dirección completa de la sede Caracas" />
+                    </div>
+
+                    <!-- Valencia Office -->
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Valencia</h3>
+                        <x-ui-input label="WhatsApp Valencia" wire:model="valencia_whatsapp" placeholder="+58 424 XXXXXXX" />
+                        <x-ui-textarea label="Ubicación Valencia" wire:model="valencia_location" rows="2" placeholder="Dirección completa de la sede Valencia" />
+                    </div>
+
+                    <!-- Barquisimeto Office -->
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Barquisimeto</h3>
+                        <x-ui-input label="WhatsApp Barquisimeto" wire:model="barquisimeto_whatsapp" placeholder="+58 251 XXXXXXX" />
+                        <x-ui-textarea label="Ubicación Barquisimeto" wire:model="barquisimeto_location" rows="2" placeholder="Dirección completa de la sede Barquisimeto" />
+                    </div>
+
+                    <!-- Maracay Office -->
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Maracay</h3>
+                        <x-ui-input label="WhatsApp Maracay" wire:model="maracay_whatsapp" placeholder="+58 243 XXXXXXX" />
+                        <x-ui-textarea label="Ubicación Maracay" wire:model="maracay_location" rows="2" placeholder="Dirección completa de la sede Maracay" />
+                    </div>
                 </div>
             </div>
         </div>

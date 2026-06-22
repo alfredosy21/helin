@@ -7,6 +7,9 @@
 @endsection
 
 @section('content')
+@php
+    $settings = \App\Models\Settings::getSettings();
+@endphp
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
@@ -29,7 +32,7 @@
                     <div class="info-icon">⌖</div>
                     <div>
                         <h3>Dirección</h3>
-                        <p>Centro Comercial El Recreo,<br>Torre Norte, Piso 5, Oficina 5B,<br>Sabana Grande, Caracas 1050, Venezuela.</p>
+                        <p>{{ $settings->contact_address ?? 'Centro Comercial El Recreo,<br>Torre Norte, Piso 5, Oficina 5B,<br>Sabana Grande, Caracas 1050, Venezuela.' }}</p>
                     </div>
                 </article>
 
@@ -37,7 +40,7 @@
                     <div class="info-icon">☏</div>
                     <div>
                         <h3>Teléfono central</h3>
-                        <p>+58 4242789481</p>
+                        <p>{{ $settings->phone ?? '+58 4242789481' }}</p>
                     </div>
                 </article>
 
@@ -45,7 +48,7 @@
                     <div class="info-icon">✉</div>
                     <div>
                         <h3>Correo electrónico</h3>
-                        <p>info@helinlatam.com</p>
+                        <p>{{ $settings->email ?? 'info@helinlatam.com' }}</p>
                     </div>
                 </article>
             </div>
@@ -53,9 +56,29 @@
             <div class="sedes">
                 <h3>Nuestras sedes</h3>
                 <div class="sede-pills">
-                    @foreach(['Caracas', 'Valencia', 'Barquisimeto', 'Maracaibo'] as $sede)
-                    <span class="sede-pill"><span>⌖</span>{{ $sede }}</span>
-                    @endforeach
+                    @if($settings && $settings->caracas_location)
+                        <a href="{{ $settings->caracas_location }}" target="_blank" class="sede-pill"><span>⌖</span>Caracas</a>
+                    @else
+                        <span class="sede-pill"><span>⌖</span>Caracas</span>
+                    @endif
+
+                    @if($settings && $settings->valencia_location)
+                        <a href="{{ $settings->valencia_location }}" target="_blank" class="sede-pill"><span>⌖</span>Valencia</a>
+                    @else
+                        <span class="sede-pill"><span>⌖</span>Valencia</span>
+                    @endif
+
+                    @if($settings && $settings->barquisimeto_location)
+                        <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="sede-pill"><span>⌖</span>Barquisimeto</a>
+                    @else
+                        <span class="sede-pill"><span>⌖</span>Barquisimeto</span>
+                    @endif
+
+                    @if($settings && $settings->maracay_location)
+                        <a href="{{ $settings->maracay_location }}" target="_blank" class="sede-pill"><span>⌖</span>Maracay</a>
+                    @else
+                        <span class="sede-pill"><span>⌖</span>Maracay</span>
+                    @endif
                 </div>
             </div>
         </aside>

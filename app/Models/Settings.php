@@ -24,9 +24,11 @@ class Settings extends Model {
      */
     protected $fillable = [
         'name',
+        'tagline',
         'email',
         'image',
         'address',
+        'contact_address',
         'phone',
         'shedule',
         'facebook',
@@ -36,7 +38,16 @@ class Settings extends Model {
         'keywords',
         'description',
         'copy',
-        'settings_description'
+        'settings_description',
+        'analytics_code',
+        'caracas_whatsapp',
+        'caracas_location',
+        'valencia_whatsapp',
+        'valencia_location',
+        'barquisimeto_whatsapp',
+        'barquisimeto_location',
+        'maracay_whatsapp',
+        'maracay_location'
     ];
 
     /**
