@@ -72,6 +72,21 @@ class SettingsController extends Component {
     public string $description = '';
     public string $settings_description = '';
 
+    /** @var string|null Analytics */
+    public ?string $analytics_code = null;
+
+    /** @var string|null Office WhatsApp links and locations */
+    public ?string $caracas_whatsapp = null;
+    public ?string $caracas_location = null;
+    public ?string $valencia_whatsapp = null;
+    public ?string $valencia_location = null;
+    public ?string $barquisimeto_whatsapp = null;
+    public ?string $barquisimeto_location = null;
+    public ?string $maracay_whatsapp = null;
+    public ?string $maracay_location = null;
+    public ?string $maracaibo_whatsapp = null;
+    public ?string $maracaibo_location = null;
+
     /**
      * Component Validation Rules.
      *
@@ -111,7 +126,12 @@ class SettingsController extends Component {
         $this->fill($settings->only([
                     'name', 'email', 'address', 'phone', 'shedule', 'copy',
                     'facebook', 'instagram', 'linkedin', 'youtube',
-                    'keywords', 'description', 'settings_description'
+                    'keywords', 'description', 'settings_description', 'analytics_code',
+                    'caracas_whatsapp', 'caracas_location',
+                    'valencia_whatsapp', 'valencia_location',
+                    'barquisimeto_whatsapp', 'barquisimeto_location',
+                    'maracay_whatsapp', 'maracay_location',
+                    'maracaibo_whatsapp', 'maracaibo_location',
         ]));
 
         $this->current_image = $settings->image;
@@ -156,6 +176,17 @@ class SettingsController extends Component {
                 'keywords' => $this->keywords,
                 'description' => $this->description,
                 'settings_description' => $this->settings_description,
+                'analytics_code' => $this->analytics_code,
+                'caracas_whatsapp' => $this->caracas_whatsapp,
+                'caracas_location' => $this->caracas_location,
+                'valencia_whatsapp' => $this->valencia_whatsapp,
+                'valencia_location' => $this->valencia_location,
+                'barquisimeto_whatsapp' => $this->barquisimeto_whatsapp,
+                'barquisimeto_location' => $this->barquisimeto_location,
+                'maracay_whatsapp' => $this->maracay_whatsapp,
+                'maracay_location' => $this->maracay_location,
+                'maracaibo_whatsapp' => $this->maracaibo_whatsapp,
+                'maracaibo_location' => $this->maracaibo_location,
             ]);
 
             if ($this->image) {

@@ -132,29 +132,30 @@
                     <!-- Caracas Office -->
                     <div class="space-y-4">
                         <h3 class="font-semibold text-slate-800 border-b pb-2">Caracas</h3>
-                        <x-ui-input label="WhatsApp Caracas" wire:model="caracas_whatsapp" placeholder="+58 414 XXXXXXX" />
+                        <x-ui-input label="Teléfono Oficina Caracas" wire:model="phone" placeholder="+58 424 278 9481" />
+                        <x-ui-input label="WhatsApp Caracas (URL)" wire:model="caracas_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
                         <x-ui-textarea label="Ubicación Caracas" wire:model="caracas_location" rows="2" placeholder="Dirección completa de la sede Caracas" />
                     </div>
 
                     <!-- Valencia Office -->
                     <div class="space-y-4">
                         <h3 class="font-semibold text-slate-800 border-b pb-2">Valencia</h3>
-                        <x-ui-input label="WhatsApp Valencia" wire:model="valencia_whatsapp" placeholder="+58 424 XXXXXXX" />
+                        <x-ui-input label="WhatsApp Valencia (URL)" wire:model="valencia_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
                         <x-ui-textarea label="Ubicación Valencia" wire:model="valencia_location" rows="2" placeholder="Dirección completa de la sede Valencia" />
+                    </div>
+
+                    <!-- Maracaibo Office -->
+                    <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Maracaibo</h3>
+                        <x-ui-input label="WhatsApp Maracaibo (URL)" wire:model="maracaibo_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
+                        <x-ui-textarea label="Ubicación Maracaibo" wire:model="maracaibo_location" rows="2" placeholder="Dirección completa de la sede Maracaibo" />
                     </div>
 
                     <!-- Barquisimeto Office -->
                     <div class="space-y-4">
                         <h3 class="font-semibold text-slate-800 border-b pb-2">Barquisimeto</h3>
-                        <x-ui-input label="WhatsApp Barquisimeto" wire:model="barquisimeto_whatsapp" placeholder="+58 251 XXXXXXX" />
+                        <x-ui-input label="WhatsApp Barquisimeto (URL)" wire:model="barquisimeto_whatsapp" placeholder="https://wa.me/58414XXXXXXX" />
                         <x-ui-textarea label="Ubicación Barquisimeto" wire:model="barquisimeto_location" rows="2" placeholder="Dirección completa de la sede Barquisimeto" />
-                    </div>
-
-                    <!-- Maracay Office -->
-                    <div class="space-y-4">
-                        <h3 class="font-semibold text-slate-800 border-b pb-2">Maracay</h3>
-                        <x-ui-input label="WhatsApp Maracay" wire:model="maracay_whatsapp" placeholder="+58 243 XXXXXXX" />
-                        <x-ui-textarea label="Ubicación Maracay" wire:model="maracay_location" rows="2" placeholder="Dirección completa de la sede Maracay" />
                     </div>
                 </div>
             </div>

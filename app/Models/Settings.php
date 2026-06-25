@@ -47,7 +47,9 @@ class Settings extends Model {
         'barquisimeto_whatsapp',
         'barquisimeto_location',
         'maracay_whatsapp',
-        'maracay_location'
+        'maracay_location',
+        'maracaibo_whatsapp',
+        'maracaibo_location',
     ];
 
     /**
