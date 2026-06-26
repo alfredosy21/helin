@@ -102,12 +102,12 @@
 
     /* Tipografía - Familia */
     --font-family-base: 'Inter', Arial, sans-serif;
-    --font-heading: 'Barlow Condensed', Arial, sans-serif;
-    --font-subtitle: 'Barlow Condensed', Arial, sans-serif;
-    --font-block-title: 'Barlow', Arial, sans-serif;
+    --font-heading: 'Barlow Condensed Bold', Arial, sans-serif;
+    --font-subtitle: 'Barlow Condensed SemiBold', Arial, sans-serif;
+    --font-block-title: 'Barlow SemiBold', Arial, sans-serif;
     --font-body: 'Inter', Arial, sans-serif;
-    --font-button: 'Inter', Arial, sans-serif;
-    --font-nav: 'Inter', Arial, sans-serif;
+    --font-button: 'Inter Medium', Arial, sans-serif;
+    --font-nav: 'Inter Medium', Arial, sans-serif;
     --font-caption: 'Inter', Arial, sans-serif;
 
     /* Tipografía - Pesos */

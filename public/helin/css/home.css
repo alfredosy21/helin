@@ -62,7 +62,7 @@
 .hero-copy .brand {
     font-size: var(--text-54px);
     font-weight: 950;
-    letter-spacing: -0.07em;
+    letter-spacing: 0;
     line-height: 0.85;
     margin-bottom: 12px;
 }
@@ -80,7 +80,7 @@
 .hero h1 {
     font-size: var(--text-50px);
     line-height: 0.98;
-    letter-spacing: -0.055em;
+    letter-spacing: 0;
     margin: 0 0 16px;
     max-width: 500px;
 }
@@ -223,7 +223,7 @@
     color: var(--helin-primary);
     font-weight: 950;
     font-size: var(--text-30px);
-    letter-spacing: -0.06em;
+    letter-spacing: 0;
 }
 
 /* Categories Section */
@@ -270,7 +270,7 @@
 .category-featured h2 {
     font-size: 44px;
     line-height: 1;
-    letter-spacing: -0.05em;
+    letter-spacing: 0;
     margin: 0 0 16px;
     color: var(--text-dark);
 }
@@ -360,7 +360,7 @@
     margin: 0 0 16px;
     font-size: var(--text-22px);
     line-height: 1.05;
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
     max-width: 220px;
     color: var(--text-dark);
 }
@@ -399,7 +399,7 @@
 .near h2 {
     margin: 0;
     font-size: var(--text-34px);
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
     color: var(--text-dark);
 }
 
@@ -441,7 +441,7 @@
     margin: 0;
     font-size: var(--text-34px);
     line-height: 1.05;
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
     color: var(--text-dark);
 }
 
@@ -569,7 +569,7 @@
 .test-head h2 {
     margin: 5px 0 0;
     font-size: var(--text-42px);
-    letter-spacing: -0.05em;
+    letter-spacing: 0;
     line-height: 1;
     color: var(--text-dark);
 }

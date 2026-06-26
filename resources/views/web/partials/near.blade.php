@@ -14,7 +14,7 @@
       ⌖
    </div>
    <div>
-      <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: -0.045em;">
+      <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">
          <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
       </h2>
       <p class="text-helin-text font-bold mt-1">Caracas · Valencia · Barquisimeto · Maracaibo</p>

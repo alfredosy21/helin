@@ -46,9 +46,9 @@
          </aside>
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
-            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: -0.07em;">helin.</div>
+            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">helin.</div>
             <small class="block text-xs font-black uppercase tracking-wide mb-3 text-white/90">Soluciones que cuidan.</small>
-            <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: -0.055em;">Todo en cirugía odontológica especializada.</h1>
+            <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: 0;">Todo en cirugía odontológica especializada.</h1>
             <p class="text-white/90 text-base lg:text-lg font-medium mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para procedimientos quirúrgicos seguros, precisos y eficientes.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                <a href="{{ route('web.catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
@@ -83,7 +83,7 @@
                ">
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
-                  <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: -0.05em;">Implantología</h2>
+                  <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
                   <a href="{{ route('web.catalogo') }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
@@ -116,7 +116,7 @@
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Implantología</h2>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Implantología</h2>
                <p class="text-helin-text text-sm mt-1">Selección de productos destacados</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
@@ -135,7 +135,7 @@
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Regeneración Ósea Guiada</h2>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Regeneración Ósea Guiada</h2>
                <p class="text-helin-text text-sm mt-1">Biomateriales y soluciones especializadas</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
@@ -154,7 +154,7 @@
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Instrumentos y Equipos</h2>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Instrumentos y Equipos</h2>
                <p class="text-helin-text text-sm mt-1">Precisión clínica para tu práctica</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
@@ -177,7 +177,7 @@
       <div class="test-head flex items-end justify-between gap-6 mb-8">
          <div>
             <small class="text-turquesa font-black text-xs">Testimonios</small>
-            <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: -0.05em;">Lo que dicen<br>nuestros clientes</h2>
+            <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: 0;">Lo que dicen<br>nuestros clientes</h2>
          </div>
          <div class="arrows flex gap-3">
             <button class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">←</button>

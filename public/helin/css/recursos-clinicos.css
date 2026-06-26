@@ -35,7 +35,7 @@
 .banner-content h1 {
     font-size: var(--text-6xl);
     line-height: 1.1;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
     font-weight: 700;
     margin: 0;
 }
@@ -136,7 +136,7 @@
 .hero h1 {
     font-size: 3.625rem;
     line-height: 0.98;
-    letter-spacing: -0.055em;
+    letter-spacing: 0;
     margin: 0 0 18px;
     max-width: 620px;
 }
@@ -203,7 +203,7 @@
 .panel-title h3 {
     margin: 0;
     font-size: 1.375rem;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
 }
 
 .badge {
@@ -321,7 +321,7 @@
     margin: 6px 0 0;
     font-size: 2.25rem;
     line-height: 1.05;
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
     color: var(--text-dark);
 }
 
@@ -574,7 +574,7 @@
 .featured-section h2 {
     margin: 0 0 12px;
     font-size: 2.25rem;
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
     line-height: 1.05;
 }
 
@@ -597,7 +597,7 @@
     display: block;
     color: var(--helin-primary);
     font-size: 1.625rem;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
     margin-bottom: 6px;
 }
 

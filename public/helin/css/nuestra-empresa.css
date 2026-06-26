@@ -68,7 +68,7 @@
     color: var(--text-navy);
     font-size: var(--text-6xl-lg);
     line-height: 1.08;
-    letter-spacing: -0.055em;
+    letter-spacing: 0;
 }
 
 .about-hero p {
@@ -140,7 +140,7 @@
     color: var(--text-navy);
     font-size: var(--text-3xl-lg);
     line-height: 1.16;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
 }
 
 .section-card p {
@@ -199,7 +199,7 @@
     color: var(--white);
     font-size: 2.75rem;
     font-weight: 950;
-    letter-spacing: -0.07em;
+    letter-spacing: 0;
     z-index: 2;
 }
 
@@ -299,7 +299,7 @@
     margin: 0 0 12px;
     font-size: var(--text-2xl-lg);
     color: var(--text-dark);
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
 }
 
 .mv-card p {
@@ -390,7 +390,7 @@
     font-size: var(--text-30px);
     font-weight: 900;
     box-shadow: 0 8px 22px rgba(16, 45, 68, 0.055);
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
 }
 
 .brand-card:nth-child(3) { color: var(--text-blue-light); }
@@ -444,7 +444,7 @@
     position: relative;
     margin: 0 0 8px;
     font-size: var(--text-3xl);
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
     z-index: 2;
     color: var(--helin-primary);
 }
