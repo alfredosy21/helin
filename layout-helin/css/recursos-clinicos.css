@@ -13,7 +13,7 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at 80% 18%, rgba(255, 255, 255, 0.45), transparent 20%),
-                linear-gradient(90deg, rgba(52, 177, 181, 0.95), rgba(151, 213, 212, 0.7));
+                linear-gradient(90deg, rgba(107, 194, 195, 0.95), rgba(151, 213, 212, 0.7));
 }
 
 .hero-inner {
@@ -120,7 +120,7 @@
 .badge {
     padding: 7px 10px;
     border-radius: 9999px;
-    background: #e9fbfb;
+    background: var(--bg-light);
     color: var(--helin-primary);
     font-size: 0.75rem;
     font-weight: 900;
@@ -303,7 +303,7 @@
 }
 
 .filter-group {
-    border-top: 1px solid #eef7f7;
+    border-top: 1px solid var(--border-color);
     padding-top: 16px;
     margin-top: 16px;
 }
@@ -329,7 +329,7 @@
 
 .count {
     color: var(--helin-primary);
-    background: #ecfbfb;
+    background: var(--bg-light);
     border-radius: 9999px;
     padding: 3px 8px;
     font-size: 0.6875rem;

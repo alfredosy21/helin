@@ -3,7 +3,7 @@
 /* Hero Section */
 .hero {
     background: radial-gradient(circle at 78% 18%, rgba(255,255,255,.42), transparent 22%),
-                linear-gradient(135deg, #34b1b5 0%, #97d5d4 100%);
+                linear-gradient(135deg, var(--helin-primary) 0%, var(--helin-primary-light) 100%);
     color: #fff;
     position: relative;
     overflow: hidden;
@@ -13,7 +13,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(90deg, rgba(52,177,181,.94), rgba(151,213,212,.50)),
+    background-image: linear-gradient(90deg, rgba(107,194,195,.94), rgba(151,213,212,.50)),
                     url("data:image/svg+xml,%3Csvg width='1200' height='420' viewBox='0 0 1200 420' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.25'%3E%3Ccircle cx='880' cy='110' r='150'/%3E%3Ccircle cx='880' cy='110' r='230'/%3E%3Cpath d='M120 355C260 220 330 310 480 190S760 40 1080 165'/%3E%3Cpath d='M520 85h34M537 68v34M1080 280h70M1115 245v70M420 60h70M455 25v70'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.18'%3E%3Ccircle cx='220' cy='90' r='5'/%3E%3Ccircle cx='315' cy='320' r='6'/%3E%3Ccircle cx='1030' cy='70' r='4'/%3E%3C/g%3E%3C/svg%3E");
     background-size: cover;
 }
@@ -201,7 +201,7 @@
     height: 8px;
     border-radius: 999px;
     background: repeating-linear-gradient(90deg,#8abec0 0 16px,#dff6f6 16px 28px);
-    box-shadow: 0 18px 0 rgba(52,177,181,.35), 0 36px 0 rgba(52,177,181,.20);
+    box-shadow: 0 18px 0 rgba(107,194,195,.35), 0 36px 0 rgba(107,194,195,.20);
 }
 
 .kit-box {
@@ -229,7 +229,7 @@
 /* Categories Section */
 .categories {
     background: white;
-    border: 1px solid #d9eeee;
+    border: 1px solid var(--border-color);
     border-radius: 28px;
     padding: 24px;
     box-shadow: 0 18px 45px rgba(15,47,67,.08);
@@ -241,8 +241,8 @@
     min-height: 210px;
     border-radius: 22px;
     background: linear-gradient(90deg, #f8ffff 0%, rgba(255,255,255,.78) 48%, rgba(151,213,212,.22)),
-                radial-gradient(circle at 76% 40%, rgba(52,177,181,.12), transparent 26%);
-    border: 1px solid #d9eeee;
+                radial-gradient(circle at 76% 40%, rgba(107,194,195,.12), transparent 26%);
+    border: 1px solid var(--border-color);
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -308,7 +308,7 @@
     height: 120px;
     border-radius: 22px;
     background: rgba(151,213,212,.42);
-    border: 10px solid rgba(52,177,181,.24);
+    border: 10px solid rgba(107,194,195,.24);
     box-shadow: 0 18px 30px rgba(15,47,67,.10);
 }
 
@@ -340,11 +340,11 @@
 
 .category-card {
     min-height: 148px;
-    border: 1px solid #d9eeee;
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 20px;
     background: linear-gradient(120deg,#fff,rgba(151,213,212,.18)),
-                radial-gradient(circle at 86% 34%, rgba(52,177,181,.22), transparent 28%);
+                radial-gradient(circle at 86% 34%, rgba(107,194,195,.22), transparent 28%);
     box-shadow: 0 10px 25px rgba(15,47,67,.06);
     position: relative;
     overflow: hidden;
@@ -372,16 +372,16 @@
     width: 96px;
     height: 54px;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(52,177,181,.32), rgba(255,255,255,.74));
-    box-shadow: inset 0 0 0 1px rgba(52,177,181,.18);
+    background: linear-gradient(135deg, rgba(107,194,195,.32), rgba(255,255,255,.74));
+    box-shadow: inset 0 0 0 1px rgba(107,194,195,.18);
 }
 
 /* Near Section */
 .near {
     margin: 30px 0;
     border-radius: 28px;
-    border: 1px solid #d9eeee;
-    background: #effafa;
+    border: 1px solid var(--border-color);
+    background: var(--bg-light);
     display: flex;
     align-items: center;
     gap: 26px;
@@ -417,9 +417,9 @@
     min-width: 42px;
     height: 42px;
     border-radius: 16px;
-    background: #eefafa;
-    color: #34b1b5;
-    border: 1px solid #cceeee;
+    background: var(--bg-light);
+    color: var(--helin-primary);
+    border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -451,7 +451,7 @@
 }
 
 .section-title a {
-    color: #34b1b5;
+    color: var(--helin-primary);
     font-size: 12px;
     font-weight: 950;
     text-transform: uppercase;
@@ -461,13 +461,13 @@
 }
 
 .section-title a:hover {
-    color: #289894;
+    color: var(--helin-primary-dark);
 }
 
 /* Product Card */
 .product-card {
     background: #fff;
-    border: 1px solid #d9eeee;
+    border: 1px solid var(--border-color);
     border-radius: 22px;
     padding: 14px;
     box-shadow: 0 10px 25px rgba(15,47,67,.06);
@@ -483,7 +483,7 @@
 .product-img {
     height: 185px;
     border-radius: 18px;
-    background: radial-gradient(circle at 50% 45%, rgba(52,177,181,.16), transparent 40%),
+    background: radial-gradient(circle at 50% 45%, rgba(107,194,195,.16), transparent 40%),
                 linear-gradient(135deg,#fff,#f5fbfb);
     position: relative;
     margin-bottom: 12px;
@@ -560,7 +560,7 @@
 }
 
 .test-head small {
-    color: #34b1b5;
+    color: var(--helin-primary);
     font-weight: 900;
 }
 
@@ -590,7 +590,7 @@
 }
 
 .arrow:hover {
-    background: #289894;
+    background: var(--helin-primary-dark);
     transform: scale(1.1);
 }
 
@@ -602,7 +602,7 @@
 
 .testimonial {
     background: #fff;
-    border: 1px solid #d9eeee;
+    border: 1px solid var(--border-color);
     border-radius: 22px;
     padding: 22px;
     box-shadow: 0 10px 25px rgba(15,47,67,.06);
@@ -632,7 +632,7 @@
 }
 
 .testimonial p {
-    color: #4a6171;
+    color: var(--text-primary);
     font-size: 13px;
     line-height: 1.55;
     margin: 12px 0 20px;
@@ -656,7 +656,7 @@
     height: 48px;
     border-radius: 50%;
     background: linear-gradient(135deg,#dff7f7,#fff);
-    border: 1px solid #d9eeee;
+    border: 1px solid var(--border-color);
 }
 
 .person strong {
@@ -666,7 +666,7 @@
 
 .person span {
     display: block;
-    color: #34b1b5;
+    color: var(--helin-primary);
     font-size: 12px;
     font-weight: 800;
 }
@@ -677,7 +677,7 @@
     max-width: 960px;
     min-height: 86px;
     border-radius: 8px;
-    background: #97d5d4;
+    background: var(--helin-primary-light);
     color: #fff;
     display: flex;
     align-items: center;
@@ -693,7 +693,7 @@
 }
 
 .opinion a {
-    background: #34b1b5;
+    background: var(--helin-primary);
     border-radius: 4px;
     padding: 12px 28px;
     color: #fff;
@@ -710,7 +710,7 @@
     height: 23px;
     padding: 0 10px;
     border-radius: 999px;
-    background: #e5f8f8;
+    background: var(--bg-light);
     color: var(--helin-primary);
     font-size: 10px;
     font-weight: 900;
