@@ -112,6 +112,7 @@
 
 .panel-title h3 {
     margin: 0;
+    color: var(--helin-heading);
     font-size: 1.375rem;
     letter-spacing: -0.03em;
 }
@@ -229,6 +230,7 @@
 
 .section-head h2 {
     margin: 6px 0 0;
+    color: var(--helin-heading);
     font-size: 2.25rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
@@ -296,6 +298,7 @@
 
 .sidebar h3 {
     margin: 0 0 14px;
+    color: var(--helin-heading);
     font-size: 1.25rem;
 }
 

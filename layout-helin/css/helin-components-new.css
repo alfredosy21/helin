@@ -3,16 +3,19 @@
 /* CSS Variables */
 :root {
     /* Colors */
-    --helin-primary: #34b1b5;
+    --helin-primary: #6BC2C3;
     --helin-primary-light: #97d5d4;
-    --helin-primary-dark: #289894;
+    --helin-primary-dark: #4aa8a9;
     --helin-soft: #97d5d4;
     --white: #ffffff;
-    --text-primary: #0f2f43;
+    --helin-heading: #123F4A;
+    --helin-subheading: #2D3740;
+    --text-primary: #2D3740;
     --text-muted: #6f8796;
-    --border-color: #d9eeee;
-    --bg-light: #f7fbfb;
-    --bg-gray: #effafa;
+    --border-color: #D8E3E5;
+    --bg-light: #f4f7f8;
+    --bg-gray: #f4f7f8;
+    --bg-site: #ffffff;
 
     /* Typography */
     --font-family-base: 'Inter', Arial, Helvetica, sans-serif;
@@ -714,6 +717,7 @@ body {
 
 .test-head h2 {
     margin: 0.3125rem 0 0;
+    color: var(--helin-heading);
     font-size: 2.625rem;
     letter-spacing: -0.05em;
     line-height: 1;
@@ -872,6 +876,7 @@ body {
 
 .section-title h2 {
     margin: 0;
+    color: var(--helin-heading);
     font-size: 2.125rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
@@ -1101,6 +1106,7 @@ body {
 
 .panel-title h3 {
     margin: 0;
+    color: var(--helin-heading);
     font-size: 1.375rem;
     letter-spacing: -0.03em;
 }
@@ -1216,6 +1222,7 @@ body {
 
 .section-head h2 {
     margin: 6px 0 0;
+    color: var(--helin-heading);
     font-size: 2.25rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
@@ -1281,6 +1288,7 @@ body {
 
 .sidebar h3 {
     margin: 0 0 14px;
+    color: var(--helin-heading);
     font-size: 1.25rem;
 }
 
@@ -1462,6 +1470,7 @@ body {
 
 .featured-section h2 {
     margin: 0 0 12px;
+    color: var(--helin-heading);
     font-size: 2.25rem;
     letter-spacing: -0.045em;
     line-height: 1.05;
@@ -1620,7 +1629,7 @@ body {
 
 .about-hero h1 {
     margin: 0 0 22px;
-    color: #13284a;
+    color: var(--helin-heading);
     font-size: 2.6875rem;
     line-height: 1.08;
     letter-spacing: -0.055em;
@@ -1693,7 +1702,7 @@ body {
 
 .section-card h2 {
     margin: 0 0 18px;
-    color: #13284a;
+    color: var(--helin-heading);
     font-size: 1.9375rem;
     line-height: 1.16;
     letter-spacing: -0.04em;
@@ -1851,7 +1860,7 @@ body {
 .mv-card h3 {
     margin: 0 0 12px;
     font-size: 1.625rem;
-    color: #111;
+    color: var(--helin-heading);
     letter-spacing: -0.035em;
 }
 
@@ -1993,6 +2002,7 @@ body {
 .cta h2 {
     position: relative;
     margin: 0 0 8px;
+    color: var(--helin-heading);
     font-size: 1.875rem;
     letter-spacing: -0.035em;
     z-index: 2;
@@ -2053,7 +2063,7 @@ body {
 
 .info-block h2 {
     margin: 0 0 18px;
-    color: #0f2448;
+    color: var(--helin-heading);
     font-size: 2.375rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
@@ -2341,7 +2351,7 @@ input:focus, select:focus, textarea:focus {
 
 .policy-content h2 {
     margin: 0 0 12px;
-    color: #1d2232;
+    color: var(--helin-heading);
     font-size: 1.875rem;
     line-height: 1.1;
     font-family: Georgia, 'Times New Roman', serif;
@@ -2620,6 +2630,7 @@ input:focus, select:focus, textarea:focus {
 
 .test-head h2 {
     margin: 5px 0 0 !important;
+    color: var(--helin-heading) !important;
     font-size: 42px !important;
     letter-spacing: -0.05em !important;
     line-height: 1 !important;
