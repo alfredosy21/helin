@@ -23,8 +23,8 @@ include 'includes/head.php';
         <div class="hero-inner">
             <div class="hero-copy">
                 <span class="hero-badge">Centro de conocimiento clínico</span>
-                <h1>Recursos clínicos para decisiones más precisas.</h1>
-                <p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
+                <h1>Recursos clínicos para una práctica más precisa</h1>
+                <p>Explora recursos especializados, casos clínicos, videos, manuales técnicos y guías descargables creadas para acompañar mejores decisiones odontológicas.</p>
                 <div class="hero-buttons">
                     <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
                     <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
