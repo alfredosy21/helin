@@ -11,7 +11,7 @@
    <!-- Hero Section -->
    <section class="hero relative overflow-hidden" style="
       background: radial-gradient(circle at 78% 18%, rgba(255,255,255,.42), transparent 22%),
-      linear-gradient(135deg, #34b1b5 0%, #97d5d4 100%);
+      linear-gradient(135deg, #6BC2C3 0%, #97d5d4 100%);
       color: #fff;
       position: relative;
       overflow: hidden;
@@ -48,7 +48,7 @@
          <div class="hero-copy text-center lg:text-left">
             <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: -0.07em;">helin.</div>
             <small class="block text-xs font-black uppercase tracking-wide mb-3 text-white/90">Soluciones que cuidan.</small>
-            <h1 class="text-3xl lg:text-5xl font-bold leading-tight mb-4" style="letter-spacing: -0.055em;">Todo en cirugía odontológica especializada.</h1>
+            <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: -0.055em;">Todo en cirugía odontológica especializada.</h1>
             <p class="text-white/90 text-base lg:text-lg font-medium mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para procedimientos quirúrgicos seguros, precisos y eficientes.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                <a href="{{ route('web.catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
@@ -75,15 +75,15 @@
    <!-- Categorías Destacadas -->
    <section class="py-12 sm:py-16">
       <div class="container mx-auto px-4">
-         <div class="categories bg-white border border-gray-200 rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
+         <div class="categories bg-white border border-helin-border rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
             <!-- Categoría Destacada -->
-            <article class="category-featured relative min-h-[200px] rounded-2xl bg-gradient-to-r from-gray-50 to-white/78 p-8 mb-4 border border-gray-200 overflow-hidden grid md:grid-cols-2 gap-6 items-center" style="
+            <article class="category-featured relative min-h-[200px] rounded-2xl bg-gradient-to-r from-helin-soft to-white/78 p-8 mb-4 border border-helin-border overflow-hidden grid md:grid-cols-2 gap-6 items-center" style="
                background: linear-gradient(90deg, #f8ffff 0%, rgba(255,255,255,.78) 48%, rgba(151,213,212,.22)),
-               radial-gradient(circle at 76% 40%, rgba(52,177,181,.12), transparent 26%);
+               radial-gradient(circle at 76% 40%, rgba(107,194,195,.12), transparent 26%);
                ">
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
-                  <h2 class="text-3xl lg:text-4xl font-bold leading-none mb-4" style="letter-spacing: -0.05em;">Implantología</h2>
+                  <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: -0.05em;">Implantología</h2>
                   <a href="{{ route('web.catalogo') }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
@@ -112,20 +112,20 @@
    </div>
 
    <!-- Productos Destacados -->
-   <section class="py-12 sm:py-16 bg-gray-100">
+   <section class="py-12 sm:py-16 bg-helin-soft">
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl font-bold leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Implantología</h2>
-               <p class="text-gray-500 text-sm mt-1">Selección de productos destacados</p>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Implantología</h2>
+               <p class="text-helin-text text-sm mt-1">Selección de productos destacados</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
          </div>
          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Implante', 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('web.producto')])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Kit', 'productName' => 'Kit de Cirugía Básico', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Implante', 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('web.producto')])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit', 'productName' => 'Kit de Cirugía Básico', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
          </div>
       </div>
    </section>
@@ -135,49 +135,49 @@
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl font-bold leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Regeneración Ósea Guiada</h2>
-               <p class="text-gray-500 text-sm mt-1">Biomateriales y soluciones especializadas</p>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Regeneración Ósea Guiada</h2>
+               <p class="text-helin-text text-sm mt-1">Biomateriales y soluciones especializadas</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
          </div>
          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Tornillos', 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Placas', 'productName' => 'Placas de Reconstrucción', 'productBrand' => 'Stryker', 'productPrice' => 120.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Pinzas', 'productName' => 'Pinzas de Elevación', 'productBrand' => 'Hu-Friedy', 'productPrice' => 95.00, 'productBadge' => 'Nuevo'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => 'Nuevo'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Tornillos', 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => 'Nuevo'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Placas', 'productName' => 'Placas de Reconstrucción', 'productBrand' => 'Stryker', 'productPrice' => 120.00, 'productBadge' => 'Nuevo'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Pinzas', 'productName' => 'Pinzas de Elevación', 'productBrand' => 'Hu-Friedy', 'productPrice' => 95.00, 'productBadge' => 'Nuevo'])
          </div>
       </div>
    </section>
 
    <!-- Productos en Oferta -->
-   <section class="py-12 sm:py-16 bg-gray-100">
+   <section class="py-12 sm:py-16 bg-helin-soft">
       <div class="container mx-auto px-4">
          <div class="section-title flex items-end justify-between gap-5 mb-5">
             <div>
-               <h2 class="text-2xl lg:text-3xl font-bold leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Instrumentos y Equipos</h2>
-               <p class="text-gray-500 text-sm mt-1">Precisión clínica para tu práctica</p>
+               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: -0.045em;">Más vendidos en Instrumentos y Equipos</h2>
+               <p class="text-helin-text text-sm mt-1">Precisión clínica para tu práctica</p>
             </div>
             <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
          </div>
          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Implante+2', 'productName' => 'Implante Nobel Active', 'productBrand' => 'Nobel Biocare', 'productPrice' => 249.00, 'productOldPrice' => 320.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Kit+Avanzado', 'productName' => 'Kit de Cirugía Avanzado', 'productBrand' => 'Helin', 'productPrice' => 159.00, 'productOldPrice' => 200.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Cinceles', 'productName' => 'Set de Cinceles', 'productBrand' => 'Hu-Friedy', 'productPrice' => 65.00, 'productOldPrice' => 85.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Separadores', 'productName' => 'Separadores de Muelas', 'productBrand' => 'Hu-Friedy', 'productPrice' => 35.00, 'productOldPrice' => 50.00, 'productBadge' => 'Oferta'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Implante+2', 'productName' => 'Implante Nobel Active', 'productBrand' => 'Nobel Biocare', 'productPrice' => 249.00, 'productOldPrice' => 320.00, 'productBadge' => 'Oferta'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit+Avanzado', 'productName' => 'Kit de Cirugía Avanzado', 'productBrand' => 'Helin', 'productPrice' => 159.00, 'productOldPrice' => 200.00, 'productBadge' => 'Oferta'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Cinceles', 'productName' => 'Set de Cinceles', 'productBrand' => 'Hu-Friedy', 'productPrice' => 65.00, 'productOldPrice' => 85.00, 'productBadge' => 'Oferta'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Separadores', 'productName' => 'Separadores de Muelas', 'productBrand' => 'Hu-Friedy', 'productPrice' => 35.00, 'productOldPrice' => 50.00, 'productBadge' => 'Oferta'])
          </div>
       </div>
    </section>
 
    <!-- Testimonios -->
-   <section class="testimonials mt-14 rounded-3xl p-9" style="
-      background: linear-gradient(135deg,#fff 0%, #f1fbfb 100%);
+   <section class="testimonials container mx-auto px-4 mt-14 rounded-3xl p-9" style="
+      background: linear-gradient(135deg,#fff 0%, #f4f7f8 100%);
       border-radius: 34px;
       padding: 36px;
       ">
       <div class="test-head flex items-end justify-between gap-6 mb-8">
          <div>
             <small class="text-turquesa font-black text-xs">Testimonios</small>
-            <h2 class="text-3xl lg:text-4xl font-bold leading-none mt-1" style="letter-spacing: -0.05em;">Lo que dicen<br>nuestros clientes</h2>
+            <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: -0.05em;">Lo que dicen<br>nuestros clientes</h2>
          </div>
          <div class="arrows flex gap-3">
             <button class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">←</button>

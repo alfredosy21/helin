@@ -1,5 +1,59 @@
 /* Helen Components - Shared CSS */
 
+/* CSS Variables */
+:root {
+    --helin-primary: #6BC2C3;
+    --helin-primary-light: #97d5d4;
+    --helin-primary-dark: #4aa8a9;
+    --helin-soft: #97d5d4;
+    --white: #ffffff;
+    --helin-heading: #123F4A;
+    --helin-subheading: #2D3740;
+    --text-primary: #2D3740;
+    --text-muted: #6f8796;
+    --border-color: #D8E3E5;
+    --bg-light: #f4f7f8;
+    --bg-gray: #f4f7f8;
+    --bg-site: #ffffff;
+}
+
+/* Base Typography */
+body {
+    font-family: var(--font-body);
+}
+
+h1, .h1, .page-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+h2, .h2 {
+    font-family: var(--font-subtitle);
+    font-weight: 600;
+}
+
+h3, .h3, .block-title, .card-title {
+    font-family: var(--font-block-title);
+    font-weight: 600;
+}
+
+h4, .h4 {
+    font-family: var(--font-block-title);
+    font-weight: 600;
+}
+
+button, .btn, .btn-primary, .btn-outline, .cta, .more-btn {
+    font-family: var(--font-button);
+}
+
+nav, .main-nav, .menu, .mega-menu {
+    font-family: var(--font-nav);
+}
+
+small, .caption, .text-xs, .tag {
+    font-family: var(--font-caption);
+}
+
 /* Custom Scrollbar Hide */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -54,7 +108,7 @@
 
 .mega-menu-box:hover {
     background-color: #e6f7f7;
-    border-color: rgba(21, 170, 175, 0.3);
+    border-color: rgba(107, 194, 195, 0.3);
 }
 
 /* Mobile Navigation */
@@ -64,7 +118,7 @@
 
 /* Benefits Section Icons */
 .benefit-icon-box {
-    background-color: rgba(77, 212, 209, 0.2);
+    background-color: rgba(107, 194, 195, 0.2);
     border-radius: 0.75rem;
     width: 3rem;
     height: 3rem;
@@ -75,7 +129,7 @@
 }
 
 .benefit-icon-box i {
-    color: #34b1b5;
+    color: #6BC2C3;
     font-size: 1.25rem;
 }
 
@@ -139,7 +193,7 @@
 }
 
 .search-button {
-    background-color: #34b1b5;
+    background-color: #6BC2C3;
     color: white;
     border-radius: 9999px;
     padding: 0 1.25rem;
@@ -152,7 +206,7 @@
 }
 
 .search-button:hover {
-    background-color: #289894;
+    background-color: #4AA8A9;
 }
 
 /* Category Badge */
@@ -160,7 +214,7 @@
     position: absolute;
     top: 0.625rem;
     left: 0.625rem;
-    background-color: #34b1b5;
+    background-color: #6BC2C3;
     color: white;
     font-size: 0.75rem;
     font-weight: 600;
@@ -177,7 +231,7 @@
     right: 2rem;
     width: 3rem;
     height: 3rem;
-    background-color: #34b1b5;
+    background-color: #6BC2C3;
     color: white;
     border-radius: 9999px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -189,6 +243,6 @@
 }
 
 .scroll-to-top:hover {
-    background-color: #289894;
+    background-color: #4AA8A9;
     transform: scale(1.1);
 }

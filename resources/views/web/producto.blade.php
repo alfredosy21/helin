@@ -7,32 +7,32 @@
     @include('web.components.breadcrumb', [
         'attributes' => 'class="text-sm mb-6"',
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
-            ['label' => 'Catálogo', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
-            ['label' => 'Implantología', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-gray-500 hover:text-turquesa"'],
+            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Catálogo', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Implantología', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => 'Implante Straumann BLX', 'spanAttributes' => 'class="text-turquesa font-medium"']
         ],
-        'separatorAttributes' => 'class="text-gray-400 mx-2"'
+        'separatorAttributes' => 'class="text-helin-text mx-2"'
     ])
 
     <div class="flex flex-col lg:flex-row gap-8 mb-12">
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
             <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
-                <img src="https://via.placeholder.com/500x500/f8f9fa/15aabf?text=Implante" alt="Implante Dental" class="w-full h-96 object-contain">
+                <img src="https://via.placeholder.com/500x500/f8f9fa/6BC2C3?text=Implante" alt="Implante Dental" class="w-full h-96 object-contain">
             </div>
             <div class="grid grid-cols-4 gap-3">
                 <button class="border-2 border-turquesa rounded-lg overflow-hidden p-2">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/15aabf?text=1" class="w-full h-16 object-contain">
+                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=1" class="w-full h-16 object-contain">
                 </button>
-                <button class="border border-gray-200 rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/15aabf?text=2" class="w-full h-16 object-contain">
+                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
+                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=2" class="w-full h-16 object-contain">
                 </button>
-                <button class="border border-gray-200 rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/15aabf?text=3" class="w-full h-16 object-contain">
+                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
+                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=3" class="w-full h-16 object-contain">
                 </button>
-                <button class="border border-gray-200 rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/15aabf?text=4" class="w-full h-16 object-contain">
+                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
+                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=4" class="w-full h-16 object-contain">
                 </button>
             </div>
         </div>
@@ -40,22 +40,22 @@
         <!-- Info del Producto -->
         <div class="lg:w-1/2">
             <span class="bg-turquesa/10 text-turquesa text-xs font-semibold px-3 py-1 rounded-full">Nuevo</span>
-            <h1 class="text-3xl font-bold text-gray-800 mt-3 mb-6">Implante Dental Straumann BLX</h1>
+            <h1 class="text-3xl text-helin-heading mt-3 mb-6">Implante Dental Straumann BLX</h1>
 
             <div class="flex items-center gap-3 mb-6">
-                <span class="text-2xl font-bold text-[#15aabf]" style="font-size: 24px;">$299.00</span>
-                <span class="text-xl text-gray-400" style="text-decoration: line-through;">$350.00</span>
+                <span class="text-2xl font-bold text-turquesa" style="font-size: 24px;">$299.00</span>
+                <span class="text-xl text-helin-text" style="text-decoration: line-through;">$350.00</span>
             </div>
 
-            <p class="text-gray-600 mb-6">El implante Straumann BLX representa la última generación en implantología dental. Diseñado para ofrecer máxima estabilidad primaria y osteointegración óptima en todos los tipos de hueso.</p>
+            <p class="text-helin-text mb-6">El implante Straumann BLX representa la última generación en implantología dental. Diseñado para ofrecer máxima estabilidad primaria y osteointegración óptima en todos los tipos de hueso.</p>
 
             <!-- Selector de Tamaño (Chips) -->
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-800 mb-3">Tamaño</h3>
+                <h3 class="font-semibold text-helin-heading mb-3">Tamaño</h3>
                 <div class="flex flex-wrap gap-2">
                     <button class="px-2 py-1 text-xs border-2 border-turquesa bg-turquesa/10 text-turquesa rounded-full font-medium transition-all">Ø3.3 mm</button>
-                    <button class="px-2 py-1 text-xs border border-gray-300 text-gray-700 rounded-full hover:border-turquesa transition-all">Ø4.1 mm</button>
-                    <button class="px-2 py-1 text-xs border border-gray-300 text-gray-700 rounded-full hover:border-turquesa transition-all">Ø4.8 mm</button>
+                    <button class="px-2 py-1 text-xs border border-helin-border text-helin-heading rounded-full hover:border-turquesa transition-all">Ø4.1 mm</button>
+                    <button class="px-2 py-1 text-xs border border-helin-border text-helin-heading rounded-full hover:border-turquesa transition-all">Ø4.8 mm</button>
                 </div>
             </div>
 
@@ -78,26 +78,26 @@
         <!-- Tabs de Información -->
         <div class="lg:w-2/3">
             <!-- Tabs Header -->
-            <div class="border-b border-gray-200 mb-6">
+            <div class="border-b border-helin-border mb-6">
                 <nav class="flex gap-8">
                     <button class="pb-4 border-b-2 border-turquesa text-turquesa font-bold text-xl">
                         Descripción
                     </button>
-                    <button class="pb-4 border-b-2 border-transparent text-gray-800 hover:text-gray-900 font-bold text-xl">
+                    <button class="pb-4 border-b-2 border-transparent text-helin-heading hover:text-helin-heading font-bold text-xl">
                         Especificaciones
                     </button>
                 </nav>
             </div>
 
             <!-- Contenido Tab Descripción -->
-            <div class="prose max-w-none leading-relaxed text-[#4a5568]">
+            <div class="prose max-w-none leading-relaxed text-helin-text">
                 <p class="mb-4">
                     El implante Straumann BLX representa la última generación en implantología dental. Diseñado para ofrecer máxima estabilidad primaria y osteointegración óptima en todos los tipos de hueso.
                 </p>
                 <p class="mb-4">
                     Su diseño roscado optimizado y superficie SLActive proporcionan una integración ósea rápida y predecible, reduciendo los tiempos de espera entre la colocación del implante y la carga protésica.
                 </p>
-                <h4 class="font-bold text-gray-800 mb-2">Características principales:</h4>
+                <h4 class="text-helin-heading mb-2">Características principales:</h4>
                 <ul class="list-disc list-inside space-y-1 mb-4">
                     <li>Superficie SLActive para osteointegración acelerada</li>
                     <li>Diseño de rosca optimizado para alta estabilidad primaria</li>
@@ -119,7 +119,7 @@
                 </a>
 
                 <!-- Teléfono -->
-                <a href="https://wa.me/584241232025" target="_blank" class="flex items-center justify-between text-gray-700 hover:text-turquesa py-2 transition-colors border border-gray-200 rounded-full hover:border-turquesa px-6">
+                <a href="https://wa.me/584241232025" target="_blank" class="flex items-center justify-between text-helin-heading hover:text-turquesa py-2 transition-colors border border-helin-border rounded-full hover:border-turquesa px-6">
                     <i class="fab fa-whatsapp text-turquesa text-2xl"></i>
                     <span class="font-bold text-turquesa">+ 584241232025</span>
                     <span class="w-6"></span>
@@ -131,15 +131,15 @@
     <!-- Productos Relacionados -->
     <section class="mb-12">
         <div class="mb-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-1">Productos Relacionados</h2>
-            <p class="text-gray-500 text-sm mb-3">Conoce los productos relacionados para ti</p>
-            <a href="{{ route('web.catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-[#00A3A0]"></i></a>
+            <h2 class="text-xl text-helin-heading mb-1">Productos Relacionados</h2>
+            <p class="text-helin-text text-sm mb-3">Conoce los productos relacionados para ti</p>
+            <a href="{{ route('web.catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('web.producto')])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Kit', 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/15aabf?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('web.producto')])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit', 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
+            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
         </div>
     </section>
 </main>

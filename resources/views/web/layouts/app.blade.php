@@ -32,6 +32,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('helin/css/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/variables.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/helin-components.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/custom-container.css') }}">
@@ -47,9 +48,22 @@
             theme: {
                 extend: {
                     colors: {
-                        turquesa: '#34b1b5',
-                        'turquesa-light': '#97d5d4',
-                        'turquesa-dark': '#289894'
+                        turquesa: '#6BC2C3',
+                        'turquesa-light': '#97D5D4',
+                        'turquesa-dark': '#4AA8A9',
+                        'helin-heading': '#123F4A',
+                        'helin-text': '#2D3740',
+                        'helin-bg': '#FFFFFF',
+                        'helin-soft': '#f4f7f8',
+                        'helin-border': '#D8E3E5'
+                    },
+                    fontFamily: {
+                        'heading': ['"Barlow Condensed"', 'Arial', 'sans-serif'],
+                        'subtitle': ['"Barlow Condensed"', 'Arial', 'sans-serif'],
+                        'block': ['Barlow', 'Arial', 'sans-serif'],
+                        'body': ['Inter', 'Arial', 'sans-serif'],
+                        'button': ['Inter', 'Arial', 'sans-serif'],
+                        'nav': ['Inter', 'Arial', 'sans-serif']
                     }
                 }
             }

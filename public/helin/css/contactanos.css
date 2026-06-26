@@ -4,11 +4,11 @@
 .page-title {
     text-align: center;
     margin: 0 0 70px;
-    color: var(--helin-primary);
+    color: var(--text-dark);
     font-size: var(--text-8xl-lg);
     line-height: 1;
     letter-spacing: -0.055em;
-    font-weight: 900;
+    font-weight: 700;
     position: relative;
 }
 
@@ -84,7 +84,7 @@
 
 .info-item h3 {
     margin: 0 0 5px;
-    color: var(--helin-primary);
+    color: var(--text-dark);
     font-size: var(--text-base);
     font-weight: 900;
 }
@@ -105,7 +105,7 @@
 
 .sedes h3 {
     margin: 0 0 14px;
-    color: var(--helin-primary);
+    color: var(--text-dark);
     font-size: var(--text-base);
     font-weight: 900;
 }
@@ -195,7 +195,7 @@ label span {
 
 .form-card input:focus, .form-card select:focus, .form-card textarea:focus {
     border-color: var(--helin-primary);
-    box-shadow: 0 0 0 3px rgba(52, 177, 181, 0.10);
+    box-shadow: 0 0 0 3px rgba(107, 194, 195, 0.10);
 }
 
 /* Captcha */
@@ -258,7 +258,7 @@ label span {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    box-shadow: 0 14px 28px rgba(52, 177, 181, 0.22);
+    box-shadow: 0 14px 28px rgba(107, 194, 195, 0.22);
 }
 
 /* Secure Message */

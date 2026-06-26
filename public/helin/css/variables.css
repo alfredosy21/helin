@@ -1,56 +1,56 @@
 /* Variables CSS Centralizadas - Helin */
 :root {
     /* Colores Principales - Turquesa */
-    --helin-primary: #34b1b5;
+    --helin-primary: #6BC2C3;
     --helin-primary-light: #97d5d4;
-    --helin-primary-dark: #289894;
+    --helin-primary-dark: #4aa8a9;
     --helin-soft: #97d5d4;
 
     /* Colores de Fondo */
-    --helin-bg: #fbfdfd;
-    --bg-light: #f7fbfb;
-    --bg-gray: #effafa;
+    --helin-bg: #ffffff;
+    --bg-light: #f4f7f8;
+    --bg-gray: #f4f7f8;
     --bg-white: #ffffff;
 
     /* Fondos Claros Turquesa */
-    --bg-turquesa-light-1: #e9fbfb;
-    --bg-turquesa-light-2: #effafa;
-    --bg-turquesa-light-3: #f7ffff;
+    --bg-turquesa-light-1: #f4f7f8;
+    --bg-turquesa-light-2: #f4f7f8;
+    --bg-turquesa-light-3: #f4f7f8;
 
     /* Colores de Texto */
-    --text-primary: #0f2f43;
-    --text-secondary: #102d44;
+    --text-primary: #2D3740;
+    --text-secondary: #2D3740;
     --text-muted: #6f8796;
-    --text-dark: #1d2232;
-    --text-gray: #63717d;
-    --text-darker: #0f2448;
-    --text-navy: #13284a;
-    --text-blue-dark: #1b3046;
-    --text-blue-gray: #152d49;
-    --text-black: #111;
+    --text-dark: #123F4A;
+    --text-gray: #6f8796;
+    --text-darker: #123F4A;
+    --text-navy: #123F4A;
+    --text-blue-dark: #123F4A;
+    --text-blue-gray: #123F4A;
+    --text-black: #123F4A;
     --text-blue: #1a609a;
     --text-blue-light: #4c7aa3;
     --text-blue-medium: #1a6ea8;
     --text-red: #cf2b2d;
-    --text-dark-gray: #333;
+    --text-dark-gray: #123F4A;
     --text-blue-royal: #2873b9;
-    --text-medium-gray: #777;
-    --text-slate: #43596a;
-    --text-slate-dark: #263746;
-    --text-slate-darker: #293f50;
+    --text-medium-gray: #6f8796;
+    --text-slate: #2D3740;
+    --text-slate-dark: #123F4A;
+    --text-slate-darker: #123F4A;
     --text-slate-light: #98a6ae;
-    --text-dark-black: #222;
+    --text-dark-black: #123F4A;
     --text-blue-purple: #4f79d9;
-    --text-gray-blue: #7d8d98;
-    --text-teal-dark: #466273;
+    --text-gray-blue: #6f8796;
+    --text-teal-dark: #2D3740;
 
     /* Colores de Borde */
-    --border-color: #d9eeee;
-    --border-light: #e1ecee;
-    --border-gray: #d9e2e4;
-    --border-blue: #d6e3e5;
-    --border-cyan: #cceeee;
-    --border-dark: #d1d6d9;
+    --border-color: #D8E3E5;
+    --border-light: #D8E3E5;
+    --border-gray: #D8E3E5;
+    --border-blue: #D8E3E5;
+    --border-cyan: #D8E3E5;
+    --border-dark: #D8E3E5;
 
     /* Colores Neutros */
     --white: #ffffff;
@@ -101,7 +101,14 @@
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
     /* Tipografía - Familia */
-    --font-family-base: 'Inter', Arial, Helvetica, sans-serif;
+    --font-family-base: 'Inter', Arial, sans-serif;
+    --font-heading: 'Barlow Condensed', Arial, sans-serif;
+    --font-subtitle: 'Barlow Condensed', Arial, sans-serif;
+    --font-block-title: 'Barlow', Arial, sans-serif;
+    --font-body: 'Inter', Arial, sans-serif;
+    --font-button: 'Inter', Arial, sans-serif;
+    --font-nav: 'Inter', Arial, sans-serif;
+    --font-caption: 'Inter', Arial, sans-serif;
 
     /* Tipografía - Pesos */
     --font-weight-light: 300;

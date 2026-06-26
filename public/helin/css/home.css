@@ -13,7 +13,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(90deg, rgba(52, 177, 181, 0.94), rgba(151, 213, 212, 0.50)),
+    background-image: linear-gradient(90deg, rgba(107, 194, 195, 0.94), rgba(151, 213, 212, 0.50)),
                     url("data:image/svg+xml,%3Csvg width='1200' height='420' viewBox='0 0 1200 420' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.25'%3E%3Ccircle cx='880' cy='110' r='150'/%3E%3Ccircle cx='880' cy='110' r='230'/%3E%3Cpath d='M120 355C260 220 330 310 480 190S760 40 1080 165'/%3E%3Cpath d='M520 85h34M537 68v34M1080 280h70M1115 245v70M420 60h70M455 25v70'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.18'%3E%3Ccircle cx='220' cy='90' r='5'/%3E%3Ccircle cx='315' cy='320' r='6'/%3E%3Ccircle cx='1030' cy='70' r='4'/%3E%3C/g%3E%3C/svg%3E");
     background-size: cover;
 }
@@ -201,7 +201,7 @@
     height: 8px;
     border-radius: 999px;
     background: repeating-linear-gradient(90deg, var(--helin-primary-light) 0 16px, var(--bg-turquesa-light-1) 16px 28px);
-    box-shadow: 0 18px 0 rgba(52, 177, 181, 0.35), 0 36px 0 rgba(52, 177, 181, 0.20);
+    box-shadow: 0 18px 0 rgba(107, 194, 195, 0.35), 0 36px 0 rgba(107, 194, 195, 0.20);
 }
 
 .kit-box {
@@ -241,7 +241,7 @@
     min-height: 210px;
     border-radius: 22px;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.78) 48%, rgba(151, 213, 212, 0.22)),
-                radial-gradient(circle at 76% 40%, rgba(52, 177, 181, 0.12), transparent 26%);
+                radial-gradient(circle at 76% 40%, rgba(107, 194, 195, 0.12), transparent 26%);
     border: 1px solid var(--border-color);
     overflow: hidden;
     display: grid;
@@ -272,6 +272,7 @@
     line-height: 1;
     letter-spacing: -0.05em;
     margin: 0 0 16px;
+    color: var(--text-dark);
 }
 
 .implant-visual {
@@ -307,7 +308,7 @@
     height: 120px;
     border-radius: 22px;
     background: rgba(151, 213, 212, 0.42);
-    border: 10px solid rgba(52, 177, 181, 0.24);
+    border: 10px solid rgba(107, 194, 195, 0.24);
     box-shadow: 0 18px 30px rgba(15, 47, 67, 0.10);
 }
 
@@ -343,7 +344,7 @@
     border-radius: 20px;
     padding: 20px;
     background: linear-gradient(120deg, var(--white), rgba(151, 213, 212, 0.18)),
-                radial-gradient(circle at 86% 34%, rgba(52, 177, 181, 0.22), transparent 28%);
+                radial-gradient(circle at 86% 34%, rgba(107, 194, 195, 0.22), transparent 28%);
     box-shadow: 0 10px 25px rgba(15, 47, 67, 0.06);
     position: relative;
     overflow: hidden;
@@ -361,6 +362,7 @@
     line-height: 1.05;
     letter-spacing: -0.035em;
     max-width: 220px;
+    color: var(--text-dark);
 }
 
 .category-card:after {
@@ -371,8 +373,8 @@
     width: 96px;
     height: 54px;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(52, 177, 181, 0.32), rgba(255, 255, 255, 0.74));
-    box-shadow: inset 0 0 0 1px rgba(52, 177, 181, 0.18);
+    background: linear-gradient(135deg, rgba(107, 194, 195, 0.32), rgba(255, 255, 255, 0.74));
+    box-shadow: inset 0 0 0 1px rgba(107, 194, 195, 0.18);
 }
 
 /* Near Section */
@@ -398,6 +400,7 @@
     margin: 0;
     font-size: var(--text-34px);
     letter-spacing: -0.045em;
+    color: var(--text-dark);
 }
 
 .near h2 span {
@@ -439,6 +442,7 @@
     font-size: var(--text-34px);
     line-height: 1.05;
     letter-spacing: -0.045em;
+    color: var(--text-dark);
 }
 
 .section-title p {
@@ -480,7 +484,7 @@
 .product-img {
     height: 185px;
     border-radius: 18px;
-    background: radial-gradient(circle at 50% 45%, rgba(52, 177, 181, 0.16), transparent 40%),
+    background: radial-gradient(circle at 50% 45%, rgba(107, 194, 195, 0.16), transparent 40%),
                 linear-gradient(135deg, var(--white), var(--bg-gray));
     position: relative;
     margin-bottom: 12px;
@@ -504,6 +508,7 @@
     font-size: var(--text-15px);
     line-height: 1.25;
     text-align: center;
+    color: var(--text-primary);
 }
 
 .old-price {
@@ -566,6 +571,7 @@
     font-size: var(--text-42px);
     letter-spacing: -0.05em;
     line-height: 1;
+    color: var(--text-dark);
 }
 
 .arrows {

@@ -17,22 +17,22 @@
     </div>
 
     <!-- Contenido -->
-    <h3 class="font-bold text-[#1a202c] text-base mb-1 text-center">
+    <h3 class="text-helin-heading text-base mb-1 text-center">
         {{ $productName ?? '' }}
     </h3>
 
-    <p class="text-[#718096] text-sm font-normal mb-3 text-center">{{ $productBrand ?? '' }}</p>
+    <p class="text-helin-text text-sm font-normal mb-3 text-center">{{ $productBrand ?? '' }}</p>
 
     <!-- Precio -->
     <div class="flex items-center justify-center gap-2 mb-4 mt-auto">
         @if(!empty($formattedOldPrice))
-            <span class="text-[#a0aec0] text-sm line-through">{{ $formattedOldPrice }}</span>
+            <span class="text-helin-text text-sm line-through">{{ $formattedOldPrice }}</span>
         @endif
-        <span class="text-[#15aabf] font-bold text-lg">{{ $formattedPrice }}</span>
+        <span class="text-turquesa font-bold text-lg">{{ $formattedPrice }}</span>
     </div>
 
     <!-- Botón -->
-    <button class="w-full bg-[#15aabf] hover:bg-[#0e8c9c] text-white font-semibold uppercase py-3 rounded-[30px] transition-colors">
+    <button class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold uppercase py-3 rounded-[30px] transition-colors">
         Añadir al carrito +
     </button>
 </div>

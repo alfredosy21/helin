@@ -100,7 +100,7 @@
     border: 0;
     background: var(--helin-primary);
     color: var(--white);
-    box-shadow: 0 13px 22px rgba(52, 177, 181, 0.20);
+    box-shadow: 0 13px 22px rgba(107, 194, 195, 0.20);
 }
 
 .btn-outline {
@@ -222,7 +222,7 @@
     width: 275px;
     height: 128px;
     border-radius: 28px;
-    border: 12px solid rgba(52, 177, 181, 0.30);
+    border: 12px solid rgba(107, 194, 195, 0.30);
     background: var(--bg-gray);
     box-shadow: 0 18px 38px rgba(16, 45, 68, 0.14);
     z-index: 3;
@@ -292,13 +292,13 @@
     align-items: center;
     justify-content: center;
     font-size: var(--text-48px);
-    box-shadow: 0 12px 24px rgba(52, 177, 181, 0.18);
+    box-shadow: 0 12px 24px rgba(107, 194, 195, 0.18);
 }
 
 .mv-card h3 {
     margin: 0 0 12px;
     font-size: var(--text-2xl-lg);
-    color: #111;
+    color: var(--text-dark);
     letter-spacing: -0.035em;
 }
 

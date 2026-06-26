@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="bg-[#00A3A0] text-white">
+<footer class="bg-turquesa text-white">
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Columna 1: Identidad y Contacto Directo -->
@@ -10,7 +10,7 @@
             @if($settings && $settings->image)
                 <img src="{{ asset('storage/' . $settings->image) }}" alt="Helin" class="h-12 w-auto mb-4">
             @else
-                <h3 class="text-3xl font-bold mb-4 lowercase">helin.</h3>
+                <h3 class="text-3xl mb-4 lowercase">helin.</h3>
             @endif
                 <p class="text-white/80 text-sm mb-4">{{ $settings->tagline ?? 'Todo en Cirugía Odontológica Especializada.' }}</p>
                 <p class="text-white font-medium mb-4">{{ $settings->phone ?? '+58 412 813 7896' }}</p>
@@ -39,7 +39,7 @@
 
             <!-- Columna 2: Nuestra Empresa -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Nuestra Empresa</h4>
+                <h4 class="text-lg mb-4">Nuestra Empresa</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#mision-vision" class="hover:text-white transition-colors">Misión y visión</a></li>
@@ -51,7 +51,7 @@
 
             <!-- Columna 3: Políticas -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Políticas</h4>
+                <h4 class="text-lg mb-4">Políticas</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.politicas') }}#envio-garantias" class="hover:text-white transition-colors">Políticas de envío y garantías</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.politicas') }}#terminos-condiciones" class="hover:text-white transition-colors">Términos y condiciones</a></li>
@@ -61,7 +61,7 @@
 
             <!-- Columna 4: Contacto Técnico y Sedes -->
             <div>
-                <h4 class="font-bold text-lg mb-4">Contáctanos</h4>
+                <h4 class="text-lg mb-4">Contáctanos</h4>
                 <div class="space-y-3 text-white/80 text-sm mb-4">
                     <a href="mailto:{{ $settings->email ?? 'info@helinbeam.com' }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
@@ -199,7 +199,7 @@
     </button>
 
     <!-- Franja de Cierre -->
-    <div class="bg-[#007A78] border-t border-white/20">
+    <div class="bg-turquesa-dark border-t border-white/20">
         <div class="container mx-auto px-4 py-2">
             <p class="text-center text-white/80 text-sm">{{ $settings->copy ?? '© Copyright 2026 by helin.' }}</p>
         </div>

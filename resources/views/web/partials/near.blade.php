@@ -1,9 +1,9 @@
 <!-- Sección "Estamos cerca de ti" -->
-<section class="near my-8 rounded-2xl border border-gray-200 bg-gray-50 flex items-center gap-7 p-6" style="
+<section class="near my-8 rounded-2xl border border-helin-border bg-helin-soft flex items-center gap-7 p-6" style="
    margin: 30px 0;
    border-radius: 28px;
-   border: 1px solid var(--line);
-   background: #effafa;
+   border: 1px solid #D8E3E5;
+   background: #f4f7f8;
    display: flex;
    align-items: center;
    gap: 26px;
@@ -14,9 +14,9 @@
       ⌖
    </div>
    <div>
-      <h2 class="text-2xl lg:text-3xl font-bold leading-none" style="letter-spacing: -0.045em;">
+      <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: -0.045em;">
          <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
       </h2>
-      <p class="text-gray-600 font-bold mt-1">Caracas · Valencia · Barquisimeto · Maracaibo</p>
+      <p class="text-helin-text font-bold mt-1">Caracas · Valencia · Barquisimeto · Maracaibo</p>
    </div>
 </section>

@@ -4,11 +4,11 @@
 .page-title {
     text-align: center;
     margin: 0 0 70px;
-    color: var(--helin-primary);
+    color: var(--text-dark);
     font-size: var(--text-8xl-lg);
     line-height: 1;
     letter-spacing: -0.055em;
-    font-weight: 900;
+    font-weight: 700;
     position: relative;
 }
 
@@ -63,7 +63,7 @@
     align-items: center;
     justify-content: center;
     font-size: var(--text-38px);
-    box-shadow: 0 10px 24px rgba(52, 177, 181, 0.08);
+    box-shadow: 0 10px 24px rgba(107, 194, 195, 0.08);
 }
 
 .policy-number {
@@ -74,7 +74,7 @@
     color: var(--helin-primary);
     font-size: 2.625rem;
     line-height: 1;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-heading);
     font-weight: 700;
     border-right: 1px solid var(--border-color);
 }
@@ -88,8 +88,8 @@
     color: var(--text-dark);
     font-size: var(--text-3xl);
     line-height: 1.1;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    font-weight: 600;
 }
 
 .policy-content > p {
@@ -127,10 +127,10 @@
 
 .point h3 {
     margin: 0 0 7px;
-    color: var(--helin-primary);
+    color: var(--text-dark);
     font-size: var(--text-base);
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 700;
+    font-family: var(--font-block-title);
+    font-weight: 600;
 }
 
 .point p {
@@ -167,7 +167,7 @@
 }
 
 .more-btn:hover {
-    background: rgba(52, 177, 181, 0.1);
+    background: rgba(107, 194, 195, 0.1);
 }
 
 /* Responsive Design */
