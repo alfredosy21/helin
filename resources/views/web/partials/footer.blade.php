@@ -162,11 +162,11 @@
                         </div>
                     </li>
 
-                    {{-- Maracay --}}
+                    {{-- Maracaibo --}}
                     <li class="flex items-center gap-2">
                         <div class="flex items-center gap-1.5">
-                            @if($settings && $settings->maracay_location)
-                                <a href="{{ $settings->maracay_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                            @if($settings && $settings->maracaibo_location)
+                                <a href="{{ $settings->maracaibo_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fas fa-map-marker-alt text-xs"></i>
                                 </a>
                             @else
@@ -174,8 +174,8 @@
                                     <i class="fas fa-map-marker-alt text-xs"></i>
                                 </div>
                             @endif
-                            @if($settings && $settings->maracay_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracay_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                            @if($settings && $settings->maracaibo_whatsapp)
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracaibo_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fab fa-whatsapp text-xs"></i>
                                 </a>
                             @else
@@ -185,7 +185,7 @@
                             @endif
                         </div>
                         <div class="flex-1">
-                            <span class="font-medium">Maracay</span>
+                            <span class="font-medium">Maracaibo</span>
                         </div>
                     </li>
                 </ul>

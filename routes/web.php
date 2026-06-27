@@ -107,6 +107,26 @@ Route::prefix('cms')->group(function () {
         Route::get('/testimonials/create', TestimonialsController::class)->name('testimonials.create')
                 ->middleware('permission:Contenido,Testimonios');
 
+        /* 3.6. Clinical Resources Management */
+        Route::get('/resources', \App\Http\Livewire\Cms\ResourceController::class)->name('resources.index')
+                ->middleware('permission:Contenido,Recursos Clínicos');
+
+        /* 3.7. Resource Types Management */
+        Route::get('/resource-types', \App\Http\Livewire\Cms\ResourceTypeController::class)->name('resource-types.index')
+                ->middleware('permission:Contenido,Tipos de Recursos');
+
+        /* 3.8. Resource Specialties Management */
+        Route::get('/resource-specialties', \App\Http\Livewire\Cms\ResourceSpecialtyController::class)->name('resource-specialties.index')
+                ->middleware('permission:Contenido,Especialidades de Recursos');
+
+        /* 3.9. Payment Methods Management */
+        Route::get('/payment-methods', \App\Http\Livewire\Cms\PaymentMethodController::class)->name('payment-methods.index')
+                ->middleware('permission:Configuración,Métodos de Pago');
+
+        /* 3.10. Website Menu Management */
+        Route::get('/menu', \App\Http\Livewire\Cms\MenuController::class)->name('menu.index')
+                ->middleware('permission:Configuración,Menú del Sitio');
+
         /* 3.6. Blog Management */
         Route::prefix('blog')->name('blog.')->group(function () {
             Route::get('/categories', BlogCategoriesController::class)->name('categories.index')

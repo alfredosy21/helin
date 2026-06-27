@@ -20,25 +20,28 @@ class SectionSeeder extends Seeder
 
         $sections = [
             // ==========================================
-            // --- SECCIONES PREVIAS (HOME / HEROES) ----
+            // ---------- SECCIONES DE HOME --------------
             // ==========================================
             [
-                'title' => 'Innovación en Dispositivos Médicos',
-                'content' => 'En Helin, nos especializamos en la distribución de implantes clínicos e instrumentos quirúrgicos de alta precisión. Cumplimos con los más altos estándares de calidad internacional para garantizar el éxito de cada procedimiento.',
-                'image' => 'hero-medical-devices.jpg',
-                'name_button' => 'Ver Catálogo',
-                'url_button' => 'https://helin.com/catalogo',
+                'title' => 'Comprometidos con la excelencia en cada solución',
+                'image' => 'hero-home.jpg',
+                'name_button' => 'Conoce nuestro portafolio →',
+                'url_button' => 'web.catalogo',
                 'status' => 1,
                 'status_content' => 1,
-            ],
-            [
-                'title' => 'Nuestros Servicios Especializados',
-                'content' => 'Ofrecemos soporte técnico presencial, logística de entrega inmediata para emergencias quirúrgicas y asesoría en la selección de materiales osteosíntesis.',
-                'image' => 'services-bg.jpg',
-                'name_button' => 'Conocer Más',
-                'url_button' => 'www.helin.com/servicios',
-                'status' => 1,
-                'status_content' => 1,
+                'content' => <<<HTML
+<p>En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.</p>
+<div class="hero-badges">
+    <div class="badge">
+        <div class="mini-icon">✚</div>
+        <span>Soluciones<br>quirúrgicas</span>
+    </div>
+    <div class="badge">
+        <div class="mini-icon">⌖</div>
+        <span>Asesoría<br>especializada</span>
+    </div>
+</div>
+HTML,
             ],
 
             // ==========================================
@@ -161,15 +164,6 @@ HTML,
 </div>
 HTML,
             ],
-            [
-                'title' => 'Sección de Promociones (Borrador)',
-                'content' => 'Contenido temporal sobre descuentos en instrumental básico para clínicas nuevas.',
-                'image' => 'promo.jpg',
-                'name_button' => 'Ver Ofertas',
-                'url_button' => 'https://helin.com/ofertas',
-                'status' => 0,
-                'status_content' => 0,
-            ],
 
             // ==========================================
             // ---------- SECCIONES DE NOSOTROS ---------
@@ -257,29 +251,6 @@ HTML,
     </div>
     <div class="slider-dot"></div>
 </div>
-HTML,
-            ],
-            [
-                'title' => '¿Tienes preguntas?',
-                'image' => null,
-                'name_button' => null,
-                'url_button' => '#',
-                'status' => 1,
-                'status_content' => 1,
-                'content' => <<<HTML
-<h2>Hablemos.</h2>
-<p>Estamos aquí para ayudarte. Escríbenos o utiliza el formulario y nuestro equipo se pondrá en contacto contigo lo antes posible.</p>
-HTML,
-            ],
-            [
-                'title' => '¡Nos encantaría conocer tu opinión!',
-                'image' => null,
-                'name_button' => 'Compartir comentario',
-                'url_button' => '#',
-                'status' => 1,
-                'status_content' => 1,
-                'content' => <<<HTML
-<p>¡Nos encantaría conocer tu opinión! Tu feedback nos ayuda a mejorar nuestros servicios y productos</p>
 HTML,
             ],
             [

@@ -51,7 +51,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5 text-center w-20">{{ __('cms.testimonials.author') }}</th>
+                            <th class="px-6 py-3.5">{{ __('cms.testimonials.author') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.testimonials.info') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.testimonials.testimony') }}</th>
                             <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
@@ -63,31 +63,18 @@
                         @forelse($testimonials as $testimonial)
                         <tr wire:key="testimonial-{{ $testimonial->id }}" data-id="{{ $testimonial->id }}" class="sortable-row hover:bg-slate-50/50 transition-colors">
                             <td class="px-6 py-4">
-                                <div class="flex justify-center">
-                                    @if($testimonial->image)
-                                    <div class="w-9 h-9 rounded-lg overflow-hidden border border-slate-100">
-                                        <img src="{{ $testimonial->image }}" alt="{{ $testimonial->name }}" class="w-full h-full object-cover">
-                                    </div>
-                                    @else
-                                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 font-semibold text-xs border border-slate-200">
-                                        {{ substr($testimonial->name, 0, 1) }}
-                                    </div>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
                                 <div class="flex items-start gap-2">
                                     <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="font-medium text-[#222]">{{ $testimonial->name }}</span>
-                                        <span class="text-xs text-[#c0c1c6]">{{ $testimonial->charge }}</span>
+                                        <span class="text-xs text-[#c0c1c6]">{{ $testimonial->specialty }}</span>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <p class="text-xs text-slate-600 line-clamp-2">{{ $testimonial->description }}</p>
+                                <p class="text-xs text-slate-600 line-clamp-2">{{ $testimonial->content }}</p>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="text-xs text-slate-500">
@@ -123,7 +110,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-16 text-center">
+                            <td colspan="5" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center text-[#c0c1c6]">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">{{ __('cms.general.no_records') }}</p>
@@ -175,51 +162,18 @@
                     </div>
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.charge_label') }} <span class="text-red-500">*</span></label>
-                        <input type="text" wire:model="charge" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                        @error('charge') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="specialty" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                        @error('specialty') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
                 {{-- Texto del testimonio --}}
                 <div class="space-y-1.5">
                     <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.description_label') }} <span class="text-red-500">*</span></label>
-                    <textarea wire:model="description" rows="4" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
-                    @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    <textarea wire:model="content" rows="4" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+                    @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Gestión de imagen de perfil/autor --}}
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.testimonials.image_label') }}</label>
-                    <div class="relative">
-                        @if($image)
-                        <div class="mb-3 relative group max-w-xs">
-                            <img src="{{ $image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                            <button type="button" wire:click="$set('image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </div>
-                        @elseif($current_image)
-                        <div class="mb-3 relative group max-w-xs">
-                            <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                            <button type="button" wire:click="$set('current_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </div>
-                        @endif
-
-                        <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors bg-slate-50/30">
-                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                </svg>
-                                <p class="text-xs text-slate-500 font-medium">{{ __('cms.testimonials.image_placeholder') }}</p>
-                                <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
-                            </div>
-                            <input type="file" wire:model="image" class="hidden" accept="image/*" />
-                        </label>
-                        @error('image') <span class="text-xs text-red-500 font-medium italic mt-1 block">{{ $message }}</span> @enderror
-                    </div>
-                </div>
 
             </div>
 

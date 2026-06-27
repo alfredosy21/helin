@@ -46,10 +46,8 @@ class SettingsSeeder extends Seeder
                 'valencia_location' => 'https://maps.google.com/?q=Centro+Empresarial+Valencia,+Piso+5,+Oficina+502,+Valencia',
                 'barquisimeto_whatsapp' => 'https://wa.me/584143805640',
                 'barquisimeto_location' => 'https://maps.google.com/?q=Av.+Lara,+Urbanización+Industrial,+Barquisimeto',
-                'maracay_whatsapp' => null,
-                'maracay_location' => null,
                 'maracaibo_whatsapp' => 'https://wa.me/584242550811',
-                'maracaibo_location' => null,
+                'maracaibo_location' => 'https://maps.google.com/?q=Av.+Principal+con+Calle+72,+Centro+Comercial+Maracaibo,+Maracaibo',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

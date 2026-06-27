@@ -51,11 +51,11 @@ class TestimonialsController extends Component {
 
     /** @var string Professional role or charge of the author */
     #[Validate('required|string|max:255')]
-    public string $charge = '';
+    public string $specialty = '';
 
     /** @var string The actual feedback content */
     #[Validate('required|string|max:2000')]
-    public string $description = '';
+    public string $content = '';
 
     /** @var mixed Temporary uploaded image file */
     public $image;
@@ -113,10 +113,10 @@ class TestimonialsController extends Component {
         $testimonials = Testimonial::query()
                 ->when($this->search, function ($query) {
                     $query->where('name', 'like', "%{$this->search}%")
-                    ->orWhere('charge', 'like', "%{$this->search}%")
-                    ->orWhere('description', 'like', "%{$this->search}%");
+                    ->orWhere('specialty', 'like', "%{$this->search}%")
+                    ->orWhere('content', 'like', "%{$this->search}%");
                 })
-                ->orderBy('order', 'asc')
+                ->orderBy('position', 'asc')
                 ->orderBy('name', 'asc')
                 ->paginate($this->perPage);
 
@@ -154,8 +154,8 @@ class TestimonialsController extends Component {
         try {
             $data = [
                 'name' => $this->name,
-                'charge' => $this->charge,
-                'description' => $this->description,
+                'specialty' => $this->specialty,
+                'content' => $this->content,
                 'is_active' => $this->is_active,
             ];
 
@@ -173,8 +173,8 @@ class TestimonialsController extends Component {
                 Activities::saveActivity(__('cms.controllers.testimonials.activity_updated', ['id' => $testimonial->id]));
                 $this->dispatch('toast', message: __('cms.controllers.testimonials.updated'), type: 'success');
             } else {
-                Testimonial::query()->increment('order');
-                $data['order'] = 1;
+                $maxPosition = Testimonial::max('position') ?? 0;
+                $data['position'] = $maxPosition + 1;
 
                 $testimonial = Testimonial::create($data);
 
@@ -205,8 +205,8 @@ class TestimonialsController extends Component {
 
         $this->editingId = $id;
         $this->name = $testimonial->name;
-        $this->charge = $testimonial->charge;
-        $this->description = $testimonial->description;
+        $this->specialty = $testimonial->specialty;
+        $this->content = $testimonial->content;
         $this->current_image = $testimonial->image;
         $this->is_active = (bool) $testimonial->is_active;
 
@@ -250,7 +250,7 @@ class TestimonialsController extends Component {
     public function updateOrder(array $orderedIds): void {
         try {
             foreach ($orderedIds as $index => $id) {
-                Testimonial::query()->where('id', $id)->update(['order' => $index + 1]);
+                Testimonial::query()->where('id', $id)->update(['position' => $index + 1]);
             }
 
             Activities::saveActivity(__('cms.controllers.testimonials.activity_reordered', ['user_id' => Auth::id()]));
@@ -296,13 +296,13 @@ class TestimonialsController extends Component {
     protected function validationAttributes(): array {
         return [
             'name' => __('cms.validation_attributes.testimonial_name'),
-            'charge' => __('cms.validation_attributes.testimonial_charge'),
-            'description' => __('cms.validation_attributes.testimonial_description'),
+            'specialty' => __('cms.validation_attributes.testimonial_specialty'),
+            'content' => __('cms.validation_attributes.testimonial_content'),
         ];
     }
 
     private function resetForm(): void {
-        $this->reset(['name', 'charge', 'description', 'image', 'current_image', 'is_active', 'editingId']);
+        $this->reset(['name', 'specialty', 'content', 'image', 'current_image', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }
@@ -328,7 +328,7 @@ class TestimonialsController extends Component {
      * @return array
      */
     public function getTestimonialLists(): array {
-        return Testimonial::orderBy('order', 'asc')
+        return Testimonial::orderBy('position', 'asc')
                         ->orderBy('name', 'asc')
                         ->get()
                         ->toArray();
