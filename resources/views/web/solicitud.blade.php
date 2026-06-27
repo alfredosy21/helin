@@ -7,8 +7,8 @@
     @include('web.components.breadcrumb', [
         'attributes' => 'class="text-sm mb-6"',
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
-            ['label' => 'Carrito', 'url' => route('web.carrito'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Carrito', 'url' => route('carrito'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => 'Detalle de la Solicitud', 'spanAttributes' => 'class="text-turquesa font-medium"']
         ],
         'separatorAttributes' => 'class="text-helin-text mx-2"'

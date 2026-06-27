@@ -6,6 +6,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sections extends Model {
 
+    // ==========================================
+    // ---------- CONSTANTS FOR SECTION IDS ----------
+    // ==========================================
+
+    // HOME SECTIONS
+    const HERO_HOME = 1; // helin.
+    const FEEDBACK_BANNER = 2; // ¡Nos encantaría conocer tu opinión!
+    const CLINICAL_RESOURCES_HERO = 3; // Centro de conocimiento clínico
+    const CLINICAL_LIBRARY = 4; // Biblioteca clínica Helin
+    const CLINICAL_CONTENT_FEATURE = 5; // Contenido clínico pensado para acompañar tu práctica.
+    const IMPLANTOLOGY_PRODUCTS = 6; // Más vendidos en Implantología
+    const GBR_PRODUCTS = 7; // Más vendidos en Regeneración Ósea Guiada
+    const INSTRUMENTS_PRODUCTS = 8; // Más vendidos en Instrumentos y Equipos
+    const TESTIMONIALS = 9; // Testimonios
+
+    // NUESTRA EMPRESA SECTIONS
+    const ABOUT_US = 10; // Soluciones que impulsan mejores resultados clínicos
+    const MISSION_VISION = 11; // Misión y Visión
+    const TEAM = 12; // Un equipo que te acompaña
+    const ALLIES = 13; // Trabajamos junto a marcas líderes
+    const CTA_COMPANY = 14; // ¿Listo para transformar tu práctica clínica?
+
+    // POLÍTICAS SECTIONS
+    const SHIPPING_POLICIES = 15; // Políticas de envío y garantías
+    const TERMS_CONDITIONS = 16; // Términos y condiciones
+    const PRIVACY_POLICIES = 17; // Políticas de privacidad
+
+    // CONTACTO SECTIONS
+    const CONTACT_HERO = 18; // ¿Tienes preguntas? Hablemos.
+
     /**
      * Name of the table
      * @var type

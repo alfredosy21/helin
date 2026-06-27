@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Module extends Model {
 
+    // ==========================================
+    // ---------- CONSTANTS FOR MODULE IDS ----------
+    // ==========================================
+
+    // MODULES
+    const ADMINISTRATORS = 1; // Administradores
+    const SETTINGS = 2; // Configuración
+    const CATALOG = 3; // Catálogo
+    const BLOG = 4; // Blog
+    const CONTENT = 5; // Contenido
+    const CONTACT = 6; // Contacto
+
     /**
      * Name of the table
      * @var type

@@ -16,11 +16,11 @@ class PermissionMiddleware {
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string  $module
-     * @param  string|null  $submodule
+     * @param  int  $moduleId
+     * @param  int|null  $submoduleId
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, string $module, ?string $submodule = null) {
+    public function handle(Request $request, Closure $next, int $moduleId, ?int $submoduleId = null) {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
@@ -32,8 +32,8 @@ class PermissionMiddleware {
             'user_id' => $user->id,
             'user_email' => $user->email,
             'user_role_id' => $user->rol_id,
-            'required_module' => $module,
-            'required_submodule' => $submodule
+            'required_module_id' => $moduleId,
+            'required_submodule_id' => $submoduleId
         ]);
 
         // Super administrators (level 1) have access to everything
@@ -43,20 +43,20 @@ class PermissionMiddleware {
         }
 
         // Check module permission
-        if (!$this->hasModulePermission($user->rol_id, $module)) {
+        if (!$this->hasModulePermission($user->rol_id, $moduleId)) {
             Log::warning('Access denied: Module permission not found', [
                 'role_id' => $user->rol_id,
-                'module' => $module
+                'module_id' => $moduleId
             ]);
             abort(403, 'No tienes permisos para acceder a este módulo.');
         }
 
         // If submodule is specified, check submodule permission
-        if ($submodule && !$this->hasSubmodulePermission($user->rol_id, $module, $submodule)) {
+        if ($submoduleId && !$this->hasSubmodulePermission($user->rol_id, $moduleId, $submoduleId)) {
             Log::warning('Access denied: Submodule permission not found', [
                 'role_id' => $user->rol_id,
-                'module' => $module,
-                'submodule' => $submodule
+                'module_id' => $moduleId,
+                'submodule_id' => $submoduleId
             ]);
             abort(403, 'No tienes permisos para acceder a esta sección.');
         }
@@ -69,15 +69,14 @@ class PermissionMiddleware {
      * Check if user has permission for the specified module.
      *
      * @param int $roleId
-     * @param string $moduleName
+     * @param int $moduleId
      * @return bool
      */
-    private function hasModulePermission(int $roleId, string $moduleName): bool {
-        return Permission::join('modules', 'modules.id', '=', 'permissions.module_id')
-                        ->where('permissions.rol_id', $roleId)
-                        ->where('modules.name', $moduleName)
-                        ->where('permissions.type', Permission::MAIN_MODULE_TYPE)
-                        ->where('permissions.status', Permission::ACTIVE_STATUS)
+    private function hasModulePermission(int $roleId, int $moduleId): bool {
+        return Permission::where('rol_id', $roleId)
+                        ->where('module_id', $moduleId)
+                        ->where('type', Permission::MAIN_MODULE_TYPE)
+                        ->where('status', Permission::ACTIVE_STATUS)
                         ->exists();
     }
 
@@ -85,18 +84,17 @@ class PermissionMiddleware {
      * Check if user has permission for the specified submodule.
      *
      * @param int $roleId
-     * @param string $moduleName
-     * @param string $submoduleName
+     * @param int $moduleId
+     * @param int $submoduleId
      * @return bool
      */
-    private function hasSubmodulePermission(int $roleId, string $moduleName, string $submoduleName): bool {
+    private function hasSubmodulePermission(int $roleId, int $moduleId, int $submoduleId): bool {
         return Permission::join('submodules', 'submodules.id', '=', 'permissions.submodule_id')
-                        ->join('modules', 'modules.id', '=', 'permissions.module_id')
                         ->where('permissions.rol_id', $roleId)
-                        ->where('modules.name', $moduleName)
-                        ->where('submodules.name', $submoduleName)
-                        ->where('permissions.type', Permission::SUB_MODULE_TYPE)
-                        ->where('permissions.status', Permission::ACTIVE_STATUS)
+                        ->where('permissions.module_id', $moduleId)
+                        ->where('permissions.submodule_id', $submoduleId)
+                        ->where('type', Permission::SUB_MODULE_TYPE)
+                        ->where('status', Permission::ACTIVE_STATUS)
                         ->exists();
     }
 

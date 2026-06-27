@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ResourceType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ResourceTypeSeeder extends Seeder
 {
@@ -14,8 +15,10 @@ class ResourceTypeSeeder extends Seeder
      */
     public function run()
     {
-        // Limpiar tipos de recursos existentes
+        // Limpiar tipos de recursos existentes (desactivar restricciones de clave foránea)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         ResourceType::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $resourceTypes = [
             [

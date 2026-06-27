@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ResourceSpecialty;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ResourceSpecialtySeeder extends Seeder
 {
@@ -14,8 +15,10 @@ class ResourceSpecialtySeeder extends Seeder
      */
     public function run()
     {
-        // Limpiar especialidades de recursos existentes
+        // Limpiar especialidades de recursos existentes (desactivar restricciones de clave foránea)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         ResourceSpecialty::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $resourceSpecialties = [
             [

@@ -10,7 +10,7 @@
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home')],
+            ['label' => 'Inicio', 'url' => route('home')],
             ['label' => 'Nuestra Empresa']
         ]
     ])
@@ -24,43 +24,24 @@
                 En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.
             </p>
             <div class="hero-actions">
-                <a href="{{ route('web.catalogo') }}" class="btn-primary">Conoce nuestro portafolio →</a>
-                <a href="{{ route('web.contactanos') }}" class="btn-outline">☏ Háblale con un asesor</a>
+                <a href="{{ route('catalogo') }}" class="btn-primary">Conoce nuestro portafolio →</a>
+                <a href="{{ route('contactanos') }}" class="btn-outline">☏ Háblale con un asesor</a>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
     <section class="section-card about" id="quienes-somos">
-        <div>
-            <span class="section-label">Quiénes somos</span>
-            <h2>Soluciones que impulsan mejores resultados clínicos</h2>
-            <p>
-                Somos más que una casa comercial: un aliado con visión quirúrgica, clínica y digital, trabajando junto a especialistas, con educación sin fronteras, ética, foco en respaldo y calidad real.
-            </p>
-            <p>
-                Seleccionamos e importamos lo mejor en odontología y trabajamos codo a codo con ustedes para que cada procedimiento sea un reflejo de la diferencia real: la sonrisa clínica.
-            </p>
-
-            <div class="value-grid">
-                <div class="value-item">
-                    <div class="value-icon">♡</div>
-                    Calidad<br>comprobada
-                </div>
-                <div class="value-item">
-                    <div class="value-icon">☊</div>
-                    Asesoría<br>especializada
-                </div>
-                <div class="value-item">
-                    <div class="value-icon">▱</div>
-                    Portafolio<br>completo
-                </div>
-                <div class="value-item">
-                    <div class="value-icon">✓</div>
-                    Respaldo y<br>confianza
-                </div>
+        @php
+            $aboutSection = \App\Models\Sections::find(\App\Models\Sections::ABOUT_US);
+        @endphp
+        @if($aboutSection && $aboutSection->status_content)
+            <div>
+                <span class="section-label">Quiénes somos</span>
+                <h2>{{ $aboutSection->title }}</h2>
+                {!! $aboutSection->content !!}
             </div>
-        </div>
+        @endif
 
         <div class="about-visual">
             <div class="implants-row">
@@ -75,40 +56,46 @@
 
     <!-- Mission and Vision -->
     <section id="mision-vision">
-        <span class="section-label">Misión y visión</span>
-        <div class="mission-vision">
-            <article class="mv-card">
-                <div class="mv-icon">◎</div>
-                <div>
-                    <h3>Misión</h3>
-                    <p>
-                        Brindar soluciones odontológicas especializadas con excelencia, calidad e innovación, impulsando la transformación y progreso real a futuro.
-                    </p>
-                </div>
-            </article>
-
-            <article class="mv-card">
-                <div class="mv-icon">⚑</div>
-                <div>
-                    <h3>Visión</h3>
-                    <p>
-                        Ser un referente en el sector odontológico especializado, reconocido por nuestro espíritu innovador, calidad y compromiso con el crecimiento de los profesionales de la salud bucal.
-                    </p>
-                </div>
-            </article>
-        </div>
+        @php
+            $missionSection = \App\Models\Sections::find(\App\Models\Sections::MISSION_VISION);
+        @endphp
+        @if($missionSection && $missionSection->status_content)
+            <span class="section-label">Misión y visión</span>
+            {!! $missionSection->content !!}
+        @endif
     </section>
 
     <!-- Team Section -->
     <section class="section-card team" id="nuestro-team">
-        <div>
-            <span class="section-label">Nuestro team</span>
-            <h2>Un equipo que te acompaña</h2>
-            <p>
-                Contamos con un equipo comprometido en ofrecer asesoría experta, alineada a calidad y novedad constante, porque en cada paso el camino prevalece.
-            </p>
-            <a href="{{ route('web.contactanos') }}" class="btn-outline">☏ Conoce al equipo</a>
-        </div>
+        @php
+            $teamSection = \App\Models\Sections::find(\App\Models\Sections::TEAM);
+        @endphp
+        @if($teamSection && $teamSection->status_content)
+            <div>
+                <span class="section-label">Nuestro team</span>
+                <h2>{{ $teamSection->title }}</h2>
+                @if($teamSection->description)
+                    <p>{{ $teamSection->description }}</p>
+                @else
+                    {!! $teamSection->content !!}
+                @endif
+
+                @php
+                    $buttons = $teamSection->buttons ? json_decode($teamSection->buttons, true) : [];
+                @endphp
+                @if(!empty($buttons))
+                    @foreach($buttons as $button)
+                        <a href="{{ $button['url'] ?: route('contactanos') }}"
+                           class="btn-outline {{ $button['style'] ?? '' }}"
+                           @if(isset($button['target']) && $button['target'] === '_blank') target="_blank" @endif>
+                           {{ $button['text'] ?? '☏ Conoce al equipo' }}
+                        </a>
+                    @endforeach
+                @else
+                    <a href="{{ $teamSection->url_button ?: route('contactanos') }}" class="btn-outline">{{ $teamSection->name_button ?: '☏ Conoce al equipo' }}</a>
+                @endif
+            </div>
+        @endif
 
         <div class="team-photo">
             <div class="people">
@@ -121,34 +108,52 @@
 
     <!-- Allies Section -->
     <section class="section-card allies" id="nuestros-aliados">
-        <div>
-            <span class="section-label">Nuestros aliados</span>
-            <h2>Trabajamos junto a marcas líderes</h2>
-            <p>
-                Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.
-            </p>
-        </div>
-
-        <div>
-            <div class="logos-grid">
-                @foreach(['GDT', 'AB', 'b:u', 'NSK', 'WOODPECKER', 'Dentistry<br>Sironа', 'Bio-Oss®', 'Geistlich'] as $brand)
-                <div class="brand-card">{!! $brand !!}</div>
-                @endforeach
+        @php
+            $alliesSection = \App\Models\Sections::find(\App\Models\Sections::ALLIES);
+        @endphp
+        @if($alliesSection && $alliesSection->status_content)
+            <div>
+                <span class="section-label">Nuestros aliados</span>
+                <h2>{{ $alliesSection->title }}</h2>
+                {!! $alliesSection->content !!}
             </div>
-            <div class="slider-dot"></div>
-        </div>
+            <div>
+                {!! $alliesSection->content !!}
+            </div>
+        @endif
     </section>
 
     <!-- CTA Section -->
     <section class="cta">
-        <div>
-            <h2>¿Listo para transformar tu práctica clínica?</h2>
-            <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
-        </div>
-        <div class="cta-actions">
-            <a href="https://wa.me/584241232025" target="_blank" class="btn-primary">☏ Háblale con WhatsApp</a>
-            <a href="{{ route('web.contactanos') }}" class="btn-outline">✉ Permítenos por correo</a>
-        </div>
+        @php
+            $ctaSection = \App\Models\Sections::find(\App\Models\Sections::CTA_COMPANY);
+        @endphp
+        @if($ctaSection && $ctaSection->status_content)
+            <div>
+                <h2>{{ $ctaSection->title }}</h2>
+                @if($ctaSection->description)
+                    <p>{{ $ctaSection->description }}</p>
+                @else
+                    {!! $ctaSection->content !!}
+                @endif
+            </div>
+            <div class="cta-actions">
+                @php
+                    $buttons = $ctaSection->buttons ? json_decode($ctaSection->buttons, true) : [];
+                @endphp
+                @if(!empty($buttons))
+                    @foreach($buttons as $button)
+                        <a href="{{ $button['url'] }}"
+                           class="btn-{{ $button['style'] ?? 'primary' }}"
+                           @if(isset($button['target']) && $button['target'] === '_blank') target="_blank" @endif>
+                           {{ $button['text'] }}
+                        </a>
+                    @endforeach
+                @else
+                    <a href="{{ $ctaSection->url_button ?: '#' }}" class="btn-primary">{{ $ctaSection->name_button ?: 'Contactar' }}</a>
+                @endif
+            </div>
+        @endif
     </section>
 </main>
 @endsection

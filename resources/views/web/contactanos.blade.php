@@ -13,7 +13,7 @@
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home')],
+            ['label' => 'Inicio', 'url' => route('home')],
             ['label' => 'Contacto']
         ]
     ])
@@ -22,10 +22,19 @@
 
     <section class="contact-layout">
         <aside class="info-block">
-            <h2>¿Tienes preguntas?<br>Hablemos.</h2>
-            <p>
-                Estamos aquí para ayudarte. Escríbenos o utiliza el formulario y nuestro equipo se pondrá en contacto contigo lo antes posible.
-            </p>
+            @php
+                $contactSection = \App\Models\Sections::find(\App\Models\Sections::CONTACT_HERO);
+            @endphp
+            @if($contactSection && $contactSection->status_content)
+                @if($contactSection->layout_type === 'text_simple')
+                    <h2>{{ $contactSection->title }}</h2>
+                    @if($contactSection->description)
+                        <p>{{ $contactSection->description }}</p>
+                    @endif
+                @else
+                    {!! $contactSection->content !!}
+                @endif
+            @endif
 
             <div class="info-list">
                 <article class="info-item">

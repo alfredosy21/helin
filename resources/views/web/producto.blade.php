@@ -7,9 +7,9 @@
     @include('web.components.breadcrumb', [
         'attributes' => 'class="text-sm mb-6"',
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
-            ['label' => 'Catálogo', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
-            ['label' => 'Implantología', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Catálogo', 'url' => route('catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Implantología', 'url' => route('catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => 'Implante Straumann BLX', 'spanAttributes' => 'class="text-turquesa font-medium"']
         ],
         'separatorAttributes' => 'class="text-helin-text mx-2"'
@@ -19,20 +19,20 @@
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
             <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
-                <img src="https://via.placeholder.com/500x500/f8f9fa/6BC2C3?text=Implante" alt="Implante Dental" class="w-full h-96 object-contain">
+                <img src="{{ asset('storage/products/73432-21300078.webp') }}" alt="Implante Dental" class="w-full h-96 object-contain">
             </div>
             <div class="grid grid-cols-4 gap-3">
                 <button class="border-2 border-turquesa rounded-lg overflow-hidden p-2">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=1" class="w-full h-16 object-contain">
+                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
                 </button>
                 <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=2" class="w-full h-16 object-contain">
+                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
                 </button>
                 <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=3" class="w-full h-16 object-contain">
+                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
                 </button>
                 <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="https://via.placeholder.com/100x100/f8f9fa/6BC2C3?text=4" class="w-full h-16 object-contain">
+                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
                 </button>
             </div>
         </div>
@@ -133,13 +133,13 @@
         <div class="mb-6">
             <h2 class="text-xl text-helin-heading mb-1">Productos Relacionados</h2>
             <p class="text-helin-text text-sm mb-3">Conoce los productos relacionados para ti</p>
-            <a href="{{ route('web.catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
+            <a href="{{ route('catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('web.producto')])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit', 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
+            @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('producto')])
+            @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => '', 'productLink' => route('producto')])
+            @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo', 'productLink' => route('producto')])
+            @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => '', 'productLink' => route('producto')])
         </div>
     </section>
 </main>

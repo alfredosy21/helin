@@ -11,8 +11,8 @@
                 @include('web.components.breadcrumb', [
                     'attributes' => 'class="text-sm text-helin-text mb-6"',
                     'items' => [
-                        ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
-                        ['label' => 'Categorías', 'url' => route('web.catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'],
+                        ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
+                        ['label' => 'Categorías', 'url' => route('catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'],
                         ['label' => 'Implantología', 'spanAttributes' => 'class="text-turquesa font-medium"']
                     ],
                     'separatorAttributes' => 'class="text-helin-text mx-1"'
@@ -150,12 +150,12 @@
 
             <!-- Grid Productos -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Implante', 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('web.producto')])
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productOldPrice' => 60.00, 'productBadge' => 'Oferta'])
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit', 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
-                @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Tornillos', 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => ''])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('producto')])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productOldPrice' => 60.00, 'productBadge' => 'Oferta'])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
+                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => ''])
             </div>
 
             <!-- Pagination -->

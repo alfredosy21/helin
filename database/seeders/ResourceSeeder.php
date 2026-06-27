@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Resource;
+use Illuminate\Support\Facades\DB;
 
 class ResourceSeeder extends Seeder
 {
@@ -14,8 +15,10 @@ class ResourceSeeder extends Seeder
      */
     public function run()
     {
-        // Limpiar recursos existentes
+        // Limpiar recursos existentes (desactivar restricciones de clave foránea)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Resource::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Recursos desde recursos-clinicos.blade.php
         $resources = [

@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class SectionSeeder extends Seeder
 {
+
+    // ==========================================
+    // ---------- TIPOS DE LAYOUT ESTÁNDAR ----------
+    // ==========================================
+
+    // LAYOUT TYPES
+    const LAYOUT_TEXT_SIMPLE = 'text_simple'; // Texto simple (título + descripción)
+    const LAYOUT_HERO_BADGES = 'hero_badges'; // Hero con badges verticales
+    const LAYOUT_FEEDBACK_BADGES = 'feedback_badges'; // Badges de feedback
+    const LAYOUT_STATS_GRID = 'stats_grid'; // Grid de estadísticas
+    const LAYOUT_SEARCH_FEATURES = 'search_features'; // Features de búsqueda
+    const LAYOUT_POLICY_POINTS = 'policy_points'; // Puntos de políticas
+    const LAYOUT_MISSION_VISION = 'mission_vision'; // Misión y visión
+    const LAYOUT_VALUE_GRID = 'value_grid'; // Grid de valores
+    const LAYOUT_BRAND_GRID = 'brand_grid'; // Grid de marcas
+    const LAYOUT_CITIES_LIST = 'cities_list'; // Lista de ciudades
+    const LAYOUT_FEATURE_BOX = 'feature_box'; // Caja de características
+
+    // ICON STYLES
+    const ICON_EMOJI = 'emoji'; // Iconos emoji
+    const ICON_LUCIDE = 'lucide'; // Iconos Lucide
+    const ICON_CUSTOM = 'custom'; // Iconos personalizados
     /**
      * Run the database seeds.
      *
@@ -23,23 +45,229 @@ class SectionSeeder extends Seeder
             // ---------- SECCIONES DE HOME --------------
             // ==========================================
             [
-                'title' => 'Comprometidos con la excelencia en cada solución',
+                'title' => 'helin.',
+                'subtitle' => null,
+                'description' => null,
                 'image' => 'hero-home.jpg',
-                'name_button' => 'Conoce nuestro portafolio →',
+                'layout_type' => self::LAYOUT_HERO_BADGES,
+                'icon_style' => self::ICON_EMOJI,
+                'items' => json_encode([
+                    'hero_badges' => [
+                        ['icon' => '✓', 'text' => 'Calidad garantizada'],
+                        ['icon' => '△', 'text' => 'Alta precisión'],
+                        ['icon' => '◎', 'text' => 'Soluciones quirúrgicas'],
+                        ['icon' => '✚', 'text' => 'Asesoría especializada']
+                    ]
+                ]),
+                'buttons' => json_encode([
+                    [
+                        'text' => 'Ver Catálogo →',
+                        'url' => 'web.catalogo',
+                        'style' => 'primary'
+                    ]
+                ]),
+                'content' => null, // El contenido HTML se manejará en la vista
+                'name_button' => 'Ver Catálogo →', // Mantener para compatibilidad temporal
+                'url_button' => 'web.catalogo', // Mantener para compatibilidad temporal
+                'status' => 1,
+                'status_content' => 1,
+            ],
+            [
+                'title' => '¡Nos encantaría conocer tu opinión!',
+                'image' => null,
+                'name_button' => 'Compartir comentario',
+                'url_button' => 'web.contactanos',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Tu experiencia es importante para nosotros. Comparte tu opinión y ayúdanos a mejorar nuestros servicios y productos.</p>
+<div class="feedback-badges">
+    <div class="badge">
+        <div class="mini-icon">⭐</div>
+        <span>Califica nuestro<br>servicio</span>
+    </div>
+    <div class="badge">
+        <div class="mini-icon">💬</div>
+        <span>Comparte tu<br>experiencia</span>
+    </div>
+    <div class="badge">
+        <div class="mini-icon">📝</div>
+        <span>Sugerencias<br>de mejora</span>
+    </div>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Centro de conocimiento clínico',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<span class="hero-badge">Centro de conocimiento clínico</span>
+<h1>Recursos clínicos para decisiones más precisas.</h1>
+<p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
+<div class="hero-buttons">
+    <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
+    <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Biblioteca clínica Helin',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<div>
+    <small>Biblioteca clínica Helin</small>
+    <h2>Busca, filtra y consulta recursos especializados.</h2>
+</div>
+<p>Una experiencia organizada para acceder rápidamente a contenido clínico por especialidad, formato y tipo de recurso.</p>
+HTML,
+            ],
+            [
+                'title' => 'Contenido clínico pensado para acompañar tu práctica.',
+                'image' => null,
+                'name_button' => 'Contactar asesor',
+                'url_button' => 'web.contactanos',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Centraliza recursos técnicos, casos clínicos y materiales descargables en una plataforma clara, rápida y alineada al portafolio de Helin.</p>
+<div class="feature-box">
+    <strong>Asesoría especializada</strong>
+    <p>Conecta cada recurso con productos, casos de uso y soporte comercial para profesionales.</p>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Más vendidos en Implantología',
+                'image' => null,
+                'name_button' => 'Ver todos los productos →',
                 'url_button' => 'web.catalogo',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
-<p>En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.</p>
-<div class="hero-badges">
-    <div class="badge">
-        <div class="mini-icon">✚</div>
-        <span>Soluciones<br>quirúrgicas</span>
+<p>Selección de productos destacados</p>
+<div class="product-highlights">
+    <div class="highlight-item">
+        <div class="highlight-icon">🦷</div>
+        <span>Implantes de<br>alta calidad</span>
     </div>
-    <div class="badge">
-        <div class="mini-icon">⌖</div>
-        <span>Asesoría<br>especializada</span>
+    <div class="highlight-item">
+        <div class="highlight-icon">⚙️</div>
+        <span>Instrumental<br>quirúrgico</span>
     </div>
+    <div class="highlight-item">
+        <div class="highlight-icon">💎</div>
+        <span>Biomateriales<br>especializados</span>
+    </div>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Más vendidos en Regeneración Ósea Guiada',
+                'image' => null,
+                'name_button' => 'Ver todos los productos →',
+                'url_button' => 'web.catalogo',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Biomateriales y soluciones especializadas</p>
+<div class="product-highlights">
+    <div class="highlight-item">
+        <div class="highlight-icon">🦴</div>
+        <span>Membranas<br>reabsorbibles</span>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-icon">🧬</div>
+        <span>Injertos<br>óseos</span>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-icon">🔬</div>
+        <span>Factores de<br>crecimiento</span>
+    </div>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Más vendidos en Instrumentos y Equipos',
+                'image' => null,
+                'name_button' => 'Ver todos los productos →',
+                'url_button' => 'web.catalogo',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Precisión clínica para tu práctica</p>
+<div class="product-highlights">
+    <div class="highlight-item">
+        <div class="highlight-icon">🔧</div>
+        <span>Motrices y<br>contrángulos</span>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-icon">⚕️</div>
+        <span>Sistemas de<br>osteosíntesis</span>
+    </div>
+    <div class="highlight-item">
+        <div class="highlight-icon">📡</div>
+        <span>Equipos de<br>cirugía</span>
+    </div>
+</div>
+HTML,
+            ],
+            [
+                'title' => 'Testimonios',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Lo que dicen nuestros clientes</p>
+<div class="testimonials-preview">
+    <div class="testimonial-item">
+        <div class="testimonial-icon">⭐</div>
+        <div class="testimonial-content">
+            <p>"Excelente atención y muy buen acompañamiento comercial. Encontramos los productos necesarios para implantología."</p>
+            <div class="testimonial-author">Dra. María Fernanda López</div>
+            <div class="testimonial-role">Odontóloga implantóloga</div>
+        </div>
+    </div>
+    <div class="testimonial-item">
+        <div class="testimonial-icon">⭐</div>
+        <div class="testimonial-content">
+            <p>"Helin nos ha brindado soluciones confiables y un portafolio muy completo. Destaco la rapidez en la atención."</p>
+            <div class="testimonial-author">Dr. José Andrés Rivas</div>
+            <div class="testimonial-role">Especialista en cirugía bucal</div>
+        </div>
+    </div>
+    <div class="testimonial-item">
+        <div class="testimonial-icon">⭐</div>
+        <div class="testimonial-content">
+            <p>"Muy buena experiencia de compra. La plataforma es fácil de usar y el equipo comercial responde con rapidez."</p>
+            <div class="testimonial-author">Clínica Sonrisa Integral</div>
+            <div class="testimonial-role">Centro odontológico</div>
+        </div>
+    </div>
+</div>
+HTML,
+            ],
+            [
+                'title' => '¿Listo para transformar tu práctica clínica?',
+                'image' => 'CTA',
+                'name_button' => '☏ Háblale con WhatsApp',
+                'url_button' => 'https://wa.me/584241232025',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
+<div class="cta-actions">
+    <a href="https://wa.me/584241232025" target="_blank" class="btn-primary">☏ Háblale con WhatsApp</a>
+    <a href="{{ route('contactanos') }}" class="btn-outline">✉ Permítenos por correo</a>
 </div>
 HTML,
             ],
@@ -261,6 +489,7 @@ HTML,
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
+<div class="location-icon">⌖</div>
 <p>donde construyes salud oral</p>
 <div class="cities-list">
     <div class="city-item">Caracas</div>
@@ -279,6 +508,23 @@ HTML,
                 'status_content' => 1,
                 'content' => <<<HTML
 <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
+HTML,
+            ],
+
+            // ==========================================
+            // ---------- SECCIONES DE CONTACTO ----------
+            // ==========================================
+            [
+                'title' => '¿Tienes preguntas? Hablemos.',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => <<<HTML
+<p>
+    Estamos aquí para ayudarte. Escríbenos o utiliza el formulario y nuestro equipo se pondrá en contacto contigo lo antes posible.
+</p>
 HTML,
             ],
         ];

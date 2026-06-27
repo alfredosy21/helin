@@ -18,7 +18,14 @@ class Resource extends Model {
         'file_path',
         'thumbnail',
         'resourceable_id',
-        'resourceable_type'
+        'resourceable_type',
+        'resource_type_id',
+        'resource_specialty_id',
+        'format',
+        'url',
+        'is_active',
+        'position',
+        'views'
     ];
 
     /**
@@ -27,5 +34,21 @@ class Resource extends Model {
      */
     public function resourceable(): MorphTo {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the resource type
+     */
+    public function resourceType()
+    {
+        return $this->belongsTo(ResourceType::class);
+    }
+
+    /**
+     * Get the resource specialty
+     */
+    public function resourceSpecialty()
+    {
+        return $this->belongsTo(ResourceSpecialty::class);
     }
 }

@@ -9,10 +9,10 @@
             </button>
         </div>
         <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100%-70px)]">
-            <a href="{{ route('web.home') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-home text-turquesa"></i> Inicio
             </a>
-            <a href="{{ route('web.catalogo') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
+            <a href="{{ route('catalogo') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-th-large text-turquesa"></i> Todos los Productos
             </a>
             <div class="border-t border-helin-border my-3"></div>
@@ -41,7 +41,7 @@
             <a href="https://wa.me/584127398580" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fab fa-whatsapp text-green-500"></i> Escríbenos por WhatsApp
             </a>
-            <a href="{{ route('web.solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+            <a href="{{ route('solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-file-contract text-turquesa"></i> Solicitud Comercial
             </a>
         </nav>
