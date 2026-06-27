@@ -47,50 +47,48 @@
             </div>
 
             {{-- Testimonials Table --}}
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+            <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
-                            <th class="px-6 py-3.5">{{ __('cms.testimonials.author') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.testimonials.info') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.testimonials.testimony') }}</th>
-                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
-                            <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
-                            <th class="px-6 py-3.5 text-right w-32">{{ __('cms.testimonials.actions') }}</th>
+                            <th class="px-4 py-3.5 w-2/5">{{ __('cms.testimonials.author') }}</th>
+                            <th class="px-4 py-3.5">{{ __('cms.testimonials.testimony') }}</th>
+                            <th class="px-4 py-3.5 text-center w-24">{{ __('cms.tables.updated_at') }}</th>
+                            <th class="px-4 py-3.5 text-center w-20">{{ __('cms.tables.status') }}</th>
+                            <th class="px-4 py-3.5 text-center w-24">{{ __('cms.testimonials.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody id="testimonials-table-body" class="divide-y divide-slate-50 text-sm">
                         @forelse($testimonials as $testimonial)
                         <tr wire:key="testimonial-{{ $testimonial->id }}" data-id="{{ $testimonial->id }}" class="sortable-row hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4">
+                            <td class="px-4 py-3">
                                 <div class="flex items-start gap-2">
-                                    <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                                    <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1 flex-shrink-0">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-[#222]">{{ $testimonial->name }}</span>
-                                        <span class="text-xs text-[#c0c1c6]">{{ $testimonial->specialty }}</span>
+                                    <div class="flex flex-col min-w-0 flex-1">
+                                        <span class="font-medium text-[#222] text-sm truncate">{{ $testimonial->name }}</span>
+                                        <span class="text-xs text-[#c0c1c6] truncate">{{ $testimonial->specialty }}</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
-                                <p class="text-xs text-slate-600 line-clamp-2">{{ $testimonial->content }}</p>
+                            <td class="px-4 py-3">
+                                <p class="text-sm text-slate-600 line-clamp-2">{{ $testimonial->content }}</p>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-xs text-slate-500">
+                            <td class="px-4 py-3 text-center">
+                                <span class="text-xs text-slate-500 whitespace-nowrap">
                                     {{ $testimonial->updated_at->format('d/m/Y H:i') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $testimonial->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span class="w-2 h-2 rounded-full {{ $testimonial->is_active ? 'bg-primary' : 'bg-slate-300' }} flex-shrink-0"></span>
                                     <span class="text-xs font-medium {{ $testimonial->is_active ? 'text-slate-700' : 'text-slate-400' }}">
-                                        {{ $testimonial->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
+                                        {{ $testimonial->is_active ? 'Activo' : 'Inactivo' }}
                                     </span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end gap-1">
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex justify-center gap-1">
                                     <x-cms-tooltip text="{{ __('cms.testimonials.edit_tooltip') }}">
                                         <button type="button" wire:click="edit({{ $testimonial->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

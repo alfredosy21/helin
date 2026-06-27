@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Cms;
 use App\Models\ResourceType;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
 
+#[Title('Gestión de Tipos de Recursos | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
 class ResourceTypeController extends Component
 {
     use WithPagination;
@@ -122,17 +126,15 @@ class ResourceTypeController extends Component
             'icon' => $this->icon,
             'color' => $this->color,
             'is_active' => $this->is_active,
-            'position' => $this->position,
-            'config' => $configArray,
         ];
 
         if ($this->editingId) {
             $resourceType = ResourceType::findOrFail($this->editingId);
             $resourceType->update($data);
-            $this->dispatch('showToast', 'Tipo de recurso actualizado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Tipo de recurso actualizado exitosamente', type: 'success');
         } else {
             ResourceType::create($data);
-            $this->dispatch('showToast', 'Tipo de recurso creado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Tipo de recurso creado exitosamente', type: 'success');
         }
 
         $this->cancel();
@@ -151,12 +153,12 @@ class ResourceTypeController extends Component
 
         // Check if there are associated resources
         if ($resourceType->resources()->count() > 0) {
-            $this->dispatch('showToast', 'No se puede eliminar el tipo de recurso porque tiene recursos asociados', 'error');
+            $this->dispatch('toast', message: 'No se puede eliminar el tipo de recurso porque tiene recursos asociados', type: 'error');
             return;
         }
 
         $resourceType->delete();
-        $this->dispatch('showToast', 'Tipo de recurso eliminado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Tipo de recurso eliminado exitosamente', type: 'success');
     }
 
     public function updateOrder($orderedIds)
@@ -164,18 +166,17 @@ class ResourceTypeController extends Component
         foreach ($orderedIds as $index => $id) {
             ResourceType::where('id', $id)->update(['position' => $index]);
         }
-        $this->dispatch('showToast', 'Orden actualizado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Orden actualizado exitosamente', type: 'success');
     }
 
     public function resetForm()
     {
         $this->reset([
             'name', 'slug', 'description', 'icon', 'color',
-            'is_active', 'position', 'config'
+            'is_active'
         ]);
 
         $this->is_active = true;
-        $this->position = 0;
     }
 
     public function resetFilters()

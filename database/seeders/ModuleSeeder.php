@@ -66,7 +66,7 @@ class ModuleSeeder extends Seeder
             ],
             [
                 'name' => 'Contenido',
-                'class' => 'file-text',
+                'class' => 'file',
                 'order' => 5,
                 'submodules' => [
                     ['name' => 'Testimonios', 'url' => '/cms/testimonials', 'icon' => 'star'],

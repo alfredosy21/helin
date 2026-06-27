@@ -178,12 +178,18 @@
             <form wire:submit.prevent="save" class="w-full">
                 <div class="p-6 space-y-6">
 
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
+                    {{-- Toggle de estado y destacado --}}
+                    <div class="flex items-center gap-6 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
                         <label for="is_active" class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
                             <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                             <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
+                        </label>
+
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" wire:model="featured" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.featured') }}</span>
                         </label>
                     </div>
 
@@ -300,30 +306,6 @@
                         </div>
                     </div>
 
-                    {{-- Campos adicionales --}}
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.views_label') }}</label>
-                            <input type="number" wire:model="views" min="0" placeholder="0"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('views') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.position_label') }}</label>
-                            <input type="number" wire:model="position" min="0" placeholder="0"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('position') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.featured_label') }}</label>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" wire:model="featured" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.resources.featured_label') }}</span>
-                            </label>
-                            @error('featured') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
 
                 </div>
 

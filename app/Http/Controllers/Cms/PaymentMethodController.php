@@ -6,8 +6,12 @@ use App\Models\PaymentMethod;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
 
+#[Title('Gestión de Métodos de Pago | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
 class PaymentMethodController extends Component
 {
     use WithPagination, WithFileUploads;
@@ -135,67 +139,21 @@ class PaymentMethodController extends Component
             PaymentMethod::where('is_default', true)->update(['is_default' => false]);
         }
 
-        // Process JSON fields
-        $configArray = null;
-        if ($this->config) {
-            try {
-                $configArray = json_decode($this->config, true);
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    $this->addError('config', 'El formato JSON es inválido');
-                    return;
-                }
-            } catch (\Exception $e) {
-                $this->addError('config', 'El formato JSON es inválido');
-                return;
-            }
-        }
-
-        $providerConfigArray = null;
-        if ($this->provider_config) {
-            try {
-                $providerConfigArray = json_decode($this->provider_config, true);
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    $this->addError('provider_config', 'El formato JSON es inválido');
-                    return;
-                }
-            } catch (\Exception $e) {
-                $this->addError('provider_config', 'El formato JSON es inválido');
-                return;
-            }
-        }
-
+        // Simplified data
         $data = [
             'name' => $this->name,
-            'slug' => $this->slug,
-            'icon' => $this->icon,
             'description' => $this->description,
-            'config' => $configArray,
             'is_active' => $this->is_active,
-            'position' => $this->position,
-            'is_default' => $this->is_default,
-            'provider' => $this->provider,
-            'provider_config' => $providerConfigArray,
-            'fee_percentage' => $this->fee_percentage,
-            'fee_fixed' => $this->fee_fixed,
-            'min_amount' => $this->min_amount,
-            'max_amount' => $this->max_amount,
         ];
 
-        // Handle image upload
-        if ($this->image) {
-            $imagePath = $this->image->store('payment-methods', 'public');
-            $data['image'] = $imagePath;
-        } elseif ($this->current_image) {
-            $data['image'] = $this->current_image;
-        }
 
         if ($this->editingId) {
             $method = PaymentMethod::findOrFail($this->editingId);
             $method->update($data);
-            $this->dispatch('showToast', 'Método de pago actualizado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Método de pago actualizado exitosamente', type: 'success');
         } else {
             PaymentMethod::create($data);
-            $this->dispatch('showToast', 'Método de pago creado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Método de pago creado exitosamente', type: 'success');
         }
 
         $this->cancel();
@@ -216,13 +174,13 @@ class PaymentMethodController extends Component
         if ($method->is_default) {
             $activeCount = PaymentMethod::where('is_active', true)->count();
             if ($activeCount <= 1) {
-                $this->dispatch('showToast', 'No se puede eliminar el método de pago por defecto si es el único método activo', 'error');
+                $this->dispatch('toast', message: 'No se puede eliminar el método de pago por defecto si es el único método activo', type: 'error');
                 return;
             }
         }
 
         $method->delete();
-        $this->dispatch('showToast', 'Método de pago eliminado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Método de pago eliminado exitosamente', type: 'success');
     }
 
     public function updateOrder($orderedIds)
@@ -230,22 +188,16 @@ class PaymentMethodController extends Component
         foreach ($orderedIds as $index => $id) {
             PaymentMethod::where('id', $id)->update(['position' => $index]);
         }
-        $this->dispatch('showToast', 'Orden actualizado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Orden actualizado exitosamente', type: 'success');
     }
 
     public function resetForm()
     {
         $this->reset([
-            'name', 'slug', 'icon', 'description', 'image', 'current_image',
-            'config', 'is_active', 'position', 'is_default', 'provider',
-            'provider_config', 'fee_percentage', 'fee_fixed', 'min_amount', 'max_amount'
+            'name', 'description', 'is_active'
         ]);
 
         $this->is_active = true;
-        $this->position = 0;
-        $this->is_default = false;
-        $this->fee_percentage = 0;
-        $this->fee_fixed = 0;
     }
 
     public function resetFilters()

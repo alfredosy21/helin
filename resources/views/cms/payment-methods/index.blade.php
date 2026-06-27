@@ -199,129 +199,24 @@
                             <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                             <span class="ml-3 text-sm font-medium text-slate-700">Activo</span>
                         </label>
-                        <label for="is_default" class="relative inline-flex items-center cursor-pointer ml-6">
-                            <input type="checkbox" id="is_default" wire:model="is_default" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">Método por defecto</span>
-                        </label>
-                    </div>
+                                            </div>
 
                     {{-- Información básica --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="name" placeholder="Ej: Tarjeta de Crédito"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="slug" placeholder="tarjeta-credito"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Título <span class="text-red-500">*</span></label>
+                        <input type="text" wire:model="name" placeholder="Ej: Transferencia Bancaria"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Icono (clase CSS)</label>
-                            <input type="text" wire:model="icon" placeholder="fas fa-credit-card"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Proveedor</label>
-                            <select wire:model="provider" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
-                                <option value="">Seleccionar proveedor</option>
-                                <option value="stripe">Stripe</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="plaid">Plaid</option>
-                                <option value="local">Local</option>
-                                <option value="mercado_pago">Mercado Pago</option>
-                            </select>
-                            @error('provider') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
 
                     {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Descripción</label>
-                        <textarea wire:model="description" rows="3"
+                        <textarea wire:model="description" rows="8"
                                   class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
-                                  placeholder="Descripción del método de pago"></textarea>
+                                  placeholder="Describe detalladamente cómo funciona este método de pago, sus características, requisitos, tiempos de procesamiento, comisiones aplicables y cualquier información relevante que los clientes necesiten saber..."></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Comisiones --}}
-                    <div class="space-y-4">
-                        <h3 class="text-sm font-semibold text-[#222] border-b border-slate-200 pb-2">Configuración de Comisiones</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Comisión Porcentual (%)</label>
-                                <input type="number" wire:model="fee_percentage" step="0.01" min="0" max="100" placeholder="0.00"
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                                @error('fee_percentage') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Comisión Fija ($)</label>
-                                <input type="number" wire:model="fee_fixed" step="0.01" min="0" placeholder="0.00"
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                                @error('fee_fixed') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Límites --}}
-                    <div class="space-y-4">
-                        <h3 class="text-sm font-semibold text-[#222] border-b border-slate-200 pb-2">Límites de Monto</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Monto Mínimo ($)</label>
-                                <input type="number" wire:model="min_amount" step="0.01" min="0" placeholder="0.00"
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                                @error('min_amount') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            </div>
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Monto Máximo ($)</label>
-                                <input type="number" wire:model="max_amount" step="0.01" min="0" placeholder="0.00"
-                                       class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                                @error('max_amount') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Campos adicionales --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Posición</label>
-                            <input type="number" wire:model="position" min="0" placeholder="0"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('position') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Imagen (opcional)</label>
-                            <input type="file" wire:model="image" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
-                            @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-
-                    {{-- Configuración JSON (avanzado) --}}
-                    <div class="space-y-4">
-                        <h3 class="text-sm font-semibold text-[#222] border-b border-slate-200 pb-2">Configuración Avanzada (JSON)</h3>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Configuración del método</label>
-                            <textarea wire:model="config" rows="4"
-                                      class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none font-mono text-xs"
-                                      placeholder='{"accepted_cards": ["visa", "mastercard"], "installments": [1, 3, 6, 12]}'></textarea>
-                            @error('config') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Configuración del proveedor</label>
-                            <textarea wire:model="provider_config" rows="4"
-                                      class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none font-mono text-xs"
-                                      placeholder='{"public_key": "pk_test_...", "secret_key": "sk_test_..."}'></textarea>
-                            @error('provider_config') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
                     </div>
 
                 </div>

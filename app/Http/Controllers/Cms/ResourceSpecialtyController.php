@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Cms;
 use App\Models\ResourceSpecialty;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
 
+#[Title('Gestión de Especialidades de Recursos | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
 class ResourceSpecialtyController extends Component
 {
     use WithPagination;
@@ -122,17 +126,15 @@ class ResourceSpecialtyController extends Component
             'icon' => $this->icon,
             'color' => $this->color,
             'is_active' => $this->is_active,
-            'position' => $this->position,
-            'config' => $configArray,
         ];
 
         if ($this->editingId) {
             $resourceSpecialty = ResourceSpecialty::findOrFail($this->editingId);
             $resourceSpecialty->update($data);
-            $this->dispatch('showToast', 'Especialidad de recurso actualizada exitosamente', 'success');
+            $this->dispatch('toast', message: 'Especialidad de recurso actualizada exitosamente', type: 'success');
         } else {
             ResourceSpecialty::create($data);
-            $this->dispatch('showToast', 'Especialidad de recurso creada exitosamente', 'success');
+            $this->dispatch('toast', message: 'Especialidad de recurso creada exitosamente', type: 'success');
         }
 
         $this->cancel();
@@ -151,12 +153,12 @@ class ResourceSpecialtyController extends Component
 
         // Check if there are associated resources
         if ($resourceSpecialty->resources()->count() > 0) {
-            $this->dispatch('showToast', 'No se puede eliminar la especialidad porque tiene recursos asociados', 'error');
+            $this->dispatch('toast', message: 'No se puede eliminar la especialidad porque tiene recursos asociados', type: 'error');
             return;
         }
 
         $resourceSpecialty->delete();
-        $this->dispatch('showToast', 'Especialidad de recurso eliminada exitosamente', 'success');
+        $this->dispatch('toast', message: 'Especialidad de recurso eliminada exitosamente', type: 'success');
     }
 
     public function updateOrder($orderedIds)
@@ -164,18 +166,17 @@ class ResourceSpecialtyController extends Component
         foreach ($orderedIds as $index => $id) {
             ResourceSpecialty::where('id', $id)->update(['position' => $index]);
         }
-        $this->dispatch('showToast', 'Orden actualizado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Orden actualizado exitosamente', type: 'success');
     }
 
     public function resetForm()
     {
         $this->reset([
             'name', 'slug', 'description', 'icon', 'color',
-            'is_active', 'position', 'config'
+            'is_active'
         ]);
 
         $this->is_active = true;
-        $this->position = 0;
     }
 
     public function resetFilters()

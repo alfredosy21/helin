@@ -197,22 +197,6 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Posición --}}
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.position_label') }}</label>
-                        <input type="number" wire:model="position" min="0" placeholder="{{ __('cms.resource_types.position_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                        @error('position') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Configuración JSON --}}
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.config_label') }}</label>
-                        <textarea wire:model="config" rows="4"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none font-mono text-xs"
-                                  placeholder="{{ __('cms.resource_types.config_placeholder') }}"></textarea>
-                        @error('config') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
 
                 </div>
 

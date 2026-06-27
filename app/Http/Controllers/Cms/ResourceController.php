@@ -6,8 +6,12 @@ use App\Models\Resource;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
 
+#[Title('Gestión de Recursos Clínicos | Helin CMS')]
+#[Layout('cms.layouts.dashboard')]
 class ResourceController extends Component
 {
     use WithPagination, WithFileUploads;
@@ -159,10 +163,10 @@ class ResourceController extends Component
         if ($this->editingId) {
             $resource = Resource::findOrFail($this->editingId);
             $resource->update($data);
-            $this->dispatch('showToast', 'Recurso actualizado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Recurso actualizado exitosamente', type: 'success');
         } else {
             Resource::create($data);
-            $this->dispatch('showToast', 'Recurso creado exitosamente', 'success');
+            $this->dispatch('toast', message: 'Recurso creado exitosamente', type: 'success');
         }
 
         $this->cancel();
@@ -179,7 +183,7 @@ class ResourceController extends Component
     {
         $resource = Resource::findOrFail($id);
         $resource->delete();
-        $this->dispatch('showToast', 'Recurso eliminado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Recurso eliminado exitosamente', type: 'success');
     }
 
     public function updateOrder($orderedIds)
@@ -187,7 +191,7 @@ class ResourceController extends Component
         foreach ($orderedIds as $index => $id) {
             Resource::where('id', $id)->update(['position' => $index]);
         }
-        $this->dispatch('showToast', 'Orden actualizado exitosamente', 'success');
+        $this->dispatch('toast', message: 'Orden actualizado exitosamente', type: 'success');
     }
 
     public function resetForm()
@@ -195,12 +199,10 @@ class ResourceController extends Component
         $this->reset([
             'title', 'description', 'type', 'specialty', 'format', 'tags',
             'file_path', 'url', 'thumbnail', 'current_thumbnail',
-            'is_active', 'views', 'position', 'featured'
+            'is_active', 'featured'
         ]);
 
         $this->is_active = true;
-        $this->views = 0;
-        $this->position = 0;
         $this->featured = false;
     }
 
