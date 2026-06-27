@@ -248,7 +248,7 @@
                         <i class="fas fa-phone text-turquesa text-2xl"></i>
                         <div class="flex flex-col">
                             <span class="font-medium">Contáctanos</span>
-                            <span class="text-red-500 font-bold">{{ $settings->phone ?? '+58 4244669150' }}</span>
+                            <span class="text-helin-heading font-bold">{{ $settings->phone ?? '+58 4244669150' }}</span>
                         </div>
                     </a>
                     <a href="{{ route('web.recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors">
