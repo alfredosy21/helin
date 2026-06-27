@@ -82,7 +82,7 @@
     line-height: 0.98;
     letter-spacing: 0;
     margin: 0 0 16px;
-    max-width: 500px;
+    max-width: 100%;
 }
 
 .hero p {
