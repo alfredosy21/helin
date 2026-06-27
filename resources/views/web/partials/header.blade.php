@@ -241,16 +241,6 @@
                     <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
-                    @php
-                    $settings = \App\Models\Settings::getSettings();
-                @endphp
-                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 4244669150') }}" class="hidden lg:flex items-center gap-3 text-helin-heading text-sm hover:text-turquesa">
-                        <i class="fas fa-phone text-turquesa text-2xl"></i>
-                        <div class="flex flex-col">
-                            <span class="font-medium">Contáctanos</span>
-                            <span class="text-helin-heading font-bold">{{ $settings->phone ?? '+58 4244669150' }}</span>
-                        </div>
-                    </a>
                     <a href="{{ route('web.recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors">
                         Recursos Clínicos
                         <i class="fas fa-cloud-download-alt"></i>
