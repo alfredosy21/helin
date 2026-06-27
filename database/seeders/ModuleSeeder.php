@@ -39,6 +39,7 @@ class ModuleSeeder extends Seeder
                 'submodules' => [
                     ['name' => 'Configuración General', 'url' => '/cms/settings', 'icon' => 'sliders'],
                     ['name' => 'Secciones', 'url' => '/cms/sections', 'icon' => 'layout'],
+                    ['name' => 'Métodos de Pago', 'url' => '/cms/payment-methods', 'icon' => 'credit-card'],
                 ]
             ],
             [
@@ -64,11 +65,14 @@ class ModuleSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Testimonios',
-                'class' => 'users',
+                'name' => 'Contenido',
+                'class' => 'file-text',
                 'order' => 5,
                 'submodules' => [
-                    ['name' => 'Gestión de Testimonios', 'url' => '/cms/testimonials', 'icon' => 'star'],
+                    ['name' => 'Testimonios', 'url' => '/cms/testimonials', 'icon' => 'star'],
+                    ['name' => 'Recursos Clínicos', 'url' => '/cms/resources', 'icon' => 'briefcase'],
+                    ['name' => 'Tipos de Recursos', 'url' => '/cms/resource-types', 'icon' => 'folder'],
+                    ['name' => 'Especialidades', 'url' => '/cms/resource-specialties', 'icon' => 'stethoscope'],
                 ]
             ],
             [

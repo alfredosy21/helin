@@ -7,7 +7,7 @@
     @include('web.components.breadcrumb', [
         'attributes' => 'class="text-sm mb-6"',
         'items' => [
-            ['label' => 'Inicio', 'url' => route('web.home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => 'Carrito', 'spanAttributes' => 'class="text-turquesa font-medium"']
         ],
         'separatorAttributes' => 'class="text-helin-text mx-2"'
@@ -167,7 +167,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('web.solicitud') }}" class="block w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold py-4 rounded-full uppercase transition-colors text-center">
+                <a href="{{ route('solicitud') }}" class="block w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold py-4 rounded-full uppercase transition-colors text-center">
                     Continuar Solicitud
                 </a>
             </div>

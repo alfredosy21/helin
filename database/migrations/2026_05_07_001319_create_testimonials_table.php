@@ -14,12 +14,15 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('specialty');
-            $table->string('city');
             $table->text('content');
-            $table->string('photo')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->integer('position')->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
+
+            // Índices para mejor rendimiento
+            $table->index(['is_active', 'position']);
+            $table->index('name');
         });
     }
 

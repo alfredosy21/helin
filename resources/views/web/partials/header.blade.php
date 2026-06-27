@@ -2,7 +2,7 @@
 <div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
     <div class="container mx-auto px-4 py-2 flex items-center justify-center gap-2 sm:gap-4">
         <span class="truncate">Todo para cirugía odontológica especializada</span>
-        <a href="{{ route('web.catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap">VER PRODUCTOS</a>
+        <a href="{{ route('catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap">VER PRODUCTOS</a>
     </div>
 </div>
 
@@ -14,7 +14,7 @@
                     $settings = \App\Models\Settings::getSettings();
                 @endphp
                 <!-- Logo -->
-                <a href="{{ route('web.home') }}" class="flex items-center gap-2 text-white flex-shrink-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 text-white flex-shrink-0">
                     @if($settings && $settings->image)
                         <img src="{{ asset('storage/' . $settings->image) }}" alt="Helin" class="h-10 sm:h-12 w-auto">
                     @else
@@ -59,7 +59,7 @@
                     <span>Escríbenos</span>
                 </a>
                 <!-- Carrito -->
-                <a href="{{ route('web.carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-turquesa-light transition p-1 sm:p-0">
+                <a href="{{ route('carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-turquesa-light transition p-1 sm:p-0">
                     <div class="relative">
                         <i class="fas fa-shopping-cart text-lg sm:text-xl"></i>
                         <span class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-turquesa text-white text-[10px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center border border-white">3</span>
@@ -232,7 +232,7 @@
                         </div>
                     </div>
                     <!-- Inicio -->
-                    <a href="{{ route('web.home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16">Inicio</a>
+                    <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16">Inicio</a>
                     <!-- Categorías -->
                     <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Cirugía Bucal <span class="text-xs">+</span></a>
                     <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Maxilofacial <span class="text-xs">+</span></a>
@@ -241,7 +241,7 @@
                     <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
-                    <a href="{{ route('web.recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors">
+                    <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors mr-12">
                         Recursos Clínicos
                         <i class="fas fa-cloud-download-alt"></i>
                     </a>
@@ -251,8 +251,8 @@
         <!-- Menú Mobile - Scrollable -->
         <div class="lg:hidden border-t border-helin-border">
             <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-4 text-sm whitespace-nowrap">
-                <a href="{{ route('web.catalogo') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Productos</a>
-                <a href="{{ route('web.home') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Inicio</a>
+                <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Productos</a>
+                <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Inicio</a>
                 <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Cirugía Bucal</a>
                 <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Periodoncia</a>
                 <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Ortodoncia</a>

@@ -19,10 +19,15 @@ use App\Http\Controllers\Cms\{
     TestimonialsController,
     BlogCategoriesController,
     BlogArticlesController,
+    MenuController,
+    PaymentMethodController,
     RolController,
     SectionController,
     UserController,
-    PermissionsController
+    PermissionsController,
+    ResourceController,
+    ResourceSpecialtyController,
+    ResourceTypeController
 };
 use App\Http\Controllers\WebController;
 
@@ -32,17 +37,16 @@ use App\Http\Controllers\WebController;
   |--------------------------------------------------------------------------
   */
 
-Route::name('web.')->group(function () {
-    Route::get('/', [WebController::class, 'home'])->name('home');
-    Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
-    Route::get('/producto', [WebController::class, 'producto'])->name('producto');
-    Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
-    Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
-    Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
-    Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
-    Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
-    Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
-});
+
+Route::get('/', [WebController::class, 'home'])->name('home');
+Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
+Route::get('/producto', [WebController::class, 'producto'])->name('producto');
+Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
+Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
+Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
+Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
+Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
+Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
 
 /*
   |--------------------------------------------------------------------------
@@ -67,7 +71,7 @@ Route::prefix('cms')->group(function () {
 
         /* 1. Main Dashboard */
         Route::get('/dashboard', DashboardController::class)->name('dashboard')
-                ->middleware('permission:Administradores');
+                ->middleware('permission:' . \App\Models\Module::ADMINISTRATORS);
 
         /* 2. Account & Profile ("Me" Module) */
         // Un solo componente Livewire maneja toda la lógica del perfil
@@ -76,55 +80,73 @@ Route::prefix('cms')->group(function () {
         /* 3. Catalog & Medical Inventory */
         Route::prefix('catalog')->name('catalog.')->group(function () {
             Route::get('/products', ProductsController::class)->name('products.index')
-                    ->middleware('permission:Catálogo,Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCTS);
             Route::get('/products/create', ProductsController::class)->name('products.create')
-                    ->middleware('permission:Catálogo,Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCTS);
             Route::get('/family', CategoriesController::class)->name('family.index')
-                    ->middleware('permission:Catálogo,Familias');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_FAMILIES);
             Route::get('/family/create', CategoriesController::class)->name('family.create')
-                    ->middleware('permission:Catálogo,Familias');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_FAMILIES);
             Route::get('/brands', BrandsController::class)->name('brands.index')
-                    ->middleware('permission:Catálogo,Marcas');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_BRANDS);
             Route::get('/brands/create', BrandsController::class)->name('brands.create')
-                    ->middleware('permission:Catálogo,Marcas');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_BRANDS);
             Route::get('/lines', LineController::class)->name('lines.index')
-                    ->middleware('permission:Catálogo,Líneas');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_LINES);
             Route::get('/lines/create', LineController::class)->name('lines.create')
-                    ->middleware('permission:Catálogo,Líneas');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_LINES);
             Route::get('/system-products', SystemProductsController::class)->name('system-products.index')
-                    ->middleware('permission:Catálogo,Sistema de Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::SYSTEM_PRODUCTS);
             Route::get('/system-products/create', SystemProductsController::class)->name('system-products.create')
-                    ->middleware('permission:Catálogo,Sistema de Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::SYSTEM_PRODUCTS);
             Route::get('/product-platforms', ProductPlatformsController::class)->name('product-platforms.index')
-                    ->middleware('permission:Catálogo,Plataforma de Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_PLATFORMS);
             Route::get('/product-platforms/create', ProductPlatformsController::class)->name('product-platforms.create')
-                    ->middleware('permission:Catálogo,Plataforma de Productos');
+                    ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::PRODUCT_PLATFORMS);
         });
 
         /* 3.5. Content Management */
         Route::get('/testimonials', TestimonialsController::class)->name('testimonials.index')
-                ->middleware('permission:Contenido,Testimonios');
-        Route::get('/testimonials/create', TestimonialsController::class)->name('testimonials.create')
-                ->middleware('permission:Contenido,Testimonios');
+                ->middleware('permission:5,1'); // Contenido (ID:5), Testimonios (submódulo 1)
+
+        /* 3.6. Clinical Resources Management */
+        Route::get('/resources', ResourceController::class)->name('resources.index')
+                ->middleware('permission:5,2'); // Recursos Clínicos (submódulo 2)
+
+        /* 3.7. Resource Types Management */
+        Route::get('/resource-types', ResourceTypeController::class)->name('resource-types.index')
+                ->middleware('permission:5,3'); // Tipos de Recursos (submódulo 3)
+
+        /* 3.8. Resource Specialties Management */
+        Route::get('/resource-specialties', ResourceSpecialtyController::class)->name('resource-specialties.index')
+                ->middleware('permission:5,4'); // Especialidades (submódulo 4)
+
+        /* 3.9. Payment Methods Management */
+        Route::get('/payment-methods', PaymentMethodController::class)->name('payment-methods.index')
+                ->middleware('permission:2,3'); // Configuración (ID:2), Métodos de Pago (submódulo 3)
+
+        /* 3.10. Website Menu Management */
+        Route::get('/menu', MenuController::class)->name('menu.index')
+                ->middleware('permission:2,4'); // Menú del Sitio (submódulo 4)
 
         /* 3.6. Blog Management */
         Route::prefix('blog')->name('blog.')->group(function () {
             Route::get('/categories', BlogCategoriesController::class)->name('categories.index')
-                    ->middleware('permission:Blog,Categorías');
+                    ->middleware('permission:4,1'); // Blog (ID:4), Categorías (submódulo 1)
             Route::get('/categories/create', BlogCategoriesController::class)->name('categories.create')
-                    ->middleware('permission:Blog,Categorías');
+                    ->middleware('permission:4,1');
             Route::get('/articles', BlogArticlesController::class)->name('articles.index')
-                    ->middleware('permission:Blog,Artículos');
+                    ->middleware('permission:4,2'); // Artículos (submódulo 2)
             Route::get('/articles/create', BlogArticlesController::class)->name('articles.create')
-                    ->middleware('permission:Blog,Artículos');
+                    ->middleware('permission:4,2');
         });
 
         /* 4. Global System Settings */
         Route::get('/settings', SettingsController::class)->name('settings.index')
-                ->middleware('permission:Configuración,Configuración General');
+                ->middleware('permission:2,1'); // Configuración General (submódulo 1)
 
         Route::get('/sections', SectionController::class)->name('sections.index')
-                ->middleware('permission:Configuración,Secciones');
+                ->middleware('permission:2,2'); // Secciones (submódulo 2)
 
         /* 5. System Administration (RBAC & Users) */
         Route::prefix('system')->name('admin.')->group(function () {
@@ -164,6 +186,16 @@ Route::prefix('cms')->group(function () {
 
 Route::middleware(['auth'])->prefix('api/internal')->group(function () {
     Route::get('/session-check', [AuthenticatedSessionController::class, 'checkSession'])->name('api.session.check');
+});
+
+/*
+|--------------------------------------------------------------------------
+| API Routes - Public
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('api')->group(function () {
+    Route::get('/recursos-clinicos/filtrar', [\App\Http\Controllers\Api\ResourceController::class, 'filtrar'])->name('api.recursos.filtrar');
 });
 
 // Enabled only for local development environment

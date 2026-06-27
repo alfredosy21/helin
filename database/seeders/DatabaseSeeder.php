@@ -24,6 +24,12 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             SystemProductSeeder::class,
             ProductPlatformSeeder::class,
+            ResourceTypeSeeder::class,
+            ResourceSpecialtySeeder::class,
+            ResourceSeeder::class,
+            TestimonialSeeder::class,
+            PaymentMethodSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }

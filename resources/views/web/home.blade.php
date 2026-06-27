@@ -16,6 +16,9 @@
       position: relative;
       overflow: hidden;
       ">
+      @php
+          $heroSection = \App\Models\Sections::find(\App\Models\Sections::HERO_HOME);
+      @endphp
       <div class="hero-inner relative max-w-6xl mx-auto px-6 py-16 lg:py-20" style="
          position: relative;
          display: grid;
@@ -24,26 +27,26 @@
          align-items: center;
          ">
          <!-- Hero Badges -->
-         <aside class="hero-badges hidden lg:block">
-            <div class="flex flex-col gap-4">
-               <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
-                  <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">✓</span>
-                  <span>Calidad<br>garantizada</span>
-               </div>
-               <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
-                  <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">△</span>
-                  <span>Alta<br>precisión</span>
-               </div>
-               <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
-                  <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">◎</span>
-                  <span>Soluciones<br>quirúrgicas</span>
-               </div>
-               <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
-                  <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">✚</span>
-                  <span>Asesoría<br>especializada</span>
-               </div>
-            </div>
-         </aside>
+         @if($heroSection && $heroSection->status_content)
+             @php
+                 $items = $heroSection->items ? json_decode($heroSection->items, true) : [];
+                 $heroBadges = $items['hero_badges'] ?? [];
+             @endphp
+             @if($heroSection->layout_type === 'hero_badges' && !empty($heroBadges))
+                 <aside class="hero-badges hidden lg:block">
+                     <div class="flex flex-col gap-4">
+                         @foreach($heroBadges as $badge)
+                             <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
+                                 <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">{{ $badge['icon'] ?? '✓' }}</span>
+                                 <span>{{ $badge['text'] ?? '' }}</span>
+                             </div>
+                         @endforeach
+                     </div>
+                 </aside>
+             @else
+                 {!! $heroSection->content !!}
+             @endif
+         @endif
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
             <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">helin.</div>
@@ -51,10 +54,10 @@
             <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: 0;">Todo en cirugía odontológica especializada.</h1>
             <p class="text-white/90 text-base lg:text-lg font-medium mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para<br>procedimientos quirúrgicos seguros, precisos y eficientes.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
-               <a href="{{ route('web.catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
+               <a href="{{ route('catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
                Ver Catálogo →
                </a>
-               <a href="{{ route('web.solicitud') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+               <a href="{{ route('solicitud') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
                Solicitar Cotización
                </a>
             </div>
@@ -84,7 +87,7 @@
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
-                  <a href="{{ route('web.catalogo') }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
+                  <a href="{{ route('catalogo') }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
                   <div class="implant absolute bottom-2 left-4 w-12 h-32 rounded-2xl bg-gradient-to-r from-gray-300 to-white to-gray-400 transform rotate-12" style="
@@ -95,12 +98,12 @@
             </article>
             <!-- Grid de Categorías -->
             <div class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('web.catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('web.catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('web.catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('web.catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('web.catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('web.catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo')])
             </div>
          </div>
       </div>
@@ -111,62 +114,38 @@
       @include('web.partials.near')
    </div>
 
-   <!-- Productos Destacados -->
-   <section class="py-12 sm:py-16 bg-helin-soft">
-      <div class="container mx-auto px-4">
-         <div class="section-title flex items-end justify-between gap-5 mb-5">
-            <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Implantología</h2>
-               <p class="text-helin-text text-sm mt-1">Selección de productos destacados</p>
-            </div>
-            <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
-         </div>
-         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Implante', 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('web.producto')])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Biomaterial', 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit', 'productName' => 'Kit de Cirugía Básico', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Suturas', 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => ''])
-         </div>
-      </div>
-   </section>
+   @php
+       $productSections = \App\Models\Sections::where('status', 1)
+           ->whereIn('id', [\App\Models\Sections::IMPLANTOLOGY_PRODUCTS, \App\Models\Sections::GBR_PRODUCTS, \App\Models\Sections::INSTRUMENTS_PRODUCTS])
+           ->orderBy('id')
+           ->get();
+   @endphp
 
-   <!-- Productos Nuevos -->
-   <section class="py-12 sm:py-16">
-      <div class="container mx-auto px-4">
-         <div class="section-title flex items-end justify-between gap-5 mb-5">
-            <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Regeneración Ósea Guiada</h2>
-               <p class="text-helin-text text-sm mt-1">Biomateriales y soluciones especializadas</p>
-            </div>
-            <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
-         </div>
-         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Membrana', 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Tornillos', 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Placas', 'productName' => 'Placas de Reconstrucción', 'productBrand' => 'Stryker', 'productPrice' => 120.00, 'productBadge' => 'Nuevo'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Pinzas', 'productName' => 'Pinzas de Elevación', 'productBrand' => 'Hu-Friedy', 'productPrice' => 95.00, 'productBadge' => 'Nuevo'])
-         </div>
-      </div>
-   </section>
-
-   <!-- Productos en Oferta -->
-   <section class="py-12 sm:py-16 bg-helin-soft">
-      <div class="container mx-auto px-4">
-         <div class="section-title flex items-end justify-between gap-5 mb-5">
-            <div>
-               <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Más vendidos en Instrumentos y Equipos</h2>
-               <p class="text-helin-text text-sm mt-1">Precisión clínica para tu práctica</p>
-            </div>
-            <a href="{{ route('web.catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
-         </div>
-         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Implante+2', 'productName' => 'Implante Nobel Active', 'productBrand' => 'Nobel Biocare', 'productPrice' => 249.00, 'productOldPrice' => 320.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Kit+Avanzado', 'productName' => 'Kit de Cirugía Avanzado', 'productBrand' => 'Helin', 'productPrice' => 159.00, 'productOldPrice' => 200.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Cinceles', 'productName' => 'Set de Cinceles', 'productBrand' => 'Hu-Friedy', 'productPrice' => 65.00, 'productOldPrice' => 85.00, 'productBadge' => 'Oferta'])
-            @include('web.components.product-card', ['productImage' => 'https://via.placeholder.com/300x250/f8f9fa/6BC2C3?text=Separadores', 'productName' => 'Separadores de Muelas', 'productBrand' => 'Hu-Friedy', 'productPrice' => 35.00, 'productOldPrice' => 50.00, 'productBadge' => 'Oferta'])
-         </div>
-      </div>
-   </section>
+   @foreach($productSections as $index => $section)
+       @if($section->status_content)
+           <section class="py-12 sm:py-16 {{ $index % 2 == 0 ? 'bg-helin-soft' : '' }}">
+               <div class="container mx-auto px-4">
+                   <div class="section-title flex items-end justify-between gap-5 mb-5">
+                       <div>
+                           <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $section->title }}</h2>
+                           @php
+                               $description = trim(strip_tags($section->content));
+                               $firstLine = explode("\n", $description)[0];
+                           @endphp
+                           <p class="text-helin-text text-sm mt-1">{{ $firstLine }}</p>
+                       </div>
+                       <a href="{{ $section->url_button ?: route('catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
+                   </div>
+                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 1', 'productBrand' => 'Helin', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('producto')])
+                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 2', 'productBrand' => 'Helin', 'productPrice' => 149.00, 'productBadge' => ''])
+                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 3', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
+                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 4', 'productBrand' => 'Helin', 'productPrice' => 45.00, 'productBadge' => ''])
+                   </div>
+               </div>
+           </section>
+       @endif
+   @endforeach
 
    <!-- Testimonios -->
    <section class="testimonials container mx-auto px-4 mt-14 rounded-3xl p-9" style="
@@ -185,11 +164,16 @@
          </div>
       </div>
       <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-         @include('web.components.testimonial-card', ['testimonialText' => 'Excelente atención y muy buen acompañamiento comercial. Encontramos los productos necesarios para implantología.', 'testimonialAuthor' => 'Dra. María Fernanda López', 'testimonialTitle' => 'Odontóloga implantóloga'])
-
-         @include('web.components.testimonial-card', ['testimonialText' => 'Helin nos ha brindado soluciones confiables y un portafolio muy completo. Destaco la rapidez en la atención.', 'testimonialAuthor' => 'Dr. José Andrés Rivas', 'testimonialTitle' => 'Especialista en cirugía bucal'])
-
-         @include('web.components.testimonial-card', ['testimonialText' => 'Muy buena experiencia de compra. La plataforma es fácil de usar y el equipo comercial responde con rapidez.', 'testimonialAuthor' => 'Clínica Sonrisa Integral', 'testimonialTitle' => 'Centro odontológico'])
+         @php
+             $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('position', 'asc')->take(3)->get();
+         @endphp
+         @foreach($testimonials as $testimonial)
+             @include('web.components.testimonial-card', [
+                 'testimonialText' => $testimonial->content,
+                 'testimonialAuthor' => $testimonial->name,
+                 'testimonialTitle' => $testimonial->specialty
+             ])
+         @endforeach
       </div>
    </section>
 

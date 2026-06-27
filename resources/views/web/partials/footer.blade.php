@@ -41,11 +41,11 @@
             <div>
                 <h4 class="text-lg mb-4">Nuestra Empresa</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#mision-vision" class="hover:text-white transition-colors">Misión y visión</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#nuestro-team" class="hover:text-white transition-colors">Nuestro Team</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Nuestro Alianza</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.contactanos') }}" class="hover:text-white transition-colors">Contáctanos</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#mision-vision" class="hover:text-white transition-colors">Misión y visión</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestro-team" class="hover:text-white transition-colors">Nuestro Team</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Nuestro Alianza</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('contactanos') }}" class="hover:text-white transition-colors">Contáctanos</a></li>
                 </ul>
             </div>
 
@@ -53,9 +53,9 @@
             <div>
                 <h4 class="text-lg mb-4">Políticas</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.politicas') }}#envio-garantias" class="hover:text-white transition-colors">Políticas de envío y garantías</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.politicas') }}#terminos-condiciones" class="hover:text-white transition-colors">Términos y condiciones</a></li>
-                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('web.politicas') }}#privacidad" class="hover:text-white transition-colors">Política de privacidad</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#envio-garantias" class="hover:text-white transition-colors">Políticas de envío y garantías</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#terminos-condiciones" class="hover:text-white transition-colors">Términos y condiciones</a></li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#privacidad" class="hover:text-white transition-colors">Política de privacidad</a></li>
                 </ul>
             </div>
 
@@ -65,13 +65,13 @@
                 <div class="space-y-3 text-white/80 text-sm mb-4">
                     <a href="mailto:{{ $settings->email ?? 'info@helinbeam.com' }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
-                            <i class="fas fa-envelope text-xs"></i>
+                            <i class="fas fa-envelope"></i>
                         </div>
                         <span>{{ $settings->email ?? 'info@helinbeam.com' }}</span>
                     </a>
                     <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 412 739 8580') }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
-                            <i class="fas fa-phone text-xs"></i>
+                            <i class="fas fa-phone"></i>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-xs">Central telefónica</span>
@@ -86,20 +86,20 @@
                         <div class="flex items-center gap-1.5">
                             @if($settings && $settings->caracas_location)
                                 <a href="{{ $settings->caracas_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
                             @endif
                             @if($settings && $settings->caracas_whatsapp)
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->caracas_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </div>
                             @endif
                         </div>
@@ -113,20 +113,20 @@
                         <div class="flex items-center gap-1.5">
                             @if($settings && $settings->valencia_location)
                                 <a href="{{ $settings->valencia_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
                             @endif
                             @if($settings && $settings->valencia_whatsapp)
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </div>
                             @endif
                         </div>
@@ -140,20 +140,20 @@
                         <div class="flex items-center gap-1.5">
                             @if($settings && $settings->barquisimeto_location)
                                 <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
                             @endif
                             @if($settings && $settings->barquisimeto_whatsapp)
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->barquisimeto_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </div>
                             @endif
                         </div>
@@ -162,30 +162,30 @@
                         </div>
                     </li>
 
-                    {{-- Maracay --}}
+                    {{-- Maracaibo --}}
                     <li class="flex items-center gap-2">
                         <div class="flex items-center gap-1.5">
-                            @if($settings && $settings->maracay_location)
-                                <a href="{{ $settings->maracay_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                            @if($settings && $settings->maracaibo_location)
+                                <a href="{{ $settings->maracaibo_location }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fas fa-map-marker-alt text-xs"></i>
+                                    <i class="fas fa-map-marker-alt"></i>
                                 </div>
                             @endif
-                            @if($settings && $settings->maracay_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracay_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                            @if($settings && $settings->maracaibo_whatsapp)
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracaibo_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                    <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
                                 <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300">
-                                    <i class="fab fa-whatsapp text-xs"></i>
+                                    <i class="fab fa-whatsapp"></i>
                                 </div>
                             @endif
                         </div>
                         <div class="flex-1">
-                            <span class="font-medium">Maracay</span>
+                            <span class="font-medium">Maracaibo</span>
                         </div>
                     </li>
                 </ul>
