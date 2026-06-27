@@ -98,7 +98,7 @@
         <!-- Menú Desktop -->
         <div class="hidden lg:block container mx-auto px-4 py-3">
             <div class="flex items-center justify-between gap-4">
-                <nav class="flex items-center gap-6 xl:gap-8 text-xs">
+                <nav class="flex items-center gap-6 xl:gap-8 text-sm">
                     <!-- Productos con Mega Menú -->
                     <div class="relative group">
                         <button class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold">
