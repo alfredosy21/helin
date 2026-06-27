@@ -38,35 +38,35 @@
 /* 2XL screens - 1281px to 1536px (Full HD and beyond) */
 @media (min-width: 1536px) {
     .container {
-        max-width: 69vw !important;
+        max-width: 85vw !important;
     }
 }
 
 /* 3XL screens - 1537px to 1920px (2K and beyond) */
 @media (min-width: 1920px) {
     .container {
-        max-width: 64vw !important;
+        max-width: 82vw !important;
     }
 }
 
 /* 4K screens - 1921px to 2560px */
 @media (min-width: 2560px) {
     .container {
-        max-width: 59vw !important;
+        max-width: 80vw !important;
     }
 }
 
 /* Ultra-wide screens - 2561px and above */
 @media (min-width: 3840px) {
     .container {
-        max-width: 49vw !important;
+        max-width: 75vw !important;
     }
 }
 
 /* Maximum cap for extremely large screens */
 @media (min-width: 5120px) {
     .container {
-        max-width: 44vw !important;
+        max-width: 70vw !important;
         min-width: 1400px !important; /* Ensure minimum width for readability */
     }
 }
