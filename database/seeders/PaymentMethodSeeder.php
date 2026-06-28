@@ -14,44 +14,41 @@ class PaymentMethodSeeder extends Seeder
      */
     public function run()
     {
-        // Limpiar métodos de pago existentes
-        PaymentMethod::truncate();
-
         $paymentMethods = [
             [
-                'name' => 'Tarjeta de Crédito',
-                'description' => 'Paga con Visa, Mastercard, American Express y otras tarjetas de crédito. Procesamiento seguro con validación 3D.',
-                'is_active' => true,
-                'position' => 1,
+                'name'        => 'Acordar con Helin',
+                'description' => 'Coordina directamente con nuestro equipo comercial la forma de pago más conveniente para ti. Te contactaremos en menos de 24 horas para confirmar los detalles.',
+                'is_active'   => true,
+                'position'    => 1,
             ],
             [
-                'name' => 'Transferencia Bancaria',
-                'description' => 'Transferencia directa desde tu cuenta bancaria. Procesamiento en 24-48 horas hábiles. Confirmación requerida.',
-                'is_active' => true,
-                'position' => 2,
+                'name'        => 'Pago Móvil',
+                'description' => 'Realiza tu pago desde cualquier banco venezolano usando la plataforma de Pago Móvil. Rápido, seguro y sin comisiones adicionales. Envíanos el comprobante al finalizar.',
+                'is_active'   => true,
+                'position'    => 2,
             ],
             [
-                'name' => 'Pago Móvil',
-                'description' => 'Pago móvil desde Venezuela. Rápido, seguro y sin comisiones adicionales. Confirmación instantánea.',
-                'is_active' => true,
-                'position' => 3,
+                'name'        => 'Zelle',
+                'description' => 'Transfiere en dólares de forma inmediata a través de Zelle. Disponible para cuentas bancarias en EE. UU. Sin comisiones y con confirmación instantánea.',
+                'is_active'   => true,
+                'position'    => 3,
             ],
             [
-                'name' => 'Billeteras Digitales',
-                'description' => 'Paga con PayPal, Apple Pay, Google Pay y otras billeteras digitales. Pago con un solo clic.',
-                'is_active' => true,
-                'position' => 4,
+                'name'        => 'Binance Pay',
+                'description' => 'Paga con criptomonedas a través de Binance Pay. Aceptamos USDT y otras criptomonedas estables. Envíanos el comprobante de transacción al concluir.',
+                'is_active'   => true,
+                'position'    => 4,
             ],
             [
-                'name' => 'Pago en Efectivo',
-                'description' => 'Paga en efectivo en nuestras sedes o puntos de pago autorizados. Recibo requerido para validación.',
-                'is_active' => true,
-                'position' => 5,
+                'name'        => 'Pagos Múltiples',
+                'description' => 'Divide tu pago en varias transacciones combinando diferentes métodos. Ideal para montos elevados. Nuestro equipo te guiará en el proceso de confirmación.',
+                'is_active'   => true,
+                'position'    => 5,
             ],
         ];
 
         foreach ($paymentMethods as $method) {
-            PaymentMethod::create($method);
+            PaymentMethod::updateOrCreate(['name' => $method['name']], $method);
         }
 
         $this->command->info('Payment methods seeded successfully!');

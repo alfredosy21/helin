@@ -34,7 +34,16 @@
     </div>
 
     <!-- Botón -->
-    <button class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold uppercase py-3 rounded-[30px] transition-colors">
-        Añadir al carrito +
-    </button>
+    <div data-cart-context>
+        <button
+            class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold uppercase py-3 rounded-[30px] transition-colors"
+            data-cart-add
+            data-slug="{{ $productSlug ?? '' }}"
+            data-name="{{ $productName ?? '' }}"
+            data-brand="{{ $productBrand ?? '' }}"
+            data-price="{{ $productPrice ?? 0 }}"
+            data-image="{{ $productImage ?? '' }}">
+            Añadir al carrito +
+        </button>
+    </div>
 </div>

@@ -27,11 +27,14 @@ use App\Http\Controllers\Cms\{
     PermissionsController,
     ResourceController,
     ResourceSpecialtyController,
-    ResourceTypeController
+    ResourceTypeController,
+    CustomerTypesController,
+    DeliveryMethodsController
 };
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\Web\ResourceFilterController;
 use App\Http\Controllers\Web\ProductFilterController;
+use App\Http\Controllers\Web\ContactController;
 
 /*
   |--------------------------------------------------------------------------
@@ -46,6 +49,7 @@ Route::get('/producto/{slug}', [WebController::class, 'producto'])->name('produc
 Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
 Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
 Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
+Route::post('/contactanos/send', [ContactController::class, 'send'])->name('contactanos.send');
 Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
 Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
@@ -128,6 +132,14 @@ Route::prefix('cms')->group(function () {
         /* 3.9. Payment Methods Management */
         Route::get('/payment-methods', PaymentMethodController::class)->name('payment-methods.index')
                 ->middleware('permission:2,3'); // Configuración (ID:2), Métodos de Pago (submódulo 3)
+
+        /* 3.11. Customer Types Management */
+        Route::get('/customer-types', CustomerTypesController::class)->name('customer-types.index')
+                ->middleware('permission:2,' . \App\Models\Submodule::CUSTOMER_TYPES);
+
+        /* 3.12. Delivery Methods Management */
+        Route::get('/delivery-methods', DeliveryMethodsController::class)->name('delivery-methods.index')
+                ->middleware('permission:2,' . \App\Models\Submodule::DELIVERY_METHODS);
 
         /* 3.10. Website Menu Management */
         Route::get('/menu', MenuController::class)->name('menu.index')

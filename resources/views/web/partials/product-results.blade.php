@@ -34,7 +34,8 @@
                 'productPrice'    => $product->price,
                 'productOldPrice' => $product->is_on_sale ? $product->price : null,
                 'productBadge'    => $badge,
-                'productLink'     => route('producto', ['slug' => $product->slug])
+                'productLink'     => route('producto', ['slug' => $product->slug]),
+                'productSlug'     => $product->slug,
             ])
         @endforeach
     </div>

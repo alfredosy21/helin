@@ -93,7 +93,7 @@
         </aside>
 
         <section class="form-card">
-            <form class="form-grid">
+            <form id="contact-form" class="form-grid" novalidate>
                 <div>
                     <label>Nombre <span>*</span></label>
                     <input type="text" name="nombre" placeholder="Ingresa tu nombre" required>
@@ -128,7 +128,7 @@
                     <textarea name="mensaje" placeholder="Cuéntanos más sobre tu consulta..." required></textarea>
                 </div>
 
-                <button class="submit" type="submit">➤ Contactar a Helin</button>
+                <button id="contact-submit" class="submit" type="submit">➤ Contactar a Helin</button>
 
                 <div class="secure">▵ Tu información está segura con nosotros.</div>
             </form>
@@ -136,3 +136,7 @@
     </section>
 </main>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('helin/js/contactanos.js') }}"></script>
+@endpush

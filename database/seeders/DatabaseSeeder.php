@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             MenuSeeder::class,
             ProductSeeder::class,
+            CustomerTypeSeeder::class,
+            DeliveryMethodSeeder::class,
+            StateCitySeeder::class,
         ]);
     }
 }

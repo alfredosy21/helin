@@ -90,6 +90,46 @@ return [
         'delete_button' => 'Eliminar familia',
     ],
 
+    // Tipos de Cliente
+    'customer_types' => [
+        'title'              => 'Clasifica a tus clientes para personalizar el proceso de solicitud y atención comercial',
+        'breadcrumb'         => 'Tipos de Cliente',
+        'new_button'         => 'Nuevo tipo',
+        'search_placeholder' => 'Buscar por nombre o slug...',
+        'name_label'         => 'Nombre del tipo de cliente',
+        'name_placeholder'   => 'ej. Doctor, Empresa, Paciente...',
+        'slug_label'         => 'Slug',
+        'slug_placeholder'   => 'ej. doctor',
+        'slug_helper'        => 'Si se deja vacío, se generará automáticamente.',
+        'description_label'  => 'Descripción',
+        'edit_title'         => 'Editar tipo de cliente',
+        'new_title'          => 'Nuevo tipo de cliente',
+        'subtitle'           => 'Clasificación de clientes del formulario de solicitud',
+        'delete_title'       => '¿Eliminar este tipo de cliente?',
+        'delete_button'      => 'Eliminar tipo',
+        'empty'              => 'No se encontraron tipos de cliente',
+    ],
+
+    // Métodos de Entrega
+    'delivery_methods' => [
+        'title'              => 'Gestiona los métodos de envío y entrega disponibles para las solicitudes comerciales',
+        'breadcrumb'         => 'Métodos de Entrega',
+        'new_button'         => 'Nuevo método',
+        'search_placeholder' => 'Buscar por nombre o slug...',
+        'name_label'         => 'Nombre del método de entrega',
+        'name_placeholder'   => 'ej. MRW, Tealca, Pick Up...',
+        'slug_label'         => 'Slug',
+        'slug_placeholder'   => 'ej. mrw',
+        'slug_helper'        => 'Si se deja vacío, se generará automáticamente.',
+        'description_label'  => 'Descripción',
+        'edit_title'         => 'Editar método de entrega',
+        'new_title'          => 'Nuevo método de entrega',
+        'subtitle'           => 'Opciones de envío del formulario de solicitud',
+        'delete_title'       => '¿Eliminar este método de entrega?',
+        'delete_button'      => 'Eliminar método',
+        'empty'              => 'No se encontraron métodos de entrega',
+    ],
+
     // Blog Categorías
     'blog_categories' => [
         'title' => 'Agrupa tus artículos por temas para que los visitantes encuentren fácilmente el contenido que les interesa',
@@ -705,6 +745,8 @@ return [
         'per_page_50' => '50 por pág.',
         'search_placeholder_default' => 'Buscar...',
         'no_subtitle' => 'Sin subtítulo...',
+        'name' => 'Nombre',
+        'description' => 'Descripción',
     ],
 
     // Configuraciones
@@ -797,7 +839,9 @@ return [
         'user_name' => 'nombre',
         'user_email' => 'correo electrónico',
         'user_role' => 'rol',
-        'user_password' => 'contraseña',
+        'user_password'          => 'contraseña',
+        'customer_type_name'     => 'nombre del tipo de cliente',
+        'delivery_method_name'   => 'nombre del método de entrega',
     ],
 
     // Mensajes de abort (403)
@@ -815,8 +859,10 @@ return [
         'roles' => 'Acceso no autorizado al módulo de roles.',
         'sections' => 'Acceso no autorizado al módulo de secciones.',
         'settings' => 'Acceso no autorizado a la configuración.',
-        'testimonials' => 'Acceso no autorizado al módulo de testimonios.',
-        'users' => 'Acceso no autorizado al módulo de usuarios.',
+        'testimonials'     => 'Acceso no autorizado al módulo de testimonios.',
+        'users'            => 'Acceso no autorizado al módulo de usuarios.',
+        'customer_types'   => 'Acceso no autorizado al módulo de tipos de cliente.',
+        'delivery_methods' => 'Acceso no autorizado al módulo de métodos de entrega.',
     ],
 
     // Mensajes de controladores (toasts y logs de actividad)
@@ -1136,5 +1182,31 @@ return [
             'session_expired' => 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
         ],
         'not_found' => 'Mensaje no encontrado.',
+        'customer_types' => [
+            'updated'            => 'Tipo de cliente actualizado correctamente.',
+            'created'            => 'Tipo de cliente creado correctamente.',
+            'process_error'      => 'Error al procesar el tipo de cliente.',
+            'deleted'            => 'Tipo de cliente eliminado correctamente.',
+            'delete_error'       => 'No se puede eliminar el tipo de cliente.',
+            'order_updated'      => 'Orden actualizado correctamente.',
+            'order_error'        => 'Error al reordenar los tipos de cliente.',
+            'activity_updated'   => 'Tipo de cliente actualizado: ID #:id',
+            'activity_created'   => 'Tipo de cliente creado: ID #:id',
+            'activity_deleted'   => 'Tipo de cliente eliminado: :name',
+            'activity_reordered' => 'Tipos de cliente reordenados por Usuario ID #:user_id',
+        ],
+        'delivery_methods' => [
+            'updated'            => 'Método de entrega actualizado correctamente.',
+            'created'            => 'Método de entrega creado correctamente.',
+            'process_error'      => 'Error al procesar el método de entrega.',
+            'deleted'            => 'Método de entrega eliminado correctamente.',
+            'delete_error'       => 'No se puede eliminar el método de entrega.',
+            'order_updated'      => 'Orden actualizado correctamente.',
+            'order_error'        => 'Error al reordenar los métodos de entrega.',
+            'activity_updated'   => 'Método de entrega actualizado: ID #:id',
+            'activity_created'   => 'Método de entrega creado: ID #:id',
+            'activity_deleted'   => 'Método de entrega eliminado: :name',
+            'activity_reordered' => 'Métodos de entrega reordenados por Usuario ID #:user_id',
+        ],
     ],
 ];

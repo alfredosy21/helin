@@ -39,7 +39,9 @@ class ModuleSeeder extends Seeder
                 'submodules' => [
                     ['name' => 'Configuración General', 'url' => '/cms/settings', 'icon' => 'sliders'],
                     ['name' => 'Secciones', 'url' => '/cms/sections', 'icon' => 'layout'],
-                    ['name' => 'Métodos de Pago', 'url' => '/cms/payment-methods', 'icon' => 'credit-card'],
+                    ['name' => 'Métodos de Pago',     'url' => '/cms/payment-methods', 'icon' => 'credit-card'],
+                    ['name' => 'Tipos de Cliente',    'url' => '/cms/customer-types',  'icon' => 'users'],
+                    ['name' => 'Métodos de Entrega',  'url' => '/cms/delivery-methods','icon' => 'truck'],
                 ]
             ],
             [

@@ -43,6 +43,10 @@ class Submodule extends Model {
     const CONTACT_MANAGEMENT = 20; // Gestión de Contactos
     const CONTACT_FORM_CONFIG = 21; // Configuración de Formulario
 
+    // SETTINGS EXTENDED (MODULE 2)
+    const CUSTOMER_TYPES = 22; // Tipos de Cliente
+    const DELIVERY_METHODS = 23; // Métodos de Entrega
+
     /**
      * Name of the table
      * @var type

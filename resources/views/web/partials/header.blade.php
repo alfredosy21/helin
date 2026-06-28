@@ -62,7 +62,7 @@
                 <a href="{{ route('carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-turquesa-light transition p-1 sm:p-0">
                     <div class="relative">
                         <i class="fas fa-shopping-cart text-lg sm:text-xl"></i>
-                        <span class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-turquesa text-white text-[10px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center border border-white">3</span>
+                        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-turquesa text-white text-[10px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center border border-white" style="display:none;">0</span>
                     </div>
                     <span class="hidden sm:inline text-sm">Ver carrito</span>
                 </a>

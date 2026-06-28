@@ -48,7 +48,13 @@ class WebController extends Controller
      */
     public function solicitud()
     {
-        return view('web.solicitud');
+        $customerTypes   = \App\Models\CustomerType::active()->ordered()->get();
+        $deliveryMethods = \App\Models\DeliveryMethod::active()->ordered()->get();
+        $paymentMethods  = \App\Models\PaymentMethod::active()->ordered()->get();
+        $states          = \App\Models\State::ordered()->get();
+        $cities          = \App\Models\City::all(); // all for JS filter
+
+        return view('web.solicitud', compact('customerTypes', 'deliveryMethods', 'paymentMethods', 'states', 'cities'));
     }
 
     /**

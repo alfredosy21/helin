@@ -25,11 +25,11 @@
                 <!-- Tipo de cliente -->
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-helin-heading mb-2">Tipo de cliente *</label>
-                    <select required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
+                    <select name="tipo_cliente" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
                         <option value="">Selecciona una opción</option>
-                        <option value="doctor">Doctor</option>
-                        <option value="paciente">Paciente</option>
-                        <option value="empresa">Empresa</option>
+                        @foreach($customerTypes as $type)
+                            <option value="{{ $type->slug }}">{{ $type->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -55,23 +55,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Estado *</label>
-                        <select required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
+                        <select name="estado" id="estado-select" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
                             <option value="">Selecciona estado</option>
-                            <option value="distrito-capital">Distrito Capital</option>
-                            <option value="miranda">Miranda</option>
-                            <option value="carabobo">Carabobo</option>
-                            <option value="aragua">Aragua</option>
-                            <option value="lara">Lara</option>
+                            @foreach($states as $state)
+                                <option value="{{ $state->code }}">{{ $state->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Ciudad *</label>
-                        <select required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
+                        <select name="ciudad" id="ciudad-select" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white" disabled>
                             <option value="">Selecciona ciudad</option>
-                            <option value="caracas">Caracas</option>
-                            <option value="valencia">Valencia</option>
-                            <option value="barquisimeto">Barquisimeto</option>
-                            <option value="maracay">Maracay</option>
                         </select>
                     </div>
                 </div>
@@ -141,25 +135,38 @@
                 <div class="mb-6">
                     <h3 class="font-semibold text-helin-heading mb-3 text-sm">Métodos de Entrega</h3>
                     <div class="space-y-2">
-                        @foreach(['MRW (Cobro destino)', 'Liberty (Cobro destino)', 'Tealca', 'Zoom', 'Pick Up (Recoger en tienda)'] as $metodo)
+                        @forelse($deliveryMethods as $method)
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="envio" class="w-4 h-4 text-turquesa" {{ $loop->first ? 'checked' : '' }}>
-                            <span class="text-sm text-helin-text">{{ $metodo }}</span>
+                            <input type="radio" name="envio" value="{{ $method->slug }}" class="w-4 h-4 text-turquesa" {{ $loop->first ? 'checked' : '' }}>
+                            <span class="text-sm text-helin-text">{{ $method->name }}</span>
                         </label>
-                        @endforeach
+                        @empty
+                        <p class="text-xs text-helin-text italic">No hay métodos de entrega disponibles.</p>
+                        @endforelse
                     </div>
                 </div>
 
                 <!-- Métodos de Pago -->
                 <div class="mb-6">
                     <h3 class="font-semibold text-helin-heading mb-3 text-sm">Métodos de Pago</h3>
-                    <div class="space-y-2">
-                        @foreach(['Acordar con Helin', 'Pago Móvil', 'Zelle', 'Binance Pay', 'Pagos Múltiples'] as $pago)
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="pago" class="w-4 h-4 text-turquesa" {{ $loop->first ? 'checked' : '' }}>
-                            <span class="text-sm text-helin-text">{{ $pago }}</span>
+                    <div class="space-y-2" id="payment-methods-list">
+                        @forelse($paymentMethods as $method)
+                        <label class="flex items-start gap-3 cursor-pointer payment-method-label group" data-description="{{ $method->description }}">
+                            <input type="radio" name="pago" value="{{ $method->name }}"
+                                   class="w-4 h-4 text-turquesa mt-0.5 flex-shrink-0"
+                                   {{ $loop->first ? 'checked' : '' }}>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-sm text-helin-text font-medium group-hover:text-turquesa transition-colors">{{ $method->name }}</span>
+                            </div>
                         </label>
-                        @endforeach
+                        @empty
+                        <p class="text-xs text-helin-text italic">No hay métodos de pago disponibles.</p>
+                        @endforelse
+                    </div>
+
+                    {{-- Description panel --}}
+                    <div id="payment-description" class="mt-3 p-3 bg-turquesa/5 border border-turquesa/20 rounded-lg hidden">
+                        <p class="text-xs text-helin-text leading-relaxed" id="payment-description-text"></p>
                     </div>
                 </div>
 
@@ -180,3 +187,71 @@
 
 @include('web.partials.beneficios')
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    const panel      = document.getElementById('payment-description');
+    const panelText  = document.getElementById('payment-description-text');
+    const list       = document.getElementById('payment-methods-list');
+    if (!list || !panel || !panelText) return;
+
+    function showDescription(label) {
+        const desc = label?.dataset?.description || '';
+        if (desc) {
+            panelText.textContent = desc;
+            panel.classList.remove('hidden');
+        } else {
+            panel.classList.add('hidden');
+        }
+    }
+
+    list.addEventListener('change', function (e) {
+        if (e.target.type === 'radio') {
+            showDescription(e.target.closest('.payment-method-label'));
+        }
+    });
+
+    // Show description for pre-checked option on load
+    const checked = list.querySelector('input[type="radio"]:checked');
+    if (checked) showDescription(checked.closest('.payment-method-label'));
+})();
+
+// State/City dynamic filter
+(function () {
+    const estadoSelect = document.getElementById('estado-select');
+    const ciudadSelect = document.getElementById('ciudad-select');
+    if (!estadoSelect || !ciudadSelect) return;
+
+    // Build cities lookup from Blade data
+    const citiesByState = {};
+    @foreach($cities as $city)
+        citiesByState['{{ $city->state->code }}'] = citiesByState['{{ $city->state->code }}'] || [];
+        citiesByState['{{ $city->state->code }}'].push({
+            name: '{{ $city->name }}',
+            slug: '{{ $city->slug }}'
+        });
+    @endforeach
+
+    function updateCiudades(stateCode) {
+        ciudadSelect.innerHTML = '<option value="">Selecciona ciudad</option>';
+        const cities = citiesByState[stateCode] || [];
+        if (cities.length === 0) {
+            ciudadSelect.disabled = true;
+        } else {
+            ciudadSelect.disabled = false;
+            cities.forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city.slug;
+                opt.textContent = city.name;
+                ciudadSelect.appendChild(opt);
+            });
+        }
+    }
+
+    estadoSelect.addEventListener('change', function () {
+        updateCiudades(this.value);
+    });
+})();
+</script>
+@endpush

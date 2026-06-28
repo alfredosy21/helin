@@ -86,6 +86,9 @@
 @include('web.partials.footer')
 
 <script src="{{ asset('helin/js/helin-theme.js') }}"></script>
+<script src="{{ asset('helin/js/cart.js') }}"></script>
+<script src="{{ asset('helin/js/cart-toast.js') }}"></script>
+<script src="{{ asset('helin/js/cart-ui.js') }}"></script>
 
 <!-- Mantenemos el yield por si lo usas en otras vistas antiguas -->
 @yield('scripts')

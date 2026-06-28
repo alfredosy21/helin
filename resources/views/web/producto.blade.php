@@ -68,13 +68,20 @@
             </div>
 
             <!-- Cantidad y Botón -->
-            <div class="flex flex-col sm:flex-row items-center gap-4 mb-6">
+            <div class="flex flex-col sm:flex-row items-center gap-4 mb-6" data-cart-context>
                 <div class="flex items-center rounded-full bg-turquesa/10 overflow-hidden px-2.5" style="padding: 5px 10px;">
                     <button class="w-10 h-10 bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" onclick="if(this.nextElementSibling.value > 1) this.nextElementSibling.value--">-</button>
-                    <input type="number" value="1" min="1" class="w-20 text-center outline-none bg-transparent" style="padding: 5px 10px;">
+                    <input type="number" value="1" min="1" class="w-20 text-center outline-none bg-transparent" data-cart-qty style="padding: 5px 10px;">
                     <button class="w-10 h-10 bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" onclick="this.previousElementSibling.value++">+</button>
                 </div>
-                <button class="bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-3 px-8 rounded-full uppercase transition-colors w-full sm:w-auto">
+                <button
+                    class="bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-3 px-8 rounded-full uppercase transition-colors w-full sm:w-auto"
+                    data-cart-add
+                    data-slug="{{ $product->slug }}"
+                    data-name="{{ $product->name }}"
+                    data-brand="{{ $product->brand->name ?? 'Helin' }}"
+                    data-price="{{ $product->price }}"
+                    data-image="{{ asset('storage/products/73432-21300078.webp') }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
             </div>
@@ -168,7 +175,8 @@
                         'productPrice' => $related->price,
                         'productOldPrice' => $related->is_on_sale ? $related->price : null,
                         'productBadge' => $badge,
-                        'productLink' => route('producto', ['slug' => $related->slug])
+                        'productLink' => route('producto', ['slug' => $related->slug]),
+                        'productSlug' => $related->slug,
                     ])
                 @endforeach
             @else
