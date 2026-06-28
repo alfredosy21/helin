@@ -53,8 +53,8 @@
             <small class="block text-xs font-black uppercase tracking-wide mb-3 text-white/90">Soluciones que cuidan.</small>
             <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: 0;">
                TODO EN CIRUGÍA <br>
-               - Odontológica <br>
-               <span style="color: #123F4A;">- Especializada.</span>
+               ODONTOLÓGICA <br>
+               <span style="color: #123F4A;"> ESPECIALIZADA.</span>
             </h1>
             <p class="text-white/90 text-base lg:text-lg font-medium mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para<br>procedimientos quirúrgicos seguros, precisos y eficientes.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
