@@ -323,8 +323,9 @@
 
 .text-link {
     color: var(--helin-primary);
-    font-weight: 900;
-    font-size: var(--text-13px);
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: var(--text-11px);
     text-decoration: none;
     transition: color 0.2s ease;
 }
