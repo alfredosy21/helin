@@ -43,7 +43,7 @@
                     <i class="fa-regular fa-square-check text-turquesa text-xl" aria-hidden="true"></i>
                 </div>
                 <div>
-                    <h4 class="font-semibold text-helin-heading text-sm"><i class="fa-regular fa-square-check text-turquesa text-xl" aria-hidden="true"></i> Productos certificados</h4>
+                    <h4 class="font-semibold text-helin-heading text-sm">Productos certificados</h4>
                     <p class="text-helin-text text-xs">Cumplimos con los más altos estándares</p>
                 </div>
             </div>
