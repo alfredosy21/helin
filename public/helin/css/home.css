@@ -325,7 +325,7 @@
     color: var(--helin-primary);
     font-family: 'Inter', Arial, sans-serif;
     font-weight: 400;
-    font-size: var(--text-11px);
+    font-size: var(--text-12px);
     text-decoration: none;
     transition: color 0.2s ease;
 }
