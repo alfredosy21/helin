@@ -18,18 +18,12 @@ return new class extends Migration {
             $table->string('format')->default('article')->comment('Formato: article, pdf, video');
             $table->string('file_path');
             $table->string('thumbnail')->nullable();
-            $table->string('icon_symbol')->nullable()->comment('Símbolo de formato: ▣, ▶, ▤, →, ↓');
-            $table->json('tags')->nullable()->comment('Etiquetas clínicas');
-            $table->integer('view_count')->default(0)->comment('Contador de vistas');
             $table->timestamp('published_at')->nullable()->comment('Fecha de publicación');
-            $table->string('specialty')->nullable()->comment('Especialidad clínica (legacy)');
             $table->string('url')->nullable();
-            $table->integer('views')->default(0)->comment('Contador de vistas (legacy)');
             $table->integer('position')->default(0);
             $table->boolean('featured')->default(false);
             $table->unsignedBigInteger('resource_type_id')->nullable();
             $table->unsignedBigInteger('resource_specialty_id')->nullable();
-            $table->nullableMorphs('resourceable');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
@@ -41,7 +35,6 @@ return new class extends Migration {
             // Índices
             $table->index(['is_active', 'published_at']);
             $table->index('format');
-            $table->index('view_count');
             $table->index(['resource_type_id', 'resource_specialty_id']);
         });
     }

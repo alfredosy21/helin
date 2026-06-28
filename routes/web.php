@@ -30,6 +30,7 @@ use App\Http\Controllers\Cms\{
     ResourceTypeController
 };
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\Web\ResourceFilterController;
 
 /*
   |--------------------------------------------------------------------------
@@ -47,6 +48,7 @@ Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contact
 Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
 Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
+Route::post('/api/resources/filter', [ResourceFilterController::class, 'filter'])->name('resources.filter');
 
 /*
   |--------------------------------------------------------------------------

@@ -19,11 +19,8 @@ class ResourceType extends Model
         'name',
         'slug',
         'description',
-        'icon',
-        'color',
         'is_active',
         'position',
-        'config',
     ];
 
     /**
@@ -32,7 +29,6 @@ class ResourceType extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'config' => 'array',
         'is_active' => 'boolean',
         'position' => 'integer',
     ];
@@ -67,29 +63,5 @@ class ResourceType extends Model
     public function resources()
     {
         return $this->hasMany(Resource::class, 'resource_type_id');
-    }
-
-    /**
-     * Get configuration value.
-     */
-    public function getConfig(string $key, mixed $default = null): mixed
-    {
-        return data_get($this->config, $key, $default);
-    }
-
-    /**
-     * Get formatted color for UI.
-     */
-    public function getFormattedColor(): string
-    {
-        return $this->color ?? '#6366f1';
-    }
-
-    /**
-     * Get formatted icon for UI.
-     */
-    public function getFormattedIcon(): string
-    {
-        return $this->icon ?? 'fas fa-file';
     }
 }

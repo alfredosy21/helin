@@ -15,11 +15,8 @@ return new class extends Migration {
             $table->string('name'); // Nombre del tipo (Ej: "Caso Clínico", "Video")
             $table->string('slug')->unique(); // Slug para URLs (Ej: "caso-clinico")
             $table->text('description')->nullable(); // Descripción del tipo
-            $table->string('icon')->nullable(); // Icono o clase CSS
-            $table->string('color')->nullable(); // Color para UI (hex)
             $table->boolean('is_active')->default(true); // Estado activo/inactivo
             $table->integer('position')->default(0); // Orden de visualización
-            $table->json('config')->nullable(); // Configuración adicional
             $table->timestamps();
 
             // Índices

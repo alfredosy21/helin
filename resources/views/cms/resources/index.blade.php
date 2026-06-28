@@ -218,24 +218,13 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.specialty_label') }}</label>
-                            <select wire:model="specialty" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
-                                <option value="">Seleccionar especialidad</option>
-                                <option value="Cirugía Bucal">Cirugía Bucal</option>
-                                <option value="Maxilofacial">Maxilofacial</option>
-                                <option value="Periodoncia">Periodoncia</option>
-                                <option value="Ortodoncia">Ortodoncia</option>
-                                <option value="Endodoncia">Endodoncia</option>
-                                <option value="Implantología">Implantología</option>
-                                <option value="Osteosíntesis">Osteosíntesis</option>
-                                <option value="Biomateriales">Biomateriales</option>
-                            </select>
-                            @error('specialty') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.format_label') }}</label>
-                            <input type="text" wire:model="format" placeholder="{{ __('cms.resources.format_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                            <select wire:model="format" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                <option value="">Seleccionar formato</option>
+                                <option value="article">Artículo</option>
+                                <option value="pdf">PDF</option>
+                                <option value="video">Video</option>
+                            </select>
                             @error('format') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -249,12 +238,37 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Tags --}}
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.tags_label') }} (separadas por comas)</label>
-                        <input type="text" wire:model="tags" placeholder="{{ __('cms.resources.tags_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                        @error('tags') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    {{-- Tipo de Recurso y Especialidad --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
+                            <select wire:model="resource_type_id" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                <option value="">Seleccionar tipo</option>
+                                <option value="1">Caso Clínico</option>
+                                <option value="2">Video</option>
+                                <option value="3">Manual</option>
+                                <option value="4">Ficha Técnica</option>
+                                <option value="5">Guía Descargable</option>
+                                <option value="6">Artículo</option>
+                            </select>
+                            @error('resource_type_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Especialidad</label>
+                            <select wire:model="resource_specialty_id" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                <option value="">Seleccionar especialidad</option>
+                                <option value="1">Cirugía Bucal</option>
+                                <option value="2">Maxilofacial</option>
+                                <option value="3">Periodoncia</option>
+                                <option value="4">Ortodoncia</option>
+                                <option value="5">Endodoncia</option>
+                                <option value="6">Implantología</option>
+                                <option value="7">Osteosíntesis</option>
+                                <option value="8">Biomateriales</option>
+                                <option value="9">Odontología General</option>
+                            </select>
+                            @error('resource_specialty_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
                     {{-- Archivo/URL --}}

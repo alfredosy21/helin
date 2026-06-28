@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-<main class="container mx-auto px-4 py-8">
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-inner">
@@ -67,7 +66,6 @@
     <!-- Estadísticas -->
     <section class="stats">
         @php
-            // Obtener estadísticas dinámicas de la base de datos
             $totalResources = \App\Models\Resource::where('is_active', true)->count();
             $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->count();
             $totalPDFs = \App\Models\Resource::where('is_active', true)->where('format', 'pdf')->count();
@@ -103,6 +101,7 @@
         </article>
     </section>
 
+<main class="container mx-auto px-4 py-8">
     <!-- Sección de Búsqueda -->
     <section class="section-head">
         @php
@@ -120,21 +119,13 @@
                 </div>
                 <p>Una experiencia organizada para acceder rápidamente a contenido clínico por especialidad, formato y tipo de recurso.</p>
             @else
-                <div>
-                    <small>Biblioteca clínica Helin</small>
-                    <h2>{{ $librarySection->title }}</h2>
-                </div>
-                @if($librarySection->description)
-                    <p>{{ $librarySection->description }}</p>
-                @else
-                    {!! $librarySection->content !!}
-                @endif
+                {!! $librarySection->content !!}
             @endif
         @endif
     </section>
 
     <!-- Formulario de Búsqueda -->
-    <form class="resource-search" id="resourceSearchForm">
+    <form class="resource-search" id="resourceSearchForm" onsubmit="return false;">
         <input type="search" name="search" placeholder="Buscar por tema, producto o procedimiento..." id="searchInput">
         <select name="specialty" id="specialtySelect">
             <option value="">Especialidad</option>
@@ -154,7 +145,10 @@
                 <option value="{{ $type->id }}">{{ $type->name }}</option>
             @endforeach
         </select>
-        <button type="submit">Buscar</button>
+        <button type="button" id="searchButton">Buscar</button>
+        <button type="button" id="clearFilters" class="clear-filters-icon" title="Limpiar filtros" style="display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
     </form>
 
     <!-- Layout Principal -->
@@ -195,7 +189,6 @@
             <div class="filter-group">
                 <div class="group-title">Formato</div>
                 @php
-                    // Obtener formatos únicos desde la base de datos
                     $formats = \App\Models\Resource::where('is_active', true)
                         ->select('format')
                         ->selectRaw('count(*) as count')
@@ -231,112 +224,15 @@
             <!-- Contenido dinámico -->
             <div id="resourcesContent">
                 @php
-                    // Obtener parámetros de filtro
-                    $search = request('search', '');
-                    $typeId = request('type', '');
-                    $specialtyId = request('specialty', '');
-                    $format = request('format', '');
-                    $sortBy = request('sort', 'position');
-
-                    // Construir query
-                    $resourcesQuery = \App\Models\Resource::where('is_active', true);
-
-                    // Aplicar filtros
-                    if ($search) {
-                        $resourcesQuery->where(function($query) use ($search) {
-                            $query->where('title', 'like', '%' . $search . '%')
-                                  ->orWhere('description', 'like', '%' . $search . '%');
-                        });
-                    }
-
-                    if ($typeId) {
-                        $resourcesQuery->where('resource_type_id', $typeId);
-                    }
-
-                    if ($specialtyId) {
-                        $resourcesQuery->where('resource_specialty_id', $specialtyId);
-                    }
-
-                    if ($format) {
-                        if (is_array($format)) {
-                            $resourcesQuery->whereIn('format', $format);
-                        } else {
-                            $resourcesQuery->where('format', $format);
-                        }
-                    }
-
-                    // Aplicar ordenamiento
-                    switch($sortBy) {
-                        case 'recent':
-                            $resourcesQuery->orderBy('created_at', 'desc');
-                            break;
-                        case 'views':
-                            $resourcesQuery->orderBy('views', 'desc');
-                            break;
-                        case 'position':
-                        default:
-                            $resourcesQuery->orderBy('position', 'asc');
-                            break;
-                    }
-
-                    $resources = $resourcesQuery->with(['resourceType', 'resourceSpecialty'])->paginate(12);
+                    $sortBy    = request('sort', 'position');
+                    $iconMap   = ['case_study'=>'→','video'=>'▶','manual'=>'↓','technical_sheet'=>'↓','guide'=>'→','downloadable_guide'=>'→'];
+                    $formatMap = ['article'=>'▣ Artículo','pdf'=>'▤ PDF','video'=>'▶ Video'];
+                    $resources = \App\Models\Resource::where('is_active', true)
+                        ->with(['resourceType','resourceSpecialty'])
+                        ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
+                        ->paginate(12);
                 @endphp
-
-                <div class="toolbar">
-                    <p>Mostrando <strong>{{ $resources->firstItem() ?? 0 }}-{{ $resources->lastItem() ?? 0 }}</strong> de <strong>{{ $resources->total() }}</strong> recursos clínicos</p>
-                    <select class="sort-select" id="sortSelect">
-                        <option value="position" {{ request('sort') == 'position' ? 'selected' : '' }}>Ordenar por defecto</option>
-                        <option value="recent" {{ request('sort') == 'recent' ? 'selected' : '' }}>Más recientes</option>
-                        <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>Más consultados</option>
-                    </select>
-                </div>
-
-            @if($resources->count() > 0)
-            <div class="resource-grid" id="casos">
-                @foreach($resources as $resource)
-                    @php
-                        $iconMap = [
-                            'case_study' => '→',
-                            'video' => '▶',
-                            'manual' => '↓',
-                            'technical_sheet' => '↓',
-                            'guide' => '→',
-                            'downloadable_guide' => '→'
-                        ];
-                        $formatMap = [
-                            'article' => '▣ Artículo',
-                            'pdf' => '▤ PDF',
-                            'video' => '▶ Video'
-                        ];
-                        $tags = is_string($resource->tags) ? json_decode($resource->tags, true) : [];
-
-                        // Obtener nombres relacionados
-                        $typeName = $resource->resourceType ? $resource->resourceType->name : 'Desconocido';
-                        $specialtyName = $resource->resourceSpecialty ? $resource->resourceSpecialty->name : '';
-                    @endphp
-                    @include('web.components.resource-card', [
-                        'resourceType' => $typeName,
-                        'resourcePlay' => $iconMap[$resource->type] ?? '→',
-                        'resourceTags' => array_merge($tags, $specialtyName ? [$specialtyName] : []),
-                        'resourceTitle' => $resource->title,
-                        'resourceDescription' => $resource->description,
-                        'resourceFormat' => $formatMap[$resource->format] ?? '▣ Artículo',
-                        'resourceLink' => $resource->type === 'video' ? 'Ver video' : ($resource->format === 'pdf' ? 'Descargar' : 'Leer'),
-                        'resourceUrl' => $resource->url ?: '#'
-                    ])
-                @endforeach
-            </div>
-
-            <!-- Paginación -->
-            <div class="pagination-wrapper">
-                {{ $resources->appends(request()->query())->links() }}
-            </div>
-            @else
-            <div class="no-results">
-                <p>No se encontraron recursos que coincidan con los criterios de búsqueda.</p>
-                <a href="{{ route('recursos-clinicos') }}" class="btn-outline">Limpiar filtros</a>
-            </div>
-            @endif
+                @include('web.partials.resource-results', compact('resources','sortBy','iconMap','formatMap'))
             </div>
         </section>
     </section>
@@ -358,226 +254,7 @@
 @include('web.partials.beneficios')
 
 @push('scripts')
-<script>
-// Sistema simple de filtros AJAX
-document.addEventListener('DOMContentLoaded', function() {
-    const searchForm = document.getElementById('resourceSearchForm');
-    const searchInput = document.getElementById('searchInput');
-    const specialtySelect = document.getElementById('specialtySelect');
-    const typeSelect = document.getElementById('typeSelect');
-    const sortSelect = document.getElementById('sortSelect');
-    const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
-    const resourcesContent = document.getElementById('resourcesContent');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-
-    let debounceTimer = null;
-
-    function showLoading() {
-        if (loadingIndicator) {
-            loadingIndicator.classList.remove('hidden');
-            if (resourcesContent) {
-                resourcesContent.style.opacity = '0.5';
-            }
-        }
-    }
-
-    function hideLoading() {
-        if (loadingIndicator) {
-            loadingIndicator.classList.add('hidden');
-            if (resourcesContent) {
-                resourcesContent.style.opacity = '1';
-            }
-        }
-    }
-
-    function getFilters() {
-        const params = new URLSearchParams();
-        console.log('Obteniendo filtros...');
-
-        // Búsqueda
-        if (searchInput && searchInput.value.trim()) {
-            params.append('search', searchInput.value.trim());
-        }
-
-        // Selects
-        if (specialtySelect && specialtySelect.value) {
-            params.append('specialtyId', specialtySelect.value);
-        }
-
-        if (typeSelect && typeSelect.value) {
-            params.append('typeId', typeSelect.value);
-        }
-
-        if (sortSelect && sortSelect.value) {
-            params.append('sort', sortSelect.value);
-        }
-
-        // Checkboxes
-        filterCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                const filterType = checkbox.dataset.filterType;
-                params.append(filterType, checkbox.value);
-            }
-        });
-
-        const queryString = params.toString();
-        console.log('Query string generada:', queryString);
-        return queryString;
-    }
-
-    async function applyFilters() {
-        try {
-            showLoading();
-
-            const queryString = getFilters();
-            const response = await fetch(`/api/recursos-clinicos/filtrar?${queryString}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
-            }
-
-            const data = await response.json();
-
-            if (data.success && resourcesContent) {
-                // Actualizar el contenido principal
-                let html = '';
-                if (data.toolbar) {
-                    html += data.toolbar;
-                }
-                if (data.html) {
-                    html += data.html;
-                }
-                if (data.pagination) {
-                    html += data.pagination;
-                }
-                resourcesContent.innerHTML = html;
-
-                // Re-inicializar el select de ordenamiento si existe
-                const newSortSelect = document.getElementById('sortSelect');
-                if (newSortSelect) {
-                    newSortSelect.addEventListener('change', applyFilters);
-                }
-            } else {
-                throw new Error(data.message || 'Error desconocido');
-            }
-
-        } catch (error) {
-            console.error('Error al aplicar filtros:', error);
-            if (resourcesContent) {
-                resourcesContent.innerHTML = '<div class="error-message">Ocurrió un error al cargar los recursos. Por favor, intenta nuevamente.</div>';
-            }
-        } finally {
-            hideLoading();
-        }
-    }
-
-    // Event listeners
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            applyFilters();
-        });
-    }
-
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(applyFilters, 500);
-        });
-    }
-
-    [specialtySelect, typeSelect, sortSelect].forEach(select => {
-        if (select) {
-            select.addEventListener('change', applyFilters);
-        }
-    });
-
-    console.log('Checkboxes encontrados:', filterCheckboxes.length);
-    filterCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            console.log('Checkbox cambiado:', checkbox.value, checkbox.checked);
-            applyFilters();
-        });
-    });
-});
-</script>
-
-@push('styles')
-<style>
-/* Estilos para el sistema de filtros AJAX */
-.loading-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    text-align: center;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.hidden {
-    display: none !important;
-}
-
-.error-message {
-    background-color: #fee;
-    border: 1px solid #fcc;
-    color: #c33;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-/* Transiciones suaves */
-#resourcesContent {
-    transition: opacity 0.3s ease;
-}
-
-/* Efecto hover en filtros */
-.filter-check:hover {
-    background-color: rgba(107, 194, 195, 0.1);
-    transition: background-color 0.2s ease;
-}
-
-/* Estados activos de filtros */
-.filter-checkbox:checked + span {
-    font-weight: 600;
-    color: #06b6d4;
-}
-
-/* Responsive para loading */
-@media (max-width: 768px) {
-    .loading-indicator {
-        padding: 2rem 1rem;
-    }
-
-    .spinner {
-        width: 32px;
-        height: 32px;
-    }
-}
-</style>
+<script src="{{ asset('helin/js/recursos-clinicos.js') }}"></script>
 @endpush
-@endpush
+
 @endsection

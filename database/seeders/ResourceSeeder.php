@@ -20,20 +20,19 @@ class ResourceSeeder extends Seeder
         Resource::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // Recursos desde recursos-clinicos.blade.php
+        // Recursos con IDs de especialidad y tipo de recurso
         $resources = [
             [
                 'title' => 'Regeneración ósea guiada en zona posterior',
                 'description' => 'Protocolo clínico con biomateriales, membrana y seguimiento del caso.',
                 'type' => 'case_study',
-                'specialty' => 'Cirugía Bucal',
-                'format' => 'Artículo',
-                'tags' => json_encode(['Cirugía Bucal', 'GBR']),
+                'resource_type_id' => 1, // Caso Clínico
+                'resource_specialty_id' => 1, // Cirugía Bucal
+                'format' => 'article',
                 'file_path' => 'resources/casos/regeneracion-osea-posterior.pdf',
                 'url' => null,
                 'thumbnail' => 'thumbnails/caso-regeneracion.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 1,
                 'featured' => false,
             ],
@@ -41,14 +40,13 @@ class ResourceSeeder extends Seeder
                 'title' => 'Colocación de implante con protocolo quirúrgico',
                 'description' => 'Video de referencia para planificación, inserción y control de estabilidad.',
                 'type' => 'video',
-                'specialty' => 'Implantología',
-                'format' => 'Video',
-                'tags' => json_encode(['Implantología', 'AB']),
+                'resource_type_id' => 2, // Video
+                'resource_specialty_id' => 6, // Implantología
+                'format' => 'video',
                 'file_path' => 'resources/videos/colocacion-implante.mp4',
                 'url' => null,
                 'thumbnail' => 'thumbnails/video-implante.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 2,
                 'featured' => false,
             ],
@@ -56,14 +54,13 @@ class ResourceSeeder extends Seeder
                 'title' => 'Manual técnico de placas y tornillos',
                 'description' => 'Guía descargable para selección, uso y consideraciones clínicas.',
                 'type' => 'manual',
-                'specialty' => 'Osteosíntesis',
-                'format' => 'PDF',
-                'tags' => json_encode(['Osteosíntesis', 'PDF']),
+                'resource_type_id' => 3, // Manual
+                'resource_specialty_id' => 7, // Osteosíntesis
+                'format' => 'pdf',
                 'file_path' => 'resources/manuales/placas-tornillos.pdf',
                 'url' => null,
                 'thumbnail' => 'thumbnails/manual-placas.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 3,
                 'featured' => false,
             ],
@@ -71,14 +68,13 @@ class ResourceSeeder extends Seeder
                 'title' => 'Ficha técnica de membrana reabsorbible',
                 'description' => 'Especificaciones, indicaciones y recomendaciones de manipulación.',
                 'type' => 'technical_sheet',
-                'specialty' => 'Biomateriales',
-                'format' => 'PDF',
-                'tags' => json_encode(['Biomateriales', 'PDF']),
+                'resource_type_id' => 4, // Ficha Técnica
+                'resource_specialty_id' => 8, // Biomateriales
+                'format' => 'pdf',
                 'file_path' => 'resources/fichas/membrana-reabsorbible.pdf',
                 'url' => null,
                 'thumbnail' => 'thumbnails/ficha-membrana.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 4,
                 'featured' => false,
             ],
@@ -86,14 +82,13 @@ class ResourceSeeder extends Seeder
                 'title' => 'Guía clínica para manejo de tejidos blandos',
                 'description' => 'Recomendaciones prácticas para procedimientos regenerativos.',
                 'type' => 'downloadable_guide',
-                'specialty' => 'Periodoncia',
-                'format' => 'Artículo',
-                'tags' => json_encode(['Periodoncia', 'Soporte']),
+                'resource_type_id' => 5, // Guía Descargable
+                'resource_specialty_id' => 3, // Periodoncia
+                'format' => 'article',
                 'file_path' => 'resources/guias/manejo-tejidos-blandos.pdf',
                 'url' => null,
                 'thumbnail' => 'thumbnails/guia-tejidos.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 5,
                 'featured' => false,
             ],
@@ -101,14 +96,13 @@ class ResourceSeeder extends Seeder
                 'title' => 'Reconstrucción con sistema de osteosíntesis',
                 'description' => 'Resumen del abordaje, materiales utilizados y evolución clínica.',
                 'type' => 'case_study',
-                'specialty' => 'Maxilofacial',
-                'format' => 'Artículo',
-                'tags' => json_encode(['Maxilofacial', 'Fijación']),
+                'resource_type_id' => 1, // Caso Clínico
+                'resource_specialty_id' => 2, // Maxilofacial
+                'format' => 'article',
                 'file_path' => 'resources/casos/reconstruccion-osteosintesis.pdf',
                 'url' => null,
                 'thumbnail' => 'thumbnails/caso-osteosintesis.jpg',
                 'is_active' => true,
-                'views' => 0,
                 'position' => 6,
                 'featured' => false,
             ],

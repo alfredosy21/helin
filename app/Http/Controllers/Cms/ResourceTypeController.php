@@ -123,8 +123,6 @@ class ResourceTypeController extends Component
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'icon' => $this->icon,
-            'color' => $this->color,
             'is_active' => $this->is_active,
         ];
 
@@ -172,7 +170,7 @@ class ResourceTypeController extends Component
     public function resetForm()
     {
         $this->reset([
-            'name', 'slug', 'description', 'icon', 'color',
+            'name', 'slug', 'description',
             'is_active'
         ]);
 

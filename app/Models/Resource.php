@@ -17,24 +17,14 @@ class Resource extends Model {
         'type',
         'file_path',
         'thumbnail',
-        'resourceable_id',
-        'resourceable_type',
         'resource_type_id',
         'resource_specialty_id',
         'format',
         'url',
         'is_active',
-        'position',
-        'views'
+        'position'
     ];
 
-    /**
-     * Get the parent resourceable model (Product or Category).
-     * * @return MorphTo
-     */
-    public function resourceable(): MorphTo {
-        return $this->morphTo();
-    }
 
     /**
      * Get the resource type
