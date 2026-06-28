@@ -38,13 +38,6 @@
                     <input type="text" wire:model.live="search" placeholder="Buscar métodos de pago..."
                            class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
                 </div>
-                <select wire:model.live="filterProvider" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
-                    <option value="">Todos los proveedores</option>
-                    <option value="stripe">Stripe</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="plaid">Plaid</option>
-                    <option value="local">Local</option>
-                </select>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="10">10 por página</option>
                     <option value="20">20 por página</option>
@@ -58,9 +51,6 @@
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
                             <th class="px-6 py-3.5">Método de Pago</th>
-                            <th class="px-6 py-3.5">Proveedor</th>
-                            <th class="px-6 py-3.5 text-center">Comisiones</th>
-                            <th class="px-6 py-3.5 text-center">Límites</th>
                             <th class="px-6 py-3.5 text-center w-40">Actualizado</th>
                             <th class="px-6 py-3.5 text-center w-24">Estado</th>
                             <th class="px-6 py-3.5 text-right w-40">Acciones</th>
@@ -74,48 +64,10 @@
                                     <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div class="flex items-center gap-3">
-                                        @if($method->icon)
-                                        <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                                            <i class="{{ $method->icon }} text-slate-600"></i>
-                                        </div>
-                                        @endif
-                                        <div>
-                                            <div class="font-medium text-[#222]">{{ $method->name }}</div>
-                                            <div class="text-xs text-slate-500 line-clamp-2">{{ $method->description }}</div>
-                                        </div>
+                                    <div>
+                                        <div class="font-medium text-[#222]">{{ $method->name }}</div>
+                                        <div class="text-xs text-slate-500 line-clamp-2">{{ $method->description }}</div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-slate-100 text-slate-600">
-                                    {{ $method->provider ?? 'Local' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-xs">
-                                    @if($method->fee_percentage > 0)
-                                    <div>{{ $method->fee_percentage }}%</div>
-                                    @endif
-                                    @if($method->fee_fixed > 0)
-                                    <div>+${{ number_format($method->fee_fixed, 2) }}</div>
-                                    @endif
-                                    @if($method->fee_percentage == 0 && $method->fee_fixed == 0)
-                                    <div class="text-green-600">Gratis</div>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-xs">
-                                    @if($method->min_amount)
-                                    <div>Min: ${{ number_format($method->min_amount, 2) }}</div>
-                                    @endif
-                                    @if($method->max_amount)
-                                    <div>Max: ${{ number_format($method->max_amount, 2) }}</div>
-                                    @endif
-                                    @if(!$method->min_amount && !$method->max_amount)
-                                    <div class="text-slate-400">Sin límites</div>
-                                    @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
@@ -125,11 +77,6 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center gap-2">
-                                    @if($method->is_default)
-                                    <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-amber-100 text-amber-600">
-                                        Por defecto
-                                    </span>
-                                    @endif
                                     <span class="w-2 h-2 rounded-full {{ $method->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
                                     <span class="text-xs font-medium {{ $method->is_active ? 'text-slate-700' : 'text-slate-400' }}">
                                         {{ $method->is_active ? 'Activo' : 'Inactivo' }}
@@ -157,7 +104,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-16 text-center">
+                            <td colspan="4" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center text-[#c0c1c6]">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">No se encontraron métodos de pago</p>

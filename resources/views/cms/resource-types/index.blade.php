@@ -66,14 +66,8 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        @if($resourceType->icon)
-                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: {{ $resourceType->color ?? '#f3f4f6' }};">
-                                            <i class="{{ $resourceType->icon }} text-white text-sm"></i>
-                                        </div>
-                                        @endif
                                         <div>
                                             <div class="font-medium text-[#222]">{{ $resourceType->name }}</div>
-                                            <div class="text-xs text-slate-500">{{ $resourceType->slug }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -157,35 +151,11 @@
                     </div>
 
                     {{-- Inputs principales --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.name_label') }} <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="name" placeholder="{{ __('cms.resource_types.name_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.slug_label') }} <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="slug" placeholder="{{ __('cms.resource_types.slug_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            <p class="text-xs text-[#c0c1c6] italic mt-1">{{ __('cms.resource_types.slug_helper') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.icon_label') }}</label>
-                            <input type="text" wire:model="icon" placeholder="{{ __('cms.resource_types.icon_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.color_label') }}</label>
-                            <input type="text" wire:model="color" placeholder="{{ __('cms.resource_types.color_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
-                            @error('color') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.name_label') }} <span class="text-red-500">*</span></label>
+                        <input type="text" wire:model="name" placeholder="{{ __('cms.resource_types.name_placeholder') }}"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Descripción --}}

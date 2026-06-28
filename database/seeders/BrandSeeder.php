@@ -13,6 +13,8 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('brands')->delete();
+
         $brands = [
             [
                 'name' => 'AB',

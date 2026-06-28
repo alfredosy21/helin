@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('resource_specialties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name'); // Nombre de la especialidad (Ej: "Cirugía Bucal", "Maxilofacial")
-            $table->string('slug')->unique(); // Slug para URLs (Ej: "cirugia-bucal")
             $table->text('description')->nullable(); // Descripción de la especialidad
             $table->boolean('is_active')->default(true); // Estado activo/inactivo
             $table->integer('position')->default(0); // Orden de visualización
@@ -21,7 +20,6 @@ return new class extends Migration {
 
             // Índices
             $table->index(['is_active', 'position']);
-            $table->index('slug');
         });
     }
 

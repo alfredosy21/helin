@@ -20,21 +20,23 @@ class Sections extends Model {
     const GBR_PRODUCTS = 7; // Más vendidos en Regeneración Ósea Guiada
     const INSTRUMENTS_PRODUCTS = 8; // Más vendidos en Instrumentos y Equipos
     const TESTIMONIALS = 9; // Testimonios
+    const CTA_HOME = 10; // ¿Listo para transformar tu práctica clínica? (Home)
 
     // NUESTRA EMPRESA SECTIONS
-    const ABOUT_US = 10; // Soluciones que impulsan mejores resultados clínicos
-    const MISSION_VISION = 11; // Misión y Visión
-    const TEAM = 12; // Un equipo que te acompaña
-    const ALLIES = 13; // Trabajamos junto a marcas líderes
-    const CTA_COMPANY = 14; // ¿Listo para transformar tu práctica clínica?
+    const ABOUT_US = 11; // Soluciones que impulsan mejores resultados clínicos
+    const MISSION_VISION = 12; // Misión y Visión
+    const TEAM = 13; // Un equipo que te acompaña
+    const ALLIES = 14; // Trabajamos junto a marcas líderes
+    const NEAR_YOU = 15; // Estamos cerca de ti
+    const CTA_COMPANY = 16; // ¿Listo para transformar tu práctica clínica?
 
     // POLÍTICAS SECTIONS
-    const SHIPPING_POLICIES = 15; // Políticas de envío y garantías
-    const TERMS_CONDITIONS = 16; // Términos y condiciones
-    const PRIVACY_POLICIES = 17; // Políticas de privacidad
+    const SHIPPING_POLICIES = 17; // Políticas de envío y garantías
+    const TERMS_CONDITIONS = 18; // Términos y condiciones
+    const PRIVACY_POLICIES = 19; // Políticas de privacidad
 
     // CONTACTO SECTIONS
-    const CONTACT_HERO = 18; // ¿Tienes preguntas? Hablemos.
+    const CONTACT_HERO = 20; // ¿Tienes preguntas? Hablemos.
 
     /**
      * Name of the table

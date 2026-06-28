@@ -41,7 +41,7 @@ use App\Http\Controllers\Web\ResourceFilterController;
 
 Route::get('/', [WebController::class, 'home'])->name('home');
 Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
-Route::get('/producto', [WebController::class, 'producto'])->name('producto');
+Route::get('/producto/{id}', [WebController::class, 'producto'])->name('producto');
 Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
 Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
 Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');

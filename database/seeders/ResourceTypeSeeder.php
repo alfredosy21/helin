@@ -23,42 +23,36 @@ class ResourceTypeSeeder extends Seeder
         $resourceTypes = [
             [
                 'name' => 'Caso Clínico',
-                'slug' => 'caso-clinico',
                 'description' => 'Estudios de casos reales con diagnóstico, tratamiento y seguimiento',
                 'is_active' => true,
                 'position' => 1,
             ],
             [
                 'name' => 'Video',
-                'slug' => 'video',
                 'description' => 'Videos tutoriales, procedimientos quirúrgicos y demostraciones clínicas',
                 'is_active' => true,
                 'position' => 2,
             ],
             [
                 'name' => 'Manual',
-                'slug' => 'manual',
                 'description' => 'Manuales de uso, guías de procedimiento y documentación técnica',
                 'is_active' => true,
                 'position' => 3,
             ],
             [
                 'name' => 'Ficha Técnica',
-                'slug' => 'ficha-tecnica',
                 'description' => 'Especificaciones técnicas, características y datos de productos',
                 'is_active' => true,
                 'position' => 4,
             ],
             [
                 'name' => 'Guía Descargable',
-                'slug' => 'guia-descargable',
                 'description' => 'Guías prácticas, protocolos y documentos de consulta rápida',
                 'is_active' => true,
                 'position' => 5,
             ],
             [
                 'name' => 'Artículo',
-                'slug' => 'articulo',
                 'description' => 'Artículos científicos, investigaciones y publicaciones académicas',
                 'is_active' => true,
                 'position' => 6,

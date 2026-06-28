@@ -25,9 +25,15 @@ class WebController extends Controller
     /**
      * Detalle de producto
      */
-    public function producto()
+    public function producto($id)
     {
-        return view('web.producto');
+        $product = \App\Models\Product::with(['category', 'brand'])->find($id);
+
+        if (!$product) {
+            abort(404);
+        }
+
+        return view('web.producto', compact('product'));
     }
 
     /**

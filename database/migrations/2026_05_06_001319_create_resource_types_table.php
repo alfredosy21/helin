@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('resource_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name'); // Nombre del tipo (Ej: "Caso Clínico", "Video")
-            $table->string('slug')->unique(); // Slug para URLs (Ej: "caso-clinico")
             $table->text('description')->nullable(); // Descripción del tipo
             $table->boolean('is_active')->default(true); // Estado activo/inactivo
             $table->integer('position')->default(0); // Orden de visualización
@@ -21,7 +20,6 @@ return new class extends Migration {
 
             // Índices
             $table->index(['is_active', 'position']);
-            $table->index('slug');
         });
     }
 

@@ -13,6 +13,8 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('categories')->delete();
+
         $categories = [
             // Implantes
             [

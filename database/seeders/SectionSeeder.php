@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class SectionSeeder extends Seeder
 {
 
+
     // ==========================================
     // ---------- TIPOS DE LAYOUT ESTÁNDAR ----------
     // ==========================================
@@ -44,7 +45,7 @@ class SectionSeeder extends Seeder
             // ==========================================
             // ---------- SECCIONES DE HOME --------------
             // ==========================================
-            [
+            Sections::HERO_HOME => [
                 'title' => 'helin.',
                 'subtitle' => null,
                 'description' => null,
@@ -72,7 +73,7 @@ class SectionSeeder extends Seeder
                 'status' => 1,
                 'status_content' => 1,
             ],
-            [
+            Sections::FEEDBACK_BANNER => [
                 'title' => '¡Nos encantaría conocer tu opinión!',
                 'image' => null,
                 'name_button' => 'Compartir comentario',
@@ -97,7 +98,7 @@ class SectionSeeder extends Seeder
 </div>
 HTML,
             ],
-            [
+            Sections::CLINICAL_RESOURCES_HERO => [
                 'title' => 'Centro de conocimiento clínico',
                 'image' => null,
                 'name_button' => null,
@@ -114,7 +115,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::CLINICAL_LIBRARY => [
                 'title' => 'Biblioteca clínica Helin',
                 'image' => null,
                 'name_button' => null,
@@ -129,7 +130,7 @@ HTML,
 <p>Una experiencia organizada para acceder rápidamente a contenido clínico por especialidad, formato y tipo de recurso.</p>
 HTML,
             ],
-            [
+            Sections::CLINICAL_CONTENT_FEATURE => [
                 'title' => 'Contenido clínico pensado para acompañar tu práctica.',
                 'image' => null,
                 'name_button' => 'Contactar asesor',
@@ -144,7 +145,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::IMPLANTOLOGY_PRODUCTS => [
                 'title' => 'Más vendidos en Implantología',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
@@ -169,7 +170,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::GBR_PRODUCTS => [
                 'title' => 'Más vendidos en Regeneración Ósea Guiada',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
@@ -194,7 +195,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::INSTRUMENTS_PRODUCTS => [
                 'title' => 'Más vendidos en Instrumentos y Equipos',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
@@ -219,7 +220,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::TESTIMONIALS => [
                 'title' => 'Testimonios',
                 'image' => null,
                 'name_button' => null,
@@ -256,7 +257,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::CTA_HOME => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
                 'image' => 'CTA',
                 'name_button' => '☏ Háblale con WhatsApp',
@@ -271,11 +272,10 @@ HTML,
 </div>
 HTML,
             ],
-
             // ==========================================
             // ---------- SECCIONES DE POLÍTICAS --------
             // ==========================================
-            [
+            Sections::SHIPPING_POLICIES => [
                 'title' => 'Políticas de envío y garantías',
                 'image' => '🚚',
                 'name_button' => 'Ver más',
@@ -314,7 +314,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::TERMS_CONDITIONS => [
                 'title' => 'Términos y condiciones',
                 'image' => '▤',
                 'name_button' => 'Ver más',
@@ -353,7 +353,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::PRIVACY_POLICIES => [
                 'title' => 'Políticas de privacidad',
                 'image' => '♙',
                 'name_button' => 'Ver más',
@@ -396,7 +396,7 @@ HTML,
             // ==========================================
             // ---------- SECCIONES DE NOSOTROS ---------
             // ==========================================
-            [
+            Sections::ABOUT_US => [
                 'title' => 'Soluciones que impulsan mejores resultados clínicos',
                 'image' => 'Quiénes somos',
                 'name_button' => null,
@@ -414,7 +414,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::MISSION_VISION => [
                 'title' => 'Misión y Visión',
                 'image' => 'Misión y visión',
                 'name_button' => null,
@@ -440,7 +440,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::TEAM => [
                 'title' => 'Un equipo que te acompaña',
                 'image' => 'Nuestro team',
                 'name_button' => '☏ Conoce al equipo',
@@ -457,7 +457,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::ALLIES => [
                 'title' => 'Trabajamos junto a marcas líderes',
                 'image' => 'Nuestros aliados',
                 'name_button' => null,
@@ -481,7 +481,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::NEAR_YOU => [
                 'title' => 'Estamos cerca de ti',
                 'image' => null,
                 'name_button' => null,
@@ -499,7 +499,7 @@ HTML,
 </div>
 HTML,
             ],
-            [
+            Sections::CTA_COMPANY => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
                 'image' => 'CTA',
                 'name_button' => 'Acciones',
@@ -514,7 +514,7 @@ HTML,
             // ==========================================
             // ---------- SECCIONES DE CONTACTO ----------
             // ==========================================
-            [
+            Sections::CONTACT_HERO => [
                 'title' => '¿Tienes preguntas? Hablemos.',
                 'image' => null,
                 'name_button' => null,
@@ -529,7 +529,8 @@ HTML,
             ],
         ];
 
-        foreach ($sections as $data) {
+        foreach ($sections as $id => $data) {
+            $data['id'] = $id;
             Sections::create($data);
         }
     }

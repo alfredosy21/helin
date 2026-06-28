@@ -1,5 +1,42 @@
 /* Recursos Clínicos Page - Specific Styles */
 
+/* Asegurar que el header y sus elementos sean visibles */
+header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+header .hidden.sm\:block {
+    display: none !important;
+}
+
+@media (min-width: 640px) {
+    header .hidden.sm\:block {
+        display: block !important;
+    }
+}
+
+header .hidden.lg\:block {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+    header .hidden.lg\:block {
+        display: block !important;
+    }
+}
+
+header .lg\:hidden {
+    display: block !important;
+}
+
+@media (min-width: 1024px) {
+    header .lg\:hidden {
+        display: none !important;
+    }
+}
+
 /* Hero Banner - Estadísticas */
 .hero-banner {
     background: linear-gradient(135deg, var(--helin-primary) 0%, var(--helin-primary-light) 100%);
@@ -97,6 +134,7 @@
     background: linear-gradient(160deg, #0d3d47 0%, #1a6070 40%, #2a8fa0 80%, var(--helin-primary-light) 100%);
     color: var(--white);
     border-top: 1px solid rgba(255,255,255,0.15);
+    z-index: 0;
 }
 
 .hero:before {

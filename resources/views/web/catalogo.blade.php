@@ -13,7 +13,7 @@
                     'items' => [
                         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
                         ['label' => 'Categorías', 'url' => route('catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'],
-                        ['label' => 'Implantología', 'spanAttributes' => 'class="text-turquesa font-medium"']
+                        ['label' => 'Todos los productos', 'spanAttributes' => 'class="text-turquesa font-medium"']
                     ],
                     'separatorAttributes' => 'class="text-helin-text mx-1"'
                 ])
@@ -51,29 +51,18 @@
                 <div class="mb-4">
                     <h4 class="font-semibold text-helin-heading mb-3 text-sm">Categorías</h4>
                     <div class="space-y-2">
-                        <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
-                            <span class="flex items-center text-helin-text text-sm">
-                                <span class="w-2 h-2 rounded-full bg-turquesa mr-2"></span>
-                                <span class="text-turquesa font-medium">Implantología</span>
-                            </span>
-                            <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">50</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
-                            <span class="text-helin-text text-sm">Instrumental</span>
-                            <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">18</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
-                            <span class="text-helin-text text-sm">Biomateriales</span>
-                            <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">22</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
-                            <span class="text-helin-text text-sm">Equipos</span>
-                            <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">12</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
-                            <span class="text-helin-text text-sm">Suturas</span>
-                            <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">8</span>
-                        </a>
+                        @php
+                            $categories = \App\Models\Category::active()->ordered()->get();
+                        @endphp
+                        @foreach($categories as $cat)
+                            @php
+                                $productCount = $cat->products()->where('is_active', true)->count();
+                            @endphp
+                            <a href="#" class="flex items-center justify-between py-1 hover:text-turquesa transition-colors group">
+                                <span class="text-helin-text text-sm">{{ $cat->name }}</span>
+                                <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center">{{ $productCount }}</span>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
 
@@ -83,11 +72,14 @@
                 <div class="mb-4">
                     <h4 class="font-semibold text-helin-heading mb-3 text-sm">Marcas</h4>
                     <div class="space-y-2">
-                        @foreach(['Straumann', 'Nobel Biocare', 'Dentsply', 'Kavo', 'NSK'] as $marca)
-                        <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors">
-                            <input type="checkbox" class="w-4 h-4 text-turquesa rounded border-helin-border">
-                            <span class="ml-2 text-helin-text text-sm">{{ $marca }}</span>
-                        </label>
+                        @php
+                            $brands = \App\Models\Brand::active()->ordered()->get();
+                        @endphp
+                        @foreach($brands as $brand)
+                            <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors">
+                                <input type="checkbox" class="w-4 h-4 text-turquesa rounded border-helin-border">
+                                <span class="ml-2 text-helin-text text-sm">{{ $brand->name }}</span>
+                            </label>
                         @endforeach
                     </div>
                 </div>
@@ -139,7 +131,10 @@
             <!-- Barra de Ordenamiento -->
             <div class="bg-helin-soft rounded-lg pl-3 sm:pl-4 py-3 sm:py-4 pr-0 mb-6">
                 <div class="flex items-center justify-between">
-                    <span class="text-helin-text text-sm">Mostrando <strong>24</strong> productos</span>
+                    @php
+                        $totalProducts = \App\Models\Product::where('is_active', true)->count();
+                    @endphp
+                    <span class="text-helin-text text-sm">Mostrando <strong>{{ $totalProducts }}</strong> productos</span>
                     <select class="border rounded-lg px-3 py-2 bg-white text-helin-heading text-sm ml-auto">
                         <option>Ordenar por: Relevancia</option>
                         <option>Precio: Menor a Mayor</option>
@@ -149,31 +144,65 @@
             </div>
 
             <!-- Grid Productos -->
+            @php
+                $products = \App\Models\Product::with(['category', 'brand'])
+                    ->where('is_active', true)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(24);
+            @endphp
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Implante Dental Straumann BLX', 'productBrand' => 'Straumann', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('producto')])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => ''])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productOldPrice' => 60.00, 'productBadge' => 'Oferta'])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => ''])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo'])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Tornillos de Osteosíntesis', 'productBrand' => 'Stryker', 'productPrice' => 75.00, 'productBadge' => ''])
+                @foreach($products as $product)
+                    @php
+                        $badge = '';
+                        if($product->is_new) $badge = 'Nuevo';
+                        elseif($product->is_on_sale) $badge = 'Oferta';
+                    @endphp
+                    @include('web.components.product-card', [
+                        'productImage' => asset('storage/products/73432-21300078.webp'),
+                        'productName' => $product->name,
+                        'productBrand' => $product->brand->name ?? 'Helin',
+                        'productPrice' => $product->price,
+                        'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                        'productBadge' => $badge,
+                        'productLink' => route('producto', ['id' => $product->id])
+                    ])
+                @endforeach
             </div>
 
             <!-- Pagination -->
             <div class="mt-10 flex justify-center">
                 <nav class="flex items-center gap-1 sm:gap-2">
-                    <button class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft disabled:opacity-50 text-sm" disabled>
-                        <i class="fas fa-chevron-left mr-1"></i><span class="hidden sm:inline">Anterior</span>
-                    </button>
-                    <div class="flex items-center gap-1 sm:gap-2">
-                        <button class="w-10 h-10 sm:px-4 sm:py-2 bg-turquesa text-white rounded-full text-sm font-medium">1</button>
-                        <button class="w-10 h-10 sm:px-4 sm:py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm hidden sm:block">2</button>
-                        <button class="w-10 h-10 sm:px-4 sm:py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm hidden sm:block">3</button>
-                        <span class="text-helin-text px-1 hidden sm:inline">...</span>
-                        <button class="w-10 h-10 sm:px-4 sm:py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm">10</button>
-                    </div>
-                    <button class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm">
-                        <span class="hidden sm:inline">Siguiente</span><i class="fas fa-chevron-right ml-1"></i>
-                    </button>
+                    @if($products->hasPages())
+                        @if($products->onFirstPage())
+                            <button class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft disabled:opacity-50 text-sm" disabled>
+                                <i class="fas fa-chevron-left mr-1"></i><span class="hidden sm:inline">Anterior</span>
+                            </button>
+                        @else
+                            <a href="{{ $products->previousPageUrl() }}" class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm">
+                                <i class="fas fa-chevron-left mr-1"></i><span class="hidden sm:inline">Anterior</span>
+                            </a>
+                        @endif
+
+                        @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                            @if($page == $products->currentPage())
+                                <button class="w-10 h-10 sm:px-4 sm:py-2 bg-turquesa text-white rounded-full text-sm font-medium">{{ $page }}</button>
+                            @elseif($page == 1 || $page == $products->lastPage() || abs($page - $products->currentPage()) <= 2)
+                                <a href="{{ $url }}" class="w-10 h-10 sm:px-4 sm:py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm">{{ $page }}</a>
+                            @elseif(abs($page - $products->currentPage()) == 3)
+                                <span class="text-helin-text px-1 hidden sm:inline">...</span>
+                            @endif
+                        @endforeach
+
+                        @if($products->hasMorePages())
+                            <a href="{{ $products->nextPageUrl() }}" class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm">
+                                <span class="hidden sm:inline">Siguiente</span><i class="fas fa-chevron-right ml-1"></i>
+                            </a>
+                        @else
+                            <button class="px-3 sm:px-4 py-2 border rounded-full text-helin-text hover:bg-helin-soft text-sm disabled:opacity-50" disabled>
+                                <span class="hidden sm:inline">Siguiente</span><i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        @endif
+                    @endif
                 </nav>
             </div>
         </div>

@@ -119,10 +119,26 @@
            ->whereIn('id', [\App\Models\Sections::IMPLANTOLOGY_PRODUCTS, \App\Models\Sections::GBR_PRODUCTS, \App\Models\Sections::INSTRUMENTS_PRODUCTS])
            ->orderBy('id')
            ->get();
+
+       // Mapear secciones a categorías
+       $sectionCategories = [
+           \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => 'Implantes',
+           \App\Models\Sections::GBR_PRODUCTS => 'Regeneración Guiada Bucal (GBR)',
+           \App\Models\Sections::INSTRUMENTS_PRODUCTS => 'Instrumentos',
+       ];
    @endphp
 
    @foreach($productSections as $index => $section)
        @if($section->status_content)
+           @php
+               $categoryName = $sectionCategories[$section->id] ?? null;
+               $category = $categoryName ? \App\Models\Category::where('name', $categoryName)->first() : null;
+               $products = $category ? \App\Models\Product::where('category_id', $category->id)
+                   ->where('is_active', true)
+                   ->inRandomOrder()
+                   ->take(4)
+                   ->get() : collect();
+           @endphp
            <section class="py-12 sm:py-16 {{ $index % 2 == 0 ? 'bg-helin-soft' : '' }}">
                <div class="container mx-auto px-4">
                    <div class="section-title flex items-end justify-between gap-5 mb-5">
@@ -137,10 +153,29 @@
                        <a href="{{ $section->url_button ?: route('catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
                    </div>
                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 1', 'productBrand' => 'Helin', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('producto')])
-                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 2', 'productBrand' => 'Helin', 'productPrice' => 149.00, 'productBadge' => ''])
-                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 3', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
-                       @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 4', 'productBrand' => 'Helin', 'productPrice' => 45.00, 'productBadge' => ''])
+                       @if($products->count() > 0)
+                           @foreach($products as $product)
+                               @php
+                                   $badge = '';
+                                   if($product->is_new) $badge = 'Nuevo';
+                                   elseif($product->is_on_sale) $badge = 'Oferta';
+                               @endphp
+                               @include('web.components.product-card', [
+                                   'productImage' => asset('storage/products/73432-21300078.webp'),
+                                   'productName' => $product->name,
+                                   'productBrand' => $product->brand->name ?? 'Helin',
+                                   'productPrice' => $product->price,
+                                   'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                                   'productBadge' => $badge,
+                                   'productLink' => route('producto', ['id' => $product->id])
+                               ])
+                           @endforeach
+                       @else
+                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 1', 'productBrand' => 'Helin', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
+                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 2', 'productBrand' => 'Helin', 'productPrice' => 149.00, 'productBadge' => ''])
+                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 3', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
+                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 4', 'productBrand' => 'Helin', 'productPrice' => 45.00, 'productBadge' => ''])
+                       @endif
                    </div>
                </div>
            </section>
