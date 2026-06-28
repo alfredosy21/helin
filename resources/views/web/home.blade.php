@@ -50,7 +50,7 @@
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
             <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">helin.</div>
-            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-white/90">Soluciones que cuidan.</small>
+            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Soluciones que cuidan.</small>
             <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: 0;">
                TODO EN CIRUGÍA <br>
                ODONTOLÓGICA <br>
