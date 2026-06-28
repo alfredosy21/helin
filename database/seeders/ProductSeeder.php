@@ -59,13 +59,27 @@ class ProductSeeder extends Seeder
 
         $units = ['Unidad', 'Caja', 'Paquete', 'Kit', 'Set', 'Par', 'Blister', 'Frasco', 'Tubo', 'Sobre'];
 
-        // Generar 20 productos por categoría
+        // Categorías con más volumen para que los contadores y filtros se vean representativos
+        $categoryVolume = [
+            'Implantes'                           => 50,
+            'Aditamentos'                         => 45,
+            'Biomateriales'                       => 40,
+            'Kits Quirúrgicos'                    => 35,
+            'Regeneración Guiada Bucal (GBR)'     => 30,
+            'Suturas'                             => 30,
+            'Placas'                              => 25,
+            'Tornillos'                           => 25,
+            'Equipos odontológicos'               => 20,
+            'Planificación Digital'               => 20,
+        ];
+
         $skuCounter = 1;
         foreach ($categories as $category) {
             $categoryName = $category->name;
             $baseNames = $productNames[$categoryName] ?? $this->generateGenericNames(20);
+            $total = $categoryVolume[$categoryName] ?? 20;
 
-            for ($i = 1; $i <= 20; $i++) {
+            for ($i = 1; $i <= $total; $i++) {
                 $brand = $brands->random();
                 $baseName = $baseNames[($i - 1) % count($baseNames)];
                 $price = rand(25, 500) + (rand(0, 99) / 100);

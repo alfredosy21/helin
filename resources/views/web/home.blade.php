@@ -87,7 +87,7 @@
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
-                  <a href="{{ route('catalogo') }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
+                  <a href="{{ route('catalogo', ['category' => 'implantes']) }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
                   <div class="implant absolute bottom-2 left-4 w-12 h-32 rounded-2xl bg-gradient-to-r from-gray-300 to-white to-gray-400 transform rotate-12" style="
@@ -98,12 +98,12 @@
             </article>
             <!-- Grid de Categorías -->
             <div class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo', ['category' => 'regeneracion-guiada-bucal-gbr'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo', ['category' => 'placas'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo', ['category' => 'cuidados-especiales-quirurgicos'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo', ['category' => 'tijeras'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo', ['category' => 'equipos-odontologicos'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo', ['category' => 'planificacion-digital'])])
             </div>
          </div>
       </div>
@@ -122,18 +122,19 @@
 
        // Mapear secciones a categorías
        $sectionCategories = [
-           \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => 'Implantes',
-           \App\Models\Sections::GBR_PRODUCTS => 'Regeneración Guiada Bucal (GBR)',
-           \App\Models\Sections::INSTRUMENTS_PRODUCTS => 'Instrumentos',
+           \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantes'],
+           \App\Models\Sections::GBR_PRODUCTS         => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
+           \App\Models\Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Instrumentos', 'slug' => 'tijeras'],
        ];
    @endphp
 
    @foreach($productSections as $index => $section)
        @if($section->status_content)
            @php
-               $categoryName = $sectionCategories[$section->id] ?? null;
-               $category = $categoryName ? \App\Models\Category::where('name', $categoryName)->first() : null;
-               $products = $category ? \App\Models\Product::where('category_id', $category->id)
+               $sectionCat   = $sectionCategories[$section->id] ?? null;
+               $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
+               $categorySlug = $sectionCat['slug'] ?? null;
+               $products     = $category ? \App\Models\Product::where('category_id', $category->id)
                    ->where('is_active', true)
                    ->inRandomOrder()
                    ->take(4)
@@ -150,7 +151,7 @@
                            @endphp
                            <p class="text-helin-text text-sm mt-1">{{ $firstLine }}</p>
                        </div>
-                       <a href="{{ $section->url_button ?: route('catalogo') }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
+                       <a href="{{ $categorySlug ? route('catalogo', ['category' => $categorySlug]) : ($section->url_button ?: route('catalogo')) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
                    </div>
                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                        @if($products->count() > 0)
@@ -167,7 +168,7 @@
                                    'productPrice' => $product->price,
                                    'productOldPrice' => $product->is_on_sale ? $product->price : null,
                                    'productBadge' => $badge,
-                                   'productLink' => route('producto', ['id' => $product->id])
+                                   'productLink' => route('producto', ['slug' => $product->slug])
                                ])
                            @endforeach
                        @else

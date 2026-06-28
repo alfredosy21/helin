@@ -24,28 +24,28 @@
 
             <!-- Buscador - Solo en tablet/desktop -->
             <div class="hidden sm:block flex-1 max-w-4xl mx-auto">
-                <div class="bg-white rounded-full p-0.5 shadow-sm">
+                <form action="{{ route('catalogo') }}" method="GET" class="bg-white rounded-full p-0.5 shadow-sm">
                     <div class="flex items-center">
                         <div class="flex-1 flex items-center px-3">
                             <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
-                            <input type="text" placeholder="¿Qué producto estás buscando?" class="flex-1 outline-none text-helin-heading text-sm w-full">
+                            <input type="text" name="search" placeholder="¿Qué producto estás buscando?" value="{{ request('search') }}" autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
                         </div>
                         <div class="border-l flex items-center px-3 hidden md:flex min-w-[140px]">
                             @php
                                 $categories = \App\Models\Category::active()->ordered()->get();
                             @endphp
-                            <select class="bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold">
+                            <select name="category" onchange="this.form.submit()" class="bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold">
                                 <option value="">Todas las categorías</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->slug }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <button class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
+                        <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
                             <i class="fas fa-search text-sm"></i>
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <!-- Acciones -->
@@ -79,17 +79,17 @@
 
         <!-- Buscador Móvil - Expandible -->
         <div id="mobile-search" class="hidden sm:hidden mt-2 pb-1">
-            <div class="bg-white rounded-full p-1 shadow-sm">
+            <form action="{{ route('catalogo') }}" method="GET" class="bg-white rounded-full p-1 shadow-sm">
                 <div class="flex items-center">
                     <div class="flex-1 flex items-center px-3">
                         <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
-                        <input type="text" placeholder="Buscar productos..." class="flex-1 outline-none text-helin-heading text-sm w-full">
+                        <input type="text" name="search" placeholder="Buscar productos..." autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
                     </div>
-                    <button class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
+                    <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
                         <i class="fas fa-search text-sm"></i>
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 

@@ -31,6 +31,7 @@ use App\Http\Controllers\Cms\{
 };
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\Web\ResourceFilterController;
+use App\Http\Controllers\Web\ProductFilterController;
 
 /*
   |--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ use App\Http\Controllers\Web\ResourceFilterController;
 
 Route::get('/', [WebController::class, 'home'])->name('home');
 Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
-Route::get('/producto/{id}', [WebController::class, 'producto'])->name('producto');
+Route::get('/producto/{slug}', [WebController::class, 'producto'])->name('producto');
 Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
 Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
 Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
@@ -49,6 +50,7 @@ Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('
 Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
 Route::post('/api/resources/filter', [ResourceFilterController::class, 'filter'])->name('resources.filter');
+Route::post('/api/products/filter', [ProductFilterController::class, 'filter'])->name('products.filter');
 
 /*
   |--------------------------------------------------------------------------

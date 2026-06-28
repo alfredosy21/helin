@@ -168,7 +168,7 @@
                         'productPrice' => $related->price,
                         'productOldPrice' => $related->is_on_sale ? $related->price : null,
                         'productBadge' => $badge,
-                        'productLink' => route('producto', ['id' => $related->id])
+                        'productLink' => route('producto', ['slug' => $related->slug])
                     ])
                 @endforeach
             @else

@@ -63,13 +63,13 @@ class SectionSeeder extends Seeder
                 'buttons' => json_encode([
                     [
                         'text' => 'Ver Catálogo →',
-                        'url' => 'web.catalogo',
+                        'url' => 'catalogo',
                         'style' => 'primary'
                     ]
                 ]),
                 'content' => null, // El contenido HTML se manejará en la vista
                 'name_button' => 'Ver Catálogo →', // Mantener para compatibilidad temporal
-                'url_button' => 'web.catalogo', // Mantener para compatibilidad temporal
+                'url_button' => 'catalogo', // Mantener para compatibilidad temporal
                 'status' => 1,
                 'status_content' => 1,
             ],
@@ -149,7 +149,7 @@ HTML,
                 'title' => 'Más vendidos en Implantología',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
-                'url_button' => 'web.catalogo',
+                'url_button' => 'catalogo',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -174,7 +174,7 @@ HTML,
                 'title' => 'Más vendidos en Regeneración Ósea Guiada',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
-                'url_button' => 'web.catalogo',
+                'url_button' => 'catalogo',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -199,7 +199,7 @@ HTML,
                 'title' => 'Más vendidos en Instrumentos y Equipos',
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
-                'url_button' => 'web.catalogo',
+                'url_button' => 'catalogo',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -402,7 +402,7 @@ HTML,
                 'name_button' => null,
                 'url_button' => '#quienes-somos',
                 'status' => 1,
-                'status_content' => 0,
+                'status_content' => 1,
                 'content' => <<<HTML
 <p>Somos más que una casa comercial: un aliado con visión quirúrgica, clínica y digital, trabajando junto a especialistas, con educación sin fronteras, ética, foco en respaldo y calidad real.</p>
 <p>Seleccionamos e importamos lo mejor en odontología y trabajamos codo a codo con ustedes para que cada procedimiento sea un reflejo de la diferencia real: la sonrisa clínica.</p>
@@ -420,7 +420,7 @@ HTML,
                 'name_button' => null,
                 'url_button' => '#mision-vision',
                 'status' => 1,
-                'status_content' => 0,
+                'status_content' => 1,
                 'content' => <<<HTML
 <div class="mission-vision">
     <article class="mv-card">
@@ -444,7 +444,7 @@ HTML,
                 'title' => 'Un equipo que te acompaña',
                 'image' => 'Nuestro team',
                 'name_button' => '☏ Conoce al equipo',
-                'url_button' => 'web.contactanos',
+                'url_button' => '/contactanos',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -463,7 +463,7 @@ HTML,
                 'name_button' => null,
                 'url_button' => '#nuestros-aliados',
                 'status' => 1,
-                'status_content' => 0,
+                'status_content' => 1,
                 'content' => <<<HTML
 <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
 <div>

@@ -5,7 +5,7 @@
 
 <div class="bg-white rounded-xl p-4 sm:p-5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-transform flex flex-col h-full cursor-pointer">
     <!-- Imagen -->
-    <div class="relative flex-1 flex items-center justify-center min-h-[200px] mb-4">
+    <a href="{{ $productLink ?? '#' }}" class="relative flex-1 flex items-center justify-center min-h-[200px] mb-4 block">
         @if(!empty($productBadge))
             <span class="absolute top-2.5 left-2.5 bg-turquesa text-white text-xs font-semibold uppercase px-3 py-1 rounded-full z-10">
                 {{ $productBadge }}
@@ -14,12 +14,14 @@
         <img src="{{ $productImage ?? '' }}"
              alt="{{ $productName ?? '' }}"
              class="max-h-[180px] object-contain">
-    </div>
+    </a>
 
     <!-- Contenido -->
-    <h3 class="text-helin-heading text-base mb-1 text-center">
-        {{ $productName ?? '' }}
-    </h3>
+    <a href="{{ $productLink ?? '#' }}" class="hover:text-turquesa transition-colors">
+        <h3 class="text-helin-heading text-base mb-1 text-center">
+            {{ $productName ?? '' }}
+        </h3>
+    </a>
 
     <p class="text-helin-text text-sm font-normal mb-3 text-center">{{ $productBrand ?? '' }}</p>
 
