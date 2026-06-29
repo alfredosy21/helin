@@ -183,6 +183,10 @@ label span {
     font-size: var(--text-sm);
 }
 
+.form-card select {
+    padding-right: 30px;
+}
+
 .form-card textarea {
     min-height: 98px;
     padding: 14px;
