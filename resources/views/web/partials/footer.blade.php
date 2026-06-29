@@ -31,7 +31,7 @@
                         <i class="fab fa-linkedin-in"></i>
                     </a>
                     {{-- Siempre mostrar Instagram --}}
-                    <a href="{{ $settings->instagram ?? '#' }}" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                    <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-instagram"></i>
                     </a>
                 </div>
