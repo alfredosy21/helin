@@ -169,7 +169,7 @@ label span {
 
 .form-card input, .form-card select, .form-card textarea {
     width: 100%;
-    border: none;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     background: var(--white);
     color: var(--text-slate-darker);
@@ -180,6 +180,11 @@ label span {
 .form-card input, .form-card select {
     height: 45px;
     padding: 0 14px;
+    font-size: var(--text-sm);
+}
+
+.form-card select {
+    padding-right: 30px;
 }
 
 .form-card select {
@@ -195,6 +200,7 @@ label span {
 
 .form-card input::placeholder, .form-card textarea::placeholder {
     color: var(--text-slate-light);
+    font-size: var(--text-sm);
 }
 
 .form-card input:focus, .form-card select:focus, .form-card textarea:focus {

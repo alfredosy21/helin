@@ -36,8 +36,8 @@
                  <aside class="hero-badges hidden lg:block">
                      <div class="flex flex-col gap-4">
                          @foreach($heroBadges as $badge)
-                             <div class="hero-badge flex items-center gap-2 text-white/92 uppercase leading-tight" style="font-size: 0.625rem; font-family: 'Inter', sans-serif; font-weight: 400;">
-                                 <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">{{ $badge['icon'] ?? '✓' }}</span>
+                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] text-xs font-bold uppercase leading-tight">
+                                 <span class="mini-icon w-10 h-10 border border-[#123F4A]/30 rounded-xl flex items-center justify-center bg-[#123F4A]/10 text-lg text-[#123F4A]">{{ $badge['icon'] ?? '✓' }}</span>
                                  <span>{{ $badge['text'] ?? '' }}</span>
                              </div>
                          @endforeach
@@ -50,15 +50,19 @@
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
             <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">helin.</div>
-            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-white/90">Soluciones que cuidan.</small>
-            <h1 class="text-3xl lg:text-5xl leading-tight mb-4" style="letter-spacing: 0;">Todo en cirugía odontológica especializada.</h1>
-            <p class="text-white/90 text-base lg:text-lg font-medium mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para<br>procedimientos quirúrgicos seguros, precisos y eficientes.</p>
+            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Soluciones que cuidan.</small>
+            <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0;">
+               TODO EN CIRUGÍA <br>
+               ODONTOLÓGICA <br>
+               <span style="color: #123F4A;"> ESPECIALIZADA.</span>
+            </h1>
+            <p class="text-white/90 text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para<br>procedimientos quirúrgicos seguros, precisos y eficientes.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
                <a href="{{ route('catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
-               Ver Catálogo →
+               Ir a productos →
                </a>
-               <a href="{{ route('solicitud') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
-               Solicitar Cotización
+               <a href="{{ route('contactanos') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+               Hablar con un asesor
                </a>
             </div>
          </div>
@@ -87,7 +91,7 @@
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
-                  <a href="{{ route('catalogo', ['category' => 'implantes']) }}" class="text-link text-turquesa font-black text-sm">Ver categoría →</a>
+                  <a href="{{ route('catalogo', ['category' => 'implantes']) }}" class="text-link">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
                   <div class="implant absolute bottom-2 left-4 w-12 h-32 rounded-2xl bg-gradient-to-r from-gray-300 to-white to-gray-400 transform rotate-12" style="

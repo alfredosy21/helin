@@ -246,3 +246,28 @@ small, .caption, .text-xs, .tag {
     background-color: #4AA8A9;
     transform: scale(1.1);
 }
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: var(--text-13px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.breadcrumb-link,
+.breadcrumb-separator {
+    color: #2D3740;
+    opacity: 0.8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--helin-primary);
+    opacity: 1;
+}
+
+.breadcrumb-active {
+    color: var(--helin-primary);
+}

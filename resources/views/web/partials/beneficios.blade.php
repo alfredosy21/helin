@@ -40,7 +40,7 @@
             </div>
             <div class="flex items-center gap-3 p-4 min-w-[200px] md:min-w-0">
                 <div class="w-12 h-12 bg-turquesa/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-file-check text-turquesa text-xl"></i>
+                    <i class="fa-regular fa-square-check text-turquesa text-xl" aria-hidden="true"></i>
                 </div>
                 <div>
                     <h4 class="font-semibold text-helin-heading text-sm">Productos certificados</h4>

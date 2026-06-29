@@ -40,9 +40,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: rgba(255, 255, 255, 0.92);
-    font-size: var(--text-11px);
-    font-weight: 900;
+    color: #123F4A;
+    font-size: var(--text-9px);
+    font-weight: 400;
+    font-family: 'Inter', Arial, sans-serif;
     text-transform: uppercase;
     line-height: 1.2;
 }
@@ -50,12 +51,12 @@
 .mini-icon {
     width: 42px;
     height: 42px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(18, 63, 74, 0.30);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(18, 63, 74, 0.10);
     font-size: var(--text-18px);
 }
 
@@ -74,11 +75,11 @@
     font-size: var(--text-12px);
     font-weight: 900;
     margin-bottom: 12px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #123F4A;
 }
 
 .hero h1 {
-    font-size: var(--text-50px);
+    font-size: 52px;
     line-height: 0.98;
     letter-spacing: 0;
     margin: 0 0 16px;
@@ -91,7 +92,7 @@
     color: rgba(255, 255, 255, 0.9);
     font-size: var(--text-15px);
     line-height: 1.5;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .hero-btn-primary {
@@ -322,8 +323,9 @@
 
 .text-link {
     color: var(--helin-primary);
-    font-weight: 900;
-    font-size: var(--text-13px);
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: var(--text-12px);
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -630,7 +632,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 950;
-    font-size: var(--text-24px);
+    font-size: 15px;
 }
 
 .testimonial p {
@@ -679,7 +681,7 @@
     max-width: 960px;
     min-height: 86px;
     border-radius: 8px;
-    background: var(--helin-primary-light);
+    background: rgba(107, 194, 195, 0.70);
     color: var(--white);
     display: flex;
     align-items: center;
@@ -694,13 +696,18 @@
 }
 
 .opinion a {
-    background: var(--helin-primary);
+    background: rgba(18, 63, 74, 0.70);
     border-radius: 9999px;
     padding: 12px 28px;
     color: var(--white);
     font-size: var(--text-12px);
     font-weight: 900;
     text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.opinion a:hover {
+    background: #123F4A;
 }
 
 /* Label */
@@ -744,7 +751,7 @@
 
 @media (max-width: 700px) {
     .hero h1 {
-        font-size: 38px;
+        font-size: 40px;
     }
 
     .hero-copy .brand {

@@ -8,5 +8,5 @@
             <span>{{ $testimonialTitle ?? '' }}</span>
         </div>
     </div>
-    <div class="quote">"</div>
+    <div class="quote"><i class="fa fa-commenting" aria-hidden="true"></i></div>
 </article>
