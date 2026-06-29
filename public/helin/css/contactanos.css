@@ -180,6 +180,7 @@ label span {
 .form-card input, .form-card select {
     height: 45px;
     padding: 0 14px;
+    font-size: 14px;
 }
 
 .form-card textarea {
