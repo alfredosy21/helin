@@ -180,7 +180,7 @@ label span {
 .form-card input, .form-card select {
     height: 45px;
     padding: 0 14px;
-    font-size: 14px;
+    font-size: var(--text-sm);
 }
 
 .form-card textarea {
@@ -192,7 +192,7 @@ label span {
 
 .form-card input::placeholder, .form-card textarea::placeholder {
     color: var(--text-slate-light);
-    font-size: 14px;
+    font-size: var(--text-sm);
 }
 
 .form-card input:focus, .form-card select:focus, .form-card textarea:focus {
