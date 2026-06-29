@@ -25,7 +25,7 @@
                 <!-- Tipo de cliente -->
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-helin-heading mb-2">Tipo de cliente *</label>
-                    <select name="tipo_cliente" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
+                    <select name="tipo_cliente" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
                         <option value="">Selecciona una opción</option>
                         @foreach($customerTypes as $type)
                             <option value="{{ $type->slug }}">{{ $type->name }}</option>
@@ -55,7 +55,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Estado *</label>
-                        <select name="estado" id="estado-select" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
+                        <select name="estado" id="estado-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
                             <option value="">Selecciona estado</option>
                             @foreach($states as $state)
                                 <option value="{{ $state->code }}">{{ $state->name }}</option>
@@ -64,7 +64,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Ciudad *</label>
-                        <select name="ciudad" id="ciudad-select" required class="w-full border border-helin-border rounded-lg px-4 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white" disabled>
+                        <select name="ciudad" id="ciudad-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white" disabled>
                             <option value="">Selecciona ciudad</option>
                         </select>
                     </div>

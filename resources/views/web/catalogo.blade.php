@@ -26,8 +26,7 @@
                     'attributes' => 'class="text-sm text-helin-text mb-6"',
                     'items' => [
                         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
-                        ['label' => 'Categorías', 'url' => route('catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'],
-                        ['label' => 'Todos los productos', 'spanAttributes' => 'class="text-turquesa font-medium"']
+                        ['label' => 'Productos', 'spanAttributes' => 'class="text-turquesa font-medium"']
                     ],
                     'separatorAttributes' => 'class="text-helin-text mx-1"'
                 ])

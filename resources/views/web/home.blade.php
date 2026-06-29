@@ -36,7 +36,7 @@
                  <aside class="hero-badges hidden lg:block">
                      <div class="flex flex-col gap-4">
                          @foreach($heroBadges as $badge)
-                             <div class="hero-badge flex items-center gap-2 text-white/92 text-xs font-bold uppercase leading-tight">
+                             <div class="hero-badge flex items-center gap-2 text-white/92 uppercase leading-tight" style="font-size: 0.625rem; font-family: 'Inter', sans-serif; font-weight: 400;">
                                  <span class="mini-icon w-10 h-10 border border-white/55 rounded-xl flex items-center justify-center bg-white/12 text-lg">{{ $badge['icon'] ?? '✓' }}</span>
                                  <span>{{ $badge['text'] ?? '' }}</span>
                              </div>

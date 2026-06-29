@@ -2,7 +2,7 @@
     <span class="text-helin-text text-sm" id="productCount">
         Mostrando <strong>{{ $products->total() }}</strong> producto{{ $products->total() != 1 ? 's' : '' }}
     </span>
-    <select id="sortSelect" class="border rounded-lg px-3 py-2 bg-white text-helin-heading text-sm ml-auto">
+    <select id="sortSelect" class="border rounded-lg pl-3 pr-8 py-2 bg-white text-helin-heading text-sm ml-auto">
         <option value="recent">Ordenar por: Relevancia</option>
         <option value="price_asc">Precio: Menor a Mayor</option>
         <option value="price_desc">Precio: Mayor a Menor</option>

@@ -1,6 +1,6 @@
 <!-- Sección "Estamos cerca de ti" -->
-<section class="near my-8 rounded-2xl border border-helin-border bg-helin-soft flex items-center gap-7 p-6" style="
-   margin: 30px 0;
+<section class="near rounded-2xl border border-helin-border bg-helin-soft flex items-center gap-7 p-6" style="
+   margin: 12px 0;
    border-radius: 28px;
    border: 1px solid #D8E3E5;
    background: #f4f7f8;

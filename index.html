@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Helin | Índice de pantallas HTML</title>
+  <style>
+:root{
+  --helin:#34b1b5;
+  --helin-soft:#97d5d4;
+  --navy:#0b2340;
+  --muted:#60788f;
+  --line:#dbeeee;
+  --bg:#f6fbfb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--navy)}
+body{min-height:100vh}
+a{text-decoration:none;color:inherit}
+.header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.header-left{display:flex;align-items:center;gap:16px;min-width:0}
+.logo{font-size:34px;font-weight:900;color:var(--helin);letter-spacing:-.05em;line-height:1;white-space:nowrap}
+.meta{min-width:0}
+.meta h1{font-size:18px;line-height:1.1;margin:0;font-weight:900;letter-spacing:-.02em}
+.meta p{font-size:12px;line-height:1.35;margin:4px 0 0;color:var(--muted);max-width:820px}
+.nav{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid rgba(52,177,181,.35);
+  background:#fff;color:var(--helin);
+  border-radius:999px;padding:9px 13px;
+  font-size:12px;font-weight:850;white-space:nowrap;
+}
+.btn:hover{background:var(--helin);color:#fff}
+.btn.primary{background:var(--helin);color:#fff;box-shadow:0 10px 24px rgba(52,177,181,.20)}
+.stage{padding:26px 18px 42px}
+.frame{
+  width:fit-content;
+  max-width:100%;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:12px;
+  box-shadow:0 18px 45px rgba(11,35,64,.08);
+}
+.frame img{
+  display:block;
+  width:auto;
+  max-width:100%;
+  height:auto;
+  border-radius:14px;
+  image-rendering:auto;
+}
+.note{
+  max-width:980px;margin:18px auto 0;
+  color:#60788f;font-size:13px;line-height:1.5;text-align:center;
+}
+@media(max-width:820px){
+  .header{flex-direction:column;align-items:flex-start;padding:12px 14px}
+  .nav{justify-content:flex-start;overflow:auto;width:100%;flex-wrap:nowrap;padding-bottom:4px}
+  .btn{min-width:max-content}
+  .stage{padding:14px 8px 28px}
+  .frame{padding:8px;border-radius:16px}
+  .frame img{border-radius:10px}
+}
+
+.hero{
+  max-width:980px;margin:28px auto 24px;text-align:center;padding:0 16px;
+}
+.hero h1{
+  margin:0;
+  font-size:clamp(34px,5vw,60px);
+  line-height:1.02;
+  letter-spacing:-.055em;
+  font-weight:950;
+}
+.hero p{color:var(--muted);font-size:15px;line-height:1.55;margin:14px auto 0;max-width:760px}
+.grid{
+  max-width:1420px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
+}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:0 14px 34px rgba(11,35,64,.07);transition:.2s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 22px 48px rgba(11,35,64,.12)}
+.preview{
+  height:260px;background:#f0fbfb;border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-start;justify-content:center;overflow:hidden;padding:10px;
+}
+.preview img{
+  max-width:100%;
+  width:auto;
+  height:auto;
+  max-height:240px;
+  object-fit:contain;
+  object-position:top center;
+  display:block;
+  border-radius:10px;
+}
+.card-body{padding:16px}
+.card-body .num{font-size:12px;color:var(--helin);font-weight:950}
+.card-body h2{font-size:20px;line-height:1.15;margin:6px 0;font-weight:950;letter-spacing:-.02em}
+.card-body p{font-size:13px;line-height:1.45;color:var(--muted);margin:0 0 14px}
+.card-body .open{display:inline-flex;background:var(--helin);color:#fff;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900}
+.strip{
+  max-width:1420px;margin:0 auto 18px;
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;
+  display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+}
+.strip strong{color:var(--helin)}
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">helin.</div>
+      <div class="meta">
+        <h1>Índice de pantallas individuales</h1>
+        <p>Archivos HTML separados para cada wireframe aprobado del proyecto Helin.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="hero">
+      <h1>Pantallas individuales HTML</h1>
+      <p>Cada pantalla está separada en su propio archivo HTML. El índice fue ajustado para mostrar las vistas sin forzar el escalado de las imágenes, evitando el efecto pixelado.</p>
+    </section>
+
+    <section class="strip">
+      <span><strong>14 pantallas</strong> listas para revisar individualmente.</span>
+      <span>Home, catálogo, producto, carrito, solicitud, recursos clínicos, empresa, contacto y políticas.</span>
+    </section>
+
+    <section class="grid">
+      
+      <article class="card">
+        <a href="01-home.html" class="preview">
+          <img src="assets/01-home.jpg" alt="Home" width="554" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">01</span>
+          <h2>Home</h2>
+          <p>Pantalla principal con hero, beneficios, categorías, destacados, más vendidos, testimonios y footer.</p>
+          <a class="open" href="01-home.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="02-menu-detallado.html" class="preview">
+          <img src="assets/02-menu-detallado.jpg" alt="Home con menú desplegable" width="2048" height="1171" />
+        </a>
+        <div class="card-body">
+          <span class="num">02</span>
+          <h2>Home con menú desplegable</h2>
+          <p>Mega menú de productos con categorías y subcategorías del catálogo Helin.</p>
+          <a class="open" href="02-menu-detallado.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="03-catalogo-productos.html" class="preview">
+          <img src="assets/03-catalogo-productos.jpg" alt="Catálogo de productos" width="1294" height="2047" />
+        </a>
+        <div class="card-body">
+          <span class="num">03</span>
+          <h2>Catálogo de productos</h2>
+          <p>Listado general con filtros laterales, ordenamiento, grilla de productos y footer.</p>
+          <a class="open" href="03-catalogo-productos.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="04-catalogo-busqueda-implantologia.html" class="preview">
+          <img src="assets/04-catalogo-busqueda-implantologia.jpg" alt="Catálogo búsqueda Implantología" width="1189" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">04</span>
+          <h2>Catálogo búsqueda Implantología</h2>
+          <p>Catálogo filtrado para búsqueda específica de implantología.</p>
+          <a class="open" href="04-catalogo-busqueda-implantologia.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="05-detalle-producto.html" class="preview">
+          <img src="assets/05-detalle-producto.jpg" alt="Detalle de producto" width="1131" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">05</span>
+          <h2>Detalle de producto</h2>
+          <p>Ficha de producto con galería, descripción, especificaciones, CTA y relacionados.</p>
+          <a class="open" href="05-detalle-producto.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="06-carrito.html" class="preview">
+          <img src="assets/06-carrito.jpg" alt="Carrito" width="1127" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">06</span>
+          <h2>Carrito</h2>
+          <p>Tabla de productos, cantidades, subtotales y resumen del carrito.</p>
+          <a class="open" href="06-carrito.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="07-resumen-carrito.html" class="preview">
+          <img src="assets/07-resumen-carrito.jpg" alt="Resumen del carrito" width="1727" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">07</span>
+          <h2>Resumen del carrito</h2>
+          <p>Revisión final del carrito antes de la solicitud comercial.</p>
+          <a class="open" href="07-resumen-carrito.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="08-solicitud-comercial.html" class="preview">
+          <img src="assets/08-solicitud-comercial.jpg" alt="Solicitud comercial" width="1166" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">08</span>
+          <h2>Solicitud comercial</h2>
+          <p>Formulario de datos del cliente, resumen de orden, entrega, pago y reCAPTCHA.</p>
+          <a class="open" href="08-solicitud-comercial.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="09-solicitud-enviada.html" class="preview">
+          <img src="assets/09-solicitud-enviada.jpg" alt="Solicitud comercial enviada" width="1615" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">09</span>
+          <h2>Solicitud comercial enviada</h2>
+          <p>Confirmación de solicitud con número, resumen, datos del cliente y descarga PDF.</p>
+          <a class="open" href="09-solicitud-enviada.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="recursos-clinicos.html" class="preview">
+          <img src="assets/10-recursos-clinicos.jpg" alt="Recursos Clínicos" width="1274" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">10</span>
+          <h2>Recursos Clínicos</h2>
+          <p>Hub de recursos clínicos con buscador, filtros y cards.</p>
+          <a class="open" href="recursos-clinicos.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="11-detalle-caso-clinico.html" class="preview">
+          <img src="assets/11-detalle-caso-clinico.jpg" alt="Detalle Caso Clínico" width="1326" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">11</span>
+          <h2>Detalle Caso Clínico</h2>
+          <p>Página de caso clínico con hero, tabs, galería, compartir y CTA.</p>
+          <a class="open" href="11-detalle-caso-clinico.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="12-nuestra-empresa.html" class="preview">
+          <img src="assets/12-nuestra-empresa.jpg" alt="Nuestra Empresa" width="1043" height="2047" />
+        </a>
+        <div class="card-body">
+          <span class="num">12</span>
+          <h2>Nuestra Empresa</h2>
+          <p>OnePage institucional con quiénes somos, misión, visión, team y aliados.</p>
+          <a class="open" href="12-nuestra-empresa.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="13-contacto.html" class="preview">
+          <img src="assets/13-contacto.jpg" alt="Contacto" width="2047" height="1965" />
+        </a>
+        <div class="card-body">
+          <span class="num">13</span>
+          <h2>Contacto</h2>
+          <p>Formulario de contacto con datos, sedes, asunto, reCAPTCHA y CTA.</p>
+          <a class="open" href="13-contacto.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+      <article class="card">
+        <a href="14-politicas.html" class="preview">
+          <img src="assets/14-politicas.jpg" alt="Políticas" width="1701" height="2048" />
+        </a>
+        <div class="card-body">
+          <span class="num">14</span>
+          <h2>Políticas</h2>
+          <p>Página de políticas con envío y garantías, términos y privacidad.</p>
+          <a class="open" href="14-politicas.html">Abrir pantalla</a>
+        </div>
+      </article>
+    
+    </section>
+  </main>
+</body>
+</html>

@@ -29,7 +29,7 @@ class SettingsSeeder extends Seeder
                 'image' => null,
                 'address' => 'Venezuela',
                 'contact_address' => 'Av. Principal con Calle 8, Edificio Médico, Plaza Level, Torre A, Piso 3, Caracas 1010, Venezuela',
-                'phone' => '+58 424 278 9481',
+                'phone' => '+58 424 466 9150',
                 'shedule' => 'Lun-Vie: 8:00 AM - 6:00 PM',
                 'facebook' => 'https://facebook.com/helinbeam',
                 'instagram' => 'https://instagram.com/helinbeam',
