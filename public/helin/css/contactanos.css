@@ -187,8 +187,28 @@ label span {
     padding-right: 30px;
 }
 
-.form-card select {
-    padding-right: 32px;
+.form-card .select-wrapper {
+    position: relative;
+}
+
+.form-card .select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.form-card .select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--text-slate-light);
+    display: flex;
+    align-items: center;
 }
 
 .form-card textarea {

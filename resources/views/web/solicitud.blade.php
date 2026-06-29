@@ -2,6 +2,34 @@
 
 @section('title', 'Detalle de la Solicitud - Helin')
 
+@section('styles')
+<style>
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--text-slate-light, #94a3b8);
+    display: flex;
+    align-items: center;
+}
+</style>
+@endsection
+
 @section('content')
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
@@ -25,12 +53,17 @@
                 <!-- Tipo de cliente -->
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-helin-heading mb-2">Tipo de cliente *</label>
-                    <select name="tipo_cliente" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
-                        <option value="">Selecciona una opción</option>
-                        @foreach($customerTypes as $type)
-                            <option value="{{ $type->slug }}">{{ $type->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="select-wrapper">
+                        <select name="tipo_cliente" required class="w-full border border-helin-border rounded-lg pl-4 pr-10 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white appearance-none cursor-pointer">
+                            <option value="">Selecciona una opción</option>
+                            @foreach($customerTypes as $type)
+                                <option value="{{ $type->slug }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                        <span class="select-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Nombre y Apellido -->
@@ -55,18 +88,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Estado *</label>
-                        <select name="estado" id="estado-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white">
-                            <option value="">Selecciona estado</option>
-                            @foreach($states as $state)
-                                <option value="{{ $state->code }}">{{ $state->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="select-wrapper">
+                            <select name="estado" id="estado-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-10 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white appearance-none cursor-pointer">
+                                <option value="">Selecciona estado</option>
+                                @foreach($states as $state)
+                                    <option value="{{ $state->code }}">{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                            <span class="select-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Ciudad *</label>
-                        <select name="ciudad" id="ciudad-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-8 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white" disabled>
-                            <option value="">Selecciona ciudad</option>
-                        </select>
+                        <div class="select-wrapper">
+                            <select name="ciudad" id="ciudad-select" required class="w-full border border-helin-border rounded-lg pl-4 pr-10 py-3 focus:border-turquesa focus:ring-1 focus:ring-turquesa outline-none transition-colors bg-white appearance-none cursor-pointer" disabled>
+                                <option value="">Selecciona ciudad</option>
+                            </select>
+                            <span class="select-arrow">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

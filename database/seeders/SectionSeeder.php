@@ -47,8 +47,8 @@ class SectionSeeder extends Seeder
             // ==========================================
             Sections::HERO_HOME => [
                 'title' => 'helin.',
-                'subtitle' => null,
-                'description' => null,
+                'subtitle' => 'Soluciones que cuidan.',
+                'description' => 'Instrumental, insumos y soluciones diseñadas para procedimientos quirúrgicos seguros, precisos y eficientes.',
                 'image' => 'hero-home.jpg',
                 'layout_type' => self::LAYOUT_HERO_BADGES,
                 'icon_style' => self::ICON_EMOJI,
@@ -62,13 +62,18 @@ class SectionSeeder extends Seeder
                 ]),
                 'buttons' => json_encode([
                     [
-                        'text' => 'Ver Catálogo →',
+                        'text' => 'Ir a productos →',
                         'url' => 'catalogo',
                         'style' => 'primary'
+                    ],
+                    [
+                        'text' => 'Hablar con un asesor',
+                        'url' => 'contactanos',
+                        'style' => 'secondary'
                     ]
                 ]),
-                'content' => null, // El contenido HTML se manejará en la vista
-                'name_button' => 'Ver Catálogo →', // Mantener para compatibilidad temporal
+                'content' => 'TODO EN CIRUGÍA<br>ODONTOLÓGICA<br><span style="color: #123F4A;">ESPECIALIZADA.</span>',
+                'name_button' => 'Ir a productos →', // Mantener para compatibilidad temporal
                 'url_button' => 'catalogo', // Mantener para compatibilidad temporal
                 'status' => 1,
                 'status_content' => 1,

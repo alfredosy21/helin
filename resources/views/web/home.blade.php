@@ -36,7 +36,7 @@
                  <aside class="hero-badges hidden lg:block">
                      <div class="flex flex-col gap-4">
                          @foreach($heroBadges as $badge)
-                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] text-xs font-bold uppercase leading-tight">
+                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] uppercase leading-tight" style="font-size:0.625rem; font-family:'Inter',sans-serif; font-weight:400;">
                                  <span class="mini-icon w-10 h-10 border border-[#123F4A]/30 rounded-xl flex items-center justify-center bg-[#123F4A]/10 text-lg text-[#123F4A]">{{ $badge['icon'] ?? '✓' }}</span>
                                  <span>{{ $badge['text'] ?? '' }}</span>
                              </div>
@@ -49,22 +49,43 @@
          @endif
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
-            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">helin.</div>
-            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Soluciones que cuidan.</small>
+            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">{{ $heroSection->title ?? 'helin.' }}</div>
+            @if($heroSection->subtitle)
+                <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">{{ $heroSection->subtitle }}</small>
+            @endif
             <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0;">
-               TODO EN CIRUGÍA <br>
-               ODONTOLÓGICA <br>
-               <span style="color: #123F4A;"> ESPECIALIZADA.</span>
+               {!! $heroSection->content !!}
             </h1>
-            <p class="text-white/90 text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0">Instrumental, insumos y soluciones diseñadas para<br>procedimientos quirúrgicos seguros, precisos y eficientes.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
-               <a href="{{ route('catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
-               Ir a productos →
-               </a>
-               <a href="{{ route('contactanos') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
-               Hablar con un asesor
-               </a>
-            </div>
+            @if($heroSection->description)
+                <p class="text-white/90 text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0">{!! $heroSection->description !!}</p>
+            @endif
+            @if($heroSection->buttons)
+                @php
+                    $buttons = json_decode($heroSection->buttons, true);
+                @endphp
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
+                    @foreach($buttons as $button)
+                        @if($button['style'] === 'primary')
+                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
+                            {{ $button['text'] }}
+                            </a>
+                        @else
+                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+                            {{ $button['text'] }}
+                            </a>
+                        @endif
+                    @endforeach
+                </div>
+            @else
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
+                   <a href="{{ route('catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
+                   Ir a productos →
+                   </a>
+                   <a href="{{ route('contactanos') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+                   Hablar con un asesor
+                   </a>
+                </div>
+            @endif
          </div>
       </div>
       <!-- Hero Visual Background -->
@@ -80,7 +101,7 @@
    @include('web.partials.beneficios')
 
    <!-- Categorías Destacadas -->
-   <section class="py-12 sm:py-16">
+   <section class="pt-12 sm:pt-16">
       <div class="container mx-auto px-4">
          <div class="categories bg-white border border-helin-border rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
             <!-- Categoría Destacada -->
