@@ -27,7 +27,7 @@
                         <i class="fab fa-twitter"></i>
                     </a>
                     {{-- Siempre mostrar LinkedIn --}}
-                    <a href="{{ $settings->linkedin ?? '#' }}" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                    <a href="https://www.linkedin.com/company/helin-latam" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
                     {{-- Siempre mostrar Instagram --}}
