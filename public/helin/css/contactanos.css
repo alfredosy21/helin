@@ -191,6 +191,7 @@ label span {
 
 .form-card input::placeholder, .form-card textarea::placeholder {
     color: var(--text-slate-light);
+    font-size: 14px;
 }
 
 .form-card input:focus, .form-card select:focus, .form-card textarea:focus {
