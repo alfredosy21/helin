@@ -19,12 +19,8 @@
             @endphp
                 <div class="flex space-x-3">
                     {{-- Siempre mostrar Facebook --}}
-                    <a href="{{ $settings->facebook ?? '#' }}" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                    <a href="https://www.facebook.com/helin.latam.user" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-facebook-f"></i>
-                    </a>
-                    {{-- Siempre mostrar Twitter/X --}}
-                    <a href="{{ $settings->youtube ?? '#' }}" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                        <i class="fab fa-twitter"></i>
                     </a>
                     {{-- Siempre mostrar LinkedIn --}}
                     <a href="https://www.linkedin.com/company/helin-latam" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
