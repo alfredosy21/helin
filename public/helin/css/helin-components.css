@@ -257,7 +257,7 @@ small, .caption, .text-xs, .tag {
 
 .breadcrumb-link,
 .breadcrumb-separator {
-    color: var(--border-color);
+    color: #2D3740;
     text-decoration: none;
     transition: color 0.2s ease;
 }
