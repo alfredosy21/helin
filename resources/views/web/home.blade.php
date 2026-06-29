@@ -136,6 +136,67 @@
 
    <!-- Sección "Estamos cerca de ti" -->
    <div class="container mx-auto px-4">
+      <!-- Flow Highlight Section -->
+      <section class="flow-highlight">
+         <aside class="how-card">
+           <h3>¿Cómo solicitar productos Helin?</h3>
+           <div class="step">
+             <b>⌕</b>
+             <div><strong>Busca tus productos</strong><span>Explora implantes, instrumentos y kits.</span></div>
+             <div class="number">1</div>
+           </div>
+           <div class="step">
+             <b>🛒</b>
+             <div><strong>Agrega al carrito</strong><span>Selecciona cantidades y arma tu solicitud.</span></div>
+             <div class="number">2</div>
+           </div>
+           <div class="step">
+             <b>☏</b>
+             <div><strong>Atención personalizada</strong><span>Un ejecutivo comercial te contactará para continuar.</span></div>
+             <div class="number">3</div>
+           </div>
+         </aside>
+
+         <div class="featured-products">
+           <div class="featured-head">
+             <span class="crumb">VER TODO EL CATÁLOGO →</span>
+             <span class="crumb">Implantes · Aditamentos · Kits</span>
+             <h3>Destacados <span style="color:var(--helin)">Helin</span></h3>
+           </div>
+
+           <div class="mini-grid">
+             <article class="mini-product">
+               <span class="label">Nuevo</span>
+               <div class="product-img"></div>
+               <h4>Implante Dental Cónico</h4>
+               <div class="stars">★★★★★</div>
+               <div class="price">$195.00</div>
+             </article>
+             <article class="mini-product">
+               <span class="label">Top</span>
+               <div class="product-img"></div>
+               <h4>Pilar Protésico de Titanio</h4>
+               <div class="stars">★★★★★</div>
+               <div class="price">$85.00</div>
+             </article>
+             <article class="mini-product">
+               <span class="label">-15%</span>
+               <div class="product-img"></div>
+               <h4>Kit Quirúrgico de Implantes</h4>
+               <div class="stars">★★★★★</div>
+               <div class="price">$1,250.00</div>
+             </article>
+             <article class="mini-product">
+               <span class="label">Especial</span>
+               <div class="product-img"></div>
+               <h4>Motor para Implantología</h4>
+               <div class="stars">★★★★★</div>
+               <div class="price">$980.00</div>
+             </article>
+           </div>
+         </div>
+      </section>
+
       @include('web.partials.near')
    </div>
 

@@ -1,5 +1,207 @@
 /* Home Page - Specific Styles from helin-components-new.css and HTML reference */
 
+/* Flow Highlight Section */
+.flow-highlight {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 18px;
+    margin-bottom: 48px;
+}
+
+.how-card {
+    background: #f2ffff;
+    border: 1px solid var(--border-color, #d9eeee);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(15, 47, 67, 0.06);
+}
+
+.how-card h3 {
+    margin: 0 0 18px;
+    color: var(--helin-primary, #34b1b5);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.step {
+    display: grid;
+    grid-template-columns: 38px 1fr 26px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid #d8eeee;
+}
+
+.step:first-of-type {
+    border-top: 0;
+}
+
+.step b {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    background: var(--helin-primary, #34b1b5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.step strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 3px;
+    color: var(--text-dark, #0f2f43);
+}
+
+.step span {
+    font-size: 12px;
+    color: var(--text-muted, #6f8796);
+    line-height: 1.32;
+}
+
+.step .number {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--helin-primary, #34b1b5);
+    color: var(--helin-primary, #34b1b5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.featured-products {
+    background: #fff;
+    border: 2px solid var(--helin-primary, #34b1b5);
+    border-radius: 26px;
+    padding: 28px;
+    box-shadow: 0 18px 45px rgba(15, 47, 67, 0.08);
+}
+
+.featured-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.featured-head .crumb {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--helin-primary, #34b1b5);
+    cursor: pointer;
+}
+
+.featured-head h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text-dark, #0f2f43);
+}
+
+.mini-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.mini-product {
+    text-align: center;
+    position: relative;
+    padding: 8px;
+    border-radius: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mini-product:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 20px rgba(15, 47, 67, 0.10);
+}
+
+.mini-product .label {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--helin-primary, #34b1b5);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.mini-product .product-img {
+    height: 80px;
+    background: linear-gradient(135deg, #f8ffff 0%, #e8f5f5 100%);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.mini-product .product-img:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(107, 194, 195, 0.1), transparent 40%);
+}
+
+.mini-product h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    line-height: 1.25;
+    font-weight: 700;
+    color: var(--text-dark, #0f2f43);
+}
+
+.mini-product .stars {
+    color: #fbbf24;
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.mini-product .price {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--helin-primary, #34b1b5);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .flow-highlight {
+        grid-template-columns: 1fr;
+    }
+
+    .mini-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .mini-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .how-card {
+        margin-bottom: 24px;
+    }
+
+    .featured-products {
+        padding: 20px;
+    }
+}
+
 /* Hero Section */
 .hero {
     background: radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.42), transparent 22%),
