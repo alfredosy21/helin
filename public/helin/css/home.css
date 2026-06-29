@@ -681,7 +681,7 @@
     max-width: 960px;
     min-height: 86px;
     border-radius: 8px;
-    background: #6BC2C3;
+    background: rgba(107, 194, 195, 0.70);
     color: var(--white);
     display: flex;
     align-items: center;
@@ -696,7 +696,7 @@
 }
 
 .opinion a {
-    background: #123F4A;
+    background: rgba(18, 63, 74, 0.70);
     border-radius: 9999px;
     padding: 12px 28px;
     color: var(--white);
