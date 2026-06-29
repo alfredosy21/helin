@@ -703,6 +703,11 @@
     font-size: var(--text-12px);
     font-weight: 900;
     text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.opinion a:hover {
+    background: #123F4A;
 }
 
 /* Label */
