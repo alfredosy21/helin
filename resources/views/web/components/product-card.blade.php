@@ -36,7 +36,7 @@
     <!-- Botón -->
     <div data-cart-context>
         <button
-            class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-3 rounded-[30px] transition-colors"
+            class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold text-sm py-3 rounded-[30px] transition-colors"
             data-cart-add
             data-slug="{{ $productSlug ?? '' }}"
             data-name="{{ $productName ?? '' }}"
