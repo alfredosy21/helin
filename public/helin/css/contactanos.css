@@ -169,7 +169,7 @@ label span {
 
 .form-card input, .form-card select, .form-card textarea {
     width: 100%;
-    border: none;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     background: var(--white);
     color: var(--text-slate-darker);
