@@ -258,12 +258,14 @@ small, .caption, .text-xs, .tag {
 .breadcrumb-link,
 .breadcrumb-separator {
     color: #2D3740;
+    opacity: 0.8;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .breadcrumb-link:hover {
     color: var(--helin-primary);
+    opacity: 1;
 }
 
 .breadcrumb-active {
