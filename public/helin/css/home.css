@@ -681,7 +681,7 @@
     max-width: 960px;
     min-height: 86px;
     border-radius: 8px;
-    background: var(--helin-primary-light);
+    background: #6BC2C3;
     color: var(--white);
     display: flex;
     align-items: center;
@@ -696,7 +696,7 @@
 }
 
 .opinion a {
-    background: var(--helin-primary);
+    background: #123F4A;
     border-radius: 9999px;
     padding: 12px 28px;
     color: var(--white);
