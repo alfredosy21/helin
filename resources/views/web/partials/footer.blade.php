@@ -18,17 +18,17 @@
                 $settings = \App\Models\Settings::getSettings();
             @endphp
                 <div class="flex space-x-3">
-                    {{-- Siempre mostrar Facebook --}}
-                    <a href="https://www.facebook.com/helin.latam.user" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                        <i class="fab fa-facebook-f"></i>
+                    {{-- Siempre mostrar Instagram --}}
+                    <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                        <i class="fab fa-instagram"></i>
                     </a>
                     {{-- Siempre mostrar LinkedIn --}}
                     <a href="https://www.linkedin.com/company/helin-latam" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    {{-- Siempre mostrar Instagram --}}
-                    <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
-                        <i class="fab fa-instagram"></i>
+                    {{-- Siempre mostrar Facebook --}}
+                    <a href="https://www.facebook.com/helin.latam.user" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                        <i class="fab fa-facebook-f"></i>
                     </a>
                 </div>
             </div>
