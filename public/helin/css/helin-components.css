@@ -252,15 +252,32 @@ small, .caption, .text-xs, .tag {
     font-size: var(--text-13px);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .breadcrumb-link,
-.breadcrumb-separator {
+.breadcrumb-active {
+    display: inline-flex;
+    align-items: center;
+    transform: translateY(-1px);
+}
+
+.breadcrumb-link {
     color: #2D3740;
     opacity: 0.8;
     text-decoration: none;
     transition: color 0.2s ease;
+}
+
+.breadcrumb-separator {
+    color: #2D3740;
+    opacity: 0.8;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: baseline;
+    margin: 0 2px;
 }
 
 .breadcrumb-link:hover {

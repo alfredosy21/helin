@@ -1,7 +1,10 @@
 <!-- Barra Informativa Superior -->
 <div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
     <div class="container mx-auto px-4 py-2 flex items-center justify-center gap-2 sm:gap-4">
-        <span class="truncate">Todo para cirugía odontológica especializada</span>
+        <span class="truncate">Todo para cirugía odontológica avanzada
+
+
+</span>
         <a href="{{ route('catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap">VER PRODUCTOS</a>
     </div>
 </div>
@@ -54,12 +57,12 @@
                     $settings = \App\Models\Settings::getSettings();
                 @endphp
                 <!-- WhatsApp - solo desktop -->
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '584127398580') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-turquesa/80 transition text-sm">
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '584127398580') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-[#123F4A] transition text-sm">
                     <i class="fab fa-whatsapp text-2xl"></i>
                     <span>Escríbenos</span>
                 </a>
                 <!-- Carrito -->
-                <a href="{{ route('carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-turquesa-light transition p-1 sm:p-0">
+                <a href="{{ route('carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-[#123F4A] transition p-1 sm:p-0">
                     <div class="relative">
                         <i class="fas fa-shopping-cart text-lg sm:text-xl"></i>
                         <span id="cart-badge" class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 bg-turquesa text-white text-[10px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center border border-white" style="display:none;">0</span>

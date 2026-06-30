@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="{{ asset('helin/css/variables.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/helin-components.css') }}">
     <link rel="stylesheet" href="{{ asset('helin/css/custom-container.css') }}">
+    <link rel="stylesheet" href="{{ asset('helin/css/skeleton.css') }}">
 
     @yield('styles')
     <!-- Habilitar soporte para @push('styles') si lo usas en el futuro -->

@@ -45,14 +45,24 @@
         <!-- Sidebar Filtros -->
         <aside class="hidden lg:block w-64 flex-shrink-0">
             <div class="space-y-6">
-                @include('web.components.breadcrumb', [
-                    'attributes' => 'class="text-sm text-helin-text mb-6"',
-                    'items' => [
-                        ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"'],
-                        ['label' => 'Productos', 'spanAttributes' => 'class="text-turquesa font-medium"']
-                    ],
-                    'separatorAttributes' => 'class="text-helin-text mx-1"'
-                ])
+                @php
+    $breadcrumbItems = [
+        ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"']
+    ];
+    
+    if ($currentCategory) {
+        $breadcrumbItems[] = ['label' => 'Productos', 'url' => route('catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'];
+        $breadcrumbItems[] = ['label' => $currentCategory->name, 'spanAttributes' => 'class="text-turquesa font-medium"'];
+    } else {
+        $breadcrumbItems[] = ['label' => 'Productos', 'spanAttributes' => 'class="text-turquesa font-medium"'];
+    }
+@endphp
+
+@include('web.components.breadcrumb', [
+    'attributes' => 'class="text-sm text-helin-text mb-6"',
+    'items' => $breadcrumbItems,
+    'separatorAttributes' => 'class="text-helin-text mx-1"'
+])
 
                 <!-- Búsqueda en sidebar -->
                 <div class="relative">
@@ -141,13 +151,20 @@
             </div>
             @endif
 
-            <!-- Indicador de carga -->
+            <!-- Skeleton Loader mientras carga -->
+            <div id="productsSkeleton" class="skeleton-grid skeleton-grid-responsive">
+                @for($i = 1; $i <= 9; $i++)
+                    @include('web.components.skeleton-product')
+                @endfor
+            </div>
+
+            <!-- Indicador de carga AJAX -->
             <div id="catalogLoading" class="hidden text-center py-4">
                 <i class="fas fa-spinner fa-spin text-turquesa text-2xl"></i>
             </div>
 
             <!-- Contenedor AJAX -->
-            <div id="productsContent">
+            <div id="productsContent" class="hidden">
                 @include('web.partials.product-results', ['products' => $products])
             </div>
 
@@ -160,4 +177,38 @@
 
 @push('scripts')
 <script src="{{ asset('helin/js/catalogo.js') }}"></script>
+<script>
+// Ocultar skeleton y mostrar contenido cuando la página carga
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const skeleton = document.getElementById('productsSkeleton');
+        const content = document.getElementById('productsContent');
+        
+        if (skeleton && content) {
+            skeleton.style.display = 'none';
+            content.classList.remove('hidden');
+        }
+    }, 500); // Pequeño delay para simular carga inicial
+});
+
+// Mostrar skeleton durante cargas AJAX
+function showProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+    const loading = document.getElementById('catalogLoading');
+    
+    if (skeleton) skeleton.style.display = 'grid';
+    if (content) content.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+}
+
+// Ocultar skeleton y mostrar contenido
+function hideProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+    
+    if (skeleton) skeleton.style.display = 'none';
+    if (content) content.classList.remove('hidden');
+}
+</script>
 @endpush

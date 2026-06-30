@@ -37,7 +37,7 @@
                  <aside class="hero-badges hidden lg:block">
                      <div class="flex flex-col gap-4">
                          @foreach($heroBadges as $badge)
-                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] uppercase leading-tight" style="font-size:0.625rem; font-family:'Inter',sans-serif; font-weight:400;">
+                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] uppercase leading-tight" style="font-size:0.625rem; font-family:'Inter',sans-serif; font-weight:600;">
                                  <span class="mini-icon w-10 h-10 border border-[#123F4A]/30 rounded-xl flex items-center justify-center bg-[#123F4A]/10 text-lg text-[#123F4A]">{{ $badge['icon'] ?? '✓' }}</span>
                                  <span>{{ $badge['text'] ?? '' }}</span>
                              </div>
@@ -122,8 +122,15 @@
                   <div class="kit absolute right-2 bottom-0 w-48 h-28 rounded-2xl bg-turquesa/40 border-4 border-turquesa/25"></div>
                </div>
             </article>
+            <!-- Skeleton Loader para Categorías -->
+            <div id="categoriesSkeleton" class="skeleton-grid skeleton-grid-responsive">
+               @for($i = 1; $i <= 6; $i++)
+                  @include('web.components.skeleton-category')
+               @endfor
+            </div>
+
             <!-- Grid de Categorías -->
-            <div class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div id="categoriesGrid" class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 hidden">
                @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo', ['category' => 'regeneracion-guiada-bucal-gbr'])])
                @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo', ['category' => 'placas'])])
                @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo', ['category' => 'cuidados-especiales-quirurgicos'])])
@@ -136,7 +143,7 @@
    </section>
 
    <!-- Sección "Estamos cerca de ti" -->
-   <div class="container mx-auto px-4">
+   <div class="container mx-auto px-4" style="padding-bottom: 20px;">
       <!-- Flow Highlight Section -->
       <section class="flow-highlight">
                      @if($howToSection && $howToSection->status == 1 && $howToSection->status_content == 1)
@@ -282,4 +289,22 @@
       @include('web.partials.opinion')
    </div>
 </main>
+
+@push('scripts')
+<script src="{{ asset('helin/js/home.js') }}"></script>
+<script>
+// Ocultar skeleton y mostrar categorías cuando la página carga
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const skeleton = document.getElementById('categoriesSkeleton');
+        const grid = document.getElementById('categoriesGrid');
+        
+        if (skeleton && grid) {
+            skeleton.style.display = 'none';
+            grid.classList.remove('hidden');
+        }
+    }, 800); // Delay para simular carga inicial
+});
+</script>
+@endpush
 @endsection

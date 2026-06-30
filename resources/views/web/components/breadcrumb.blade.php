@@ -8,7 +8,7 @@
         @endif
 
         @if($index < count($items) - 1)
-            <span class="breadcrumb-separator" {{ $separatorAttributes ?? '' }}>{{ $separator ?? '>' }}</span>
+            <span class="breadcrumb-separator" {{ $separatorAttributes ?? '' }}><i class="fa fa-angle-right"></i></span>
         @endif
     @endforeach
 </nav>
