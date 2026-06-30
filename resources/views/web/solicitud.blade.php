@@ -3,31 +3,7 @@
 @section('title', 'Detalle de la Solicitud - Helin')
 
 @section('styles')
-<style>
-.select-wrapper {
-    position: relative;
-}
-
-.select-wrapper select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    padding-right: 40px;
-    cursor: pointer;
-    width: 100%;
-}
-
-.select-arrow {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--text-slate-light, #94a3b8);
-    display: flex;
-    align-items: center;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('helin/css/solicitud.css') }}">
 @endsection
 
 @section('content')
@@ -149,28 +125,11 @@
                 <h2 class="text-xl text-helin-heading mb-6">Orden</h2>
 
                 <!-- Resumen de productos -->
-                <div class="space-y-3 mb-6">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-helin-text">Implante Straumann BLX x 1</span>
-                        <span class="font-medium">$299.00</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-helin-text">Biomaterial Bio-Oss x 2</span>
-                        <span class="font-medium">$298.00</span>
-                    </div>
-                    <div class="border-t border-helin-border pt-3 mt-3">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="text-helin-text">Subtotal</span>
-                            <span>$597.00</span>
-                        </div>
-                        <div class="flex justify-between text-sm mb-2">
-                            <span class="text-helin-text">Descuento</span>
-                            <span class="text-green-500">-$45.00</span>
-                        </div>
-                        <div class="flex justify-between text-base font-bold">
-                            <span class="text-helin-heading">Total</span>
-                            <span class="text-turquesa">$552.00</span>
-                        </div>
+                <div class="space-y-3 mb-6" id="cart-summary">
+                    <!-- Cart items will be rendered dynamically by cart-ui.js -->
+                    <div class="flex items-center justify-center py-8 text-helin-text">
+                        <i class="fas fa-spinner fa-spin text-turquesa text-xl mr-2"></i>
+                        <span class="text-sm">Cargando resumen del carrito...</span>
                     </div>
                 </div>
 
@@ -220,7 +179,7 @@
                 </div>
 
                 <!-- Botón Enviar -->
-                <button type="submit" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold py-4 rounded-full uppercase transition-colors">
+                <button type="submit" id="submit-btn" disabled class="w-full bg-gray-400 text-white font-bold py-4 rounded-full uppercase transition-colors cursor-not-allowed">
                     Enviar Solicitud Comercial
                 </button>
             </div>
@@ -234,6 +193,54 @@
 @push('scripts')
 <script>
 (function () {
+    /**
+     * Form validation for submit button
+     */
+    function validateForm() {
+        const form = document.querySelector('form[action="#"]');
+        const submitBtn = document.getElementById('submit-btn');
+        if (!form || !submitBtn) return;
+
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+            }
+        });
+
+        // Check if cart has items
+        const cartItems = Cart.getItems();
+        if (cartItems.length === 0) {
+            isValid = false;
+        }
+
+        if (isValid) {
+            submitBtn.disabled = false;
+            submitBtn.className = 'w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold py-4 rounded-full uppercase transition-colors';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.className = 'w-full bg-gray-400 text-white font-bold py-4 rounded-full uppercase transition-colors cursor-not-allowed';
+        }
+    }
+
+    // Initialize validation
+    document.addEventListener('DOMContentLoaded', function() {
+        // Validate on load
+        validateForm();
+
+        // Validate on input change
+        const form = document.querySelector('form[action="#"]');
+        if (form) {
+            form.addEventListener('input', validateForm);
+            form.addEventListener('change', validateForm);
+        }
+
+        // Validate on cart updates
+        document.addEventListener('cart:updated', validateForm);
+    });
+
     const panel      = document.getElementById('payment-description');
     const panelText  = document.getElementById('payment-description-text');
     const list       = document.getElementById('payment-methods-list');
@@ -255,18 +262,24 @@
         }
     });
 
-    // Show description for pre-checked option on load
+    /**
+     * Show description for pre-checked option on load
+     */
     const checked = list.querySelector('input[type="radio"]:checked');
     if (checked) showDescription(checked.closest('.payment-method-label'));
 })();
 
-// State/City dynamic filter
+/**
+ * State/City dynamic filter
+ */
 (function () {
     const estadoSelect = document.getElementById('estado-select');
     const ciudadSelect = document.getElementById('ciudad-select');
     if (!estadoSelect || !ciudadSelect) return;
 
-    // Build cities lookup from Blade data
+    /**
+     * Build cities lookup from Blade data
+     */
     const citiesByState = {};
     @foreach($cities as $city)
         citiesByState['{{ $city->state->code }}'] = citiesByState['{{ $city->state->code }}'] || [];

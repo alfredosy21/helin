@@ -1,15 +1,16 @@
 @extends('web.layouts.app')
 
 @section('title', 'Contáctanos - Helin')
+@section('meta-description', 'Contacta a Helin para asesoría especializada en productos odontológicos. Atención personalizada para implantes, instrumentos y biomateriales. Envíos a todo Venezuela.')
+@section('meta-keywords', 'contacto helin, asesoría odontológica, productos dentales, implantes Venezuela, soporte técnico, material dental')
+@section('og-type', 'website')
+@section('og-image', asset('images/helin-contact-og.jpg'))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/contactanos.css') }}">
 @endsection
 
 @section('content')
-@php
-    $settings = \App\Models\Settings::getSettings();
-@endphp
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
@@ -22,10 +23,7 @@
 
     <section class="contact-layout">
         <aside class="info-block">
-            @php
-                $contactSection = \App\Models\Sections::find(\App\Models\Sections::CONTACT_HERO);
-            @endphp
-            @if($contactSection && $contactSection->status_content)
+                        @if($contactSection && $contactSection->status == 1 && $contactSection->status_content == 1)
                 @if($contactSection->layout_type === 'text_simple')
                     <h2>{{ $contactSection->title }}</h2>
                     @if($contactSection->description)

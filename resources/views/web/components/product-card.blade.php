@@ -13,12 +13,14 @@
         @endif
         <img src="{{ $productImage ?? '' }}"
              alt="{{ $productName ?? '' }}"
+             title="{{ $productName ?? '' }}"
+             loading="lazy"
              class="max-h-[180px] object-contain">
     </a>
 
     <!-- Contenido -->
-    <a href="{{ $productLink ?? '#' }}" class="hover:text-turquesa transition-colors">
-        <h3 class="text-helin-heading text-base mb-1 text-center">
+    <a href="{{ $productLink ?? '#' }}" class="hover:text-turquesa transition-colors" title="{{ $productName ?? '' }}">
+        <h3 class="text-helin-heading text-base mb-1 text-center line-clamp-2 leading-5">
             {{ $productName ?? '' }}
         </h3>
     </a>
@@ -30,7 +32,7 @@
         @if(!empty($formattedOldPrice))
             <span class="text-helin-text text-sm line-through">{{ $formattedOldPrice }}</span>
         @endif
-        <span class="text-turquesa font-bold text-lg">{{ $formattedPrice }}</span>
+        <span class="text-turquesa font-bold text-base">{{ $formattedPrice }}</span>
     </div>
 
     <!-- Botón -->

@@ -7,13 +7,6 @@
 @endsection
 
 @section('content')
-@php
-    $aboutSection   = \App\Models\Sections::find(\App\Models\Sections::ABOUT_US);
-    $missionSection = \App\Models\Sections::find(\App\Models\Sections::MISSION_VISION);
-    $teamSection    = \App\Models\Sections::find(\App\Models\Sections::TEAM);
-    $alliesSection  = \App\Models\Sections::find(\App\Models\Sections::ALLIES);
-    $ctaSection     = \App\Models\Sections::find(\App\Models\Sections::CTA_COMPANY);
-@endphp
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
@@ -25,13 +18,37 @@
     <!-- Hero Section -->
     <section class="about-hero">
         <div class="about-hero-copy">
-            <span class="hero-badge">Nuestra empresa</span>
-            <h1>Comprometidos con la excelencia en cada solución</h1>
-            <p>En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.</p>
-            <div class="hero-actions">
-                <a href="{{ route('catalogo') }}" class="btn-primary">Conoce nuestro portafolio →</a>
-                <a href="{{ route('contactanos') }}" class="btn-outline">☏ Háblale con un asesor</a>
-            </div>
+            @if($companyHeroSection && $companyHeroSection->status == 1 && $companyHeroSection->status_content == 1)
+                @if($companyHeroSection->layout_type === 'hero_buttons')
+                    <span class="hero-badge">{{ $companyHeroSection->subtitle ?? 'Nuestra empresa' }}</span>
+                    <h1>{{ $companyHeroSection->title }}</h1>
+                    @if($companyHeroSection->description)
+                        <p>{{ $companyHeroSection->description }}</p>
+                    @endif
+                    <div class="hero-actions">
+                        @php
+                            $buttons = $companyHeroSection->buttons ? json_decode($companyHeroSection->buttons, true) : [];
+                        @endphp
+                        @foreach($buttons as $button)
+                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}"
+                               class="{{ $button['style'] === 'primary' ? 'btn-primary' : 'btn-outline' }}">
+                                {{ $button['text'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    {!! $companyHeroSection->content !!}
+                @endif
+            @else
+                <!-- Fallback hardcoded -->
+                <span class="hero-badge">Nuestra empresa</span>
+                <h1>Comprometidos con la excelencia en cada solución</h1>
+                <p>En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.</p>
+                <div class="hero-actions">
+                    <a href="{{ route('catalogo') }}" class="btn-primary">Conoce nuestro portafolio →</a>
+                    <a href="{{ route('contactanos') }}" class="btn-outline">☏ Háblale con un asesor</a>
+                </div>
+            @endif
         </div>
     </section>
 

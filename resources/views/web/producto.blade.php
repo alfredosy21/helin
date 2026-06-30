@@ -1,6 +1,11 @@
 @extends('web.layouts.app')
 
 @section('title', $product->name . ' - Helin')
+@section('meta-description', $product->seo_description ?? $product->description ?? 'Compra ' . $product->name . ' en Helin. ' . ($product->category->name ?? '') . ' de alta calidad para profesionales odontológicos. Envíos a todo Venezuela.')
+@section('meta-keywords', $product->seo_keywords ?? ($product->name . ', ' . ($product->category->name ?? '') . ', implantes dentales, material dental, helin, productos odontológicos'))
+@section('og-type', 'product')
+@section('og-image', $product->image ? asset('storage/' . $product->image) : asset('images/helin-product-default.jpg'))
+@section('twitter-card', 'product')
 
 @section('content')
 <main class="container mx-auto px-4 py-8">
@@ -147,20 +152,14 @@
 
     <!-- Productos Relacionados -->
     <section class="mb-12">
-        <div class="mb-6">
-            <h2 class="text-xl text-helin-heading mb-1">Productos Relacionados</h2>
-            <p class="text-helin-text text-sm mb-3">Conoce los productos relacionados para ti</p>
+        <div class="mb-6 flex justify-between items-end">
+            <div>
+                <h2 class="text-xl text-helin-heading mb-1">Productos Relacionados</h2>
+                <p class="text-helin-text text-sm">Conoce los productos relacionados para ti</p>
+            </div>
             <a href="{{ route('catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
         </div>
-        @php
-            $relatedProducts = \App\Models\Product::where('category_id', $product->category_id ?? null)
-                ->where('id', '!=', $product->id)
-                ->where('is_active', true)
-                ->inRandomOrder()
-                ->take(4)
-                ->get();
-        @endphp
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @if($relatedProducts->count() > 0)
                 @foreach($relatedProducts as $related)
                     @php

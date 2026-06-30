@@ -1,6 +1,21 @@
 @extends('web.layouts.app')
 
-@section('title', 'Catálogo de Productos - Helin')
+@php
+    /**
+     * Get current category for metadata
+     */
+    $initCategory = request('category', '');
+    $currentCategory = null;
+    if ($initCategory) {
+        $currentCategory = \App\Models\Category::where('slug', $initCategory)->first();
+    }
+@endphp
+
+@section('title', $currentCategory ? ($currentCategory->name . ' - Catálogo - Helin') : 'Catálogo de Productos - Helin')
+@section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.')
+@section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela')
+@section('og-type', 'website')
+@section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : asset('images/helin-catalog-og.jpg'))
 
 @section('content')
 @php
@@ -9,6 +24,14 @@
 
     $initSearch   = request('search', '');
     $initCategory = request('category', '');
+
+    /**
+     * Get current category if filter is applied
+     */
+    $currentCategory = null;
+    if ($initCategory) {
+        $currentCategory = \App\Models\Category::where('slug', $initCategory)->first();
+    }
 
     $productsQuery = \App\Models\Product::with(['category', 'brand'])->where('is_active', true);
     if ($initSearch)   $productsQuery->where(fn($q) => $q->where('name','like',"%$initSearch%")->orWhere('description','like',"%$initSearch%")->orWhere('sku','like',"%$initSearch%"));
@@ -111,8 +134,13 @@
             <!-- Banner -->
             <div class="bg-turquesa rounded-xl p-4 sm:p-6 lg:p-8 mb-6 relative overflow-hidden">
                 <div class="relative z-10 max-w-full sm:max-w-[65%]">
-                    <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">Catálogo de Productos</h1>
-                    <p class="text-white/90 text-xs sm:text-base">Encuentra los mejores productos odontológicos organizados por especialidad</p>
+                    @if($currentCategory)
+                        <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">{{ $currentCategory->name }}</h1>
+                        <p class="text-white/90 text-xs sm:text-base">{{ $currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' de alta calidad para profesionales odontológicos.' }}</p>
+                    @else
+                        <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">Catálogo de Productos</h1>
+                        <p class="text-white/90 text-xs sm:text-base">Encuentra los mejores productos odontológicos organizados por especialidad</p>
+                    @endif
                 </div>
             </div>
 

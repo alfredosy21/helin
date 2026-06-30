@@ -18,17 +18,13 @@
     <h1 class="page-title">Políticas</h1>
 
     <section class="policies">
-        @php
-            $sections = \App\Models\Sections::where('status', 1)
-                ->whereIn('id', [\App\Models\Sections::SHIPPING_POLICIES, \App\Models\Sections::TERMS_CONDITIONS, \App\Models\Sections::PRIVACY_POLICIES])
-                ->orderBy('id')
-                ->get();
-        @endphp
 
         @foreach($sections as $index => $section)
             @if($section->status_content)
                 @php
-                    // Parsear el contenido HTML para extraer los puntos
+                    /**
+                     * Parse HTML content to extract policy points
+                     */
                     $dom = new DOMDocument();
                     @$dom->loadHTML($section->content);
                     $xpath = new DOMXPath($dom);
@@ -48,7 +44,9 @@
                         ];
                     }
 
-                    // Determinar el icono y ID según el título
+                    /**
+                     * Determine icon and ID based on title
+                     */
                     $policyData = match($section->title) {
                         'Políticas de envío y garantías' => [
                             'policyId' => 'envio-garantias',

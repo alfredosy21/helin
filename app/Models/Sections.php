@@ -20,23 +20,25 @@ class Sections extends Model {
     const GBR_PRODUCTS = 7; // Más vendidos en Regeneración Ósea Guiada
     const INSTRUMENTS_PRODUCTS = 8; // Más vendidos en Instrumentos y Equipos
     const TESTIMONIALS = 9; // Testimonios
-    const CTA_HOME = 10; // ¿Listo para transformar tu práctica clínica? (Home)
+    const FLOW_HOW_TO = 10; // ¿Cómo solicitar productos Helin?
+    const CTA_HOME = 11; // ¿Listo para transformar tu práctica clínica? (Home)
 
     // NUESTRA EMPRESA SECTIONS
-    const ABOUT_US = 11; // Soluciones que impulsan mejores resultados clínicos
-    const MISSION_VISION = 12; // Misión y Visión
-    const TEAM = 13; // Un equipo que te acompaña
-    const ALLIES = 14; // Trabajamos junto a marcas líderes
-    const NEAR_YOU = 15; // Estamos cerca de ti
-    const CTA_COMPANY = 16; // ¿Listo para transformar tu práctica clínica?
+    const COMPANY_HERO = 12; // Comprometidos con la excelencia en cada solución
+    const ABOUT_US = 13; // Soluciones que impulsan mejores resultados clínicos
+    const MISSION_VISION = 14; // Misión y Visión
+    const TEAM = 15; // Un equipo que te acompaña
+    const ALLIES = 16; // Trabajamos junto a marcas líderes
+    const NEAR_YOU = 17; // Estamos cerca de ti
+    const CTA_COMPANY = 18; // ¿Listo para transformar tu práctica clínica?
 
     // POLÍTICAS SECTIONS
-    const SHIPPING_POLICIES = 17; // Políticas de envío y garantías
-    const TERMS_CONDITIONS = 18; // Términos y condiciones
-    const PRIVACY_POLICIES = 19; // Políticas de privacidad
+    const SHIPPING_POLICIES = 19; // Políticas de envío y garantías
+    const TERMS_CONDITIONS = 20; // Términos y condiciones
+    const PRIVACY_POLICIES = 21; // Políticas de privacidad
 
     // CONTACTO SECTIONS
-    const CONTACT_HERO = 20; // ¿Tienes preguntas? Hablemos.
+    const CONTACT_HERO = 22; // ¿Tienes preguntas? Hablemos.
 
     /**
      * Name of the table

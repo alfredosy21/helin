@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('cart-page-root')) {
             renderCartPage(e.detail.items);
         }
+        if (document.getElementById('cart-summary')) {
+            renderCartSummary(e.detail.items);
+        }
     });
 
     // ─── Add-to-cart button delegation ───────────────────────────────────────
@@ -256,5 +259,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 Toast.show({ type: 'info', message: 'El carrito ha sido vaciado.' });
             });
         }
+    }
+
+    /**
+     * Render cart summary for solicitud page
+     */
+    function renderCartSummary(items) {
+        const summaryRoot = document.getElementById('cart-summary');
+        if (!summaryRoot) return;
+
+        if (items.length === 0) {
+            summaryRoot.innerHTML = `
+                <div class="text-center py-8 text-helin-text">
+                    <i class="fas fa-shopping-cart text-turquesa text-2xl mb-2"></i>
+                    <p class="text-sm">Tu carrito está vacío</p>
+                    <a href="${window.location.origin}/catalogo" class="text-turquesa text-sm hover:underline mt-2 inline-block">Ver productos →</a>
+                </div>
+            `;
+            return;
+        }
+
+        const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const discount = subtotal > 500 ? subtotal * 0.05 : 0; // 5% descuento si subtotal > 500
+        const total = subtotal - discount;
+
+        const itemsHtml = items.map(item => `
+            <div class="flex justify-between text-sm">
+                <span class="text-helin-text">${item.name} x ${item.qty}</span>
+                <span class="font-medium">$${(item.price * item.qty).toFixed(2)}</span>
+            </div>
+        `).join('');
+
+        summaryRoot.innerHTML = `
+            ${itemsHtml}
+            <div class="border-t border-helin-border pt-3 mt-3">
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="text-helin-text">Subtotal</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                ${discount > 0 ? `
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-helin-text">Descuento (5%)</span>
+                        <span class="text-green-500">-$${discount.toFixed(2)}</span>
+                    </div>
+                ` : ''}
+                <div class="flex justify-between text-base font-bold">
+                    <span class="text-helin-heading">Total</span>
+                    <span class="text-turquesa">$${total.toFixed(2)}</span>
+                </div>
+            </div>
+        `;
     }
 });

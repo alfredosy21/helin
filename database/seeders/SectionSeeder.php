@@ -262,6 +262,41 @@ HTML,
 </div>
 HTML,
             ],
+            Sections::FLOW_HOW_TO => [
+                'title' => '¿Cómo solicitar productos Helin?',
+                'subtitle' => null,
+                'description' => null,
+                'image' => null,
+                'layout_type' => self::LAYOUT_FEATURE_BOX,
+                'icon_style' => self::ICON_EMOJI,
+                'items' => json_encode([
+                    'steps' => [
+                        [
+                            'icon' => '⌕',
+                            'title' => 'Busca tus productos',
+                            'description' => 'Explora implantes, instrumentos y kits.',
+                            'number' => '1'
+                        ],
+                        [
+                            'icon' => '🛒',
+                            'title' => 'Agrega al carrito',
+                            'description' => 'Selecciona cantidades y arma tu solicitud.',
+                            'number' => '2'
+                        ],
+                        [
+                            'icon' => '☏',
+                            'title' => 'Atención personalizada',
+                            'description' => 'Un ejecutivo comercial te contactará para continuar.',
+                            'number' => '3'
+                        ]
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+            ],
             Sections::CTA_HOME => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
                 'image' => 'CTA',
@@ -276,6 +311,52 @@ HTML,
     <a href="{{ route('contactanos') }}" class="btn-outline">✉ Permítenos por correo</a>
 </div>
 HTML,
+            ],
+            // ==========================================
+            // ---------- SECCIONES DE TESTIMONIOS --------
+            // ==========================================
+            Sections::TESTIMONIALS => [
+                'title' => 'Lo que dicen nuestros clientes',
+                'subtitle' => 'Testimonios',
+                'description' => null,
+                'image' => null,
+                'layout_type' => self::LAYOUT_TESTIMONIALS,
+                'icon_style' => self::ICON_NONE,
+                'items' => null,
+                'buttons' => null,
+                'content' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+            ],
+            // ==========================================
+            // ---------- SECCIONES DE NUESTRA EMPRESA --------
+            // ==========================================
+            Sections::COMPANY_HERO => [
+                'title' => 'Comprometidos con la excelencia en cada solución',
+                'subtitle' => 'Nuestra empresa',
+                'description' => 'En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.',
+                'image' => 'company-hero',
+                'layout_type' => self::LAYOUT_HERO_BUTTONS,
+                'icon_style' => self::ICON_NONE,
+                'buttons' => json_encode([
+                    [
+                        'text' => 'Conoce nuestro portafolio →',
+                        'url' => 'catalogo',
+                        'style' => 'primary'
+                    ],
+                    [
+                        'text' => '☏ Háblale con un asesor',
+                        'url' => 'contactanos',
+                        'style' => 'outline'
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
             ],
             // ==========================================
             // ---------- SECCIONES DE POLÍTICAS --------

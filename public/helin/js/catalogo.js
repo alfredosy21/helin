@@ -138,12 +138,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (match) {
             match.checked = true;
             updateClearButton();
-            applyFilters();
+            // No aplicar filtros AJAX al cargar, ya que el contenido ya viene del servidor
         }
     }
     if (urlParams.has('search') && searchInput) {
         searchInput.value = urlParams.get('search');
         updateClearButton();
-        applyFilters();
+        // No aplicar filtros AJAX al cargar, ya que el contenido ya viene del servidor
     }
 });

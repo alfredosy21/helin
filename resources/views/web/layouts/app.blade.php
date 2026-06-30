@@ -14,22 +14,22 @@
 
     {{-- SEO Meta Tags --}}
     @if($settings)
-        <meta name="description" content="{{ $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud. Especialistas en implantología, reingeniería y cirugía guiada.' }}">
-        <meta name="keywords" content="{{ $settings->keywords ?? 'implantes, cirugía odontológica, material dental, helin, productos médicos' }}">
+        <meta name="description" content="@yield('meta-description', $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud. Especialistas en implantología, reingeniería y cirugía guiada.')">
+        <meta name="keywords" content="@yield('meta-keywords', $settings->keywords ?? 'implantes, cirugía odontológica, material dental, helin, productos médicos')">
         <meta name="author" content="{{ $settings->name ?? 'Helin' }}">
         <meta property="og:title" content="@yield('title', $settings->name ?? 'Helin - Material Dental')">
-        <meta property="og:description" content="{{ $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud' }}">
-        <meta property="og:type" content="website">
+        <meta property="og:description" content="@yield('meta-description', $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud')">
+        <meta property="og:type" content="@yield('og-type', 'website')">
         <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:image" content="{{ $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-og-default.jpg') }}">
+        <meta property="og:image" content="@yield('og-image', $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-og-default.jpg'))">
         <meta property="og:site_name" content="{{ $settings->name ?? 'Helin' }}">
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:card" content="@yield('twitter-card', 'summary_large_image')">
         <meta name="twitter:title" content="@yield('title', $settings->name ?? 'Helin - Material Dental')">
-        <meta name="twitter:description" content="{{ $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud' }}">
-        <meta name="twitter:image" content="{{ $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-twitter-default.jpg') }}">
+        <meta name="twitter:description" content="@yield('meta-description', $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud')">
+        <meta name="twitter:image" content="@yield('twitter-image', $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-twitter-default.jpg'))">
     @else
-        <meta name="description" content="Soluciones médicas de alta calidad para profesionales de la salud. Especialistas en implantología, reingeniería y cirugía guiada.">
-        <meta name="keywords" content="implantes, cirugía odontológica, material dental, helin, productos médicos">
+        <meta name="description" content="@yield('meta-description', 'Soluciones médicas de alta calidad para profesionales de la salud. Especialistas en implantología, reingeniería y cirugía guiada.')">
+        <meta name="keywords" content="@yield('meta-keywords', 'implantes, cirugía odontológica, material dental, helin, productos médicos')">
         <meta name="author" content="Helin">
     @endif
 

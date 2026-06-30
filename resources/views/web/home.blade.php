@@ -1,6 +1,10 @@
 @extends('web.layouts.app')
 
 @section('title', 'Helin - Material Dental de Calidad')
+@section('meta-description', 'Helin - Soluciones odontológicas especializadas en implantes, instrumentos y biomateriales. Calidad garantizada para profesionales de la salud bucal en Venezuela.')
+@section('meta-keywords', 'implantes dentales, material dental, instrumentos odontológicos, biomateriales, cirugía guiada, helin, productos odontológicos Venezuela')
+@section('og-type', 'website')
+@section('og-image', asset('images/helin-home-og.jpg'))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/home.css') }}">
@@ -16,10 +20,7 @@
       position: relative;
       overflow: hidden;
       ">
-      @php
-          $heroSection = \App\Models\Sections::find(\App\Models\Sections::HERO_HOME);
-      @endphp
-      <div class="hero-inner relative max-w-6xl mx-auto px-6 py-16 lg:py-20" style="
+            <div class="hero-inner relative max-w-6xl mx-auto px-6 py-16 lg:py-20" style="
          position: relative;
          display: grid;
          grid-template-columns: auto 1fr;
@@ -27,7 +28,7 @@
          align-items: center;
          ">
          <!-- Hero Badges -->
-         @if($heroSection && $heroSection->status_content)
+         @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
              @php
                  $items = $heroSection->items ? json_decode($heroSection->items, true) : [];
                  $heroBadges = $items['hero_badges'] ?? [];
@@ -138,61 +139,47 @@
    <div class="container mx-auto px-4">
       <!-- Flow Highlight Section -->
       <section class="flow-highlight">
-         <aside class="how-card">
-           <h3>¿Cómo solicitar productos Helin?</h3>
-           <div class="step">
-             <b>⌕</b>
-             <div><strong>Busca tus productos</strong><span>Explora implantes, instrumentos y kits.</span></div>
-             <div class="number">1</div>
-           </div>
-           <div class="step">
-             <b>🛒</b>
-             <div><strong>Agrega al carrito</strong><span>Selecciona cantidades y arma tu solicitud.</span></div>
-             <div class="number">2</div>
-           </div>
-           <div class="step">
-             <b>☏</b>
-             <div><strong>Atención personalizada</strong><span>Un ejecutivo comercial te contactará para continuar.</span></div>
-             <div class="number">3</div>
-           </div>
-         </aside>
+                     @if($howToSection && $howToSection->status == 1 && $howToSection->status_content == 1)
+                @php
+                    $items = $howToSection->items ? json_decode($howToSection->items, true) : [];
+                    $steps = $items['steps'] ?? [];
+                @endphp
+                <aside class="how-card">
+                   <h3>{{ $howToSection->title }}</h3>
+                   @foreach($steps as $step)
+                       <div class="step">
+                         <b>{{ $step['icon'] ?? '' }}</b>
+                         <div><strong>{{ $step['title'] ?? '' }}</strong><span>{{ $step['description'] ?? '' }}</span></div>
+                         <div class="number">{{ $step['number'] ?? '' }}</div>
+                       </div>
+                   @endforeach
+                 </aside>
+            @endif
 
          <div class="featured-products">
            <div class="featured-head">
-             <span class="crumb">VER TODO EL CATÁLOGO →</span>
-             <span class="crumb">Implantes · Aditamentos · Kits</span>
              <h3>Destacados <span style="color:var(--helin)">Helin</span></h3>
+             <a href="{{ route('catalogo') }}" class="crumb">VER TODO EL CATÁLOGO →</a>
            </div>
 
-           <div class="mini-grid">
-             <article class="mini-product">
-               <span class="label">Nuevo</span>
-               <div class="product-img"></div>
-               <h4>Implante Dental Cónico</h4>
-               <div class="stars">★★★★★</div>
-               <div class="price">$195.00</div>
-             </article>
-             <article class="mini-product">
-               <span class="label">Top</span>
-               <div class="product-img"></div>
-               <h4>Pilar Protésico de Titanio</h4>
-               <div class="stars">★★★★★</div>
-               <div class="price">$85.00</div>
-             </article>
-             <article class="mini-product">
-               <span class="label">-15%</span>
-               <div class="product-img"></div>
-               <h4>Kit Quirúrgico de Implantes</h4>
-               <div class="stars">★★★★★</div>
-               <div class="price">$1,250.00</div>
-             </article>
-             <article class="mini-product">
-               <span class="label">Especial</span>
-               <div class="product-img"></div>
-               <h4>Motor para Implantología</h4>
-               <div class="stars">★★★★★</div>
-               <div class="price">$980.00</div>
-             </article>
+                      <div class="mini-grid">
+                @foreach($featuredProducts as $product)
+                    @php
+                        $badge = '';
+                        if($product->is_new) $badge = 'Nuevo';
+                        elseif($product->is_on_sale) $badge = 'Oferta';
+                    @endphp
+                    @include('web.components.product-card', [
+                        'productImage' => $product->image ? asset('storage/' . $product->image) : asset('storage/products/73432-21300078.webp'),
+                        'productName' => $product->name,
+                        'productBrand' => $product->brand->name ?? 'Helin',
+                        'productPrice' => $product->price,
+                        'productOldPrice' => $product->is_on_sale ? $product->old_price : null,
+                        'productBadge' => $badge,
+                        'productLink' => route('producto', ['slug' => $product->slug]),
+                        'productSlug' => $product->slug
+                    ])
+                @endforeach
            </div>
          </div>
       </section>
@@ -200,22 +187,9 @@
       @include('web.partials.near')
    </div>
 
-   @php
-       $productSections = \App\Models\Sections::where('status', 1)
-           ->whereIn('id', [\App\Models\Sections::IMPLANTOLOGY_PRODUCTS, \App\Models\Sections::GBR_PRODUCTS, \App\Models\Sections::INSTRUMENTS_PRODUCTS])
-           ->orderBy('id')
-           ->get();
-
-       // Mapear secciones a categorías
-       $sectionCategories = [
-           \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantes'],
-           \App\Models\Sections::GBR_PRODUCTS         => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
-           \App\Models\Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Instrumentos', 'slug' => 'tijeras'],
-       ];
-   @endphp
 
    @foreach($productSections as $index => $section)
-       @if($section->status_content)
+       @if($section->status == 1 && $section->status_content == 1)
            @php
                $sectionCat   = $sectionCategories[$section->id] ?? null;
                $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
@@ -278,8 +252,14 @@
       ">
       <div class="test-head flex items-end justify-between gap-6 mb-8">
          <div>
-            <small class="text-turquesa font-black text-xs">Testimonios</small>
-            <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: 0;">Lo que dicen<br>nuestros clientes</h2>
+            @if($testimonialsSection && $testimonialsSection->status == 1 && $testimonialsSection->status_content == 1)
+                <small class="text-turquesa font-black text-xs">{{ $testimonialsSection->subtitle ?? 'Testimonios' }}</small>
+                <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: 0;">{!! $testimonialsSection->title !!}</h2>
+            @else
+                <!-- Fallback hardcoded -->
+                <small class="text-turquesa font-black text-xs">Testimonios</small>
+                <h2 class="text-3xl lg:text-4xl leading-none mt-1" style="letter-spacing: 0;">Lo que dicen<br>nuestros clientes</h2>
+            @endif
          </div>
          <div class="arrows flex gap-3">
             <button class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">←</button>
@@ -287,10 +267,7 @@
          </div>
       </div>
       <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-         @php
-             $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('position', 'asc')->take(3)->get();
-         @endphp
-         @foreach($testimonials as $testimonial)
+                  @foreach($testimonials as $testimonial)
              @include('web.components.testimonial-card', [
                  'testimonialText' => $testimonial->content,
                  'testimonialAuthor' => $testimonial->name,

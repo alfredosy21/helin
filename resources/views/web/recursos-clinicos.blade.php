@@ -11,10 +11,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-copy">
-                @php
-                    $heroSection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_RESOURCES_HERO);
-                @endphp
-                @if($heroSection && $heroSection->status_content)
+                                @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
                     @if($heroSection->layout_type === 'text_simple')
                         <span class="hero-badge">{{ $heroSection->title }}</span>
                         <h1>{!! $heroSection->content !!}</h1>
@@ -65,13 +62,7 @@
 
     <!-- Estadísticas -->
     <section class="stats">
-        @php
-            $totalResources = \App\Models\Resource::where('is_active', true)->count();
-            $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->count();
-            $totalPDFs = \App\Models\Resource::where('is_active', true)->where('format', 'pdf')->count();
-            $totalCases = \App\Models\Resource::where('is_active', true)->where('type', 'case')->count();
-        @endphp
-        <article class="stat">
+                <article class="stat">
             <div class="stat-icon">+</div>
             <div>
                 <strong>{{ $totalResources }}</strong>
@@ -104,10 +95,7 @@
 <main class="container mx-auto px-4 py-8">
     <!-- Sección de Búsqueda -->
     <section class="section-head">
-        @php
-            $librarySection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_LIBRARY);
-        @endphp
-        @if($librarySection && $librarySection->status_content)
+                @if($librarySection && $librarySection->status == 1 && $librarySection->status_content == 1)
             @if($librarySection->layout_type === 'search_features')
                 @php
                     $items = $librarySection->items ? json_decode($librarySection->items, true) : [];
@@ -129,19 +117,13 @@
         <input type="search" name="search" placeholder="Buscar por tema, producto o procedimiento..." id="searchInput">
         <select name="specialty" id="specialtySelect">
             <option value="">Especialidad</option>
-            @php
-                $resourceSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
-            @endphp
-            @foreach($resourceSpecialties as $specialty)
+                        @foreach($resourceSpecialties as $specialty)
                 <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
             @endforeach
         </select>
         <select name="type" id="typeSelect">
             <option value="">Tipo de recurso</option>
-            @php
-                $resourceTypes = \App\Models\ResourceType::where('is_active', true)->orderBy('name')->get();
-            @endphp
-            @foreach($resourceTypes as $type)
+                        @foreach($resourceTypes as $type)
                 <option value="{{ $type->id }}">{{ $type->name }}</option>
             @endforeach
         </select>
@@ -158,12 +140,9 @@
             <h3>Filtros</h3>
             <div class="filter-group">
                 <div class="group-title">Tipo de recurso</div>
-                @php
-                    $resourceTypes = \App\Models\ResourceType::where('is_active', true)->orderBy('name')->get();
-                @endphp
-                @foreach($resourceTypes as $type)
+                @foreach($resourceTypeCounts as $type)
                     @php
-                        $count = \App\Models\Resource::where('resource_type_id', $type->id)->where('is_active', true)->count();
+                        $count = $type->resources_count;
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="resource_type[]" value="{{ $type->id }}" class="filter-checkbox" data-filter-type="resource_type"> {{ $type->name }}</span>
@@ -173,12 +152,9 @@
             </div>
             <div class="filter-group">
                 <div class="group-title">Especialidad</div>
-                @php
-                    $resourceSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
-                @endphp
-                @foreach($resourceSpecialties as $specialty)
+                @foreach($resourceSpecialtyCounts as $specialty)
                     @php
-                        $count = \App\Models\Resource::where('resource_specialty_id', $specialty->id)->where('is_active', true)->count();
+                        $count = $specialty->resources_count;
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="resource_specialty[]" value="{{ $specialty->id }}" class="filter-checkbox" data-filter-type="resource_specialty"> {{ $specialty->name }}</span>
@@ -188,15 +164,7 @@
             </div>
             <div class="filter-group">
                 <div class="group-title">Formato</div>
-                @php
-                    $formats = \App\Models\Resource::where('is_active', true)
-                        ->select('format')
-                        ->selectRaw('count(*) as count')
-                        ->groupBy('format')
-                        ->orderByRaw('count(*) DESC')
-                        ->get();
-                @endphp
-                @foreach($formats as $format)
+                                @foreach($formats as $format)
                     @php
                         $formatName = match($format->format) {
                             'article' => 'Artículo',
@@ -227,10 +195,6 @@
                     $sortBy    = request('sort', 'position');
                     $iconMap   = ['case_study'=>'→','video'=>'▶','manual'=>'↓','technical_sheet'=>'↓','guide'=>'→','downloadable_guide'=>'→'];
                     $formatMap = ['article'=>'▣ Artículo','pdf'=>'▤ PDF','video'=>'▶ Video'];
-                    $resources = \App\Models\Resource::where('is_active', true)
-                        ->with(['resourceType','resourceSpecialty'])
-                        ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
-                        ->paginate(12);
                 @endphp
                 @include('web.partials.resource-results', compact('resources','sortBy','iconMap','formatMap'))
             </div>
