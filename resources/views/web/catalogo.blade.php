@@ -132,14 +132,7 @@
         <div class="flex-1 min-w-0">
 
             <!-- Banner -->
-            @if(request('featured') == '1')
-            <div class="bg-turquesa rounded-xl p-4 sm:p-6 lg:p-8 mb-6 relative overflow-hidden">
-                <div class="relative z-10 max-w-full sm:max-w-[65%]">
-                    <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">Productos Destacados</h1>
-                    <p class="text-white/90 text-xs sm:text-base">Explora nuestra selección de productos destacados de alta calidad para profesionales odontológicos.</p>
-                </div>
-            </div>
-            @elseif($currentCategory)
+            @if($currentCategory)
             <div class="bg-turquesa rounded-xl p-4 sm:p-6 lg:p-8 mb-6 relative overflow-hidden">
                 <div class="relative z-10 max-w-full sm:max-w-[65%]">
                     <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">{{ $currentCategory->name }}</h1>

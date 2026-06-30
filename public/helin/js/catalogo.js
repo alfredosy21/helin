@@ -142,7 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
             hasInitialFilters = true;
         }
     }
-    if (urlParams.has('featured')) {
+    // Manejar tanto ?featured=1 como ?tag[]=featured
+    if (urlParams.has('featured') || urlParams.has('tag[]')) {
         const match = document.querySelector(`.filter-checkbox[data-filter-type="tag"][value="featured"]`);
         if (match) {
             match.checked = true;
@@ -154,8 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
         hasInitialFilters = true;
     }
 
-    // Si hay filtros iniciales y viene featured=1, aplicar AJAX para asegurar filtrado correcto
-    if (hasInitialFilters && urlParams.has('featured')) {
+    // Si hay filtros iniciales, aplicar AJAX para asegurar filtrado correcto
+    if (hasInitialFilters) {
         setTimeout(() => {
             applyFilters();
         }, 100);
