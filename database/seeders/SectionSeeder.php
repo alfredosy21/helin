@@ -26,11 +26,14 @@ class SectionSeeder extends Seeder
     const LAYOUT_BRAND_GRID = 'brand_grid'; // Grid de marcas
     const LAYOUT_CITIES_LIST = 'cities_list'; // Lista de ciudades
     const LAYOUT_FEATURE_BOX = 'feature_box'; // Caja de características
+    const LAYOUT_HERO_BUTTONS = 'hero_buttons'; // Hero con botones
+    const LAYOUT_TESTIMONIALS = 'testimonials'; // Sección de testimonios
 
     // ICON STYLES
     const ICON_EMOJI = 'emoji'; // Iconos emoji
     const ICON_LUCIDE = 'lucide'; // Iconos Lucide
     const ICON_CUSTOM = 'custom'; // Iconos personalizados
+    const ICON_NONE = 'none'; // Sin iconos
     /**
      * Run the database seeds.
      *
