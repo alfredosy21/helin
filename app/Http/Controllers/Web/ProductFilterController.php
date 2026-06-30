@@ -14,6 +14,7 @@ class ProductFilterController extends Controller
         $categories = $request->get('category', []);
         $brands     = $request->get('brand', []);
         $tags       = $request->get('tag', []);
+        $featured   = $request->get('featured', '');
         $sortBy     = $request->get('sort', 'recent');
 
         $query = Product::with(['category', 'brand'])->where('is_active', true);
@@ -38,6 +39,11 @@ class ProductFilterController extends Controller
             if (in_array('featured', $tags)) $query->where('is_featured', true);
             if (in_array('on_sale', $tags))  $query->where('is_on_sale', true);
             if (in_array('new', $tags))      $query->where('is_new', true);
+        }
+
+        // Apply featured filter if passed directly
+        if ($featured == '1') {
+            $query->where('is_featured', true);
         }
 
         switch ($sortBy) {

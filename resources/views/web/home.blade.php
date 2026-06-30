@@ -159,7 +159,7 @@
          <div class="featured-products">
            <div class="featured-head">
              <h3>Destacados <span style="color:var(--helin)">Helin</span></h3>
-             <a href="{{ route('catalogo') }}" class="crumb">VER TODO EL CATÁLOGO →</a>
+             <a href="{{ route('catalogo', ['featured' => '1']) }}" class="crumb">VER PRODUCTOS DESTACADOS →</a>
            </div>
 
                       <div class="mini-grid">

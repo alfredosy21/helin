@@ -132,18 +132,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Aplicar filtros iniciales si vienen de URL (ej: ?category=implantes)
     const urlParams = new URLSearchParams(window.location.search);
+    let hasInitialFilters = false;
+
     if (urlParams.has('category')) {
         const slug = urlParams.get('category');
         const match = document.querySelector(`.filter-checkbox[data-filter-type="category"][value="${slug}"]`);
         if (match) {
             match.checked = true;
-            updateClearButton();
-            // No aplicar filtros AJAX al cargar, ya que el contenido ya viene del servidor
+            hasInitialFilters = true;
+        }
+    }
+    if (urlParams.has('featured')) {
+        const match = document.querySelector(`.filter-checkbox[data-filter-type="tag"][value="featured"]`);
+        if (match) {
+            match.checked = true;
+            hasInitialFilters = true;
         }
     }
     if (urlParams.has('search') && searchInput) {
         searchInput.value = urlParams.get('search');
-        updateClearButton();
-        // No aplicar filtros AJAX al cargar, ya que el contenido ya viene del servidor
+        hasInitialFilters = true;
     }
+
+    // Si hay filtros iniciales y viene featured=1, aplicar AJAX para asegurar filtrado correcto
+    if (hasInitialFilters && urlParams.has('featured')) {
+        setTimeout(() => {
+            applyFilters();
+        }, 100);
+    }
+
+    updateClearButton();
 });
