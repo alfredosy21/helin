@@ -116,24 +116,24 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-tooth text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Implantología</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Implantología</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <div class="space-y-4">
                                             <div>
                                                 <p class="text-turquesa font-semibold text-[10px] mb-2 uppercase tracking-wide">AB</p>
                                                 <ul class="space-y-1">
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
                                                 </ul>
                                             </div>
                                             <div>
                                                 <p class="text-turquesa font-semibold text-[10px] mb-2 uppercase tracking-wide">GDT</p>
                                                 <ul class="space-y-1">
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
+                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -145,13 +145,13 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-bone text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide leading-tight hover:text-turquesa transition-colors">Regeneración Ósea Guiada</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide leading-tight hover:text-turquesa transition-colors">Regeneración Ósea Guiada</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Biomateriales</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Regeneración Guiada Bucal</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Suturas</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Biomateriales</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Regeneración Guiada Bucal</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Suturas</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -161,13 +161,13 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-layer-group text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Osteosíntesis</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Osteosíntesis</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Placas</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tornillos</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cajetín</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Placas</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tornillos</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cajetín</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -177,57 +177,62 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-smile text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Cuidado Bucal</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Cuidado Bucal</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Especiales</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Diarios</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Especiales</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Diarios</a></li>
                                         </ul>
                                     </div>
                                 </div>
 
-                                <!-- Columna 5: Instrumentos -->
-                                <div class="px-4 py-4 border-r border-helin-border cursor-pointer">
+                                <!-- Columna 5: Instrumentos y Equipos -->
+                                <div class="px-4 py-4 cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-scissors text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Instrumentos</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Instrumentos</h4>
+                                        </div>
+                                        <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
+                                        <ul class="space-y-2 mb-6">
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tijeras</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Pinzas</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Separadores</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cinceles</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Periostótomos</a></li>
+                                        </ul>
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <i class="fas fa-cog text-turquesa text-sm"></i>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Equipos</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tijeras</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Pinzas</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Separadores</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cinceles</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Periostótomos</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Equipos odontológicos</a></li>
                                         </ul>
+                                        <!-- Subdivisión de Equipos -->
+                                        <div class="ml-4 pl-2 border-l border-helin-border/30">
+                                            <ul class="space-y-2">
+                                                <li><a href="#" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Piezas de mano</a></li>
+                                                <li><a href="#" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Motores</a></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Columna 6: Planificación Digital y Equipos -->
+                                <!-- Columna 6: Planificación Digital -->
                                 <div class="px-4 py-4 cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-digital-tachograph text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Planificación Digital</h4>
-                                        </div>
-                                        <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
-                                        <ul class="space-y-2 mb-6">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Planificación Digital</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Impresión 3D</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Escaneo Intraoral</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> PD Completa</a></li>
-                                        </ul>
-                                        <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-cog text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[11px] uppercase tracking-wide hover:text-turquesa transition-colors">Equipos</h4>
+                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Planificación Digital</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Equipos odontológicos</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Piezas de mano</a></li>
-                                            <li><a href="#" class="text-helin-text text-[11px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Motores</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Planificación Digital</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Impresión 3D</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Escaneo Intraoral</a></li>
+                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> PD Completa</a></li>
                                         </ul>
                                     </div>
                                 </div>

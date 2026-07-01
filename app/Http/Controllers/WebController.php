@@ -19,6 +19,7 @@ class WebController extends Controller
 
         // Featured products
         $featuredProducts = \App\Models\Product::where('is_active', true)
+            ->where('is_featured', true)
             ->inRandomOrder()
             ->take(4)
             ->get();
@@ -56,7 +57,45 @@ class WebController extends Controller
      */
     public function catalogo()
     {
-        return view('web.catalogo');
+        // Get current category for metadata
+        $currentCategory = null;
+        $categorySlug = request('category');
+
+        if ($categorySlug) {
+            $currentCategory = \App\Models\Category::where('slug', $categorySlug)
+                ->where('is_active', true)
+                ->first();
+        }
+
+        // Get products with filters
+        $query = \App\Models\Product::with(['category', 'brand'])
+            ->where('is_active', true);
+
+        // Apply featured filter if requested
+        if (request('featured') == '1') {
+            $query->where('is_featured', true);
+        }
+
+        // Apply category filter if present
+        if ($currentCategory) {
+            $query->where('category_id', $currentCategory->id);
+        }
+
+        // Apply search filter if present
+        $searchTerm = request('search');
+        if ($searchTerm) {
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhereHas('brand', function($brandQuery) use ($searchTerm) {
+                      $brandQuery->where('name', 'like', '%' . $searchTerm . '%');
+                  });
+            });
+        }
+
+        $products = $query->orderBy('name')->get();
+
+        return view('web.catalogo', compact('products', 'currentCategory'));
     }
 
     /**

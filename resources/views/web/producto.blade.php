@@ -13,8 +13,7 @@
         'attributes' => 'class="text-sm mb-6"',
         'items' => [
             ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
-            ['label' => 'Catálogo', 'url' => route('catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
-            ['label' => $product->category->name ?? 'Categoría', 'url' => route('catalogo'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
+            ['label' => $product->category->name ?? 'Categoría', 'url' => route('catalogo', ['category' => $product->category->slug ?? '']), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => $product->name, 'spanAttributes' => 'class="text-turquesa font-medium"']
         ],
         'separatorAttributes' => 'class="text-helin-text mx-2"'
