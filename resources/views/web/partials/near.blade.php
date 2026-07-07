@@ -17,6 +17,14 @@
       <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">
          <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
       </h2>
-      <p class="text-helin-text font-bold mt-1">Caracas · Valencia · Barquisimeto · Maracaibo</p>
+      <p class="text-helin-text font-bold mt-1">
+         <a href="https://wa.me/584242789481?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Caracas</a>
+         ·
+         <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hover:text-turquesa transition-colors">Valencia</a>
+         ·
+         <a href="https://wa.me/584143805640?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Barquisimeto</a>
+         ·
+         <a href="https://wa.me/584242550811?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Maracaibo</a>
+      </p>
    </div>
 </section>

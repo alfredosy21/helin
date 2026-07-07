@@ -57,7 +57,7 @@
                     $settings = \App\Models\Settings::getSettings();
                 @endphp
                 <!-- WhatsApp - solo desktop -->
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '584127398580') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-[#123F4A] transition text-sm">
+                <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-[#123F4A] transition text-sm">
                     <i class="fab fa-whatsapp text-2xl"></i>
                     <span>Escríbenos</span>
                 </a>
@@ -104,10 +104,10 @@
                 <nav class="flex items-center gap-6 xl:gap-8 text-sm">
                     <!-- Productos con Mega Menú -->
                     <div class="relative group">
-                        <button class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold">
+                        <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold">
                             <i class="fas fa-bars"></i>
                             Productos
-                        </button>
+                        </a>
                         <!-- Mega Menú -->
                         <div class="absolute top-full left-0 w-[1200px] bg-white shadow-[0_10px_20px_rgba(0,0,0,0.1)] rounded-b-lg py-6 hidden group-hover:block z-50" style="box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                             <div class="grid grid-cols-6 gap-0">

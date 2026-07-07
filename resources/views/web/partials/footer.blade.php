@@ -90,7 +90,7 @@
                                 </div>
                             @endif
                             @if($settings && $settings->caracas_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->caracas_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->caracas_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
@@ -117,7 +117,7 @@
                                 </div>
                             @endif
                             @if($settings && $settings->valencia_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
@@ -144,7 +144,7 @@
                                 </div>
                             @endif
                             @if($settings && $settings->barquisimeto_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->barquisimeto_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->barquisimeto_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else
@@ -171,7 +171,7 @@
                                 </div>
                             @endif
                             @if($settings && $settings->maracaibo_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracaibo_whatsapp) }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracaibo_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
                             @else

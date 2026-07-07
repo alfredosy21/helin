@@ -14,8 +14,7 @@
 <main>
    <!-- Hero Section -->
    <section class="hero relative overflow-hidden" style="
-      background: radial-gradient(circle at 78% 18%, rgba(255,255,255,.42), transparent 22%),
-      linear-gradient(135deg, #6BC2C3 0%, #97d5d4 100%);
+      background: url('{{ asset('images/banner.png') }}') center top / cover no-repeat;
       color: #fff;
       position: relative;
       overflow: hidden;
@@ -50,15 +49,15 @@
          @endif
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
-            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0;">{{ $heroSection->title ?? 'helin.' }}</div>
+            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">{{ $heroSection->title ?? 'helin.' }}</div>
             @if($heroSection->subtitle)
                 <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">{{ $heroSection->subtitle }}</small>
             @endif
-            <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0;">
+            <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
                {!! $heroSection->content !!}
             </h1>
             @if($heroSection->description)
-                <p class="text-white/90 text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0">{!! $heroSection->description !!}</p>
+                <p class="text-white text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{!! $heroSection->description !!}</p>
             @endif
             @if($heroSection->buttons)
                 @php
@@ -90,13 +89,7 @@
          </div>
       </div>
       <!-- Hero Visual Background -->
-      <div class="hero-visual absolute inset-0 pointer-events-none">
-         <div class="medical-scene absolute inset-0 rounded-3xl overflow-hidden opacity-30" style="
-            background: radial-gradient(circle at 55% 20%, #fff 0 0, transparent 30%),
-            linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.08));
-            border: 1px solid rgba(255,255,255,.35);
-            "></div>
-      </div>
+      <div class="hero-visual absolute inset-0 pointer-events-none" style="background: rgba(255,255,255,0.10);"></div>
    </section>
 
    @include('web.partials.beneficios')
@@ -146,22 +139,24 @@
    <div class="container mx-auto px-4" style="padding-bottom: 20px;">
       <!-- Flow Highlight Section -->
       <section class="flow-highlight">
-                     @if($howToSection && $howToSection->status == 1 && $howToSection->status_content == 1)
-                @php
-                    $items = $howToSection->items ? json_decode($howToSection->items, true) : [];
-                    $steps = $items['steps'] ?? [];
-                @endphp
                 <aside class="how-card">
-                   <h3>{{ $howToSection->title }}</h3>
-                   @foreach($steps as $step)
-                       <div class="step">
-                         <b>{{ $step['icon'] ?? '' }}</b>
-                         <div><strong>{{ $step['title'] ?? '' }}</strong><span>{{ $step['description'] ?? '' }}</span></div>
-                         <div class="number">{{ $step['number'] ?? '' }}</div>
-                       </div>
-                   @endforeach
+                   <h3>¿Cómo solicitar productos Helin?</h3>
+                   <div class="step">
+                      <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <div><strong>Selecciona tus productos</strong><span>Explora el catálogo Helin y elige los productos que necesitas.</span></div>
+                      <div class="number">1</div>
+                   </div>
+                   <div class="step">
+                      <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <div><strong>Arma tu carrito</strong><span>Agrega cantidades y revisa el resumen de tu solicitud comercial.</span></div>
+                      <div class="number">2</div>
+                   </div>
+                   <div class="step">
+                      <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <div><strong>Contacta a tu ejecutivo</strong><span>Envía la solicitud por WhatsApp al ejecutivo asignado según tu zona.</span></div>
+                      <div class="number">3</div>
+                   </div>
                  </aside>
-            @endif
 
          <div class="featured-products">
            <div class="featured-head">
@@ -170,23 +165,36 @@
            </div>
 
                       <div class="mini-grid">
-                @foreach($featuredProducts->take(3) as $product)
-                    @php
-                        $badge = '';
-                        if($product->is_new) $badge = 'Nuevo';
-                        elseif($product->is_on_sale) $badge = 'Oferta';
-                    @endphp
-                    @include('web.components.product-card', [
-                        'productImage' => $product->image ? asset('storage/' . $product->image) : asset('storage/products/73432-21300078.webp'),
-                        'productName' => $product->name,
-                        'productBrand' => $product->brand->name ?? 'Helin',
-                        'productPrice' => $product->price,
-                        'productOldPrice' => $product->is_on_sale ? $product->old_price : null,
-                        'productBadge' => $badge,
-                        'productLink' => route('producto', ['slug' => $product->slug]),
-                        'productSlug' => $product->slug
-                    ])
-                @endforeach
+                @include('web.components.product-card', [
+                    'productImage' => asset('images/im1.png'),
+                    'productName' => 'Producto Destacado 1',
+                    'productBrand' => 'Helin',
+                    'productPrice' => 0.00,
+                    'productOldPrice' => null,
+                    'productBadge' => 'Nuevo',
+                    'productLink' => route('catalogo'),
+                    'productSlug' => 'producto-destacado-1'
+                ])
+                @include('web.components.product-card', [
+                    'productImage' => asset('images/im2.png'),
+                    'productName' => 'Producto Destacado 2',
+                    'productBrand' => 'Helin',
+                    'productPrice' => 0.00,
+                    'productOldPrice' => null,
+                    'productBadge' => '',
+                    'productLink' => route('catalogo'),
+                    'productSlug' => 'producto-destacado-2'
+                ])
+                @include('web.components.product-card', [
+                    'productImage' => asset('images/im3.png'),
+                    'productName' => 'Producto Destacado 3',
+                    'productBrand' => 'Helin',
+                    'productPrice' => 0.00,
+                    'productOldPrice' => null,
+                    'productBadge' => 'Oferta',
+                    'productLink' => route('catalogo'),
+                    'productSlug' => 'producto-destacado-3'
+                ])
            </div>
          </div>
       </section>
@@ -196,7 +204,11 @@
 
 
    @foreach($productSections as $index => $section)
-       @if($section->status == 1 && $section->status_content == 1)
+       @php
+           $sectionTitleLower = strtolower($section->title ?? '');
+           $isInstrumentosEquipos = str_contains($sectionTitleLower, 'instrumentos') || str_contains($sectionTitleLower, 'equipos');
+       @endphp
+       @if($section->status == 1 && $section->status_content == 1 && !$isInstrumentosEquipos)
            @php
                $sectionCat   = $sectionCategories[$section->id] ?? null;
                $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
@@ -211,7 +223,20 @@
                <div class="container mx-auto px-4">
                    <div class="section-title flex items-end justify-between gap-5 mb-5">
                        <div>
-                           <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $section->title }}</h2>
+                           @php
+                               $sectionTitle = $section->title;
+                               if (str_contains(strtolower($sectionTitle), 'implantología')) {
+                                   $sectionTitle = 'Destacados en Implantología';
+                               } elseif (str_contains(strtolower($sectionTitle), 'regeneración') || str_contains(strtolower($sectionTitle), 'osea') || str_contains(strtolower($sectionTitle), 'guía')) {
+                                   $sectionTitle = 'Destacados en Regeneración Ósea Guíada';
+                               } elseif (str_contains(strtolower($sectionTitle), 'instrumentos') || str_contains(strtolower($sectionTitle), 'equipos')) {
+                                   $sectionTitle = 'Destacados en Instrumentos y Equipos';
+                               } else {
+                                   $sectionTitle = str_ireplace('más vendido', 'Destacados', $sectionTitle);
+                                   $sectionTitle = str_ireplace('más vendidos', 'Destacados', $sectionTitle);
+                               }
+                           @endphp
+                           <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $sectionTitle }}</h2>
                            @php
                                $description = trim(strip_tags($section->content));
                                $firstLine = explode("\n", $description)[0];
@@ -227,9 +252,11 @@
                                    $badge = '';
                                    if($product->is_new) $badge = 'Nuevo';
                                    elseif($product->is_on_sale) $badge = 'Oferta';
+                                   $sectionImages = [asset('images/im1.png'), asset('images/im2.png'), asset('images/im3.png'), asset('images/im4.png')];
+                                   $sectionImage = $sectionImages[($loop->index) % 4];
                                @endphp
                                @include('web.components.product-card', [
-                                   'productImage' => asset('storage/products/73432-21300078.webp'),
+                                   'productImage' => $sectionImage,
                                    'productName' => $product->name,
                                    'productBrand' => $product->brand->name ?? 'Helin',
                                    'productPrice' => $product->price,
@@ -250,6 +277,61 @@
            </section>
        @endif
    @endforeach
+
+   <!-- Destacados en Instrumentos y Equipos -->
+   <section class="py-12 sm:py-16">
+       <div class="container mx-auto px-4">
+           <div class="section-title flex items-end justify-between gap-5 mb-5">
+               <div>
+                   <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Destacados en Instrumentos y Equipos</h2>
+                   <p class="text-helin-text text-sm mt-1">Precisión y tecnología para tu práctica odontológica</p>
+               </div>
+               <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
+           </div>
+           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+               @include('web.components.product-card', [
+                   'productImage' => asset('images/im1.png'),
+                   'productName' => 'Instrumento Destacado 1',
+                   'productBrand' => 'Helin',
+                   'productPrice' => 0.00,
+                   'productOldPrice' => null,
+                   'productBadge' => 'Nuevo',
+                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
+                   'productSlug' => 'instrumento-destacado-1'
+               ])
+               @include('web.components.product-card', [
+                   'productImage' => asset('images/im2.png'),
+                   'productName' => 'Instrumento Destacado 2',
+                   'productBrand' => 'Helin',
+                   'productPrice' => 0.00,
+                   'productOldPrice' => null,
+                   'productBadge' => '',
+                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
+                   'productSlug' => 'instrumento-destacado-2'
+               ])
+               @include('web.components.product-card', [
+                   'productImage' => asset('images/im3.png'),
+                   'productName' => 'Instrumento Destacado 3',
+                   'productBrand' => 'Helin',
+                   'productPrice' => 0.00,
+                   'productOldPrice' => null,
+                   'productBadge' => 'Oferta',
+                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
+                   'productSlug' => 'instrumento-destacado-3'
+               ])
+               @include('web.components.product-card', [
+                   'productImage' => asset('images/im4.png'),
+                   'productName' => 'Instrumento Destacado 4',
+                   'productBrand' => 'Helin',
+                   'productPrice' => 0.00,
+                   'productOldPrice' => null,
+                   'productBadge' => '',
+                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
+                   'productSlug' => 'instrumento-destacado-4'
+               ])
+           </div>
+       </div>
+   </section>
 
    <!-- Testimonios -->
    <section class="testimonials container mx-auto px-4 mt-14 rounded-3xl p-9" style="
@@ -275,10 +357,22 @@
       </div>
       <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   @foreach($testimonials as $testimonial)
+             @php
+                 $authorName = strtolower($testimonial->name ?? '');
+                 $testimonialImage = '';
+                 if (str_contains($authorName, 'maría fernanda lópez')) {
+                     $testimonialImage = asset('images/dra_test.png');
+                 } elseif (str_contains($authorName, 'josé andrés rivas')) {
+                     $testimonialImage = asset('images/dr_test.png');
+                 } elseif (str_contains($authorName, 'sorrisa') || str_contains($authorName, 'sonrisa') || str_contains($authorName, 'integral')) {
+                     $testimonialImage = asset('images/clinica_test.png');
+                 }
+             @endphp
              @include('web.components.testimonial-card', [
                  'testimonialText' => $testimonial->content,
                  'testimonialAuthor' => $testimonial->name,
-                 'testimonialTitle' => $testimonial->specialty
+                 'testimonialTitle' => $testimonial->specialty,
+                 'testimonialImage' => $testimonialImage
              ])
          @endforeach
       </div>
