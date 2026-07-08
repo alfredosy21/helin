@@ -2,7 +2,7 @@
 <footer class="bg-turquesa text-white">
     <div class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Columna 1: Identidad y Contacto Directo -->
+            <!-- Columna 1: Identidad y Redes Sociales -->
             <div>
                 @php
                 $settings = \App\Models\Settings::getSettings();
@@ -12,28 +12,21 @@
             @else
                 <h3 class="text-3xl mb-4 lowercase">helin.</h3>
             @endif
-                <p class="text-white/80 text-sm mb-4">{{ $settings->tagline ?? 'Todo en Cirugía Odontológica Especializada.' }}</p>
-                <p class="text-white font-medium mb-4">{{ $settings->phone ?? '+58 412 813 7896' }}</p>
-                @php
-                $settings = \App\Models\Settings::getSettings();
-            @endphp
+                <p class="text-white/80 text-sm mb-6">{{ $settings->tagline ?? 'Todo en Cirugía Odontológica Especializada.' }}</p>
                 <div class="flex space-x-3">
-                    {{-- Siempre mostrar Instagram --}}
                     <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    {{-- Siempre mostrar LinkedIn --}}
                     <a href="https://www.linkedin.com/company/helin-latam" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    {{-- Siempre mostrar Facebook --}}
                     <a href="https://www.facebook.com/helin.latam.user" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-facebook-f"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- Columna 2: Nuestra Empresa -->
+            <!-- Columna 2: Nuestra Empresa + Políticas -->
             <div>
                 <h4 class="text-lg mb-4">Nuestra Empresa</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
@@ -42,40 +35,15 @@
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestro-team" class="hover:text-white transition-colors">Nuestro Team</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Nuestro Alianza</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('contactanos') }}" class="hover:text-white transition-colors">Contáctanos</a></li>
-                </ul>
-            </div>
-
-            <!-- Columna 3: Políticas -->
-            <div>
-                <h4 class="text-lg mb-4">Políticas</h4>
-                <ul class="space-y-2 text-white/80 text-sm">
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#envio-garantias" class="hover:text-white transition-colors">Políticas de envío y garantías</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#terminos-condiciones" class="hover:text-white transition-colors">Términos y condiciones</a></li>
                     <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#privacidad" class="hover:text-white transition-colors">Política de privacidad</a></li>
                 </ul>
             </div>
 
-            <!-- Columna 4: Contacto Técnico y Sedes -->
+            <!-- Columna 3: Nuestras Sedes -->
             <div>
-                <h4 class="text-lg mb-4">Contáctanos</h4>
-                <div class="space-y-3 text-white/80 text-sm mb-4">
-                    <a href="mailto:{{ $settings->email ?? 'info@helinbeam.com' }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <span>{{ $settings->email ?? 'info@helinbeam.com' }}</span>
-                    </a>
-                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 412 739 8580') }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
-                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-xs">Central telefónica</span>
-                            <span>{{ $settings->phone ?? '+58 412 739 8580' }}</span>
-                        </div>
-                    </a>
-                </div>
-                <h5 class="font-semibold text-sm mb-3">Nuestras sedes</h5>
+                <h4 class="text-lg mb-4">Nuestras sedes</h4>
                 <ul class="space-y-2 text-white/80 text-sm">
                     {{-- Caracas --}}
                     <li class="flex items-center gap-2">
@@ -99,9 +67,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1">
-                            <span class="font-medium">Caracas</span>
-                        </div>
+                        <span class="font-medium">Caracas</span>
                     </li>
 
                     {{-- Valencia --}}
@@ -126,9 +92,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1">
-                            <span class="font-medium">Valencia</span>
-                        </div>
+                        <span class="font-medium">Valencia</span>
                     </li>
 
                     {{-- Barquisimeto --}}
@@ -153,9 +117,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1">
-                            <span class="font-medium">Barquisimeto</span>
-                        </div>
+                        <span class="font-medium">Barquisimeto</span>
                     </li>
 
                     {{-- Maracaibo --}}
@@ -180,11 +142,31 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1">
-                            <span class="font-medium">Maracaibo</span>
-                        </div>
+                        <span class="font-medium">Maracaibo</span>
                     </li>
                 </ul>
+            </div>
+
+            <!-- Columna 4: Contáctanos -->
+            <div>
+                <h4 class="text-lg mb-4">Contáctanos</h4>
+                <div class="space-y-3 text-white/80 text-sm">
+                    <a href="mailto:{{ $settings->email ?? 'info@helinbeam.com' }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span>{{ $settings->email ?? 'info@helinbeam.com' }}</span>
+                    </a>
+                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 412 739 8580') }}" class="flex items-center gap-3 hover:text-white transition-colors duration-300">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs">Central telefónica</span>
+                            <span>{{ $settings->phone ?? '+58 412 739 8580' }}</span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

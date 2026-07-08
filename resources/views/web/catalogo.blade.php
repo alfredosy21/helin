@@ -36,7 +36,7 @@
     $productsQuery = \App\Models\Product::with(['category', 'brand'])->where('is_active', true);
     if ($initSearch)   $productsQuery->where(fn($q) => $q->where('name','like',"%$initSearch%")->orWhere('description','like',"%$initSearch%")->orWhere('sku','like',"%$initSearch%"));
     if ($initCategory) $productsQuery->whereHas('category', fn($q) => $q->where('slug', $initCategory));
-    $products = $productsQuery->orderBy('created_at', 'desc')->paginate(24)->withQueryString();
+    $products = $productsQuery->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 @endphp
 
 <main class="container mx-auto px-4 py-8">

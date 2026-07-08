@@ -60,7 +60,7 @@ class ProductFilterController extends Controller
                 $query->orderBy('created_at', 'desc');
         }
 
-        $products = $query->paginate(24);
+        $products = $query->paginate(15);
 
         $html = view('web.partials.product-results', compact('products'))->render();
 
