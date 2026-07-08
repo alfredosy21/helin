@@ -115,7 +115,7 @@
                                 <div class="px-4 py-4 border-r border-helin-border cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-tooth text-turquesa text-sm"></i>
+                                            <i class="fas fa-tooth text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Implantología</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
@@ -160,7 +160,7 @@
                                 <div class="px-4 py-4 border-r border-helin-border cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-layer-group text-turquesa text-sm"></i>
+                                            <i class="fas fa-toolbox text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Osteosíntesis</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
@@ -176,7 +176,7 @@
                                 <div class="px-4 py-4 border-r border-helin-border cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-smile text-turquesa text-sm"></i>
+                                            <i class="fas fa-face-smile text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Cuidado Bucal</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
@@ -191,7 +191,7 @@
                                 <div class="px-4 py-4 cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-scissors text-turquesa text-sm"></i>
+                                            <i class="fas fa-tools text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Instrumentos</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
@@ -203,7 +203,7 @@
                                             <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Periostótomos</a></li>
                                         </ul>
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-cog text-turquesa text-sm"></i>
+                                            <i class="fas fa-gears text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Equipos</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
@@ -224,7 +224,7 @@
                                 <div class="px-4 py-4 cursor-pointer">
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <i class="fas fa-digital-tachograph text-turquesa text-sm"></i>
+                                            <i class="fas fa-cube text-sm" style="color: #6BC2C3;"></i>
                                             <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Planificación Digital</h4>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
