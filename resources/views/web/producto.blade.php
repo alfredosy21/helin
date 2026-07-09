@@ -7,6 +7,14 @@
 @section('og-image', $product->image ? asset('storage/' . $product->image) : asset('images/helin-product-default.jpg'))
 @section('twitter-card', 'product')
 
+@push('styles')
+<style>
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+</style>
+@endpush
+
 @section('content')
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
@@ -22,22 +30,23 @@
     <div class="flex flex-col lg:flex-row gap-8 mb-12">
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
+            @php
+                $galleryImages = [
+                    asset('images/im1.png'),
+                    asset('images/im2.png'),
+                    asset('images/im3.png'),
+                    asset('images/im4.png'),
+                ];
+            @endphp
             <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
-                <img src="{{ asset('storage/products/73432-21300078.webp') }}" alt="{{ $product->name }}" class="w-full h-96 object-contain">
+                <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="w-full h-96 object-contain">
             </div>
             <div class="grid grid-cols-4 gap-3">
-                <button class="border-2 border-turquesa rounded-lg overflow-hidden p-2">
-                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
+                @foreach($galleryImages as $i => $img)
+                <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 transition-all">
+                    <img src="{{ $img }}" class="w-full h-16 object-contain">
                 </button>
-                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
-                </button>
-                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
-                </button>
-                <button class="border border-helin-border rounded-lg overflow-hidden p-2 hover:border-turquesa">
-                    <img src="{{ asset('storage/products/73432-21300078.webp') }}" class="w-full h-16 object-contain">
-                </button>
+                @endforeach
             </div>
         </div>
 
@@ -52,10 +61,10 @@
 
             <div class="flex items-center gap-3 mb-6">
                 @if($product->is_on_sale && $product->sale_price)
-                    <span class="text-2xl font-bold text-turquesa" style="font-size: 24px;">${{ number_format($product->sale_price, 2) }}</span>
-                    <span class="text-xl text-helin-text" style="text-decoration: line-through;">${{ number_format($product->price, 2) }}</span>
+                    <span class="text-lg text-helin-text" style="text-decoration: line-through;">${{ number_format($product->price, 2) }}</span>
+                    <span class="text-xl font-bold text-turquesa">${{ number_format($product->sale_price, 2) }}</span>
                 @else
-                    <span class="text-2xl font-bold text-turquesa" style="font-size: 24px;">${{ number_format($product->price, 2) }}</span>
+                    <span class="text-xl font-bold text-turquesa">${{ number_format($product->price, 2) }}</span>
                 @endif
             </div>
 
@@ -73,21 +82,50 @@
 
             <!-- Cantidad y Botón -->
             <div class="flex flex-col sm:flex-row items-center gap-4 mb-6" data-cart-context>
-                <div class="flex items-center rounded-full bg-turquesa/10 overflow-hidden px-2.5" style="padding: 5px 10px;">
-                    <button class="w-10 h-10 bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" onclick="if(this.nextElementSibling.value > 1) this.nextElementSibling.value--">-</button>
-                    <input type="number" value="1" min="1" class="w-20 text-center outline-none bg-transparent" data-cart-qty style="padding: 5px 10px;">
-                    <button class="w-10 h-10 bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" onclick="this.previousElementSibling.value++">+</button>
+                <div class="flex items-center rounded-full gap-1 px-1.5" style="background-color: rgba(107,194,195,0.45); height: 38px;">
+                    <button class="w-7 h-7 bg-white hover:bg-gray-50 rounded-full flex items-center justify-center transition-colors text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="if(this.nextElementSibling.value > 1) this.nextElementSibling.value--">−</button>
+                    <input type="number" value="1" min="1" class="w-8 text-center outline-none bg-transparent text-sm font-semibold" style="color:#9ca3af; -moz-appearance:textfield; appearance:textfield;" data-cart-qty onwheel="return false;">
+                    <button class="w-7 h-7 bg-white hover:bg-gray-50 rounded-full flex items-center justify-center transition-colors text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="this.previousElementSibling.value++">+</button>
                 </div>
                 <button
-                    class="bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-3 px-8 rounded-full uppercase transition-colors w-full sm:w-auto"
+                    class="bg-turquesa hover:bg-turquesa-dark text-white font-semibold px-6 rounded-full uppercase transition-colors w-full sm:w-auto text-xs tracking-wide" style="height: 38px;"
                     data-cart-add
                     data-slug="{{ $product->slug }}"
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
                     data-price="{{ $product->price }}"
-                    data-image="{{ asset('storage/products/73432-21300078.webp') }}">
+                    data-image="{{ asset('images/im1.png') }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
+            </div>
+
+            <!-- Tags del producto -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                @if($product->is_new)
+                    <a href="{{ route('catalogo', ['tag' => 'new']) }}" class="inline-flex items-center gap-1.5 bg-turquesa/10 text-turquesa text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-turquesa/20 transition-colors">
+                        <i class="fas fa-star text-[10px]"></i> Nuevo
+                    </a>
+                @endif
+                @if($product->is_featured)
+                    <a href="{{ route('catalogo', ['tag' => 'featured']) }}" class="inline-flex items-center gap-1.5 bg-yellow-50 text-yellow-600 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-yellow-100 transition-colors">
+                        <i class="fas fa-award text-[10px]"></i> Destacado
+                    </a>
+                @endif
+                @if($product->is_on_sale)
+                    <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-100 transition-colors">
+                        <i class="fas fa-tag text-[10px]"></i> Oferta
+                    </a>
+                @endif
+                @if($product->category)
+                    <a href="{{ route('catalogo', ['category' => $product->category->slug]) }}" class="inline-flex items-center gap-1.5 bg-helin-soft text-helin-heading text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-helin-border transition-colors">
+                        <i class="fas fa-folder text-[10px]"></i> {{ $product->category->name }}
+                    </a>
+                @endif
+                @if($product->brand)
+                    <a href="{{ route('catalogo', ['brand' => $product->brand->slug]) }}" class="inline-flex items-center gap-1.5 bg-helin-soft text-helin-heading text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-helin-border transition-colors">
+                        <i class="fas fa-certificate text-[10px]"></i> {{ $product->brand->name }}
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -99,52 +137,70 @@
             <!-- Tabs Header -->
             <div class="border-b border-helin-border mb-6">
                 <nav class="flex gap-8">
-                    <button class="pb-4 border-b-2 border-turquesa text-turquesa font-bold text-xl">
+                    <button onclick="showTab('descripcion', this)" id="tab-btn-descripcion" class="pb-4 border-b-2 border-turquesa text-turquesa font-bold text-xl">
                         Descripción
                     </button>
-                    <button class="pb-4 border-b-2 border-transparent text-helin-heading hover:text-helin-heading font-bold text-xl">
+                    <button onclick="showTab('especificaciones', this)" id="tab-btn-especificaciones" class="pb-4 border-b-2 border-transparent text-helin-heading hover:text-turquesa font-bold text-xl transition-colors">
                         Especificaciones
                     </button>
                 </nav>
             </div>
 
             <!-- Contenido Tab Descripción -->
-            <div class="prose max-w-none leading-relaxed text-helin-text">
-                <p class="mb-4">
-                    {{ $product->description }}
-                </p>
-                @if($product->clinical_specs)
-                    @php
-                        $specs = json_decode($product->clinical_specs, true);
-                    @endphp
-                    @if($specs)
-                        <h4 class="text-helin-heading mb-2">Especificaciones clínicas:</h4>
-                        <ul class="list-disc list-inside space-y-1 mb-4">
-                            @foreach($specs as $key => $value)
-                                <li>{{ ucfirst($key) }}: {{ $value }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                @endif
+            <div id="tab-descripcion" class="prose max-w-none leading-relaxed text-helin-text">
+                <p class="mb-4">Producto especializado para procedimientos de osteosíntesis odontológica, diseñado para ofrecer estabilidad, precisión y resistencia en aplicaciones quirúrgicas.</p>
+                <p class="mb-4">Fabricado en titanio grado 5, cuenta con alta biocompatibilidad y resistencia a la corrosión, lo que permite un desempeño confiable en procedimientos de fijación ósea y uso clínico especializado.</p>
             </div>
+
+            <!-- Contenido Tab Especificaciones -->
+            <div id="tab-especificaciones" class="prose max-w-none leading-relaxed text-helin-text hidden">
+                <table class="w-full text-sm border-collapse">
+                    <tbody>
+                        @foreach([
+                            'Material'          => 'Titanio Grado 5',
+                            'Uso clínico'       => 'Osteosíntesis y fijación ósea odontológica',
+                            'Compatibilidad'    => 'Placas quirúrgicas y sistemas de fijación',
+                            'Esterilización'    => 'Autoclave 134°C',
+                            'Propiedades'       => 'Alta resistencia mecánica, estabilidad estructural y biocompatibilidad',
+                            'Certificación'     => 'ISO 13485',
+                            'Origen'            => 'Importado',
+                        ] as $key => $value)
+                        <tr class="border-b border-helin-border">
+                            <td class="py-3 pr-6 font-semibold text-helin-heading w-1/3">{{ $key }}</td>
+                            <td class="py-3 text-helin-text">{{ $value }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+            function showTab(tab, btn) {
+                ['descripcion','especificaciones'].forEach(t => {
+                    document.getElementById('tab-' + t).classList.add('hidden');
+                    document.getElementById('tab-btn-' + t).classList.remove('border-turquesa','text-turquesa');
+                    document.getElementById('tab-btn-' + t).classList.add('border-transparent','text-helin-heading');
+                });
+                document.getElementById('tab-' + tab).classList.remove('hidden');
+                btn.classList.remove('border-transparent','text-helin-heading');
+                btn.classList.add('border-turquesa','text-turquesa');
+            }
+            </script>
         </div>
 
         <!-- Widget Soporte -->
-        <div class="lg:w-1/3">
-            <div class="bg-white rounded-xl py-6 lg:py-12 px-12 min-h-[400px] flex flex-col justify-end lg:mx-5">
-                <!-- Botón Chat -->
-                <a href="https://wa.me/584241232025" target="_blank" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-3 rounded-full mb-3 transition-colors flex items-center justify-between px-6">
-                    <i class="fab fa-whatsapp text-2xl"></i>
-                    <span>Chatear con ejecutivo</span>
-                    <span class="w-6"></span>
-                </a>
-
-                <!-- Teléfono -->
-                <a href="https://wa.me/584241232025" target="_blank" class="flex items-center justify-between text-helin-heading hover:text-turquesa py-2 transition-colors border border-helin-border rounded-full hover:border-turquesa px-6">
-                    <i class="fab fa-whatsapp text-turquesa text-2xl"></i>
-                    <span class="font-bold text-turquesa">+ 584241232025</span>
-                    <span class="w-6"></span>
-                </a>
+        <div class="lg:w-1/3 ml-auto">
+            <div class="bg-white rounded-xl overflow-hidden">
+                <div class="flex flex-col items-center pt-4 px-4">
+                    <img src="{{ asset('images/atencion_cliente.png') }}" alt="Atención al cliente Helin" class="h-auto object-cover" style="width: 52%;">
+                    <div class="w-full mt-3 mb-4" style="width: 52%;">
+                        <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-1.5 rounded-full transition-colors flex items-center justify-center gap-2 text-[10px] sm:text-xs">
+                            <i class="fab fa-whatsapp text-sm"></i>
+                            <span>Chatear con ejecutivo</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="h-3"></div>
             </div>
         </div>
     </div>
@@ -153,21 +209,22 @@
     <section class="mb-12">
         <div class="mb-6 flex justify-between items-end">
             <div>
-                <h2 class="text-xl text-helin-heading mb-1">Productos Relacionados</h2>
+                <h2 class="text-2xl text-helin-heading mb-1">Productos Relacionados</h2>
                 <p class="text-helin-text text-sm">Conoce los productos relacionados para ti</p>
             </div>
             <a href="{{ route('catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
         </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @if($relatedProducts->count() > 0)
-                @foreach($relatedProducts as $related)
+                @foreach($relatedProducts as $ri => $related)
                     @php
                         $badge = '';
                         if($related->is_new) $badge = 'Nuevo';
                         elseif($related->is_on_sale) $badge = 'Oferta';
+                        $relatedImg = asset('images/im' . (($ri % 4) + 1) . '.png');
                     @endphp
                     @include('web.components.product-card', [
-                        'productImage' => asset('storage/products/73432-21300078.webp'),
+                        'productImage' => $relatedImg,
                         'productName' => $related->name,
                         'productBrand' => $related->brand->name ?? 'Helin',
                         'productPrice' => $related->price,
@@ -178,10 +235,10 @@
                     ])
                 @endforeach
             @else
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => '', 'productLink' => route('catalogo')])
+                @include('web.components.product-card', ['productImage' => asset('images/im1.png'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('catalogo')])
+                @include('web.components.product-card', ['productImage' => asset('images/im2.png'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => '', 'productLink' => route('catalogo')])
+                @include('web.components.product-card', ['productImage' => asset('images/im3.png'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
+                @include('web.components.product-card', ['productImage' => asset('images/im4.png'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => '', 'productLink' => route('catalogo')])
             @endif
         </div>
     </section>

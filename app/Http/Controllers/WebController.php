@@ -71,14 +71,28 @@ class WebController extends Controller
         $query = \App\Models\Product::with(['category', 'brand'])
             ->where('is_active', true);
 
-        // Apply featured filter if requested
-        if (request('featured') == '1') {
-            $query->where('is_featured', true);
-        }
-
         // Apply category filter if present
         if ($currentCategory) {
             $query->where('category_id', $currentCategory->id);
+        }
+
+        // Apply brand filter if present
+        $brandSlug = request('brand');
+        if ($brandSlug) {
+            $brand = \App\Models\Brand::where('slug', $brandSlug)->where('is_active', true)->first();
+            if ($brand) {
+                $query->where('brand_id', $brand->id);
+            }
+        }
+
+        // Apply tag filters
+        $tag = request('tag');
+        if ($tag === 'featured') {
+            $query->where('is_featured', true);
+        } elseif ($tag === 'new') {
+            $query->where('is_new', true);
+        } elseif ($tag === 'on_sale') {
+            $query->where('is_on_sale', true);
         }
 
         // Apply search filter if present

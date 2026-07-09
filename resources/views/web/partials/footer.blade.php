@@ -179,7 +179,8 @@
     <!-- Franja de Cierre -->
     <div class="bg-turquesa-dark border-t border-white/20">
         <div class="container mx-auto px-4 py-2">
-            <p class="text-center text-white/80 text-sm">{{ $settings->copy ?? '© Copyright 2026 by helin.' }}</p>
+            <p class="text-center text-white/80 text-xs footer-copy">© <span id="year"></span> Helin. Desarrollado por <a href="https://syevolution.com" target="_blank" rel="noopener noreferrer" class="hover:text-white underline transition-colors">SY Evolution</a>.</p>
+            <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
         </div>
     </div>
 </footer>

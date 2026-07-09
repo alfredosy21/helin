@@ -143,10 +143,132 @@
 
             <!-- Banner -->
             @if($currentCategory)
-            <div class="bg-turquesa rounded-xl p-4 sm:p-6 lg:p-8 mb-6 relative overflow-hidden">
-                <div class="relative z-10 max-w-full sm:max-w-[65%]">
-                    <h1 class="text-lg sm:text-2xl lg:text-3xl text-white mb-1 sm:mb-2">{{ $currentCategory->name }}</h1>
-                    <p class="text-white/90 text-xs sm:text-base">{{ $currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' de alta calidad para profesionales odontológicos.' }}</p>
+            @php
+                $bannerBg = asset('images/banner_imp1.png');
+                $categoryBanners = [
+                    'implantes' => [
+                        'label'       => 'Bienvenidos al Catálogo de Implantología',
+                        'title'       => 'Todo Para Tus Procedimientos De Implantología En Un Solo Lugar',
+                        'description' => 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'aditamentos' => [
+                        'label'       => 'Catálogo de Aditamentos',
+                        'title'       => 'Aditamentos Para Tus Procedimientos En Un Solo Lugar',
+                        'description' => 'Encuentra aditamentos de alta calidad para complementar tus procedimientos clínicos.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'kits-quirurgicos' => [
+                        'label'       => 'Catálogo de Kits Quirúrgicos',
+                        'title'       => 'Kits Quirúrgicos Completos Para Cada Procedimiento',
+                        'description' => 'Todo lo que necesitas en un solo kit para tus procedimientos quirúrgicos.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'biomateriales' => [
+                        'label'       => 'Catálogo de Biomateriales',
+                        'title'       => 'Biomateriales De Alta Calidad Para Tu Práctica Clínica',
+                        'description' => 'Selección de biomateriales especializados para procedimientos de regeneración.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'regeneracion-guiada-bucal-gbr' => [
+                        'label'       => 'Catálogo de Regeneración Ósea Guiada',
+                        'title'       => 'Soluciones Completas En Regeneración Ósea Guiada',
+                        'description' => 'Encuentra los mejores productos para procedimientos de regeneración ósea y tisular.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'suturas' => [
+                        'label'       => 'Catálogo de Suturas',
+                        'title'       => 'Suturas De Alta Calidad Para Procedimientos Odontológicos',
+                        'description' => 'Amplia variedad de suturas especializadas para cirugías bucales y maxilofaciales.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'placas' => [
+                        'label'       => 'Catálogo de Osteosíntesis',
+                        'title'       => 'Placas Y Sistemas De Fijación Para Cirugía Maxilofacial',
+                        'description' => 'Sistemas de osteosíntesis de titanio de alta precisión para reconstrucción ósea.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'tornillos' => [
+                        'label'       => 'Catálogo de Osteosíntesis',
+                        'title'       => 'Tornillos Y Fijaciones Para Cirugía Maxilofacial',
+                        'description' => 'Tornillos de osteosíntesis de alta resistencia para procedimientos de fijación ósea.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'cajetin' => [
+                        'label'       => 'Catálogo de Osteosíntesis',
+                        'title'       => 'Cajetines Y Accesorios Para Cirugía Maxilofacial',
+                        'description' => 'Sistemas completos de cajetines para almacenamiento y uso de implantes quirúrgicos.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'cuidados-especiales-quirurgicos' => [
+                        'label'       => 'Catálogo de Cuidado Bucal',
+                        'title'       => 'Cuidados Especiales Para El Postoperatorio Quirúrgico',
+                        'description' => 'Productos especializados para el cuidado y recuperación en el postoperatorio.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'cuidados-diarios-paciente' => [
+                        'label'       => 'Catálogo de Cuidado Bucal',
+                        'title'       => 'Cuidados Diarios Para La Salud Bucal De Tu Paciente',
+                        'description' => 'Soluciones para el cuidado diario y mantenimiento de la salud bucal.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'tijeras' => [
+                        'label'       => 'Catálogo de Instrumentos',
+                        'title'       => 'Instrumentos De Precisión Para Procedimientos Odontológicos',
+                        'description' => 'Tijeras y herramientas de corte de alta precisión para cirugía bucal.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'pinzas' => [
+                        'label'       => 'Catálogo de Instrumentos',
+                        'title'       => 'Pinzas Y Herramientas Para Procedimientos Odontológicos',
+                        'description' => 'Pinzas de alta calidad diseñadas para procedimientos odontológicos especializados.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'separadores' => [
+                        'label'       => 'Catálogo de Instrumentos',
+                        'title'       => 'Separadores Para Cirugía Bucal Y Maxilofacial',
+                        'description' => 'Separadores de tejidos de alta precisión para una mejor visibilidad quirúrgica.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'cinceles' => [
+                        'label'       => 'Catálogo de Instrumentos',
+                        'title'       => 'Cinceles Y Escoplos Para Cirugía Ósea',
+                        'description' => 'Cinceles de acero quirúrgico de alta calidad para procedimientos de osteotomía.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'periostomos' => [
+                        'label'       => 'Catálogo de Instrumentos',
+                        'title'       => 'Periostótomos Para Cirugía Bucal Especializada',
+                        'description' => 'Periostótomos de precisión para el despegamiento y manejo de tejidos periósticos.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'equipos-odontologicos' => [
+                        'label'       => 'Catálogo de Equipos',
+                        'title'       => 'Equipos Odontológicos De Alta Tecnología',
+                        'description' => 'Equipos especializados para optimizar cada procedimiento en tu consultorio.',
+                        'bg'          => $bannerBg,
+                    ],
+                    'planificacion-digital' => [
+                        'label'       => 'Catálogo de Planificación Digital',
+                        'title'       => 'Soluciones Digitales Para Tu Práctica Odontológica',
+                        'description' => 'Herramientas de planificación digital, impresión 3D y escaneo intraoral de última generación.',
+                        'bg'          => $bannerBg,
+                    ],
+                ];
+                $bannerData = $categoryBanners[$currentCategory->slug] ?? null;
+            @endphp
+            @php
+                $bannerStyle = ($bannerData && isset($bannerData['bg']))
+                    ? 'min-height:160px; background-image:url(\'' . $bannerData['bg'] . '\'); background-size:cover; background-position:center;'
+                    : 'min-height:160px; background:linear-gradient(135deg,#3bbfbf 0%,#2aa8a8 60%,#1a9090 100%);';
+            @endphp
+            <div class="rounded-2xl mb-6 relative overflow-hidden" style="{{ $bannerStyle }}">
+                <div class="p-5 sm:p-7 lg:p-8 w-full sm:max-w-[58%]">
+                    <p class="text-white/85 text-xs mb-2 font-medium">{{ $bannerData['label'] ?? 'Bienvenidos al Catálogo de ' . $currentCategory->name }}</p>
+                    <h1 class="text-white font-black text-lg sm:text-xl lg:text-2xl leading-tight mb-2" style="text-shadow: 0 1px 4px rgba(0,0,0,0.2);">
+                        {{ $bannerData['title'] ?? 'Todo Para Tus Procedimientos De ' . $currentCategory->name . ' En Un Solo Lugar' }}
+                    </h1>
+                    <p class="text-white/85 text-xs sm:text-sm mb-4">{{ $bannerData['description'] ?? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.') }}</p>
                 </div>
             </div>
             @endif
