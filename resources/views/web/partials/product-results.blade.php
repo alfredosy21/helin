@@ -31,8 +31,8 @@
                 $badge = '';
                 if($product->is_new) $badge = 'Nuevo';
                 elseif($product->is_on_sale) $badge = 'Oferta';
-                $imgNum = ($index % 4) + 1;
-                $productImg = asset("images/im{$imgNum}.png");
+                $imgPool = ['im2.png','im3.png','im4.png','im5.png','im6.png'];
+                $productImg = asset("images/" . $imgPool[$index % count($imgPool)]);
             @endphp
             @include('web.components.product-card', [
                 'productImage'    => $productImg,

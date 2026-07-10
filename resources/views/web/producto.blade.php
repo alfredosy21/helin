@@ -12,6 +12,7 @@
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.qty-btn:hover { background-color: #6BC2C3 !important; color: #ffffff !important; }
 </style>
 @endpush
 
@@ -32,19 +33,23 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         <div class="lg:w-1/2">
             @php
                 $galleryImages = [
-                    asset('images/im1.png'),
-                    asset('images/im2.png'),
                     asset('images/im3.png'),
                     asset('images/im4.png'),
+                    asset('images/im5.png'),
+                    asset('images/im6.png'),
                 ];
             @endphp
             <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
-                <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="w-full h-96 object-contain">
+                <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
+                    <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="object-contain" style="width:85%; height:85%;">
+                </div>
             </div>
             <div class="grid grid-cols-4 gap-3">
                 @foreach($galleryImages as $i => $img)
                 <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 transition-all">
-                    <img src="{{ $img }}" class="w-full h-16 object-contain">
+                    <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
+                        <img src="{{ $img }}" class="w-full h-full object-contain">
+                    </div>
                 </button>
                 @endforeach
             </div>
@@ -70,22 +75,60 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
             <p class="text-helin-text mb-6">{{ $product->description }}</p>
 
-            <!-- Selector de Tamaño (Chips) -->
+            <!-- Selector de Tamaño (Dropdown Custom) -->
             <div class="mb-6">
                 <h3 class="font-semibold text-helin-heading mb-3">Tamaño</h3>
-                <div class="flex flex-wrap gap-2">
-                    <button class="px-2 py-1 text-xs border-2 border-turquesa bg-turquesa/10 text-turquesa rounded-full font-medium transition-all">Ø3.3 mm</button>
-                    <button class="px-2 py-1 text-xs border border-helin-border text-helin-heading rounded-full hover:border-turquesa transition-all">Ø4.1 mm</button>
-                    <button class="px-2 py-1 text-xs border border-helin-border text-helin-heading rounded-full hover:border-turquesa transition-all">Ø4.8 mm</button>
+                <div class="relative w-48" id="sizeDropdown">
+                    <!-- Trigger -->
+                    <button type="button" id="sizeDropdownTrigger"
+                        class="w-full flex items-center justify-between border border-helin-border rounded-lg px-4 py-2.5 text-sm text-helin-heading bg-white cursor-pointer hover:border-turquesa transition-colors focus:outline-none"
+                        onclick="toggleSizeDropdown()">
+                        <span id="sizeDropdownLabel">Ø3.3 mm</span>
+                        <svg id="sizeDropdownArrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <!-- Options -->
+                    <div id="sizeDropdownMenu" class="hidden absolute z-50 w-full mt-1 bg-white border border-helin-border rounded-lg shadow-lg overflow-hidden">
+                        @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
+                        <div onclick="selectSize(this, '{{ $size }}')"
+                            class="size-option px-4 py-2.5 text-sm cursor-pointer transition-colors {{ $si === 0 ? 'bg-turquesa text-white font-semibold' : 'text-helin-heading hover:bg-turquesa/10 hover:text-turquesa' }}">
+                            {{ $size }}
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
+            <script>
+            function toggleSizeDropdown() {
+                const menu = document.getElementById('sizeDropdownMenu');
+                const arrow = document.getElementById('sizeDropdownArrow');
+                menu.classList.toggle('hidden');
+                arrow.classList.toggle('rotate-180');
+            }
+            function selectSize(el, label) {
+                document.getElementById('sizeDropdownLabel').textContent = label;
+                document.querySelectorAll('.size-option').forEach(o => {
+                    o.classList.remove('bg-turquesa','text-white','font-semibold');
+                    o.classList.add('text-helin-heading','hover:bg-turquesa/10','hover:text-turquesa');
+                });
+                el.classList.add('bg-turquesa','text-white','font-semibold');
+                el.classList.remove('text-helin-heading','hover:bg-turquesa/10','hover:text-turquesa');
+                document.getElementById('sizeDropdownMenu').classList.add('hidden');
+                document.getElementById('sizeDropdownArrow').classList.remove('rotate-180');
+            }
+            document.addEventListener('click', function(e) {
+                if (!document.getElementById('sizeDropdown').contains(e.target)) {
+                    document.getElementById('sizeDropdownMenu').classList.add('hidden');
+                    document.getElementById('sizeDropdownArrow').classList.remove('rotate-180');
+                }
+            });
+            </script>
 
             <!-- Cantidad y Botón -->
             <div class="flex flex-col sm:flex-row items-center gap-4 mb-6" data-cart-context>
                 <div class="flex items-center rounded-full gap-1 px-1.5" style="background-color: rgba(107,194,195,0.45); height: 38px;">
-                    <button class="w-7 h-7 bg-white hover:bg-gray-50 rounded-full flex items-center justify-center transition-colors text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="if(this.nextElementSibling.value > 1) this.nextElementSibling.value--">−</button>
+                    <button class="qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="if(this.nextElementSibling.value > 1) this.nextElementSibling.value--">−</button>
                     <input type="number" value="1" min="1" class="w-8 text-center outline-none bg-transparent text-sm font-semibold" style="color:#9ca3af; -moz-appearance:textfield; appearance:textfield;" data-cart-qty onwheel="return false;">
-                    <button class="w-7 h-7 bg-white hover:bg-gray-50 rounded-full flex items-center justify-center transition-colors text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="this.previousElementSibling.value++">+</button>
+                    <button class="qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" onclick="this.previousElementSibling.value++">+</button>
                 </div>
                 <button
                     class="bg-turquesa hover:bg-turquesa-dark text-white font-semibold px-6 rounded-full uppercase transition-colors w-full sm:w-auto text-xs tracking-wide" style="height: 38px;"
@@ -94,7 +137,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
                     data-price="{{ $product->price }}"
-                    data-image="{{ asset('images/im1.png') }}">
+                    data-image="{{ asset('images/im3.png') }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
             </div>
@@ -221,7 +264,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         $badge = '';
                         if($related->is_new) $badge = 'Nuevo';
                         elseif($related->is_on_sale) $badge = 'Oferta';
-                        $relatedImg = asset('images/im' . (($ri % 4) + 1) . '.png');
+                        $relatedImg = asset('images/im' . (($ri % 6) + 1) . '.png');
                     @endphp
                     @include('web.components.product-card', [
                         'productImage' => $relatedImg,

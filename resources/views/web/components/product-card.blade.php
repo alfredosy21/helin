@@ -5,17 +5,19 @@
 
 <div class="bg-white rounded-xl p-4 sm:p-5 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-transform flex flex-col h-full cursor-pointer">
     <!-- Imagen -->
-    <a href="{{ $productLink ?? '#' }}" class="relative flex-1 flex items-center justify-center min-h-[200px] mb-4 block">
+    <a href="{{ $productLink ?? '#' }}" class="relative block w-full mb-4">
         @if(!empty($productBadge))
             <span class="absolute top-2.5 left-2.5 bg-turquesa text-white text-xs font-semibold uppercase px-3 py-1 rounded-full z-10">
                 {{ $productBadge }}
             </span>
         @endif
-        <img src="{{ $productImage ?? '' }}"
-             alt="{{ $productName ?? '' }}"
-             title="{{ $productName ?? '' }}"
-             loading="lazy"
-             class="max-h-[180px] object-contain">
+        <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
+            <img src="{{ $productImage ?? '' }}"
+                 alt="{{ $productName ?? '' }}"
+                 title="{{ $productName ?? '' }}"
+                 loading="lazy"
+                 class="w-full h-full object-contain">
+        </div>
     </a>
 
     <!-- Contenido -->

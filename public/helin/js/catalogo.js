@@ -73,11 +73,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.success && productsContent) {
+                // Guardar valor del sort antes de reemplazar HTML
+                const prevSortVal = (document.getElementById('sortSelect') || {}).value || 'recent';
+
                 productsContent.innerHTML = data.html;
 
-                // Re-bind sortSelect después de reemplazar el HTML
+                // Re-bind sortSelect después de reemplazar el HTML y restaurar valor
                 const newSort = document.getElementById('sortSelect');
-                if (newSort) newSort.addEventListener('change', applyFilters);
+                if (newSort) {
+                    newSort.value = prevSortVal;
+                    newSort.addEventListener('change', applyFilters);
+                }
 
                 // Re-bind botón limpiar del estado vacío
                 const clearEmpty = document.getElementById('clearFiltersEmpty');
