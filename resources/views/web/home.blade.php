@@ -49,10 +49,7 @@
          @endif
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
-            <div class="brand text-4xl lg:text-5xl font-black tracking-tight leading-none mb-3" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">{{ $heroSection->title ?? 'helin.' }}</div>
-            @if($heroSection->subtitle)
-                <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">{{ $heroSection->subtitle }}</small>
-            @endif
+            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Precisión para cada procedimiento</small>
             <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
                {!! $heroSection->content !!}
             </h1>
@@ -161,7 +158,7 @@
          <div class="featured-products">
            <div class="featured-head">
              <h3>Destacados <span style="color:var(--helin)">Helin</span></h3>
-             <a href="{{ route('catalogo', ['featured' => '1']) }}" class="crumb">VER PRODUCTOS DESTACADOS →</a>
+             <a href="{{ route('catalogo', ['featured' => '1']) }}" class="crumb">VER TODOS LOS PRODUCTOS →</a>
            </div>
 
                       <div class="mini-grid">
@@ -224,12 +221,15 @@
                    <div class="section-title flex items-end justify-between gap-5 mb-5">
                        <div>
                            @php
+                               $isImplantologia = str_contains(strtolower($section->title), 'implantología');
+                               $isRegeneracion = str_contains(strtolower($section->title), 'regeneración') || str_contains(strtolower($section->title), 'osea') || str_contains(strtolower($section->title), 'guía');
+                               $isInstrumentos = str_contains(strtolower($section->title), 'instrumentos') || str_contains(strtolower($section->title), 'equipos');
                                $sectionTitle = $section->title;
-                               if (str_contains(strtolower($sectionTitle), 'implantología')) {
+                               if ($isImplantologia) {
                                    $sectionTitle = 'Destacados en Implantología';
-                               } elseif (str_contains(strtolower($sectionTitle), 'regeneración') || str_contains(strtolower($sectionTitle), 'osea') || str_contains(strtolower($sectionTitle), 'guía')) {
+                               } elseif ($isRegeneracion) {
                                    $sectionTitle = 'Destacados en Regeneración Ósea Guíada';
-                               } elseif (str_contains(strtolower($sectionTitle), 'instrumentos') || str_contains(strtolower($sectionTitle), 'equipos')) {
+                               } elseif ($isInstrumentos) {
                                    $sectionTitle = 'Destacados en Instrumentos y Equipos';
                                } else {
                                    $sectionTitle = str_ireplace('más vendido', 'Destacados', $sectionTitle);
@@ -237,11 +237,19 @@
                                }
                            @endphp
                            <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $sectionTitle }}</h2>
-                           @php
-                               $description = trim(strip_tags($section->content));
-                               $firstLine = explode("\n", $description)[0];
-                           @endphp
-                           <p class="text-helin-text text-sm mt-1">{{ $firstLine }}</p>
+                           @if($isImplantologia)
+                               <p class="text-helin-text text-sm mt-1">Explora productos especializados para procedimientos implantológicos.</p>
+                           @elseif($isRegeneracion)
+                               <p class="text-helin-text text-sm mt-1">Explora biomateriales y soluciones especializadas para procedimientos regenerativos.</p>
+                           @elseif($isInstrumentos)
+                               <p class="text-helin-text text-sm mt-1">Explora instrumentos y equipos diseñados para aportar precisión y eficiencia a la práctica odontológica.</p>
+                           @else
+                               @php
+                                   $description = trim(strip_tags($section->content));
+                                   $firstLine = explode("\n", $description)[0];
+                               @endphp
+                               <p class="text-helin-text text-sm mt-1">{{ $firstLine }}</p>
+                           @endif
                        </div>
                        <a href="{{ $categorySlug ? route('catalogo', ['category' => $categorySlug]) : ($section->url_button ?: route('catalogo')) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
                    </div>
@@ -284,7 +292,7 @@
            <div class="section-title flex items-end justify-between gap-5 mb-5">
                <div>
                    <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Destacados en Instrumentos y Equipos</h2>
-                   <p class="text-helin-text text-sm mt-1">Precisión y tecnología para tu práctica odontológica</p>
+                   <p class="text-helin-text text-sm mt-1">Explora instrumentos y equipos diseñados para aportar precisión y eficiencia a la práctica odontológica.</p>
                </div>
                <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
            </div>
@@ -351,30 +359,48 @@
             @endif
          </div>
          <div class="arrows flex gap-3">
-            <button class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">←</button>
-            <button class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">→</button>
+            <button id="testimonialPrev" class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">←</button>
+            <button id="testimonialNext" class="arrow w-12 h-12 rounded-full border-0 bg-turquesa text-white text-2xl font-black hover:bg-turquesa/90 transition-all hover:scale-105">→</button>
          </div>
       </div>
-      <div class="testimonial-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  @foreach($testimonials as $testimonial)
+      <div class="testimonial-carousel overflow-hidden -mx-2.5">
+         <div id="testimonialTrack" class="testimonial-track flex transition-transform duration-500 ease-in-out px-2.5">
              @php
-                 $authorName = strtolower($testimonial->name ?? '');
-                 $testimonialImage = '';
-                 if (str_contains($authorName, 'maría fernanda lópez')) {
-                     $testimonialImage = asset('images/dra_test.png');
-                 } elseif (str_contains($authorName, 'josé andrés rivas')) {
-                     $testimonialImage = asset('images/dr_test.png');
-                 } elseif (str_contains($authorName, 'sorrisa') || str_contains($authorName, 'sonrisa') || str_contains($authorName, 'integral')) {
-                     $testimonialImage = asset('images/clinica_test.png');
-                 }
+                 $duplicatedTestimonial = null;
              @endphp
-             @include('web.components.testimonial-card', [
-                 'testimonialText' => $testimonial->content,
-                 'testimonialAuthor' => $testimonial->name,
-                 'testimonialTitle' => $testimonial->specialty,
-                 'testimonialImage' => $testimonialImage
-             ])
-         @endforeach
+             @foreach($testimonials as $testimonial)
+                 @php
+                     $authorName = strtolower($testimonial->name ?? '');
+                     $testimonialImage = '';
+                     if (str_contains($authorName, 'maría fernanda lópez')) {
+                         $testimonialImage = asset('images/dra_test.png');
+                     } elseif (str_contains($authorName, 'josé andrés rivas')) {
+                         $testimonialImage = asset('images/dr_test.png');
+                         $duplicatedTestimonial = $testimonial;
+                     } elseif (str_contains($authorName, 'sorrisa') || str_contains($authorName, 'sonrisa') || str_contains($authorName, 'integral')) {
+                         $testimonialImage = asset('images/clinica_test.png');
+                     }
+                 @endphp
+                 <div class="testimonial-slide w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2.5">
+                     @include('web.components.testimonial-card', [
+                         'testimonialText' => $testimonial->content,
+                         'testimonialAuthor' => $testimonial->name,
+                         'testimonialTitle' => $testimonial->specialty,
+                         'testimonialImage' => $testimonialImage
+                     ])
+                 </div>
+             @endforeach
+             @if($duplicatedTestimonial)
+                 <div class="testimonial-slide w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2.5">
+                     @include('web.components.testimonial-card', [
+                         'testimonialText' => $duplicatedTestimonial->content,
+                         'testimonialAuthor' => $duplicatedTestimonial->name,
+                         'testimonialTitle' => $duplicatedTestimonial->specialty,
+                         'testimonialImage' => asset('images/dr_test.png')
+                     ])
+                 </div>
+             @endif
+         </div>
       </div>
    </section>
 
@@ -392,12 +418,114 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         const skeleton = document.getElementById('categoriesSkeleton');
         const grid = document.getElementById('categoriesGrid');
-        
+
         if (skeleton && grid) {
             skeleton.style.display = 'none';
             grid.classList.remove('hidden');
         }
     }, 800); // Delay para simular carga inicial
+
+    // Carrusel de testimonios (infinito)
+    const track = document.getElementById('testimonialTrack');
+    const prevBtn = document.getElementById('testimonialPrev');
+    const nextBtn = document.getElementById('testimonialNext');
+
+    if (track && prevBtn && nextBtn) {
+        const realSlides = Array.from(track.querySelectorAll('.testimonial-slide'));
+        if (realSlides.length === 0) return;
+
+        function getItemsVisible() {
+            if (window.innerWidth >= 1024) return 3;
+            if (window.innerWidth >= 768) return 2;
+            return 1;
+        }
+
+        // Construir carrusel infinito clonando slides
+        let itemsVisible = getItemsVisible();
+        function buildInfiniteTrack() {
+            track.innerHTML = '';
+            // Clonar últimos N al inicio
+            realSlides.slice(-itemsVisible).forEach(slide => {
+                const clone = slide.cloneNode(true);
+                clone.dataset.clone = 'start';
+                track.appendChild(clone);
+            });
+            // Slides reales
+            realSlides.forEach(slide => track.appendChild(slide.cloneNode(true)));
+            // Clonar primeros N al final
+            realSlides.slice(0, itemsVisible).forEach(slide => {
+                const clone = slide.cloneNode(true);
+                clone.dataset.clone = 'end';
+                track.appendChild(clone);
+            });
+        }
+        buildInfiniteTrack();
+
+        let currentIndex = itemsVisible;
+        let isTransitioning = false;
+
+        function getSlideWidth() {
+            return 100 / itemsVisible;
+        }
+
+        function moveTo(index, animate = true) {
+            if (animate) {
+                track.style.transition = 'transform 0.5s ease-in-out';
+            } else {
+                track.style.transition = 'none';
+            }
+            const slideWidth = getSlideWidth();
+            track.style.transform = `translateX(-${index * slideWidth}%)`;
+        }
+
+        function handleNext() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentIndex++;
+            moveTo(currentIndex);
+        }
+
+        function handlePrev() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentIndex--;
+            moveTo(currentIndex);
+        }
+
+        function onTransitionEnd() {
+            const totalSlides = track.children.length;
+            // Si estamos en los clones del final, saltar al inicio real
+            if (currentIndex >= totalSlides - itemsVisible) {
+                currentIndex = itemsVisible;
+                moveTo(currentIndex, false);
+            }
+            // Si estamos en los clones del inicio, saltar al final real
+            if (currentIndex < itemsVisible) {
+                currentIndex = totalSlides - itemsVisible - itemsVisible;
+                moveTo(currentIndex, false);
+            }
+            setTimeout(() => { isTransitioning = false; }, 20);
+        }
+
+        track.addEventListener('transitionend', onTransitionEnd);
+        track.addEventListener('webkitTransitionEnd', onTransitionEnd);
+
+        nextBtn.addEventListener('click', handleNext);
+        prevBtn.addEventListener('click', handlePrev);
+
+        function onResize() {
+            const newItemsVisible = getItemsVisible();
+            if (newItemsVisible !== itemsVisible) {
+                itemsVisible = newItemsVisible;
+                buildInfiniteTrack();
+                currentIndex = itemsVisible;
+                moveTo(currentIndex, false);
+            }
+        }
+
+        window.addEventListener('resize', onResize);
+        moveTo(currentIndex, false);
+    }
 });
 </script>
 @endpush

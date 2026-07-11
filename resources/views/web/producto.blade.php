@@ -28,7 +28,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         'separatorAttributes' => 'class="text-helin-text mx-2"'
     ])
 
-    <div class="flex flex-col lg:flex-row gap-8 mb-12">
+    <div class="flex flex-col lg:flex-row items-start gap-8 mt-4 mb-12">
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
             @php
@@ -39,8 +39,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     asset('images/im6.png'),
                 ];
             @endphp
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-4">
-                <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm px-6 pb-6 pt-0 mb-4">
+                <div class="w-full aspect-square flex items-start justify-center overflow-hidden">
                     <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="object-contain" style="width:85%; height:85%;">
                 </div>
             </div>
@@ -57,12 +57,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
         <!-- Info del Producto -->
         <div class="lg:w-1/2">
-            @if($product->is_new)
-                <span class="bg-turquesa/10 text-turquesa text-xs font-semibold px-3 py-1 rounded-full">Nuevo</span>
-            @elseif($product->is_on_sale)
-                <span class="bg-red-100 text-red-600 text-xs font-semibold px-3 py-1 rounded-full">Oferta</span>
-            @endif
-            <h1 class="text-3xl text-helin-heading mt-3 mb-6">{{ $product->name }}</h1>
+            <h1 class="text-3xl text-helin-heading mb-6">{{ $product->name }}</h1>
 
             <div class="flex items-center gap-3 mb-6">
                 @if($product->is_on_sale && $product->sale_price)
@@ -215,6 +210,13 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         @endforeach
                     </tbody>
                 </table>
+
+                <div class="mt-6">
+                    <a href="{{ asset('images/ficha_test.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-white text-turquesa border border-turquesa text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-turquesa/10 transition-colors">
+                        <i class="fas fa-file-pdf"></i>
+                        Descargar ficha técnica
+                    </a>
+                </div>
             </div>
 
             <script>

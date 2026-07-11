@@ -1,6 +1,10 @@
-<div class="flex items-center justify-between bg-helin-soft rounded-lg pl-3 sm:pl-4 py-3 sm:py-4 pr-3 mb-6">
-    <span class="text-helin-text text-sm" id="productCount">
-        Mostrando <strong>{{ $products->total() }}</strong> producto{{ $products->total() != 1 ? 's' : '' }}
+<div class="flex flex-col sm:flex-row sm:items-center justify-between bg-helin-soft rounded-lg pl-3 sm:pl-4 py-3 sm:py-4 pr-3 mb-4 gap-2 sm:gap-0">
+    <span class="text-helin-text text-sm" id="productCount" data-first="{{ $products->firstItem() }}" data-last="{{ $products->lastItem() }}" data-total="{{ $products->total() }}">
+        @if($products->count() > 0)
+            Mostrando <strong>{{ $products->firstItem() }}–{{ $products->lastItem() }}</strong> de <strong>{{ $products->total() }}</strong> resultado{{ $products->total() != 1 ? 's' : '' }}
+        @else
+            Mostrando <strong>0</strong> resultados
+        @endif
     </span>
     <div class="relative ml-auto">
         <select id="sortSelect" class="appearance-none border rounded-lg pl-3 pr-10 py-2 bg-white text-helin-heading text-sm cursor-pointer">

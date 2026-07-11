@@ -65,15 +65,11 @@
 ])
 
                 <!-- Búsqueda en sidebar -->
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-helin-text text-xs"></i>
-                    <input id="catalogSearch" type="text" value="{{ $initSearch }}" placeholder="Buscar productos..." class="w-full border border-helin-border rounded-lg pl-8 pr-3 py-2 text-sm outline-none focus:border-turquesa">
+                <div class="relative" id="catalogSearchWrapper">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-helin-text text-xs z-10"></i>
+                    <input id="catalogSearch" type="text" value="{{ $initSearch }}" placeholder="Buscar productos..." autocomplete="off" class="w-full border border-helin-border rounded-lg pl-8 pr-3 py-2 text-sm outline-none focus:border-turquesa relative z-10">
+                    <div id="searchAutocomplete" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-helin-border rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"></div>
                 </div>
-
-                <!-- Botón limpiar -->
-                <button id="clearFilters" class="hidden items-center gap-1 text-xs text-turquesa hover:underline">
-                    <i class="fas fa-times-circle"></i> Limpiar filtros
-                </button>
 
                 <hr class="border-helin-border">
 
@@ -283,6 +279,12 @@
             <!-- Indicador de carga AJAX -->
             <div id="catalogLoading" class="hidden text-center py-4">
                 <i class="fas fa-spinner fa-spin text-turquesa text-2xl"></i>
+            </div>
+
+            <!-- Resumen de filtros activos (fuera del AJAX para persistir) -->
+            <div id="activeFilters" class="hidden flex flex-wrap items-center gap-2 mb-4">
+                <span class="text-helin-text text-sm mr-1">Filtros seleccionados:</span>
+                <div id="activeFiltersChips" class="flex flex-wrap items-center gap-2"></div>
             </div>
 
             <!-- Contenedor AJAX -->

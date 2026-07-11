@@ -43,7 +43,7 @@ class WebController extends Controller
         // Testimonials data
         $testimonials = \App\Models\Testimonial::where('is_active', true)
             ->orderBy('position', 'asc')
-            ->take(3)
+            ->take(4)
             ->get();
 
         return view('web.home', compact(

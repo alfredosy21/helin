@@ -95,7 +95,7 @@ class ProductSeeder extends Seeder
                     'slug' => Str::slug("{$baseName}-{$brand->name}-{$categoryName}-{$i}"),
                     'sku' => $sku,
                     'brand_id' => $brand->id,
-                    'description' => $descriptions[array_rand($descriptions)] . " Ideal para {$category->name}.",
+                    'description' => $descriptions[array_rand($descriptions)] . " Ideal para {$category->name}. Fabricado con materiales de alta calidad para garantizar durabilidad, precisión y seguridad en cada procedimiento.",
                     'clinical_specs' => json_encode([
                         'material' => 'Titanio Grado 5',
                         'esterilizacion' => 'Autoclave 134°C',

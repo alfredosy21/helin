@@ -4,6 +4,82 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearFiltersBtn   = document.getElementById('clearFilters');
     const filterCheckboxes  = document.querySelectorAll('.filter-checkbox');
     const searchInput       = document.getElementById('catalogSearch');
+    function getActiveFilters() { return document.getElementById('activeFilters'); }
+    function getActiveFiltersChips() { return document.getElementById('activeFiltersChips'); }
+
+    const filterLabelMap = {
+        'tag': { 'featured': 'Destacados', 'on_sale': 'Ofertas', 'new': 'Nuevos' }
+    };
+
+    function getFilterLabel(type, value) {
+        if (filterLabelMap[type] && filterLabelMap[type][value]) {
+            return filterLabelMap[type][value];
+        }
+        const checkbox = document.querySelector(`.filter-checkbox[data-filter-type="${type}"][value="${value}"]`);
+        if (checkbox) {
+            const label = checkbox.closest('label')?.querySelector('span.text-helin-text, span:last-child')?.textContent;
+            return label ? label.trim() : value;
+        }
+        return value;
+    }
+
+    function renderActiveFilters() {
+        const activeFilters = getActiveFilters();
+        const activeFiltersChips = getActiveFiltersChips();
+        if (!activeFilters || !activeFiltersChips) return;
+        activeFiltersChips.innerHTML = '';
+        const chips = [];
+
+        filterCheckboxes.forEach(cb => {
+            if (!cb.checked) return;
+            const type = cb.dataset.filterType;
+            const value = cb.value;
+            const label = getFilterLabel(type, value);
+            const key = `${type}:${value}`;
+            if (chips.some(c => c.key === key)) return;
+            chips.push({ key, type, value, label });
+        });
+
+        if (searchInput && searchInput.value.trim()) {
+            chips.push({ key: 'search', type: 'search', value: searchInput.value.trim(), label: 'Búsqueda: ' + searchInput.value.trim() });
+        }
+
+        if (chips.length === 0) {
+            activeFilters.classList.add('hidden');
+            return;
+        }
+
+        activeFilters.classList.remove('hidden');
+        activeFilters.style.display = 'flex';
+        chips.forEach(chip => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'inline-flex items-center gap-1.5 bg-white border border-turquesa text-turquesa text-xs px-3 py-1.5 rounded-full hover:bg-turquesa hover:text-white transition-colors';
+            btn.innerHTML = `<span>${chip.label}</span><i class="fas fa-times"></i>`;
+            btn.addEventListener('click', () => removeFilter(chip.type, chip.value));
+            activeFiltersChips.appendChild(btn);
+        });
+
+        if (chips.length > 1) {
+            const clearBtn = document.createElement('button');
+            clearBtn.type = 'button';
+            clearBtn.className = 'text-xs text-turquesa hover:underline ml-1';
+            clearBtn.textContent = 'Limpiar todos';
+            clearBtn.addEventListener('click', clearAll);
+            activeFiltersChips.appendChild(clearBtn);
+        }
+    }
+
+    function removeFilter(type, value) {
+        if (type === 'search') {
+            if (searchInput) searchInput.value = '';
+        } else {
+            const checkbox = document.querySelector(`.filter-checkbox[data-filter-type="${type}"][value="${value}"]`);
+            if (checkbox) checkbox.checked = false;
+        }
+        updateClearButton();
+        applyFilters();
+    }
 
     let debounceTimer = null;
 
@@ -94,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.history.pushState({}, '', window.location.pathname + (qs ? '?' + qs : ''));
 
                 updateClearButton();
+                renderActiveFilters();
             }
 
         } catch (error) {
@@ -109,16 +186,155 @@ document.addEventListener('DOMContentLoaded', function () {
         const sortSelect = document.getElementById('sortSelect');
         if (sortSelect) sortSelect.value = 'recent';
         updateClearButton();
+        renderActiveFilters();
         applyFilters();
     }
 
     // --- Event Listeners ---
 
+    // Autocompletado de búsqueda
+    const searchWrapper = document.getElementById('catalogSearchWrapper');
+    const autocompleteBox = document.getElementById('searchAutocomplete');
+    let autocompleteTimer = null;
+    let abortController = null;
+
+    function normalizeText(text) {
+        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function highlightMatch(text, term) {
+        if (!term) return escapeHtml(text);
+        const normalizedTerm = normalizeText(term);
+        const normalizedText = normalizeText(text);
+        const idx = normalizedText.indexOf(normalizedTerm);
+        if (idx === -1) return escapeHtml(text);
+        return escapeHtml(text.slice(0, idx)) +
+               '<mark class="bg-turquesa/20 text-helin-heading font-semibold">' + escapeHtml(text.slice(idx, idx + term.length)) + '</mark>' +
+               escapeHtml(text.slice(idx + term.length));
+    }
+
+    function hideAutocomplete() {
+        if (autocompleteBox) {
+            autocompleteBox.classList.add('hidden');
+            autocompleteBox.innerHTML = '';
+        }
+    }
+
+    function showAutocomplete(html) {
+        if (autocompleteBox) {
+            autocompleteBox.innerHTML = html;
+            autocompleteBox.classList.remove('hidden');
+        }
+    }
+
+    async function fetchAutocomplete(term) {
+        if (abortController) abortController.abort();
+        abortController = new AbortController();
+
+        try {
+            console.log('[Autocompletado] Buscando:', term);
+            const response = await fetch('/api/products/autocomplete?q=' + encodeURIComponent(term), {
+                method: 'GET',
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                signal: abortController.signal
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            if (error.name !== 'AbortError') console.error('[Autocompletado] Error:', error);
+            return null;
+        }
+    }
+
+    function renderAutocomplete(products, term) {
+        if (!autocompleteBox) return;
+
+        if (products.length === 0) {
+            showAutocomplete('<div class="px-4 py-3 text-sm text-helin-text">No se encontraron coincidencias.</div>');
+            return;
+        }
+
+        let html = '';
+        products.forEach(product => {
+            html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-helin-soft transition-colors border-b border-helin-border last:border-0">' +
+                '<div class="w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-helin-border">' +
+                    '<img src="' + product.image + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
+                '</div>' +
+                '<div class="flex-1 min-w-0">' +
+                    '<div class="text-sm font-semibold text-helin-heading truncate">' + highlightMatch(product.name, term) + '</div>' +
+                    '<div class="text-xs text-helin-text truncate">' + escapeHtml(product.category || 'Helin') + '</div>' +
+                '</div>' +
+                '<div class="text-sm font-bold text-turquesa flex-shrink-0">' + product.formatted_price + '</div>' +
+            '</a>';
+        });
+
+        html += '<button type="button" id="autocompleteViewAll" class="w-full text-center text-xs text-turquesa font-black uppercase py-2.5 hover:bg-helin-soft transition-colors">Ver todos los resultados →</button>';
+        showAutocomplete(html);
+
+        document.getElementById('autocompleteViewAll')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            hideAutocomplete();
+            if (searchInput) {
+                searchInput.focus();
+                applyFilters();
+            }
+        });
+    }
+
     if (searchInput) {
         searchInput.addEventListener('input', function () {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(applyFilters, 450);
+            clearTimeout(autocompleteTimer);
             updateClearButton();
+
+            const term = searchInput.value.trim();
+            if (term.length < 3) {
+                hideAutocomplete();
+                debounceTimer = setTimeout(applyFilters, 450);
+                return;
+            }
+
+            debounceTimer = setTimeout(applyFilters, 600);
+            autocompleteTimer = setTimeout(async () => {
+                const data = await fetchAutocomplete(term);
+                console.log('[Autocompletado] Respuesta:', data);
+                if (data && data.success) {
+                    renderAutocomplete(data.products, term);
+                }
+            }, 250);
+        });
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                hideAutocomplete();
+                applyFilters();
+            }
+        });
+
+        searchInput.addEventListener('focus', function() {
+            const term = searchInput.value.trim();
+            if (term.length >= 3) {
+                clearTimeout(autocompleteTimer);
+                autocompleteTimer = setTimeout(async () => {
+                    const data = await fetchAutocomplete(term);
+                    if (data && data.success) renderAutocomplete(data.products, term);
+                }, 150);
+            }
+        });
+    }
+
+    // Cerrar autocompletado al hacer clic fuera
+    if (searchWrapper) {
+        document.addEventListener('click', function(e) {
+            if (!searchWrapper.contains(e.target)) hideAutocomplete();
         });
     }
 
@@ -126,6 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cb.addEventListener('change', function () {
             applyFilters();
             updateClearButton();
+            renderActiveFilters();
         });
     });
 
@@ -169,4 +386,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateClearButton();
+    renderActiveFilters();
 });

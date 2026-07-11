@@ -18,11 +18,7 @@
                 @endphp
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center gap-2 text-white flex-shrink-0">
-                    @if($settings && $settings->image)
-                        <img src="{{ asset('storage/' . $settings->image) }}" alt="Helin" class="h-10 sm:h-12 w-auto">
-                    @else
-                        <span class="text-2xl sm:text-4xl font-bold lowercase tracking-tight">helin.</span>
-                    @endif
+                    <img src="{{ asset('images/logo_blanco_helin.png') }}" alt="Helin" class="h-12 sm:h-16 w-auto">
                 </a>
 
             <!-- Buscador - Solo en tablet/desktop -->
