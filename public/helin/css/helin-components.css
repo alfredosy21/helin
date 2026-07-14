@@ -253,6 +253,10 @@ small, .caption, .text-xs, .tag {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 4px 0;
 }
 
 .breadcrumb-link,
@@ -260,6 +264,7 @@ small, .caption, .text-xs, .tag {
     display: inline-flex;
     align-items: center;
     transform: translateY(-1px);
+    white-space: nowrap;
 }
 
 .breadcrumb-link {
@@ -278,6 +283,7 @@ small, .caption, .text-xs, .tag {
     justify-content: center;
     vertical-align: baseline;
     margin: 0 2px;
+    flex-shrink: 0;
 }
 
 .breadcrumb-link:hover {
@@ -287,4 +293,18 @@ small, .caption, .text-xs, .tag {
 
 .breadcrumb-active {
     color: var(--helin-primary);
+    font-weight: 500;
+}
+
+/* Responsive breadcrumb for small screens */
+@media (max-width: 640px) {
+    .breadcrumb {
+        font-size: var(--text-12px);
+        gap: 6px;
+    }
+
+    .breadcrumb-separator {
+        font-size: 8px;
+        margin: 0 1px;
+    }
 }

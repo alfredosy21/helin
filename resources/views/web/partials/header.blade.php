@@ -23,28 +23,31 @@
 
             <!-- Buscador - Solo en tablet/desktop -->
             <div class="hidden sm:block flex-1 max-w-4xl mx-auto">
-                <form action="{{ route('catalogo') }}" method="GET" class="bg-white rounded-full p-0.5 shadow-sm">
-                    <div class="flex items-center">
-                        <div class="flex-1 flex items-center px-3">
-                            <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
-                            <input type="text" name="search" placeholder="¿Qué producto estás buscando?" value="{{ request('search') }}" autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
+                <div class="header-search-wrapper">
+                    <div class="bg-white rounded-full shadow-lg border border-gray-100">
+                        <div class="flex items-center">
+                            <div class="flex-1 flex items-center px-3 py-3">
+                                <i class="fas fa-search text-turquesa mr-2 text-sm"></i>
+                                <input type="text" id="header-search-input" placeholder="¿Qué producto estás buscando?" autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full bg-transparent">
+                            </div>
+                            <div class="border-l flex items-center px-3 hidden md:flex min-w-[140px] py-3">
+                                @php
+                                    $categories = \App\Models\Category::active()->ordered()->get();
+                                @endphp
+                                <select name="category" onchange="this.form.submit()" class="bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold">
+                                    <option value="">Todas las categorías</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
+                                <i class="fas fa-search text-sm"></i>
+                            </button>
                         </div>
-                        <div class="border-l flex items-center px-3 hidden md:flex min-w-[140px]">
-                            @php
-                                $categories = \App\Models\Category::active()->ordered()->get();
-                            @endphp
-                            <select name="category" onchange="this.form.submit()" class="bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold">
-                                <option value="">Todas las categorías</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
-                            <i class="fas fa-search text-sm"></i>
-                        </button>
                     </div>
-                </form>
+                    <div id="header-search-dropdown" class="hidden mt-2"></div>
+                </div>
             </div>
 
             <!-- Acciones -->
@@ -78,17 +81,20 @@
 
         <!-- Buscador Móvil - Expandible -->
         <div id="mobile-search" class="hidden sm:hidden mt-2 pb-1">
-            <form action="{{ route('catalogo') }}" method="GET" class="bg-white rounded-full p-1 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-1 flex items-center px-3">
-                        <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
-                        <input type="text" name="search" placeholder="Buscar productos..." autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
+            <div class="mobile-search-wrapper">
+                <div class="bg-white rounded-full p-1 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="flex-1 flex items-center px-3">
+                            <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
+                            <input type="text" id="mobile-search-input" placeholder="Buscar productos..." autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
+                        </div>
+                        <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
+                            <i class="fas fa-search text-sm"></i>
+                        </button>
                     </div>
-                    <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
-                        <i class="fas fa-search text-sm"></i>
-                    </button>
                 </div>
-            </form>
+                <div id="mobile-search-dropdown" class="hidden"></div>
+            </div>
         </div>
     </div>
 
@@ -119,17 +125,17 @@
                                             <div>
                                                 <p class="text-turquesa font-semibold text-[10px] mb-2 uppercase tracking-wide">AB</p>
                                                 <ul class="space-y-1">
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'aditamentos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'kits-quirurgicos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
                                                 </ul>
                                             </div>
                                             <div>
                                                 <p class="text-turquesa font-semibold text-[10px] mb-2 uppercase tracking-wide">GDT</p>
                                                 <ul class="space-y-1">
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
-                                                    <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Implantes</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'aditamentos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Aditamentos</a></li>
+                                                    <li><a href="{{ route('catalogo', ['category' => 'kits-quirurgicos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Kits</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -145,9 +151,9 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Biomateriales</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Regeneración Guiada Bucal</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Suturas</a></li>
+                                            <li><a href="{{ route('catalogo', ['tag' => 'biomaterial']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Biomateriales</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'regeneracion-guiada-bucal']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Regeneración Guiada Bucal</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'suturas']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Suturas</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -161,9 +167,9 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Placas</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tornillos</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cajetín</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'placas-osteosintesis']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Placas</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'tornillos-osteosintesis']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tornillos</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'cajetin-osteosintesis']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cajetín</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -177,8 +183,8 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Especiales</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Diarios</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'cuidados-especiales']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Especiales</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'cuidados-diarios']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cuidados Diarios</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -192,11 +198,11 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2 mb-6">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tijeras</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Pinzas</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Separadores</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cinceles</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Periostótomos</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'tijeras']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Tijeras</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'pinzas']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Pinzas</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'separadores']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Separadores</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'cinceles']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Cinceles</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'periostotomos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Periostótomos</a></li>
                                         </ul>
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-gears text-sm" style="color: #6BC2C3;"></i>
@@ -204,13 +210,13 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Equipos odontológicos</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Equipos odontológicos</a></li>
                                         </ul>
                                         <!-- Subdivisión de Equipos -->
                                         <div class="ml-4 pl-2 border-l border-helin-border/30">
                                             <ul class="space-y-2">
-                                                <li><a href="#" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Piezas de mano</a></li>
-                                                <li><a href="#" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Motores</a></li>
+                                                <li><a href="{{ route('catalogo', ['category' => 'piezas-de-mano']) }}" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Piezas de mano</a></li>
+                                                <li><a href="{{ route('catalogo', ['category' => 'motores-odontologicos']) }}" class="text-helin-text text-[12px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">→</span> Motores</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -225,10 +231,10 @@
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Planificación Digital</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Impresión 3D</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Escaneo Intraoral</a></li>
-                                            <li><a href="#" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> PD Completa</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Planificación Digital</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'impresion-3d']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Impresión 3D</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'escaneo-intraoral']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> Escaneo Intraoral</a></li>
+                                            <li><a href="{{ route('catalogo', ['category' => 'pd-completa']) }}" class="text-helin-text text-[13px] hover:text-turquesa flex items-center gap-2 py-1 font-normal transition-colors"><span class="text-turquesa text-[10px]">></span> PD Completa</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -238,11 +244,11 @@
                     <!-- Inicio -->
                     <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16">Inicio</a>
                     <!-- Categorías -->
-                    <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Cirugía Bucal <span class="text-xs">+</span></a>
-                    <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Maxilofacial <span class="text-xs">+</span></a>
-                    <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Periodoncia <span class="text-xs">+</span></a>
-                    <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Ortodoncia <span class="text-xs">+</span></a>
-                    <a href="#" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Cirugía Bucal <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Maxilofacial <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Periodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Ortodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
                     <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors mr-12">
@@ -257,10 +263,11 @@
             <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-4 text-sm whitespace-nowrap">
                 <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Productos</a>
                 <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Inicio</a>
-                <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Cirugía Bucal</a>
-                <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Periodoncia</a>
-                <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Ortodoncia</a>
-                <a href="#" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Endodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Cirugía Bucal</a>
+                <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Maxilofacial</a>
+                <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Periodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Ortodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Endodoncia</a>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ class CategorySeeder extends Seeder
             // Implantes
             [
                 'name' => 'Implantes',
-                'slug' => 'implantes',
+                'slug' => 'implantologia',
                 'description' => 'Sistema completo de implantes dentales para rehabilitación oral',
                 'seo_description' => 'Descubre nuestra selección de implantes dentales de alta calidad. Implantes de titanio, cónicos y cerámicos para rehabilitación oral con garantía Helin. Envíos a todo Venezuela.',
                 'seo_keywords' => 'implantes dentales, implantes de titanio, implantes cónicos, rehabilitación oral, implantes Venezuela, helin implantes',

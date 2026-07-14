@@ -103,7 +103,7 @@
                <div>
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
-                  <a href="{{ route('catalogo', ['category' => 'implantes']) }}" class="text-link">Ver categoría →</a>
+                  <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-link">Ver categoría →</a>
                </div>
                <div class="implant-visual relative h-32 hidden md:block">
                   <div class="implant absolute bottom-2 left-4 w-12 h-32 rounded-2xl bg-gradient-to-r from-gray-300 to-white to-gray-400 transform rotate-12" style="

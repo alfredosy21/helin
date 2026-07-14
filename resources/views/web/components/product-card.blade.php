@@ -12,11 +12,11 @@
             </span>
         @endif
         <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-            <img src="{{ $productImage ?? '' }}"
+            <img data-src="{{ $productImage ?? '' }}"
+                 data-fallback="{{ asset('images/placeholder-product.webp') }}"
                  alt="{{ $productName ?? '' }}"
                  title="{{ $productName ?? '' }}"
-                 loading="lazy"
-                 class="w-full h-full object-contain">
+                 class="w-full h-full object-contain lazy-image">
         </div>
     </a>
 

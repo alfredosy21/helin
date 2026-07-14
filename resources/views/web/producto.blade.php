@@ -41,14 +41,17 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             @endphp
             <div class="bg-white rounded-xl shadow-sm px-6 pb-6 pt-0 mb-4">
                 <div class="w-full aspect-square flex items-start justify-center overflow-hidden">
-                    <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="object-contain" style="width:85%; height:85%;">
+                    <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="object-contain" style="width:85%; height:85%;" loading="eager">
                 </div>
             </div>
             <div class="grid grid-cols-4 gap-3">
                 @foreach($galleryImages as $i => $img)
                 <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 transition-all">
                     <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-                        <img src="{{ $img }}" class="w-full h-full object-contain">
+                        <img data-src="{{ $img }}"
+     data-fallback="{{ asset('images/placeholder-product.webp') }}"
+     class="w-full h-full object-contain lazy-image"
+     onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.parentElement.classList.replace('border-helin-border','border-turquesa');">
                     </div>
                 </button>
                 @endforeach
@@ -59,12 +62,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         <div class="lg:w-1/2">
             <h1 class="text-3xl text-helin-heading mb-6">{{ $product->name }}</h1>
 
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-6" id="priceDisplay">
                 @if($product->is_on_sale && $product->sale_price)
-                    <span class="text-lg text-helin-text" style="text-decoration: line-through;">${{ number_format($product->price, 2) }}</span>
-                    <span class="text-xl font-bold text-turquesa">${{ number_format($product->sale_price, 2) }}</span>
+                    <span class="text-lg text-helin-text line-through opacity-70" id="oldPrice">${{ number_format($product->price, 2) }}</span>
+                    <span class="text-xl font-bold text-turquesa" id="currentPrice">${{ number_format($product->sale_price, 2) }}</span>
                 @else
-                    <span class="text-xl font-bold text-turquesa">${{ number_format($product->price, 2) }}</span>
+                    <span class="text-xl font-bold text-turquesa" id="currentPrice">${{ number_format($product->price, 2) }}</span>
                 @endif
             </div>
 
@@ -109,6 +112,68 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 el.classList.remove('text-helin-heading','hover:bg-turquesa/10','hover:text-turquesa');
                 document.getElementById('sizeDropdownMenu').classList.add('hidden');
                 document.getElementById('sizeDropdownArrow').classList.remove('rotate-180');
+
+                // Actualizar precio según el tamaño seleccionado
+                updatePriceBySize(label);
+            }
+
+            function updatePriceBySize(size) {
+                // Precios base según tamaño (ajustar según tus datos reales)
+                const sizePrices = {
+                    'Ø3.3 mm': {
+                        base: @json($product->price),
+                        sale: @json($product->sale_price ?? null)
+                    },
+                    'Ø4.1 mm': {
+                        base: @json($product->price * 1.15), // 15% más caro
+                        sale: @json(($product->sale_price ?? $product->price) * 1.15)
+                    },
+                    'Ø4.8 mm': {
+                        base: @json($product->price * 1.25), // 25% más caro
+                        sale: @json(($product->sale_price ?? $product->price) * 1.25)
+                    }
+                };
+
+                const priceInfo = sizePrices[size] || sizePrices['Ø3.3 mm'];
+                const currentPriceEl = document.getElementById('currentPrice');
+                const oldPriceEl = document.getElementById('oldPrice');
+                const cartButton = document.querySelector('[data-cart-add]');
+
+                // Actualizar precios con animación
+                currentPriceEl.style.opacity = '0.5';
+                if (oldPriceEl) oldPriceEl.style.opacity = '0.5';
+
+                setTimeout(() => {
+                    // Actualizar precio actual
+                    currentPriceEl.textContent = '$' + priceInfo.sale.toFixed(2);
+
+                    // Actualizar precio anterior si hay oferta
+                    if (priceInfo.sale < priceInfo.base) {
+                        if (!oldPriceEl) {
+                            // Crear elemento de precio anterior si no existe
+                            const priceDisplay = document.getElementById('priceDisplay');
+                            const newOldPrice = document.createElement('span');
+                            newOldPrice.id = 'oldPrice';
+                            newOldPrice.className = 'text-lg text-helin-text line-through opacity-70';
+                            priceDisplay.insertBefore(newOldPrice, currentPriceEl);
+                            oldPriceEl = newOldPrice;
+                        }
+                        oldPriceEl.textContent = '$' + priceInfo.base.toFixed(2);
+                        oldPriceEl.style.display = 'inline';
+                    } else if (oldPriceEl) {
+                        // Ocultar precio anterior si no hay oferta
+                        oldPriceEl.style.display = 'none';
+                    }
+
+                    // Actualizar data-price del botón de carrito
+                    if (cartButton) {
+                        cartButton.setAttribute('data-price', priceInfo.sale.toFixed(2));
+                    }
+
+                    // Restaurar opacidad con animación
+                    currentPriceEl.style.opacity = '1';
+                    if (oldPriceEl) oldPriceEl.style.opacity = '0.7';
+                }, 200);
             }
             document.addEventListener('click', function(e) {
                 if (!document.getElementById('sizeDropdown').contains(e.target)) {
@@ -137,34 +202,274 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 </button>
             </div>
 
-            <!-- Tags del producto -->
-            <div class="flex flex-wrap gap-2 mt-4">
-                @if($product->is_new)
-                    <a href="{{ route('catalogo', ['tag' => 'new']) }}" class="inline-flex items-center gap-1.5 bg-turquesa/10 text-turquesa text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-turquesa/20 transition-colors">
-                        <i class="fas fa-star text-[10px]"></i> Nuevo
-                    </a>
-                @endif
-                @if($product->is_featured)
-                    <a href="{{ route('catalogo', ['tag' => 'featured']) }}" class="inline-flex items-center gap-1.5 bg-yellow-50 text-yellow-600 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-yellow-100 transition-colors">
-                        <i class="fas fa-award text-[10px]"></i> Destacado
-                    </a>
-                @endif
-                @if($product->is_on_sale)
-                    <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="inline-flex items-center gap-1.5 bg-red-50 text-red-500 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-100 transition-colors">
-                        <i class="fas fa-tag text-[10px]"></i> Oferta
-                    </a>
-                @endif
-                @if($product->category)
-                    <a href="{{ route('catalogo', ['category' => $product->category->slug]) }}" class="inline-flex items-center gap-1.5 bg-helin-soft text-helin-heading text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-helin-border transition-colors">
-                        <i class="fas fa-folder text-[10px]"></i> {{ $product->category->name }}
-                    </a>
-                @endif
-                @if($product->brand)
-                    <a href="{{ route('catalogo', ['brand' => $product->brand->slug]) }}" class="inline-flex items-center gap-1.5 bg-helin-soft text-helin-heading text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-helin-border transition-colors">
-                        <i class="fas fa-certificate text-[10px]"></i> {{ $product->brand->name }}
-                    </a>
-                @endif
+            <!-- Tags dinámicos del producto -->
+            <div class="product-tags-section">
+                <h3 class="text-sm font-semibold text-helin-heading mb-3">Etiquetas del producto</h3>
+                <div class="flex flex-wrap gap-2" id="productTags">
+                    @php
+                        $productTags = [];
+
+                        // Tags de estado del producto
+                        if($product->is_new) {
+                            $productTags[] = [
+                                'type' => 'status',
+                                'label' => 'Nuevo',
+                                'icon' => 'fas fa-star',
+                                'color' => 'turquesa',
+                                'filter' => 'new'
+                            ];
+                        }
+
+                        if($product->is_featured) {
+                            $productTags[] = [
+                                'type' => 'status',
+                                'label' => 'Destacado',
+                                'icon' => 'fas fa-award',
+                                'color' => 'yellow',
+                                'filter' => 'featured'
+                            ];
+                        }
+
+                        if($product->is_on_sale) {
+                            $productTags[] = [
+                                'type' => 'status',
+                                'label' => 'Oferta',
+                                'icon' => 'fas fa-tag',
+                                'color' => 'red',
+                                'filter' => 'on_sale'
+                            ];
+                        }
+
+                        // Tags de categoría y marca
+                        if($product->category) {
+                            $productTags[] = [
+                                'type' => 'category',
+                                'label' => $product->category->name,
+                                'icon' => 'fas fa-folder',
+                                'color' => 'helin',
+                                'filter' => 'category:' . $product->category->slug
+                            ];
+                        }
+
+                        if($product->brand) {
+                            $productTags[] = [
+                                'type' => 'brand',
+                                'label' => $product->brand->name,
+                                'icon' => 'fas fa-certificate',
+                                'color' => 'helin',
+                                'filter' => 'brand:' . $product->brand->slug
+                            ];
+                        }
+
+                        // Tags adicionales basados en atributos del producto
+                        if($product->material) {
+                            $productTags[] = [
+                                'type' => 'attribute',
+                                'label' => $product->material,
+                                'icon' => 'fas fa-cube',
+                                'color' => 'purple',
+                                'filter' => 'material:' . strtolower($product->material)
+                            ];
+                        }
+
+                        // Tag de biomateriales si aplica
+                        if($product->is_biomaterial ?? false) {
+                            $productTags[] = [
+                                'type' => 'attribute',
+                                'label' => 'Biomateriales',
+                                'icon' => 'fas fa-leaf',
+                                'color' => 'green',
+                                'filter' => 'biomaterial'
+                            ];
+                        }
+                    @endphp
+
+                    @foreach($productTags as $tag)
+                        <a href="{{ route('catalogo', ['tag' => $tag['filter']]) }}"
+                           class="product-tag tag-{{ $tag['type'] }} tag-{{ $tag['color'] }}"
+                           data-tag-type="{{ $tag['type'] }}"
+                           data-tag-filter="{{ $tag['filter'] }}"
+                           onclick="handleTagClick(event, '{{ $tag['filter'] }}')">
+                            <i class="{{ $tag['icon'] }} tag-icon"></i>
+                            <span class="tag-label">{{ $tag['label'] }}</span>
+                        </a>
+                    @endforeach
+                </div>
             </div>
+
+            <style>
+            .product-tags-section {
+                margin-top: 24px;
+                padding: 16px;
+                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+            }
+
+            .product-tag {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border: 1px solid transparent;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .product-tag::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .product-tag:hover::before {
+                left: 100%;
+            }
+
+            .product-tag:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .tag-icon {
+                font-size: 10px;
+                flex-shrink: 0;
+            }
+
+            .tag-label {
+                white-space: nowrap;
+            }
+
+            /* Colores de tags */
+            .tag-turquesa {
+                background: rgba(107, 194, 195, 0.1);
+                color: #0d9488;
+                border-color: rgba(107, 194, 195, 0.2);
+            }
+
+            .tag-turquesa:hover {
+                background: rgba(107, 194, 195, 0.2);
+                color: #0f766e;
+            }
+
+            .tag-yellow {
+                background: rgba(251, 191, 36, 0.1);
+                color: #d97706;
+                border-color: rgba(251, 191, 36, 0.2);
+            }
+
+            .tag-yellow:hover {
+                background: rgba(251, 191, 36, 0.2);
+                color: #b45309;
+            }
+
+            .tag-red {
+                background: rgba(239, 68, 68, 0.1);
+                color: #dc2626;
+                border-color: rgba(239, 68, 68, 0.2);
+            }
+
+            .tag-red:hover {
+                background: rgba(239, 68, 68, 0.2);
+                color: #b91c1c;
+            }
+
+            .tag-helin {
+                background: rgba(71, 85, 105, 0.1);
+                color: #475569;
+                border-color: rgba(71, 85, 105, 0.2);
+            }
+
+            .tag-helin:hover {
+                background: rgba(71, 85, 105, 0.2);
+                color: #334155;
+            }
+
+            .tag-purple {
+                background: rgba(147, 51, 234, 0.1);
+                color: #9333ea;
+                border-color: rgba(147, 51, 234, 0.2);
+            }
+
+            .tag-purple:hover {
+                background: rgba(147, 51, 234, 0.2);
+                color: #7c3aed;
+            }
+
+            .tag-green {
+                background: rgba(34, 197, 94, 0.1);
+                color: #16a34a;
+                border-color: rgba(34, 197, 94, 0.2);
+            }
+
+            .tag-green:hover {
+                background: rgba(34, 197, 94, 0.2);
+                color: #15803d;
+            }
+
+            /* Responsive */
+            @media (max-width: 640px) {
+                .product-tags-section {
+                    padding: 12px;
+                    margin-top: 16px;
+                }
+
+                .product-tag {
+                    font-size: 10px;
+                    padding: 4px 8px;
+                    gap: 4px;
+                }
+
+                .tag-icon {
+                    font-size: 8px;
+                }
+            }
+            </style>
+
+            <script>
+            function handleTagClick(event, filterValue) {
+                event.preventDefault();
+
+                // Mostrar loading
+                const tag = event.currentTarget;
+                const originalContent = tag.innerHTML;
+                tag.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Cargando...</span>';
+                tag.style.pointerEvents = 'none';
+
+                // Construir URL según el tipo de filtro
+                let url = '/catalogo?';
+
+                if(filterValue.includes(':')) {
+                    const [type, value] = filterValue.split(':');
+                    if(type === 'category') {
+                        url += 'category=' + encodeURIComponent(value);
+                    } else if(type === 'brand') {
+                        url += 'brand=' + encodeURIComponent(value);
+                    } else if(type === 'material') {
+                        url += 'material=' + encodeURIComponent(value);
+                    } else {
+                        url += 'tag=' + encodeURIComponent(filterValue);
+                    }
+                } else {
+                    url += 'tag=' + encodeURIComponent(filterValue);
+                }
+
+                // Redirigir después de un breve delay para mostrar el loading
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 300);
+            }
+            </script>
         </div>
     </div>
 

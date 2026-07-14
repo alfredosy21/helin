@@ -1,5 +1,11 @@
 <article class="resource-card">
     <div class="resource-thumb">
+        @if(!empty($resourceImage))
+            <img data-src="{{ $resourceImage }}"
+                 data-fallback="{{ asset('images/placeholder-resource.webp') }}"
+                 alt="{{ $resourceTitle ?? '' }}"
+                 class="resource-thumb-img lazy-image">
+        @endif
         <span class="resource-type">{{ $resourceType ?? '' }}</span>
         <span class="resource-play">{{ $resourcePlay ?? '→' }}</span>
     </div>

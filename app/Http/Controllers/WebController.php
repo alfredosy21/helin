@@ -85,15 +85,34 @@ class WebController extends Controller
             }
         }
 
-        // Apply tag filters
+        // Apply tag filter if present
         $tag = request('tag');
-        if ($tag === 'featured') {
-            $query->where('is_featured', true);
-        } elseif ($tag === 'new') {
-            $query->where('is_new', true);
-        } elseif ($tag === 'on_sale') {
-            $query->where('is_on_sale', true);
+        if ($tag) {
+            // Handle different tag types
+            if ($tag === 'new') {
+                $query->where('is_new', true);
+            } elseif ($tag === 'featured') {
+                $query->where('is_featured', true);
+            } elseif ($tag === 'on_sale') {
+                $query->where('is_on_sale', true);
+            } elseif ($tag === 'biomaterial') {
+                $query->where('is_biomaterial', true);
+            } elseif (str_contains($tag, ':')) {
+                // Handle compound tags like "category:slug" or "brand:slug"
+                [$tagType, $tagValue] = explode(':', $tag, 2);
+
+                if ($tagType === 'material') {
+                    $query->where('material', 'like', '%' . $tagValue . '%');
+                }
+            }
         }
+
+        // Apply material filter if present
+        $material = request('material');
+        if ($material) {
+            $query->where('material', 'like', '%' . $material . '%');
+        }
+
 
         // Apply search filter if present
         $searchTerm = request('search');
@@ -250,5 +269,48 @@ class WebController extends Controller
             'librarySection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
             'resourceSpecialtyCounts', 'formats', 'resources'
         ));
+    }
+
+    /**
+     * Búsqueda AJAX de productos para autocompletado
+     */
+    public function searchProducts(Request $request)
+    {
+        $query = $request->get('q', '');
+        $limit = min($request->get('limit', 8), 12); // Máximo 12 resultados
+
+        if (strlen($query) < 3) {
+            return response()->json([]);
+        }
+
+        $products = \App\Models\Product::with(['category', 'brand'])
+            ->where('is_active', true)
+            ->where(function($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhere('description', 'like', '%' . $query . '%')
+                  ->orWhere('sku', 'like', '%' . $query . '%');
+            })
+            ->orderBy('name')
+            ->limit($limit)
+            ->get();
+
+        $results = $products->map(function($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'price' => $product->price,
+                'sale_price' => $product->sale_price,
+                'image' => $product->image ? asset('storage/' . $product->image) : asset('storage/products/73432-21300078.webp'),
+                'category' => $product->category ? $product->category->name : 'Sin categoría',
+                'category_slug' => $product->category ? $product->category->slug : null,
+                'brand' => $product->brand ? $product->brand->name : 'Helin',
+                'url' => route('producto', ['slug' => $product->slug]),
+                'is_on_sale' => $product->is_on_sale,
+                'is_new' => $product->is_new,
+            ];
+        });
+
+        return response()->json($results);
     }
 }

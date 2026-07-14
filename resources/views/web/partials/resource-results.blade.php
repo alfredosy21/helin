@@ -23,6 +23,7 @@
             'resourceFormat'      => $formatMap[$resource->format] ?? '▣ Artículo',
             'resourceLink'        => $resource->type === 'video' ? 'Ver video' : ($resource->format === 'pdf' ? 'Descargar' : 'Leer'),
             'resourceUrl'         => $resource->url ?: '#',
+            'resourceImage'       => $resource->image_url ?? null,
         ])
     @endforeach
 </div>

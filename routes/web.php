@@ -55,7 +55,7 @@ Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas')
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
 Route::post('/api/resources/filter', [ResourceFilterController::class, 'filter'])->name('resources.filter');
 Route::post('/api/products/filter', [ProductFilterController::class, 'filter'])->name('products.filter');
-Route::get('/api/products/autocomplete', [\App\Http\Controllers\Api\ProductAutocompleteController::class, 'search'])->name('api.products.autocomplete');
+Route::get('/api/search/products', [WebController::class, 'searchProducts'])->name('api.search.products');
 
 /*
   |--------------------------------------------------------------------------

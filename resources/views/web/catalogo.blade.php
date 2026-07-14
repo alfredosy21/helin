@@ -49,7 +49,7 @@
     $breadcrumbItems = [
         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"']
     ];
-    
+
     if ($currentCategory) {
         $breadcrumbItems[] = ['label' => 'Productos', 'url' => route('catalogo'), 'linkAttributes' => 'class="hover:text-turquesa"'];
         $breadcrumbItems[] = ['label' => $currentCategory->name, 'spanAttributes' => 'class="text-turquesa font-medium"'];
@@ -142,7 +142,7 @@
             @php
                 $bannerBg = asset('images/banner_imp1.png');
                 $categoryBanners = [
-                    'implantes' => [
+                    'implantologia' => [
                         'label'       => 'Bienvenidos al Catálogo de Implantología',
                         'title'       => 'Todo Para Tus Procedimientos De Implantología En Un Solo Lugar',
                         'description' => 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.',
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         const skeleton = document.getElementById('productsSkeleton');
         const content = document.getElementById('productsContent');
-        
+
         if (skeleton && content) {
             skeleton.style.display = 'none';
             content.classList.remove('hidden');
@@ -320,7 +320,7 @@ function showProductsSkeleton() {
     const skeleton = document.getElementById('productsSkeleton');
     const content = document.getElementById('productsContent');
     const loading = document.getElementById('catalogLoading');
-    
+
     if (skeleton) skeleton.style.display = 'grid';
     if (content) content.classList.add('hidden');
     if (loading) loading.classList.add('hidden');
@@ -330,7 +330,7 @@ function showProductsSkeleton() {
 function hideProductsSkeleton() {
     const skeleton = document.getElementById('productsSkeleton');
     const content = document.getElementById('productsContent');
-    
+
     if (skeleton) skeleton.style.display = 'none';
     if (content) content.classList.remove('hidden');
 }
