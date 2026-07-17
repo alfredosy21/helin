@@ -12,7 +12,8 @@
             </span>
         @endif
         <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-            <img data-src="{{ $productImage ?? '' }}"
+            <img src="{{ $productImage ?? '' }}"
+                 data-src="{{ $productImage ?? '' }}"
                  data-fallback="{{ asset('images/placeholder-product.webp') }}"
                  alt="{{ $productName ?? '' }}"
                  title="{{ $productName ?? '' }}"

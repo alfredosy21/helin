@@ -33,14 +33,24 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.dataset.src;
+                const src = img.dataset.src;
+                // Solo asignar si data-src es válido
+                if (src && src !== '' && src !== 'undefined') {
+                    img.src = src;
+                }
                 img.classList.remove('lazy');
                 imageObserver.unobserve(img);
             }
         });
     });
-    
-    lazyImages.forEach(img => imageObserver.observe(img));
+
+    lazyImages.forEach(img => {
+        const src = img.dataset.src;
+        // Solo observar si tiene data-src válido
+        if (src && src !== '' && src !== 'undefined') {
+            imageObserver.observe(img);
+        }
+    });
     
     // Smooth scroll para botones "Ver más"
     const viewMoreButtons = document.querySelectorAll('[data-scroll-to]');

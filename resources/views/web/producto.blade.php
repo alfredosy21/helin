@@ -48,10 +48,11 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 @foreach($galleryImages as $i => $img)
                 <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 transition-all">
                     <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-                        <img data-src="{{ $img }}"
-     data-fallback="{{ asset('images/placeholder-product.webp') }}"
-     class="w-full h-full object-contain lazy-image"
-     onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.parentElement.classList.replace('border-helin-border','border-turquesa');">
+                        <img src="{{ $img }}"
+                             data-src="{{ $img }}"
+                             data-fallback="{{ asset('images/placeholder-product.webp') }}"
+                             class="w-full h-full object-contain lazy-image"
+                             onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.parentElement.classList.replace('border-helin-border','border-turquesa');">
                     </div>
                 </button>
                 @endforeach

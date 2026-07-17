@@ -294,14 +294,19 @@ class WebController extends Controller
             ->limit($limit)
             ->get();
 
-        $results = $products->map(function($product) {
+        $results = $products->map(function($product, $index) {
+            // Usar las mismas imágenes que la página de producto (im1.png - im6.png)
+            $imagePool = ['im1.png', 'im2.png', 'im3.png', 'im4.png', 'im5.png', 'im6.png'];
+            $imageIndex = $index % count($imagePool);
+            $imageUrl = asset('images/' . $imagePool[$imageIndex]);
+
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'sale_price' => $product->sale_price,
-                'image' => $product->image ? asset('storage/' . $product->image) : asset('storage/products/73432-21300078.webp'),
+                'image' => $imageUrl,
                 'category' => $product->category ? $product->category->name : 'Sin categoría',
                 'category_slug' => $product->category ? $product->category->slug : null,
                 'brand' => $product->brand ? $product->brand->name : 'Helin',

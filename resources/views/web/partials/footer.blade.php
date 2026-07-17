@@ -8,7 +8,8 @@
                 $settings = \App\Models\Settings::getSettings();
             @endphp
             @if($settings && $settings->image)
-                <img data-src="{{ asset('storage/' . $settings->image) }}"
+                <img src="{{ asset('storage/' . $settings->image) }}"
+                     data-src="{{ asset('storage/' . $settings->image) }}"
                      data-fallback="{{ asset('images/logo-helin.webp') }}"
                      alt="Helin"
                      class="h-12 w-auto mb-4 lazy-image">

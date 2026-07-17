@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize badge with current cart count
     updateBadge(Cart.getCount());
 
+    // Initialize cart summary if present
+    if (document.getElementById('cart-summary')) {
+        renderCartSummary(Cart.getItems());
+    }
+
     document.addEventListener('cart:updated', e => {
         updateBadge(e.detail.count);
         if (document.getElementById('cart-page-root')) {
@@ -48,16 +53,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Cart page rendering ──────────────────────────────────────────────────
-    const cartRoot = document.getElementById('cart-page-root');
-    if (cartRoot) {
-        renderCartPage(Cart.getItems());
-    }
-
     function fmt(n) {
         return '$' + parseFloat(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
-    function renderCartPage(items) {
+    let cachedBsRate = null;
+
+    async function fetchBsRate() {
+        if (cachedBsRate !== null) return cachedBsRate;
+
+        try {
+            const response = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            cachedBsRate = parseFloat(data.promedio) || 0;
+        } catch (e) {
+            console.error('Error fetching Bs rate:', e);
+            cachedBsRate = 0;
+        }
+
+        return cachedBsRate;
+    }
+
+    async function renderCartPage(items) {
         const root = document.getElementById('cart-page-root');
         if (!root) return;
 
@@ -69,10 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
         root.innerHTML = `
             <div class="flex flex-col lg:flex-row gap-8">
                 ${renderItemsTable(items)}
-                ${renderSummary(items)}
+                ${await renderSummary(items)}
             </div>`;
 
         bindCartPageEvents();
+    }
+
+    const cartRoot = document.getElementById('cart-page-root');
+    if (cartRoot) {
+        renderCartPage(Cart.getItems());
     }
 
     function renderEmpty() {
@@ -161,9 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
     }
 
-    function renderSummary(items) {
+    async function renderSummary(items) {
         const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-        const bsRate   = 36.50;
+        const bsRate   = await fetchBsRate();
         const totalBs  = (subtotal * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2 });
 
         return `

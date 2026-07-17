@@ -19,7 +19,8 @@ class HelinLazyLoading {
         // Crear el observer
         this.imageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
+                // Verificar que la imagen aún tenga data-src antes de procesar
+                if (entry.isIntersecting && entry.target.dataset.src) {
                     this.loadImage(entry.target);
                 }
             });
@@ -36,7 +37,11 @@ class HelinLazyLoading {
         // Buscar todas las imágenes con data-src
         const lazyImages = document.querySelectorAll('img[data-src]');
         lazyImages.forEach(img => {
-            this.imageObserver.observe(img);
+            // Solo observar si tiene data-src válido
+            const src = img.dataset.src;
+            if (src && src !== '' && src !== 'undefined') {
+                this.imageObserver.observe(img);
+            }
         });
     }
 
@@ -44,16 +49,37 @@ class HelinLazyLoading {
         // Para imágenes que ya están visibles en el primer load
         const lazyImages = document.querySelectorAll('img[data-src]');
         lazyImages.forEach(img => {
-            const rect = img.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                this.loadImage(img);
+            const src = img.dataset.src;
+            if (src && src !== '' && src !== 'undefined') {
+                const rect = img.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    this.loadImage(img);
+                }
             }
         });
     }
 
     loadImage(img) {
         const src = img.dataset.src;
-        if (!src) return;
+        const currentSrc = img.src;
+
+        // Si no hay data-src válido, no hacer nada
+        if (!src || src === '' || src === 'undefined') {
+            this.imageObserver.unobserve(img);
+            return;
+        }
+
+        // Si el src actual es igual al data-src, ya está cargado
+        if (src === currentSrc) {
+            this.imageObserver.unobserve(img);
+            return;
+        }
+
+        // Marcar la imagen como cargando para evitar procesamiento duplicado
+        if (img.classList.contains('lazy-loading')) {
+            return;
+        }
+        img.classList.add('lazy-loading');
 
         // Aplicar efecto de fade-in
         img.style.opacity = '0';
@@ -61,15 +87,16 @@ class HelinLazyLoading {
 
         // Crear nueva imagen para precargar
         const newImg = new Image();
-        
+
         newImg.onload = () => {
             // Cuando la imagen se carga, actualizar el src
             img.src = src;
             img.removeAttribute('data-src');
-            
+            img.classList.remove('lazy-loading');
+
             // Remover del observer
             this.imageObserver.unobserve(img);
-            
+
             // Aplicar fade-in
             setTimeout(() => {
                 img.style.opacity = '1';
@@ -77,9 +104,14 @@ class HelinLazyLoading {
         };
 
         newImg.onerror = () => {
-            // Manejo de error - usar imagen por defecto
-            img.src = img.dataset.fallback || '/images/placeholder-product.webp';
+            // En caso de error, usar el fallback o mantener el src actual
+            const fallback = img.dataset.fallback;
+            if (fallback && fallback !== 'undefined' && fallback !== '') {
+                img.src = fallback;
+            }
+            // Siempre remover data-src para evitar reintentos
             img.removeAttribute('data-src');
+            img.classList.remove('lazy-loading');
             this.imageObserver.unobserve(img);
             img.style.opacity = '1';
         };
