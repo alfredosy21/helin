@@ -122,9 +122,17 @@
 }
 
 .search-result-item:hover,
+.search-result-item:active,
 .search-result-item.active {
     background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
     border-color: #6BC2C3;
+}
+
+@media (hover: none) {
+    .search-result-item:active {
+        background: linear-gradient(135deg, #e0f7f7 0%, #d1f5f5 100%);
+        border-color: #6BC2C3;
+    }
 }
 
 .search-result-item:last-child {

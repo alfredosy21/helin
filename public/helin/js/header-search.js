@@ -151,9 +151,6 @@ class HelinHeaderSearch {
                         <span class="current-price">$${parseFloat(price).toFixed(2)}</span>
                     </div>
                 </div>
-                <div class="search-result-action">
-                    <i class="fas fa-arrow-right"></i>
-                </div>
             </div>
         `;
     }

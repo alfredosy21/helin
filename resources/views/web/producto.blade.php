@@ -39,20 +39,16 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     asset('images/im6.png'),
                 ];
             @endphp
-            <div class="bg-white rounded-xl shadow-sm px-6 pb-6 pt-0 mb-4">
-                <div class="w-full aspect-square flex items-start justify-center overflow-hidden">
-                    <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="object-contain" style="width:85%; height:85%;" loading="eager">
+            <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4">
+                <div class="w-full" style="aspect-ratio: 1 / 1;">
+                    <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="w-full h-full object-contain" loading="eager">
                 </div>
             </div>
             <div class="grid grid-cols-4 gap-3">
                 @foreach($galleryImages as $i => $img)
-                <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 transition-all">
-                    <div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-                        <img src="{{ $img }}"
-                             data-src="{{ $img }}"
-                             data-fallback="{{ asset('images/placeholder-product.webp') }}"
-                             class="w-full h-full object-contain lazy-image"
-                             onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.parentElement.classList.replace('border-helin-border','border-turquesa');">
+                <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 bg-white transition-all">
+                    <div class="w-full" style="aspect-ratio: 1 / 1;">
+                        <img src="{{ $img }}" alt="{{ $product->name }}" class="w-full h-full object-contain">
                     </div>
                 </button>
                 @endforeach
@@ -204,8 +200,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             </div>
 
             <!-- Tags dinámicos del producto -->
-            <div class="product-tags-section">
-                <h3 class="text-sm font-semibold text-helin-heading mb-3">Etiquetas del producto</h3>
+            <div class="mt-6">
                 <div class="flex flex-wrap gap-2" id="productTags">
                     @php
                         $productTags = [];
@@ -299,14 +294,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             </div>
 
             <style>
-            .product-tags-section {
-                margin-top: 24px;
-                padding: 16px;
-                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-                border-radius: 12px;
-                border: 1px solid #e2e8f0;
-            }
-
             .product-tag {
                 display: inline-flex;
                 align-items: center;
@@ -420,11 +407,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
             /* Responsive */
             @media (max-width: 640px) {
-                .product-tags-section {
-                    padding: 12px;
-                    margin-top: 16px;
-                }
-
                 .product-tag {
                     font-size: 10px;
                     padding: 4px 8px;

@@ -210,13 +210,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function highlightMatch(text, term) {
         if (!term) return escapeHtml(text);
-        const normalizedTerm = normalizeText(term);
-        const normalizedText = normalizeText(text);
-        const idx = normalizedText.indexOf(normalizedTerm);
-        if (idx === -1) return escapeHtml(text);
-        return escapeHtml(text.slice(0, idx)) +
-               '<mark class="bg-turquesa/20 text-helin-heading font-semibold">' + escapeHtml(text.slice(idx, idx + term.length)) + '</mark>' +
-               escapeHtml(text.slice(idx + term.length));
+        const lowerTerm = term.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const lowerText = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const nfdText = text.normalize('NFD');
+        const matchIdx = lowerText.indexOf(lowerTerm);
+        if (matchIdx === -1) return escapeHtml(text);
+        const nfdBefore = nfdText.slice(0, matchIdx);
+        const nfdMatch = nfdText.slice(matchIdx, matchIdx + lowerTerm.length);
+        const nfdAfter = nfdText.slice(matchIdx + lowerTerm.length);
+        const before = nfdBefore.normalize('NFC');
+        const match = nfdMatch.normalize('NFC');
+        const after = nfdAfter.normalize('NFC');
+        return escapeHtml(before) +
+               '<mark class="bg-turquesa/20 text-helin-heading font-semibold">' + escapeHtml(match) + '</mark>' +
+               escapeHtml(after);
     }
 
     function hideAutocomplete() {
@@ -262,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let html = '';
         products.forEach(product => {
-            html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-helin-soft transition-colors border-b border-helin-border last:border-0">' +
+            html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-turquesa/10 cursor-pointer transition-colors border-b border-helin-border last:border-0">' +
                 '<div class="w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-helin-border">' +
                     '<img src="' + product.image + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
                 '</div>' +
@@ -274,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '</a>';
         });
 
-        html += '<button type="button" id="autocompleteViewAll" class="w-full text-center text-xs text-turquesa font-black uppercase py-2.5 hover:bg-helin-soft transition-colors">Ver todos los resultados →</button>';
+        html += '<button type="button" id="autocompleteViewAll" class="w-full text-center text-xs text-turquesa font-black uppercase py-2.5 hover:bg-turquesa/10 cursor-pointer transition-colors">Ver todos los resultados</button>';
         showAutocomplete(html);
 
         document.getElementById('autocompleteViewAll')?.addEventListener('click', function(e) {

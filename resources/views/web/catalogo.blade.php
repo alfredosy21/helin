@@ -40,12 +40,7 @@
 @endphp
 
 <main class="container mx-auto px-4 py-8">
-    <div class="flex flex-col lg:flex-row gap-8">
-
-        <!-- Sidebar Filtros -->
-        <aside class="hidden lg:block w-64 flex-shrink-0">
-            <div class="space-y-6">
-                @php
+    @php
     $breadcrumbItems = [
         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"']
     ];
@@ -59,13 +54,18 @@
 @endphp
 
 @include('web.components.breadcrumb', [
-    'attributes' => 'class="text-sm text-helin-text mb-6"',
+    'attributes' => 'class="text-sm text-helin-text mb-10 w-full"',
     'items' => $breadcrumbItems,
     'separatorAttributes' => 'class="text-helin-text mx-1"'
 ])
 
+    <div class="flex flex-col lg:flex-row gap-8">
+
+        <!-- Sidebar Filtros -->
+        <aside class="hidden lg:block w-64 flex-shrink-0">
+            <div class="space-y-6">
                 <!-- Búsqueda en sidebar -->
-                <div class="relative" id="catalogSearchWrapper">
+                <div class="relative mt-4" id="catalogSearchWrapper">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-helin-text text-xs z-10"></i>
                     <input id="catalogSearch" type="text" value="{{ $initSearch }}" placeholder="Buscar productos..." autocomplete="off" class="w-full border border-helin-border rounded-lg pl-8 pr-3 py-2 text-sm outline-none focus:border-turquesa relative z-10">
                     <div id="searchAutocomplete" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-helin-border rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"></div>

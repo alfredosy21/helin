@@ -118,7 +118,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-tooth text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Implantología</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Implantología</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <div class="space-y-4">
@@ -147,7 +147,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-bone text-turquesa text-sm"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide leading-tight hover:text-turquesa transition-colors">Regeneración Ósea Guiada</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'regeneracion-guiada-bucal']) }}" class="text-helin-text text-[12px] uppercase tracking-wide leading-tight hover:text-turquesa transition-colors font-semibold">Regeneración Ósea Guiada</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
@@ -163,7 +163,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-toolbox text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Osteosíntesis</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Osteosíntesis</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
@@ -179,7 +179,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-face-smile text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Cuidado Bucal</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'cuidados-especiales']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Cuidado Bucal</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
@@ -194,7 +194,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-tools text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Instrumentos</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Instrumentos</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2 mb-6">
@@ -206,7 +206,7 @@
                                         </ul>
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-gears text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Equipos</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Equipos</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
@@ -227,7 +227,7 @@
                                     <div class="border border-helin-border rounded-lg p-3 h-full hover:bg-[#e6f7f7] hover:border-turquesa/30 transition-colors">
                                         <div class="flex items-center gap-2 mb-2">
                                             <i class="fas fa-cube text-sm" style="color: #6BC2C3;"></i>
-                                            <h4 class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors">Planificación Digital</h4>
+                                            <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-text text-[12px] uppercase tracking-wide hover:text-turquesa transition-colors font-semibold">Planificación Digital</a>
                                         </div>
                                         <div class="h-0.5 w-12 bg-turquesa mb-5 ml-6"></div>
                                         <ul class="space-y-2">
