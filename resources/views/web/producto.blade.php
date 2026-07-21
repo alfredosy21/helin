@@ -19,7 +19,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 @section('content')
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
-        'attributes' => 'class="text-sm mb-6"',
+        'attributes' => 'text-sm mb-6',
         'items' => [
             ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],
             ['label' => $product->category->name ?? 'Categoría', 'url' => route('catalogo', ['category' => $product->category->slug ?? '']), 'linkAttributes' => 'class="text-helin-text hover:text-turquesa"'],

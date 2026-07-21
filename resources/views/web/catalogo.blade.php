@@ -54,7 +54,7 @@
 @endphp
 
 @include('web.components.breadcrumb', [
-    'attributes' => 'class="text-sm text-helin-text mb-10 w-full"',
+    'attributes' => 'text-sm text-helin-text mb-10 w-full',
     'items' => $breadcrumbItems,
     'separatorAttributes' => 'class="text-helin-text mx-1"'
 ])

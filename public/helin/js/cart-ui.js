@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="font-bold text-turquesa">${fmt(item.price * item.qty)}</span>
-                            <button class="cart-remove text-helin-text hover:text-red-500 transition" data-slug="${item.slug}" aria-label="Eliminar">
+                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-slug="${item.slug}" aria-label="Eliminar">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="col-span-2 px-6 py-5 text-right">
                         <div class="flex items-center justify-end gap-3">
                             <span class="font-bold text-turquesa cart-row-subtotal">${fmt(item.price * item.qty)}</span>
-                            <button class="cart-remove text-helin-text hover:text-red-500 transition" data-slug="${item.slug}" aria-label="Eliminar">
+                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-slug="${item.slug}" aria-label="Eliminar">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -172,15 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderQtyControl(item, size) {
-        const w  = size === 'sm' ? 'w-8 h-8 text-sm'  : 'w-10 h-10';
-        const iw = size === 'sm' ? 'w-14 text-sm' : 'w-20';
+        const inputWidth = size === 'sm' ? 'w-8' : 'w-10';
         return `
-            <div class="flex items-center rounded-full bg-turquesa/10 overflow-hidden" style="padding:5px 10px;">
-                <button class="cart-qty-dec ${w} bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" data-slug="${item.slug}">-</button>
+            <div class="flex items-center rounded-full gap-1 px-1.5" style="background-color: rgba(107,194,195,0.45); height: 38px;">
+                <button class="cart-qty-dec qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-slug="${item.slug}">−</button>
                 <input type="number" value="${item.qty}" min="1"
-                       class="cart-qty-input ${iw} text-center font-medium bg-transparent outline-none"
-                       data-slug="${item.slug}" style="padding:5px 6px;">
-                <button class="cart-qty-inc ${w} bg-turquesa-dark hover:bg-turquesa text-white rounded-full flex items-center justify-center transition-colors" data-slug="${item.slug}">+</button>
+                       class="cart-qty-input ${inputWidth} text-center outline-none bg-transparent text-sm font-semibold"
+                       style="color:#9ca3af; -moz-appearance:textfield; appearance:textfield;" data-slug="${item.slug}" onwheel="return false;">
+                <button class="cart-qty-inc qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-slug="${item.slug}">+</button>
             </div>`;
     }
 
@@ -202,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="border-t border-helin-border pt-4 mb-6">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-lg font-semibold text-helin-heading">Total</span>
-                            <span class="text-2xl font-bold text-turquesa" id="cart-summary-total">${fmt(subtotal)}</span>
+                            <span class="font-bold text-turquesa" id="cart-summary-total">${fmt(subtotal)}</span>
                         </div>
                     </div>
                     <div class="bg-helin-soft rounded-lg p-4 mb-6">
@@ -210,10 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="text-sm text-helin-text mb-2">1 USD = ${bsRate} Bs.</p>
                         <div class="flex justify-between items-center border-t border-helin-border pt-2">
                             <span class="font-semibold text-helin-heading">Total en Bs.</span>
-                            <span class="text-lg font-bold text-turquesa" id="cart-summary-bs">${totalBs} Bs.</span>
+                            <span class="font-bold text-turquesa" id="cart-summary-bs">${totalBs} Bs.</span>
                         </div>
                     </div>
-                    <a href="/solicitud" class="block w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold py-4 rounded-full uppercase transition-colors text-center">
+                    <a href="/solicitud" class="block w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold text-sm py-3 rounded-full uppercase transition-colors text-center">
                         Continuar Solicitud
                     </a>
                     <button id="cart-clear-btn" class="mt-3 w-full text-xs text-helin-text hover:text-red-500 transition text-center py-2">
@@ -307,26 +306,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = subtotal - discount;
 
         const itemsHtml = items.map(item => `
-            <div class="flex justify-between text-sm">
-                <span class="text-helin-text">${item.name} x ${item.qty}</span>
-                <span class="font-medium">$${(item.price * item.qty).toFixed(2)}</span>
+            <div class="flex justify-between text-sm py-2 border-b border-helin-border/20 last:border-b-0">
+                <span class="text-helin-text">${item.name} <span class="text-helin-text/60">× ${item.qty}</span></span>
+                <span class="font-medium text-helin-heading">$${(item.price * item.qty).toFixed(2)}</span>
             </div>
         `).join('');
 
         summaryRoot.innerHTML = `
-            ${itemsHtml}
-            <div class="border-t border-helin-border pt-3 mt-3">
-                <div class="flex justify-between text-sm mb-1">
+            <div class="bg-turquesa text-white rounded-t-lg flex justify-between text-sm font-semibold px-4 py-3">
+                <span>Producto</span>
+                <span>Subtotal</span>
+            </div>
+            <div class="px-4">
+                ${itemsHtml}
+            </div>
+            <div class="border-t border-helin-border/30 pt-3 mt-3 px-4 pb-4 rounded-b-lg">
+                <div class="flex justify-between text-sm mb-2">
                     <span class="text-helin-text">Subtotal</span>
-                    <span>$${subtotal.toFixed(2)}</span>
+                    <span class="font-medium text-helin-heading">$${subtotal.toFixed(2)}</span>
                 </div>
                 ${discount > 0 ? `
                     <div class="flex justify-between text-sm mb-2">
                         <span class="text-helin-text">Descuento (5%)</span>
-                        <span class="text-green-500">-$${discount.toFixed(2)}</span>
+                        <span class="text-green-500 font-medium">-$${discount.toFixed(2)}</span>
                     </div>
                 ` : ''}
-                <div class="flex justify-between text-base font-bold">
+                <div class="flex justify-between font-bold">
                     <span class="text-helin-heading">Total</span>
                     <span class="text-turquesa">$${total.toFixed(2)}</span>
                 </div>

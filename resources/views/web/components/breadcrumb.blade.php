@@ -1,5 +1,5 @@
 <!-- Breadcrumb -->
-<nav class="breadcrumb" {{ $attributes ?? '' }}>
+<nav class="breadcrumb {{ $attributes ?? '' }}">
     @foreach($items ?? [] as $index => $item)
         @if($item['url'] ?? false)
             <a href="{{ $item['url'] }}" class="breadcrumb-link" {{ $item['linkAttributes'] ?? '' }}>{{ $item['label'] }}</a>

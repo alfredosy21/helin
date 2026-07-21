@@ -92,7 +92,7 @@
    @include('web.partials.beneficios')
 
    <!-- Categorías Destacadas -->
-   <section class="pt-12 sm:pt-16">
+   <section class="pt-6 sm:pt-8">
       <div class="container mx-auto px-4">
          <div class="categories bg-white border border-helin-border rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
             <!-- Categoría Destacada -->
@@ -134,6 +134,10 @@
 
    <!-- Sección "Estamos cerca de ti" -->
    <div class="container mx-auto px-4" style="padding-bottom: 20px;">
+      <div class="mb-8">
+         @include('web.partials.near')
+      </div>
+
       <!-- Flow Highlight Section -->
       <section class="flow-highlight">
                 <aside class="how-card">
@@ -144,12 +148,12 @@
                       <div class="number">1</div>
                    </div>
                    <div class="step">
-                      <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <a href="/carrito" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
                       <div><strong>Arma tu carrito</strong><span>Agrega cantidades y revisa el resumen de tu solicitud comercial.</span></div>
                       <div class="number">2</div>
                    </div>
                    <div class="step">
-                      <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
                       <div><strong>Contacta a tu ejecutivo</strong><span>Envía la solicitud por WhatsApp al ejecutivo asignado según tu zona.</span></div>
                       <div class="number">3</div>
                    </div>
@@ -195,8 +199,6 @@
            </div>
          </div>
       </section>
-
-      @include('web.partials.near')
    </div>
 
 

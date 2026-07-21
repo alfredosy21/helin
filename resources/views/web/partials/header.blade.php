@@ -241,14 +241,18 @@
                             </div>
                         </div>
                     </div>
+                    @php
+                        $currentRoute = request()->route()->getName();
+                        $currentCategory = request()->route('category') ?? request('category');
+                    @endphp
                     <!-- Inicio -->
-                    <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16">Inicio</a>
+                    <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16 border-b-2 border-transparent pb-1 {{ $currentRoute === 'home' ? 'text-turquesa border-turquesa' : '' }}">Inicio</a>
                     <!-- Categorías -->
-                    <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Cirugía Bucal <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Maxilofacial <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Periodoncia <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Ortodoncia <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap">Endodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'cirugia-bucal' ? 'text-turquesa border-turquesa' : '' }}">Cirugía Bucal <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'maxilofacial' ? 'text-turquesa border-turquesa' : '' }}">Maxilofacial <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'periodoncia' ? 'text-turquesa border-turquesa' : '' }}">Periodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'ortodoncia' ? 'text-turquesa border-turquesa' : '' }}">Ortodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'endodoncia' ? 'text-turquesa border-turquesa' : '' }}">Endodoncia <span class="text-xs">+</span></a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
                     <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors mr-12">
