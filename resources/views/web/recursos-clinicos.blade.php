@@ -12,27 +12,22 @@
         <div class="hero-inner">
             <div class="hero-copy">
                                 @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
-                    @if($heroSection->layout_type === 'text_simple')
-                        <span class="hero-badge">{{ $heroSection->title }}</span>
-                        <h1>{!! $heroSection->content !!}</h1>
-                    @else
-                        {!! $heroSection->content !!}
-                    @endif
+                    {!! $heroSection->content !!}
                 @else
                     <span class="hero-badge">Centro de conocimiento clínico</span>
                     <h1>Recursos clínicos para decisiones más precisas.</h1>
                     <p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
-                @endif
 
-                <div class="hero-buttons">
-                    <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
-                    <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
-                </div>
+                    <div class="hero-buttons">
+                        <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
+                        <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
+                    </div>
+                @endif
             </div>
             <div class="hero-panel">
                 <div class="panel-title">
                     <h3>Encuentra contenido por tipo</h3>
-                    <span class="badge">Actualizado</span>
+         
                 </div>
                 <div class="quick-cards">
                     <article class="quick-card">
@@ -128,8 +123,8 @@
             @endforeach
         </select>
         <button type="button" id="searchButton">Buscar</button>
-        <button type="button" id="clearFilters" class="clear-filters-icon" title="Limpiar filtros" style="display:none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <button type="button" id="clearFilters" class="clear-filters-text" title="Limpiar filtros" style="display:none;">
+            Limpiar filtros
         </button>
     </form>
 
@@ -203,14 +198,13 @@
 
     <!-- Sección Destacada -->
     <section class="featured-section">
-        <div>
-            <h2>Contenido clínico pensado para acompañar tu práctica.</h2>
-            <p>Centraliza recursos técnicos, casos clínicos y materiales descargables en una plataforma clara, rápida y alineada al portafolio de Helin.</p>
-        </div>
-        <div class="feature-box">
-            <strong>Asesoría especializada</strong>
-            <p>Conecta cada recurso con productos, casos de uso y soporte comercial para profesionales.</p>
-            <a href="{{ route('contactanos') }}" class="btn-primary">Contactar asesor</a>
+        <div class="featured-content">
+            <h2>¿Necesitas apoyo para tu próximo procedimiento?</h2>
+            <p class="featured-lead">Nuestro equipo comercial puede orientarte en la selección de productos y soluciones según las necesidades de tu práctica clínica.</p>
+            <p class="featured-text">Contacta a nuestro equipo y recibe asesoría personalizada.</p>
+            <a href="{{ route('contactanos') }}" class="featured-cta">
+                Hablar con un asesor
+            </a>
         </div>
     </section>
 </main>

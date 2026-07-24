@@ -25,7 +25,7 @@
         <aside class="info-block">
                         @if($contactSection && $contactSection->status == 1 && $contactSection->status_content == 1)
                 @if($contactSection->layout_type === 'text_simple')
-                    <h2>{{ $contactSection->title }}</h2>
+                    <h2>¿Tienes alguna consulta?<br><span style="font-size: 69%;">Estamos para ayudarte.</span></h2>
                     @if($contactSection->description)
                         <p>{{ $contactSection->description }}</p>
                     @endif
@@ -36,7 +36,7 @@
 
             <div class="info-list">
                 <article class="info-item">
-                    <div class="info-icon">⌖</div>
+                    <div class="info-icon"><img src="{{ asset('icons/location.svg') }}" alt="Dirección" width="24" height="24"></div>
                     <div>
                         <h3>Dirección</h3>
                         <p>{{ $settings->contact_address ?? 'Centro Comercial El Recreo,<br>Torre Norte, Piso 5, Oficina 5B,<br>Sabana Grande, Caracas 1050, Venezuela.' }}</p>
@@ -44,15 +44,15 @@
                 </article>
 
                 <article class="info-item">
-                    <div class="info-icon">☏</div>
+                    <div class="info-icon"><img src="{{ asset('icons/ws.svg') }}" alt="WhatsApp Comercial" width="24" height="24"></div>
                     <div>
-                        <h3>Teléfono central</h3>
+                        <h3>WhatsApp Comercial</h3>
                         <p>{{ $settings->phone ?? '+58 4242789481' }}</p>
                     </div>
                 </article>
 
                 <article class="info-item">
-                    <div class="info-icon">✉</div>
+                    <div class="info-icon"><img src="{{ asset('icons/mail.svg') }}" alt="Correo electrónico" width="24" height="24"></div>
                     <div>
                         <h3>Correo electrónico</h3>
                         <p>{{ $settings->email ?? 'info@helinlatam.com' }}</p>
@@ -64,27 +64,27 @@
                 <h3>Nuestras sedes</h3>
                 <div class="sede-pills">
                     @if($settings && $settings->caracas_location)
-                        <a href="{{ $settings->caracas_location }}" target="_blank" class="sede-pill"><span>⌖</span>Caracas</a>
+                        <a href="{{ $settings->caracas_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Caracas" width="10" height="10">Caracas</a>
                     @else
-                        <span class="sede-pill"><span>⌖</span>Caracas</span>
+                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Caracas" width="10" height="10">Caracas</span>
                     @endif
 
                     @if($settings && $settings->valencia_location)
-                        <a href="{{ $settings->valencia_location }}" target="_blank" class="sede-pill"><span>⌖</span>Valencia</a>
+                        <a href="{{ $settings->valencia_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Valencia" width="10" height="10">Valencia</a>
                     @else
-                        <span class="sede-pill"><span>⌖</span>Valencia</span>
+                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Valencia" width="10" height="10">Valencia</span>
                     @endif
 
                     @if($settings && $settings->barquisimeto_location)
-                        <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="sede-pill"><span>⌖</span>Barquisimeto</a>
+                        <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Barquisimeto" width="10" height="10">Barquisimeto</a>
                     @else
-                        <span class="sede-pill"><span>⌖</span>Barquisimeto</span>
+                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Barquisimeto" width="10" height="10">Barquisimeto</span>
                     @endif
 
-                    @if($settings && $settings->maracay_location)
-                        <a href="{{ $settings->maracay_location }}" target="_blank" class="sede-pill"><span>⌖</span>Maracay</a>
+                    @if($settings && $settings->maracaibo_location)
+                        <a href="{{ $settings->maracaibo_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Maracaibo" width="10" height="10">Maracaibo</a>
                     @else
-                        <span class="sede-pill"><span>⌖</span>Maracay</span>
+                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Maracaibo" width="10" height="10">Maracaibo</span>
                     @endif
                 </div>
             </div>
@@ -93,8 +93,8 @@
         <section class="form-card">
             <form id="contact-form" class="form-grid" novalidate>
                 <div>
-                    <label>Nombre <span>*</span></label>
-                    <input type="text" name="nombre" placeholder="Ingresa tu nombre" required>
+                    <label>Nombre Completo <span>*</span></label>
+                    <input type="text" name="nombre" placeholder="Ingresa tu nombre completo" required>
                 </div>
 
                 <div>
@@ -111,7 +111,7 @@
                     <label>Asunto <span>*</span></label>
                     <div class="select-wrapper">
                         <select name="asunto" required>
-                            <option value="">Selecciona un asunto</option>
+                            <option value="" disabled hidden selected>Selecciona un asunto</option>
                             <option value="informacion-comercial">Información comercial</option>
                             <option value="asesoria-productos">Asesoría de productos</option>
                             <option value="cotizacion">Cotización</option>
@@ -131,9 +131,16 @@
                     <textarea name="mensaje" placeholder="Cuéntanos más sobre tu consulta..." required></textarea>
                 </div>
 
+                <div class="field-full privacy-check">
+                    <label class="privacy-label">
+                        <input type="checkbox" name="privacy_accepted" required>
+                        <span>He leído y acepto la <a href="{{ route('politicas') }}" target="_blank">Política de Privacidad</a> y autorizo a Helin a utilizar mis datos para gestionar mi solicitud y contactarme por WhatsApp, llamada o correo electrónico.</span>
+                    </label>
+                </div>
+
                 <button id="contact-submit" class="submit" type="submit">➤ Contactar a Helin</button>
 
-                <div class="secure">▵ Tu información está segura con nosotros.</div>
+                <div class="secure"><i class="fa fa-lock secure-icon" aria-hidden="true"></i> Tu información está segura con nosotros.</div>
             </form>
         </section>
     </section>

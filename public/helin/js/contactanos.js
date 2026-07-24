@@ -9,11 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!form) return;
 
     const fields = {
-        nombre:   form.querySelector('[name="nombre"]'),
-        email:    form.querySelector('[name="email"]'),
-        asunto:   form.querySelector('[name="asunto"]'),
-        mensaje:  form.querySelector('[name="mensaje"]'),
-        telefono: form.querySelector('[name="telefono"]'),
+        nombre:          form.querySelector('[name="nombre"]'),
+        email:           form.querySelector('[name="email"]'),
+        asunto:          form.querySelector('[name="asunto"]'),
+        mensaje:         form.querySelector('[name="mensaje"]'),
+        telefono:        form.querySelector('[name="telefono"]'),
+        privacy_accepted: form.querySelector('[name="privacy_accepted"]'),
     };
 
     // ─── Inline error helpers ─────────────────────────────────────────────────
@@ -54,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearAllErrors();
+
+        if (fields.privacy_accepted && !fields.privacy_accepted.checked) {
+            showFieldError('privacy_accepted', 'Debes aceptar la Política de Privacidad para continuar.');
+            return;
+        }
 
         setLoading(true);
 

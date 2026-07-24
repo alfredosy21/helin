@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Render cart summary for solicitud page
      */
-    function renderCartSummary(items) {
+    async function renderCartSummary(items) {
         const summaryRoot = document.getElementById('cart-summary');
         if (!summaryRoot) return;
 
@@ -304,6 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
         const discount = subtotal > 500 ? subtotal * 0.05 : 0; // 5% descuento si subtotal > 500
         const total = subtotal - discount;
+        const bsRate = await fetchBsRate();
+        const totalBs = (total * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const formattedBsRate = bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         const itemsHtml = items.map(item => `
             <div class="flex justify-between text-sm py-2 border-b border-helin-border/20 last:border-b-0">
@@ -334,6 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flex justify-between font-bold">
                     <span class="text-helin-heading">Total</span>
                     <span class="text-turquesa">$${total.toFixed(2)}</span>
+                </div>
+                <div class="bg-helin-soft rounded-lg p-3 mt-4">
+                    <p class="text-xs text-helin-text mb-1">Tasa de conversión a Bs.</p>
+                    <p class="text-sm text-helin-text mb-2">1 USD = ${formattedBsRate} Bs.</p>
+                    <div class="flex justify-between items-center border-t border-helin-border pt-2">
+                        <span class="font-semibold text-helin-heading">Total en Bs.</span>
+                        <span class="font-bold text-turquesa">${totalBs} Bs.</span>
+                    </div>
                 </div>
             </div>
         `;

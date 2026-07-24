@@ -131,7 +131,7 @@ header .lg\:hidden {
 .hero {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(160deg, #0d3d47 0%, #1a6070 40%, #2a8fa0 80%, var(--helin-primary-light) 100%);
+    background: url('/images/recursos_clinicos_banner_helin.png') center/cover no-repeat;
     color: var(--white);
     border-top: 1px solid rgba(255,255,255,0.15);
     z-index: 0;
@@ -141,7 +141,7 @@ header .lg\:hidden {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 80% 18%, rgba(255, 255, 255, 0.12), transparent 30%);
+    background: linear-gradient(90deg, #123F4A 0%, #123F4A 50%, rgba(18, 63, 74, 0.63) 100%);
 }
 
 .hero-inner {
@@ -158,14 +158,14 @@ header .lg\:hidden {
 }
 
 .hero-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 8px 13px;
+    gap: 0.5rem;
+    padding: 5px 10px;
     border-radius: 9999px;
     background: rgba(255, 255, 255, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.35);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -400,6 +400,18 @@ header .lg\:hidden {
     width: 100%;
 }
 
+.resource-search select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
 .resource-search button {
     height: 52px;
     border: 0;
@@ -487,10 +499,18 @@ header .lg\:hidden {
     border: 1px solid var(--border-color);
     border-radius: 9999px;
     background: var(--white);
-    padding: 0 14px;
+    padding: 0 38px 0 14px;
     color: var(--text-primary);
     font-size: 0.8125rem;
     font-weight: 800;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
 }
 
 /* Resource Grid */
@@ -604,55 +624,74 @@ header .lg\:hidden {
 .featured-section {
     margin-top: 42px;
     border-radius: 32px;
-    background: linear-gradient(135deg, rgba(107, 194, 195, 0.95), rgba(151, 213, 212, 0.84));
+    background: url('/images/banner_rc_clinic.png') center/cover no-repeat;
     color: var(--white);
-    padding: 34px;
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 28px;
+    overflow: hidden;
+    box-shadow: 0 24px 58px rgba(18, 63, 74, 0.22);
+    position: relative;
+}
+
+.featured-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 63, 74, 0.46);
+    z-index: 1;
+}
+
+.featured-content {
+    padding: 48px 40px;
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+}
+
+.featured-badge {
+    display: inline-flex;
     align-items: center;
-    box-shadow: 0 24px 58px rgba(107, 194, 195, 0.24);
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 18px;
 }
 
 .featured-section h2 {
-    margin: 0 0 12px;
-    font-size: 2.25rem;
-    letter-spacing: 0;
+    margin: 0 0 16px;
+    font-size: 2.5rem;
+    letter-spacing: -0.02em;
     line-height: 1.05;
+    max-width: 480px;
 }
 
 .featured-section p {
-    margin: 0;
-    line-height: 1.55;
+    margin: 0 0 28px;
+    line-height: 1.6;
     color: rgba(255, 255, 255, 0.92);
-    max-width: 630px;
+    max-width: 460px;
 }
 
-.feature-box {
-    background: rgba(255, 255, 255, 0.92);
-    color: var(--text-primary);
-    border-radius: 24px;
-    padding: 22px;
-    box-shadow: 0 16px 40px rgba(18, 48, 68, 0.14);
-}
-
-.feature-box strong {
-    display: block;
-    color: var(--helin-primary);
-    font-size: 1.625rem;
-    letter-spacing: 0;
-    margin-bottom: 6px;
-}
-
-.btn-primary {
-    display: inline-block;
-    padding: 12px 24px;
+.featured-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
     border-radius: 9999px;
-    background: var(--helin-primary);
-    color: var(--white);
+    background: #6BC2C3;
+    color: #123F4A;
     font-weight: 900;
     text-decoration: none;
-    margin-top: 16px;
+    transition: all 0.2s ease;
+}
+
+.featured-cta:hover {
+    background: #ffffff;
+    color: #123F4A;
 }
 
 /* Responsive Design */
@@ -683,8 +722,12 @@ header .lg\:hidden {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .featured-section {
-        grid-template-columns: 1fr;
+    .featured-content {
+        padding: 32px 24px;
+    }
+
+    .featured-section h2 {
+        font-size: 1.875rem;
     }
 }
 
@@ -751,48 +794,27 @@ header .lg\:hidden {
     transition: opacity 0.3s ease;
 }
 
-.clear-filters-icon {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background-color: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    border-radius: 50%;
-    color: #94a3b8;
+.clear-filters-text {
+    padding: 2px 6px;
+    background-color: rgba(107, 194, 195, 0.1);
+    border: 1px solid rgba(107, 194, 195, 0.25);
+    border-radius: 9999px;
+    color: #6BC2C3;
     cursor: pointer;
     transition: all 0.2s ease;
     display: none;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    position: relative;
-}
-
-.clear-filters-icon:hover {
-    background-color: #fee2e2;
-    border-color: #fca5a5;
-    color: #ef4444;
-}
-
-.clear-filters-icon::after {
-    content: attr(title);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1e293b;
-    color: #fff;
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-decoration: none;
     white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
 }
 
-.clear-filters-icon:hover::after {
-    opacity: 1;
+.clear-filters-text:hover {
+    background-color: #123F4A;
+    color: #ffffff;
 }
 
 .filter-check:hover {
@@ -803,6 +825,51 @@ header .lg\:hidden {
 .filter-checkbox:checked + span {
     font-weight: 600;
     color: #06b6d4;
+}
+
+/* Pagination */
+.pagination-wrapper nav > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.pagination-wrapper a,
+.pagination-wrapper span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #334155;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination-wrapper a:hover {
+    background: rgba(107, 194, 195, 0.12);
+    border-color: #6BC2C3;
+    color: #123F4A;
+}
+
+.pagination-wrapper span[aria-current="page"] {
+    background: #123F4A;
+    border-color: #123F4A;
+    color: #ffffff;
+}
+
+.pagination-wrapper span[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

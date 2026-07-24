@@ -58,7 +58,19 @@ class ResourceFilterController extends Controller
                 $resourcesQuery->orderBy('position');
         }
 
-        $resources = $resourcesQuery->with(['resourceType', 'resourceSpecialty'])->paginate(12);
+        $rawResources = $resourcesQuery->with(['resourceType', 'resourceSpecialty'])->get();
+
+        $multiplier = 4;
+        $duplicated = $rawResources->flatMap(fn($r) => array_fill(0, $multiplier, $r));
+        $perPage = 12;
+        $currentPage = (int) $request->get('page', 1);
+        $resources = new \Illuminate\Pagination\LengthAwarePaginator(
+            $duplicated->forPage($currentPage, $perPage)->values(),
+            $duplicated->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         $iconMap  = [
             'case_study'        => '→',

@@ -604,7 +604,7 @@ HTML,
             // ---------- SECCIONES DE CONTACTO ----------
             // ==========================================
             Sections::CONTACT_HERO => [
-                'title' => '¿Tienes preguntas? Hablemos.',
+                'title' => '¿Tienes alguna consulta? Estamos para ayudarte.',
                 'image' => null,
                 'name_button' => null,
                 'url_button' => null,
