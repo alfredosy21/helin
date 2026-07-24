@@ -11,7 +11,7 @@
    box-shadow: 0 10px 25px rgba(15,47,67,.06);
    ">
    <div class="circle-icon w-12 h-12 rounded-xl bg-turquesa/10 border border-turquesa/30 flex items-center justify-center text-turquesa font-black text-xl">
-      ⌖
+      <i class="fa fa-location-arrow" aria-hidden="true"></i>
    </div>
    <div>
       <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">

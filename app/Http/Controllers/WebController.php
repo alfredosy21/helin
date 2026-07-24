@@ -221,12 +221,15 @@ class WebController extends Controller
         // Hero section
         $heroSection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_RESOURCES_HERO);
 
-        // Estadísticas (multiplicadas por el factor de duplicación del grid)
-        $statsMultiplier = 4;
-        $totalResources = \App\Models\Resource::where('is_active', true)->count() * $statsMultiplier;
-        $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->count();
-        $totalPDFs = \App\Models\Resource::where('is_active', true)->where('format', 'pdf')->count() * $statsMultiplier;
-        $totalCases = \App\Models\Resource::where('is_active', true)->where('type', 'case')->count() * $statsMultiplier;
+        // Estadísticas
+        $totalResources = \App\Models\Resource::where('is_active', true)->count();
+        $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)
+            ->whereHas('resources', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->count();
+        $totalPDFs = \App\Models\Resource::where('is_active', true)->where('format', 'pdf')->count();
+        $totalCases = \App\Models\Resource::where('is_active', true)->where('type', 'case_study')->count();
 
         // Library section
         $librarySection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_LIBRARY);
@@ -265,13 +268,11 @@ class WebController extends Controller
             ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
             ->get();
 
-        $multiplier = 4;
-        $duplicated = $rawResources->flatMap(fn($r) => array_fill(0, $multiplier, $r));
         $perPage = 12;
         $currentPage = (int) request('page', 1);
         $resources = new \Illuminate\Pagination\LengthAwarePaginator(
-            $duplicated->forPage($currentPage, $perPage)->values(),
-            $duplicated->count(),
+            $rawResources->forPage($currentPage, $perPage)->values(),
+            $rawResources->count(),
             $perPage,
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]

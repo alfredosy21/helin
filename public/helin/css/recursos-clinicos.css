@@ -328,7 +328,7 @@ header .lg\:hidden {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
+    font-size: 1rem;
 }
 
 .stat strong {

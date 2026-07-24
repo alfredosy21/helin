@@ -58,28 +58,28 @@
     <!-- Estadísticas -->
     <section class="stats">
                 <article class="stat">
-            <div class="stat-icon">+</div>
+            <div class="stat-icon"><i class="fas fa-laptop-medical"></i></div>
             <div>
                 <strong>{{ $totalResources }}</strong>
                 <span>Recursos disponibles</span>
             </div>
         </article>
         <article class="stat">
-            <div class="stat-icon">5</div>
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
             <div>
                 <strong>{{ $totalSpecialties }}</strong>
                 <span>Especialidades clínicas</span>
             </div>
         </article>
         <article class="stat">
-            <div class="stat-icon">PDF</div>
+            <div class="stat-icon"><i class="fas fa-download"></i></div>
             <div>
                 <strong>{{ $totalPDFs }}</strong>
                 <span>Descargables técnicos</span>
             </div>
         </article>
         <article class="stat">
-            <div class="stat-icon">24</div>
+            <div class="stat-icon"><i class="fas fa-book-open"></i></div>
             <div>
                 <strong>{{ $totalCases }}</strong>
                 <span>Casos clínicos</span>
