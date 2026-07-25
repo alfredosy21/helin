@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cms;
 use App\Models\ResourceSpecialty;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Str;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 #[Layout('cms.layouts.dashboard')]
 class ResourceSpecialtyController extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     public $showForm = false;
     public $editingId = null;
@@ -23,6 +24,10 @@ class ResourceSpecialtyController extends Component
     public $description;
     public $is_active = true;
     public $position = 0;
+
+    // File upload
+    public $image;
+    public ?string $current_image = null;
 
     // Filters
     public $search = '';
@@ -35,6 +40,7 @@ class ResourceSpecialtyController extends Component
         'description' => 'nullable|string|max:1000',
         'is_active' => 'boolean',
         'position' => 'integer|min:0',
+        'image' => 'nullable|image|max:2048',
     ];
 
     public function mount()
@@ -77,6 +83,7 @@ class ResourceSpecialtyController extends Component
         $this->description = $resourceSpecialty->description;
         $this->is_active = $resourceSpecialty->is_active;
         $this->position = $resourceSpecialty->position;
+        $this->current_image = $resourceSpecialty->image;
 
         $this->showForm = true;
     }
@@ -91,11 +98,22 @@ class ResourceSpecialtyController extends Component
             'is_active' => $this->is_active,
         ];
 
+        // Handle image upload
+        if ($this->image) {
+            $filename = time() . '_' . $this->image->getClientOriginalName();
+            $path = $this->image->storeAs('resource-specialties', $filename, 'public');
+            $data['image'] = $path;
+        } elseif ($this->editingId) {
+            $data['image'] = $this->current_image;
+        }
+
         if ($this->editingId) {
             $resourceSpecialty = ResourceSpecialty::findOrFail($this->editingId);
             $resourceSpecialty->update($data);
             $this->dispatch('toast', message: 'Especialidad de recurso actualizada exitosamente', type: 'success');
         } else {
+            $maxPosition = ResourceSpecialty::max('position') ?? 0;
+            $data['position'] = $maxPosition + 1;
             ResourceSpecialty::create($data);
             $this->dispatch('toast', message: 'Especialidad de recurso creada exitosamente', type: 'success');
         }
@@ -135,11 +153,12 @@ class ResourceSpecialtyController extends Component
     public function resetForm()
     {
         $this->reset([
-            'name', 'slug', 'description',
-            'is_active'
+            'name', 'description',
+            'is_active', 'position', 'image', 'current_image'
         ]);
 
         $this->is_active = true;
+        $this->position = 0;
     }
 
     public function resetFilters()

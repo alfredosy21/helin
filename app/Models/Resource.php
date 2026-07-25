@@ -41,4 +41,12 @@ class Resource extends Model {
     {
         return $this->belongsTo(ResourceSpecialty::class);
     }
+
+    /**
+     * Get the image URL attribute for web compatibility
+     */
+    public function getImageUrlAttribute()
+    {
+        return $this->thumbnail ? asset('storage/' . $this->thumbnail) : null;
+    }
 }

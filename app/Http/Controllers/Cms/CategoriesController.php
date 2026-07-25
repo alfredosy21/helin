@@ -43,6 +43,10 @@ class CategoriesController extends Component {
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
 
+    /** @var string|null SEO keywords for meta tags */
+    #[Validate('nullable|string|max:500')]
+    public ?string $seo_keywords = '';
+
     /** @var int|null ID of the family being modified */
     public ?int $editingId = null;
 
@@ -113,6 +117,7 @@ class CategoriesController extends Component {
                 'slug' => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
             ];
 
@@ -153,6 +158,7 @@ class CategoriesController extends Component {
         $this->slug = $category->slug;
         $this->description = $category->description;
         $this->seo_description = $category->seo_description;
+        $this->seo_keywords = $category->seo_keywords;
         $this->is_active = $category->is_active;
 
         $this->showForm = true;
@@ -210,7 +216,7 @@ class CategoriesController extends Component {
     }
 
     private function resetForm(): void {
-        $this->reset(['name', 'slug', 'description', 'seo_description', 'is_active', 'editingId']);
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }

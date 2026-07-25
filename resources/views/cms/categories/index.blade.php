@@ -181,6 +181,14 @@
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Keywords</label>
+                        <input type="text" wire:model="seo_keywords" placeholder="ej: implantes dentales, biomateriales, cirugía oral"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('seo_keywords') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        <p class="text-xs text-[#c0c1c6] italic mt-1">Separadas por comas</p>
+                    </div>
+
                 </div>
 
                 {{-- Acciones alineadas a la derecha típica de formularios --}}

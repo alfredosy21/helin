@@ -47,7 +47,8 @@
             </div>
 
             {{-- Testimonials Table --}}
-            <table class="w-full text-left border-collapse">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
                             <th class="px-4 py-3.5 w-2/5">{{ __('cms.testimonials.author') }}</th>
@@ -140,7 +141,7 @@
             </div>
 
             {{-- Cuerpo del Formulario --}}
-            <div class="p-6 space-y-6">
+            <form wire:submit.prevent="save" class="p-6 space-y-6">
 
                 {{-- Toggle de estado activo/inactivo --}}
                 <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
@@ -172,15 +173,47 @@
                     @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                 </div>
 
-
-            </div>
+                {{-- Imagen del testimonio --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Imagen del Autor</label>
+                    @if($image)
+                    <div class="mb-2 relative group w-32 h-32">
+                        <img src="{{ $image->temporaryUrl() }}" class="w-full h-full object-cover rounded-lg border border-slate-100">
+                        <button type="button" wire:click="$set('image', null)" class="absolute top-1 right-1 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    @elseif($current_image)
+                    <div class="mb-2 relative group w-32 h-32">
+                        <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-full object-cover rounded-lg border border-slate-100">
+                        <button type="button" wire:click="$set('current_image', null)" class="absolute top-1 right-1 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    @endif
+                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                        <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                            <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                            </svg>
+                            <p class="text-xs text-slate-500">Subir imagen del autor</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                        </div>
+                        <input type="file" wire:model="image" class="hidden" accept="image/*" />
+                    </label>
+                    @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                </div>
 
             {{-- Acciones alineadas a la derecha --}}
             <div class="p-6 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-3">
                 <button type="button" wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                     {{ __('cms.general.cancel') }}
                 </button>
-                <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
                     <span wire:loading wire:target="save">
                         <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -194,6 +227,8 @@
                         {{ __('cms.general.save') }}
                     </span>
                 </button>
+            </div>
+            </form>
             </div>
         </div>
         @endif

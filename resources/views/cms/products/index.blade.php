@@ -292,6 +292,20 @@
                   class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
             </div>
          </div>
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+               <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Material</label>
+               <input type="text" wire:model="material" placeholder="ej: Titanio Grado 5, Cerámica, Acero"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+            </div>
+            <div class="space-y-1.5 flex items-center pt-5">
+               <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" wire:model="is_biomaterial" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <span class="ml-3 text-sm font-medium text-slate-700">Es Biomaterial</span>
+               </label>
+            </div>
+         </div>
          {{-- Descripción --}}
          <div class="space-y-1.5">
             <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.description_label') }}</label>
@@ -338,7 +352,7 @@
                   @foreach($gallery as $index => $img)
                   <div class="relative group">
                      <img src="{{ $img->temporaryUrl() }}" class="w-full h-16 object-cover rounded-lg border border-slate-100">
-                     <button type="button" wire:click="$set('gallery', {{ json_encode(array_values(array_filter($gallery, fn($_, $i) => $i !== $index, ARRAY_FILTER_USE_BOTH))) }})" class="absolute top-1 right-1 p-0.5 bg-white rounded text-red-500 hover:text-red-700 border-none cursor-pointer">
+                     <button type="button" wire:click="removeGalleryImage({{ $index }})" class="absolute top-1 right-1 p-0.5 bg-white rounded text-red-500 hover:text-red-700 border-none cursor-pointer">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -398,6 +412,17 @@
                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.products.meta_keywords') }}</label>
                <input type="text" wire:model="meta_keywords" placeholder="{{ __('cms.products.meta_keywords_placeholder') }}"
                   class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+            </div>
+            <div class="space-y-1.5">
+               <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Description (Web)</label>
+               <textarea wire:model="seo_description" rows="2" placeholder="Descripción para meta tags de la web"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none placeholder-slate-300"></textarea>
+            </div>
+            <div class="space-y-1.5">
+               <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">SEO Keywords (Web)</label>
+               <input type="text" wire:model="seo_keywords" placeholder="ej: implantes, titanio, odontología"
+                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+               <p class="text-xs text-[#c0c1c6] italic mt-1">Separadas por comas</p>
             </div>
          </div>
          {{-- Promociones --}}

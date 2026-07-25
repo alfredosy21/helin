@@ -49,9 +49,13 @@ class ProductsController extends Component {
     public string $currency = 'USD';
     public int $stock = 0;
     public string $unit = 'Und';
+    public ?string $material = '';
+    public bool $is_biomaterial = false;
     public ?string $meta_title = '';
     public ?string $meta_description = '';
     public ?string $meta_keywords = '';
+    public ?string $seo_description = '';
+    public ?string $seo_keywords = '';
     public bool $is_active = true;
     public bool $is_featured = false;
     public bool $is_new = true;
@@ -159,9 +163,13 @@ class ProductsController extends Component {
                 'currency' => $this->currency,
                 'stock' => $this->stock,
                 'unit' => $this->unit,
+                'material' => $this->material,
+                'is_biomaterial' => $this->is_biomaterial,
                 'meta_title' => $this->meta_title,
                 'meta_description' => $this->meta_description,
                 'meta_keywords' => $this->meta_keywords,
+                'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
                 'is_featured' => $this->is_featured,
                 'is_new' => $this->is_new,
@@ -255,9 +263,13 @@ class ProductsController extends Component {
         $this->currency = $product->currency ?? 'USD';
         $this->stock = (int) $product->stock;
         $this->unit = $product->unit ?? 'Und';
+        $this->material = $product->material ?? '';
+        $this->is_biomaterial = (bool) ($product->is_biomaterial ?? false);
         $this->meta_title = $product->meta_title ?? '';
         $this->meta_description = $product->meta_description ?? '';
         $this->meta_keywords = $product->meta_keywords ?? '';
+        $this->seo_description = $product->seo_description ?? '';
+        $this->seo_keywords = $product->seo_keywords ?? '';
         $this->is_active = $product->is_active;
         $this->is_featured = $product->is_featured;
         $this->is_new = $product->is_new;
@@ -339,6 +351,13 @@ class ProductsController extends Component {
         $this->deleteId = null;
     }
 
+    public function removeGalleryImage(int $index): void {
+        if (isset($this->gallery[$index])) {
+            unset($this->gallery[$index]);
+            $this->gallery = array_values($this->gallery);
+        }
+    }
+
     public function cancel(): void {
         $this->resetForm();
         $this->showForm = false;
@@ -349,7 +368,9 @@ class ProductsController extends Component {
         $this->reset([
             'name', 'slug', 'sku', 'category_id', 'brand_id', 'description',
             'clinical_specs', 'price', 'currency', 'stock', 'unit',
+            'material', 'is_biomaterial',
             'meta_title', 'meta_description', 'meta_keywords',
+            'seo_description', 'seo_keywords',
             'is_active', 'is_featured', 'is_new', 'is_on_sale',
             'sale_price', 'sale_start_date', 'sale_end_date', 'published_at',
             'system_product_id', 'product_platform_id',
