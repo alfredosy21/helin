@@ -45,6 +45,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                            <th class="px-4 py-3.5">ID</th>
                             <th class="px-4 py-3.5">Cliente</th>
                             <th class="px-4 py-3.5">Contacto</th>
                             <th class="px-4 py-3.5">Ubicación</th>
@@ -58,6 +59,14 @@
                     <tbody class="divide-y divide-slate-50 text-sm">
                         @forelse($requests as $request)
                         <tr wire:key="request-{{ $request->id }}" class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-4 py-3">
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-[#222]">{{ $request->correlative }}</span>
+                                    @if($request->uuid)
+                                    <span class="text-xs text-slate-400 font-mono">{{ substr($request->uuid, 0, 8) }}...</span>
+                                    @endif
+                                </div>
+                            </td>
                             <td class="px-4 py-3">
                                 <div class="flex flex-col">
                                     <span class="font-medium text-[#222]">{{ $request->full_name }}</span>
@@ -107,11 +116,20 @@
                             </td>
                             <td class="px-4 py-3 text-center">
                                 <div class="flex justify-center gap-1">
-                                    <x-cms-tooltip text="Ver detalles">
-                                        <button type="button" wire:click="viewDetails({{ $request->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                    @if($request->uuid)
+                                    <x-cms-tooltip text="Ver página de solicitud">
+                                        <a href="{{ route('solicitud-enviada', ['uuid' => $request->uuid]) }}" target="_blank" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </a>
+                                    </x-cms-tooltip>
+                                    @endif
+                                    <x-cms-tooltip text="Ver detalles">
+                                        <button type="button" wire:click="viewDetails({{ $request->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                             </svg>
                                         </button>
                                     </x-cms-tooltip>
@@ -127,7 +145,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-16 text-center">
+                            <td colspan="9" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center text-[#c0c1c6]">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">No hay solicitudes registradas</p>

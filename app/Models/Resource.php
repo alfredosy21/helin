@@ -13,16 +13,21 @@ class Resource extends Model {
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'type',
+        'specialty',
+        'format',
+        'tags',
         'file_path',
+        'url',
         'thumbnail',
         'resource_type_id',
         'resource_specialty_id',
-        'format',
-        'url',
         'is_active',
-        'position'
+        'views',
+        'position',
+        'featured'
     ];
 
 

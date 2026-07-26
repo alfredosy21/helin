@@ -332,4 +332,46 @@ class WebController extends Controller
 
         return response()->json($results);
     }
+
+    /**
+     * Detalle de caso clínico
+     */
+    public function casoClinico($slug)
+    {
+        $resource = \App\Models\Resource::with(['resourceType', 'resourceSpecialty'])
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        return view('web.caso-clinico', compact('resource'));
+    }
+
+    /**
+     * Solicitud comercial enviada
+     */
+    public function solicitudEnviada($uuid)
+    {
+        $commercialRequest = \App\Models\CommercialRequest::with(['deliveryMethod', 'paymentMethod', 'whatsappNumber'])
+            ->where('uuid', $uuid)
+            ->firstOrFail();
+
+        $cartItems = [];
+        $subtotal = 0;
+
+        if ($commercialRequest) {
+            $cartData = json_decode($commercialRequest->cart_data, true) ?? [];
+            foreach ($cartData as $item) {
+                $product = \App\Models\Product::find($item['id']);
+                if ($product) {
+                    $cartItems[] = (object)[
+                        'product' => $product,
+                        'quantity' => $item['quantity']
+                    ];
+                    $subtotal += $product->price * $item['quantity'];
+                }
+            }
+        }
+
+        return view('web.solicitud-enviada', compact('uuid', 'commercialRequest', 'cartItems', 'subtotal'));
+    }
 }

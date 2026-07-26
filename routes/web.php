@@ -56,6 +56,8 @@ Route::post('/contactanos/send', [ContactController::class, 'send'])->name('cont
 Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
 Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas');
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
+Route::get('/caso-clinico/{slug}', [WebController::class, 'casoClinico'])->name('caso-clinico');
+Route::get('/solicitud-enviada/{uuid}', [WebController::class, 'solicitudEnviada'])->name('solicitud-enviada');
 Route::post('/api/resources/filter', [ResourceFilterController::class, 'filter'])->name('resources.filter');
 Route::post('/api/products/filter', [ProductFilterController::class, 'filter'])->name('products.filter');
 Route::get('/api/search/products', [WebController::class, 'searchProducts'])->name('api.search.products');

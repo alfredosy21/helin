@@ -24,6 +24,7 @@ class ResourceSeeder extends Seeder
         $resources = [
             [
                 'title' => 'Regeneración ósea guiada en zona posterior',
+                'slug' => 'regeneracion-osea-guiada-zona-posterior',
                 'description' => 'Protocolo clínico con biomateriales, membrana y seguimiento del caso.',
                 'type' => 'case_study',
                 'resource_type_id' => 1, // Caso Clínico
@@ -38,6 +39,7 @@ class ResourceSeeder extends Seeder
             ],
             [
                 'title' => 'Colocación de implante con protocolo quirúrgico',
+                'slug' => 'colocacion-implante-protocolo-quirurgico',
                 'description' => 'Video de referencia para planificación, inserción y control de estabilidad.',
                 'type' => 'video',
                 'resource_type_id' => 2, // Video
@@ -52,6 +54,7 @@ class ResourceSeeder extends Seeder
             ],
             [
                 'title' => 'Manual técnico de placas y tornillos',
+                'slug' => 'manual-tecnico-placas-tornillos',
                 'description' => 'Guía descargable para selección, uso y consideraciones clínicas.',
                 'type' => 'manual',
                 'resource_type_id' => 3, // Manual
@@ -66,6 +69,7 @@ class ResourceSeeder extends Seeder
             ],
             [
                 'title' => 'Ficha técnica de membrana reabsorbible',
+                'slug' => 'ficha-tecnica-membrana-reabsorbible',
                 'description' => 'Especificaciones, indicaciones y recomendaciones de manipulación.',
                 'type' => 'technical_sheet',
                 'resource_type_id' => 4, // Ficha Técnica
@@ -80,6 +84,7 @@ class ResourceSeeder extends Seeder
             ],
             [
                 'title' => 'Guía clínica para manejo de tejidos blandos',
+                'slug' => 'guia-clinica-manejo-tejidos-blandos',
                 'description' => 'Recomendaciones prácticas para procedimientos regenerativos.',
                 'type' => 'downloadable_guide',
                 'resource_type_id' => 5, // Guía Descargable
@@ -94,6 +99,7 @@ class ResourceSeeder extends Seeder
             ],
             [
                 'title' => 'Reconstrucción con sistema de osteosíntesis',
+                'slug' => 'reconstruccion-sistema-osteosintesis',
                 'description' => 'Resumen del abordaje, materiales utilizados y evolución clínica.',
                 'type' => 'case_study',
                 'resource_type_id' => 1, // Caso Clínico

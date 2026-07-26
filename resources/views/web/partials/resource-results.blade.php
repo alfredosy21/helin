@@ -21,8 +21,8 @@
             'resourceTitle'       => $resource->title,
             'resourceDescription' => $resource->description,
             'resourceFormat'      => $formatMap[$resource->format] ?? '▣ Artículo',
-            'resourceLink'        => $resource->type === 'video' ? 'Ver video' : ($resource->format === 'pdf' ? 'Descargar' : 'Leer'),
-            'resourceUrl'         => $resource->url ?: '#',
+            'resourceLink'        => 'Ver detalle',
+            'resourceUrl'         => route('caso-clinico', ['slug' => $resource->slug]),
             'resourceImage'       => $resource->image_url ?? null,
         ])
     @endforeach

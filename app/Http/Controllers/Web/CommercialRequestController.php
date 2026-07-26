@@ -48,17 +48,17 @@ class CommercialRequestController extends Controller
         try {
             // Get customer type ID from slug
             $customerType = \App\Models\CustomerType::where('slug', $request->tipo_cliente)->first();
-            
+
             // Get state and city IDs
             $state = \App\Models\State::where('code', $request->estado)->first();
             $city = \App\Models\City::where('slug', $request->ciudad)->first();
-            
+
             // Get delivery method
             $deliveryMethod = \App\Models\DeliveryMethod::where('slug', $request->envio)->first();
-            
+
             // Get payment method
             $paymentMethod = \App\Models\PaymentMethod::where('name', $request->pago)->first();
-            
+
             // Get shipping state and city if provided
             $shippingState = null;
             $shippingCity = null;
@@ -66,7 +66,7 @@ class CommercialRequestController extends Controller
                 $shippingState = \App\Models\State::where('code', $request->envio_estado)->first();
                 $shippingCity = \App\Models\City::where('slug', $request->envio_ciudad)->first();
             }
-            
+
             // Get WhatsApp number for the state
             $whatsappNumber = WhatsAppNumber::getActiveByState($state->id);
 
@@ -115,6 +115,7 @@ class CommercialRequestController extends Controller
                 'success' => true,
                 'message' => 'Solicitud enviada exitosamente',
                 'request_id' => $commercialRequest->id,
+                'redirect_url' => route('solicitud-enviada', ['uuid' => $commercialRequest->uuid]),
                 'whatsapp_number' => $whatsappNumber?->phone_number
             ], 200);
 

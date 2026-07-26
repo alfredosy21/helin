@@ -11,6 +11,7 @@ class CommercialRequest extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'uuid',
         'customer_type_id',
         'first_name',
         'last_name',
@@ -98,13 +99,14 @@ class CommercialRequest extends Model
     }
 
     /**
-     * Boot method para asociar WhatsApp automáticamente al guardar
+     * Boot method para asociar WhatsApp automáticamente al guardar y generar UUID
      */
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($request) {
+            $request->uuid = (string) \Illuminate\Support\Str::uuid();
             $request->associateWhatsAppNumber();
         });
 
@@ -118,6 +120,13 @@ class CommercialRequest extends Model
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getCorrelativeAttribute()
+    {
+        $whatsappId = $this->whatsapp_number_id ? 'Z' . $this->whatsapp_number_id : 'Z0';
+        $requestId = str_pad($this->id, 2, '0', STR_PAD_LEFT);
+        return "#HELIN-{$whatsappId}-{$requestId}";
     }
 
     public function scopePending($query)

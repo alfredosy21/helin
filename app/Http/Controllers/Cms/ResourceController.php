@@ -21,6 +21,7 @@ class ResourceController extends Component
 
     // Form fields
     public $title;
+    public $slug;
     public $description;
     public $type;
     public $specialty;
@@ -30,6 +31,8 @@ class ResourceController extends Component
     public $url;
     public $thumbnail;
     public $current_thumbnail;
+    public $resource_type_id;
+    public $resource_specialty_id;
     public $is_active = true;
     public $views = 0;
     public $position = 0;
@@ -45,6 +48,7 @@ class ResourceController extends Component
 
     protected $rules = [
         'title' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:resources,slug',
         'description' => 'required|string',
         'type' => 'required|in:case_study,video,manual,technical_sheet,downloadable_guide,article',
         'specialty' => 'nullable|string|max:100',
@@ -53,6 +57,8 @@ class ResourceController extends Component
         'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,zip|max:10240',
         'url' => 'nullable|url|max:500',
         'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'resource_type_id' => 'nullable|integer|exists:resource_types,id',
+        'resource_specialty_id' => 'nullable|integer|exists:resource_specialties,id',
         'is_active' => 'boolean',
         'views' => 'integer|min:0',
         'position' => 'integer|min:0',
@@ -106,6 +112,7 @@ class ResourceController extends Component
 
         $this->editingId = $id;
         $this->title = $resource->title;
+        $this->slug = $resource->slug;
         $this->description = $resource->description;
         $this->type = $resource->type;
         $this->specialty = $resource->specialty;
@@ -113,6 +120,8 @@ class ResourceController extends Component
         $this->tags = $resource->tags ? implode(', ', json_decode($resource->tags)) : '';
         $this->url = $resource->url;
         $this->current_thumbnail = $resource->thumbnail;
+        $this->resource_type_id = $resource->resource_type_id;
+        $this->resource_specialty_id = $resource->resource_specialty_id;
         $this->is_active = $resource->is_active;
         $this->views = $resource->views;
         $this->position = $resource->position;
@@ -123,7 +132,12 @@ class ResourceController extends Component
 
     public function save()
     {
-        $this->validate();
+        // Update validation for slug to ignore current record when editing
+        $rules = $this->rules;
+        if ($this->editingId) {
+            $rules['slug'] = 'required|string|max:255|unique:resources,slug,' . $this->editingId;
+        }
+        $this->validate($rules);
 
         // Process tags
         $tagsArray = [];
@@ -134,12 +148,15 @@ class ResourceController extends Component
 
         $data = [
             'title' => $this->title,
+            'slug' => $this->slug,
             'description' => $this->description,
             'type' => $this->type,
             'specialty' => $this->specialty,
             'format' => $this->format,
             'tags' => json_encode($tagsArray),
             'url' => $this->url,
+            'resource_type_id' => $this->resource_type_id,
+            'resource_specialty_id' => $this->resource_specialty_id,
             'is_active' => $this->is_active,
             'views' => $this->views,
             'position' => $this->position,
@@ -197,8 +214,9 @@ class ResourceController extends Component
     public function resetForm()
     {
         $this->reset([
-            'title', 'description', 'type', 'specialty', 'format', 'tags',
+            'title', 'slug', 'description', 'type', 'specialty', 'format', 'tags',
             'file_path', 'url', 'thumbnail', 'current_thumbnail',
+            'resource_type_id', 'resource_specialty_id',
             'is_active', 'featured'
         ]);
 

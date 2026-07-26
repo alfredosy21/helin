@@ -371,11 +371,8 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Show success message
-                alert('¡Solicitud enviada exitosamente! Tu solicitud #' + data.request_id + ' ha sido recibida.');
-
-                // Redirect to home or show success page
-                window.location.href = '{{ route("home") }}';
+                // Redirect to success page
+                window.location.href = data.redirect_url || '{{ route("solicitud-enviada") }}';
             } else {
                 // Show error message
                 alert('Error: ' + (data.message || 'Hubo un error al procesar tu solicitud'));

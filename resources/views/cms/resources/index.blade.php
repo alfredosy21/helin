@@ -202,6 +202,15 @@
                             @error('title') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug (URL amigable) <span class="text-red-500">*</span></label>
+                            <input type="text" wire:model="slug" placeholder="ejemplo: regeneracion-osea-guiada"
+                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                            @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.type_label') }} <span class="text-red-500">*</span></label>
                             <select wire:model="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
                                 <option value="">Seleccionar tipo</option>
