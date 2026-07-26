@@ -78,13 +78,11 @@ class ModuleSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Contacto',
-                'class' => 'mail', // Confirmed functional icon from your dashboard link
+                'name' => 'Solicitudes',
+                'class' => 'shopping-cart',
                 'order' => 6,
                 'submodules' => [
-                    ['name' => 'Mensajes de Contacto', 'url' => '/cms/contact', 'icon' => 'inbox'],
-                    ['name' => 'Gestión de Contactos', 'url' => '/cms/contacts', 'icon' => 'user'],
-                    ['name' => 'Configuración de Formulario', 'url' => '/cms/contact/form', 'icon' => 'check-square'],
+                    ['name' => 'Solicitudes Comerciales', 'url' => '/cms/commercial-requests', 'icon' => 'file-text'],
                 ]
             ],
         ];

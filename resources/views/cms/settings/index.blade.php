@@ -49,9 +49,6 @@
                             <x-ui-textarea label="Eslogan / Slogan" wire:model="tagline" rows="2" placeholder="Todo en Cirugía Odontológica Especializada" />
                         </div>
                         <div class="md:col-span-2">
-                            <x-ui-textarea label="{{ __('cms.settings.physical_address') }}" wire:model="address" rows="2" placeholder="Dirección general de la empresa" />
-                        </div>
-                        <div class="md:col-span-2">
                             <x-ui-textarea label="Dirección de Contacto (Página de contacto)" wire:model="contact_address" rows="2" placeholder="Dirección completa que se mostrará en la página de contacto" />
                         </div>
                     </div>

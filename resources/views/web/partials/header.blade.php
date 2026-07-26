@@ -1,10 +1,10 @@
 <!-- Barra Informativa Superior -->
 <div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
     <div class="container mx-auto px-4 py-2 flex items-center justify-center gap-2 sm:gap-4">
-        <span class="truncate">Todo para cirugía odontológica avanzada
-
-
-</span>
+        @php
+            $settings = \App\Models\Settings::getSettings();
+        @endphp
+        <span class="truncate">{{ $settings->tagline }}</span>
         <a href="{{ route('catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap">VER PRODUCTOS</a>
     </div>
 </div>

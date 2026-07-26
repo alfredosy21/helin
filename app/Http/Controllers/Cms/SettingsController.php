@@ -46,6 +46,12 @@ class SettingsController extends Component {
     /** @var string Physical office address */
     public string $address = '';
 
+    /** @var string Tagline/Slogan */
+    public string $tagline = '';
+
+    /** @var string Contact address for contact page */
+    public string $contact_address = '';
+
     /** @var string Main contact phone number */
     public string $phone = '';
 
@@ -124,7 +130,7 @@ class SettingsController extends Component {
         $settings = Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS]);
 
         $this->fill($settings->only([
-                    'name', 'email', 'address', 'phone', 'shedule', 'copy',
+                    'name', 'email', 'address', 'tagline', 'contact_address', 'phone', 'shedule', 'copy',
                     'facebook', 'instagram', 'linkedin', 'youtube',
                     'keywords', 'description', 'settings_description', 'analytics_code',
                     'caracas_whatsapp', 'caracas_location',
@@ -166,6 +172,8 @@ class SettingsController extends Component {
                 'name' => $this->name,
                 'email' => $this->email,
                 'address' => $this->address,
+                'tagline' => $this->tagline,
+                'contact_address' => $this->contact_address,
                 'phone' => $this->phone,
                 'shedule' => $this->shedule,
                 'copy' => $this->copy,

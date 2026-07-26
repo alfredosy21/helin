@@ -16,7 +16,7 @@
             @else
                 <h3 class="text-3xl mb-4 lowercase">helin.</h3>
             @endif
-                <p class="text-white/80 text-sm mb-6">{{ $settings->tagline ?? 'Todo en Cirugía Odontológica Especializada.' }}</p>
+                <p class="text-white/80 text-sm mb-6">{{ $settings->tagline }}</p>
                 <div class="flex space-x-3">
                     <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300">
                         <i class="fab fa-instagram"></i>

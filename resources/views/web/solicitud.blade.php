@@ -18,7 +18,8 @@
         'separatorAttributes' => 'class="text-helin-text mx-2"'
     ])
 
-    <form action="#" method="POST" class="flex flex-col lg:flex-row gap-8">
+    <form action="{{ route('solicitud.send') }}" method="POST" class="flex flex-col lg:flex-row gap-8" id="solicitud-form">
+        @csrf
         <!-- Columna Izquierda (55%) - Datos del Cliente -->
         <div class="lg:w-[55%] space-y-6">
 
@@ -47,28 +48,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Nombre *</label>
-                        <input type="text" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Tu nombre">
+                        <input type="text" name="nombre" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Tu nombre">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Apellido *</label>
-                        <input type="text" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Tu apellido">
+                        <input type="text" name="apellido" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Tu apellido">
                     </div>
                 </div>
 
                 <!-- Empresa (opcional) -->
                 <div id="cedula-field" class="mb-5 hidden">
                     <label class="block text-sm font-medium text-helin-heading mb-2">Cédula *</label>
-                    <input type="text" name="cedula" disabled class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="V-12345678">
+                    <input type="text" name="cedula" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="V-12345678">
                 </div>
 
                 <div id="empresa-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5 hidden">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Empresa *</label>
-                        <input type="text" name="empresa" disabled class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Nombre de la empresa">
+                        <input type="text" name="empresa" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Nombre de la empresa">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">RIF *</label>
-                        <input type="text" name="rif" disabled class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="J-12345678-9">
+                        <input type="text" name="rif" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="J-12345678-9">
                     </div>
                 </div>
 
@@ -76,11 +77,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Teléfono *</label>
-                        <input type="tel" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="+58 412 123 4567">
+                        <input type="tel" name="telefono" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="+58 412 123 4567">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-helin-heading mb-2">Correo Electrónico *</label>
-                        <input type="email" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="correo@ejemplo.com">
+                        <input type="email" name="email" required class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="correo@ejemplo.com">
                     </div>
                 </div>
 
@@ -128,7 +129,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-helin-heading mb-2">Observaciones</label>
-                    <textarea rows="5" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90 resize-none" placeholder="Indica aquí cualquier detalle adicional sobre tu pedido, horario de entrega preferido, instrucciones especiales..."></textarea>
+                    <textarea name="observaciones" rows="5" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90 resize-none" placeholder="Indica aquí cualquier detalle adicional sobre tu pedido, horario de entrega preferido, instrucciones especiales..."></textarea>
                 </div>
             </div>
         </div>
@@ -167,7 +168,7 @@
                     </div>
                     <div id="other-delivery-company-field" class="mt-3 hidden">
                         <label class="block text-sm font-medium text-helin-heading mb-2">Indica la empresa de entrega *</label>
-                        <input type="text" name="otra_empresa_entrega" disabled class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Nombre de la empresa">
+                        <input type="text" name="otra_empresa_entrega" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-3 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90" placeholder="Nombre de la empresa">
                     </div>
 
                     <!-- Información de punto de retiro -->
@@ -264,7 +265,7 @@
                 <!-- Nro de comprobante -->
                 <div id="payment-receipt-block" class="mb-6 hidden">
                     <label class="block text-sm font-medium text-helin-heading mb-2">Nro. de comprobante de pago *</label>
-                    <input type="text" name="numero_comprobante" id="payment-receipt-input" disabled class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-2 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90 text-sm" placeholder="Referencia de transferencia">
+                    <input type="text" name="numero_comprobante" id="payment-receipt-input" class="w-full bg-gray-50/80 border border-helin-border/30 rounded-lg px-4 py-2 focus:border-turquesa/50 focus:ring-1 focus:ring-turquesa/30 outline-none transition-colors opacity-90 text-sm" placeholder="Referencia de transferencia">
                 </div>
 
                 <!-- Aceptación de política de privacidad -->
@@ -294,7 +295,7 @@
      * Form validation for submit button
      */
     function validateForm() {
-        const form = document.querySelector('form[action="#"]');
+        const form = document.getElementById('solicitud-form');
         const submitBtn = document.getElementById('submit-btn');
         if (!form || !submitBtn) return;
 
@@ -328,7 +329,7 @@
         validateForm();
 
         // Validate on input change
-        const form = document.querySelector('form[action="#"]');
+        const form = document.getElementById('solicitud-form');
         if (form) {
             form.addEventListener('input', validateForm);
             form.addEventListener('change', validateForm);
@@ -336,6 +337,72 @@
 
         // Validate on cart updates
         document.addEventListener('cart:updated', validateForm);
+    });
+
+    // Form submission with AJAX
+    document.getElementById('solicitud-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const form = this;
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Enable all disabled fields temporarily for submission
+        const allDisabledFields = form.querySelectorAll('[disabled]');
+        allDisabledFields.forEach(field => {
+            field.disabled = false;
+            field.dataset.wasDisabled = 'true';
+        });
+
+        const formData = new FormData(form);
+
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
+        submitBtn.className = 'w-full bg-gray-400 text-white font-bold text-sm py-3 rounded-full uppercase cursor-not-allowed';
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                alert('¡Solicitud enviada exitosamente! Tu solicitud #' + data.request_id + ' ha sido recibida.');
+
+                // Redirect to home or show success page
+                window.location.href = '{{ route("home") }}';
+            } else {
+                // Show error message
+                alert('Error: ' + (data.message || 'Hubo un error al procesar tu solicitud'));
+
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Enviar Solicitud Comercial';
+                submitBtn.className = 'w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold text-sm py-3 rounded-full uppercase transition-colors';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión. Por favor, intenta nuevamente.');
+
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Enviar Solicitud Comercial';
+            submitBtn.className = 'w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold text-sm py-3 rounded-full uppercase transition-colors';
+        })
+        .finally(() => {
+            // Re-disable fields that were originally disabled
+            const originallyDisabledFields = form.querySelectorAll('[data-was-disabled="true"]');
+            originallyDisabledFields.forEach(field => {
+                field.disabled = true;
+                delete field.dataset.wasDisabled;
+            });
+        });
     });
 
     const envioInput = document.getElementById('envio-input');

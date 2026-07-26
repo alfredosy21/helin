@@ -29,12 +29,14 @@ use App\Http\Controllers\Cms\{
     ResourceSpecialtyController,
     ResourceTypeController,
     CustomerTypesController,
-    DeliveryMethodsController
+    DeliveryMethodsController,
+    CommercialRequestsController
 };
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\Web\ResourceFilterController;
 use App\Http\Controllers\Web\ProductFilterController;
 use App\Http\Controllers\Web\ContactController;
+use App\Http\Controllers\Web\CommercialRequestController;
 
 /*
   |--------------------------------------------------------------------------
@@ -48,6 +50,7 @@ Route::get('/catalogo', [WebController::class, 'catalogo'])->name('catalogo');
 Route::get('/producto/{slug}', [WebController::class, 'producto'])->name('producto');
 Route::get('/carrito', [WebController::class, 'carrito'])->name('carrito');
 Route::get('/solicitud', [WebController::class, 'solicitud'])->name('solicitud');
+Route::post('/solicitud/send', [CommercialRequestController::class, 'store'])->name('solicitud.send');
 Route::get('/contactanos', [WebController::class, 'contactanos'])->name('contactanos');
 Route::post('/contactanos/send', [ContactController::class, 'send'])->name('contactanos.send');
 Route::get('/nuestra-empresa', [WebController::class, 'nuestraEmpresa'])->name('nuestra-empresa');
@@ -141,6 +144,10 @@ Route::prefix('cms')->group(function () {
         /* 3.12. Delivery Methods Management */
         Route::get('/delivery-methods', DeliveryMethodsController::class)->name('delivery-methods.index')
                 ->middleware('permission:2,' . \App\Models\Submodule::DELIVERY_METHODS);
+
+        /* 3.13. Commercial Requests Management */
+        Route::get('/commercial-requests', CommercialRequestsController::class)->name('commercial-requests.index')
+                ->middleware('permission:6,1'); // Solicitudes (ID:6), Solicitudes Comerciales (submódulo 1)
 
         /* 3.10. Website Menu Management */
         Route::get('/menu', MenuController::class)->name('menu.index')

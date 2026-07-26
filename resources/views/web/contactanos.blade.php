@@ -39,7 +39,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/location.svg') }}" alt="Dirección" width="24" height="24"></div>
                     <div>
                         <h3>Dirección</h3>
-                        <p>{{ $settings->contact_address ?? 'Centro Comercial El Recreo,<br>Torre Norte, Piso 5, Oficina 5B,<br>Sabana Grande, Caracas 1050, Venezuela.' }}</p>
+                        <p>{{ $settings->contact_address }}</p>
                     </div>
                 </article>
 
@@ -47,7 +47,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/ws.svg') }}" alt="WhatsApp Comercial" width="24" height="24"></div>
                     <div>
                         <h3>WhatsApp Comercial</h3>
-                        <p>{{ $settings->phone ?? '+58 4242789481' }}</p>
+                        <p>{{ $settings->phone }}</p>
                     </div>
                 </article>
 
@@ -55,7 +55,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/mail.svg') }}" alt="Correo electrónico" width="24" height="24"></div>
                     <div>
                         <h3>Correo electrónico</h3>
-                        <p>{{ $settings->email ?? 'info@helinlatam.com' }}</p>
+                        <p>{{ $settings->email }}</p>
                     </div>
                 </article>
             </div>
