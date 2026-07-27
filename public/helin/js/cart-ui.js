@@ -7,29 +7,7 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ─── Header badge ─────────────────────────────────────────────────────────
-    const badge = document.getElementById('cart-badge');
-
-    function updateBadge(count) {
-        if (!badge) return;
-        badge.textContent = count;
-        badge.style.display = count > 0 ? 'flex' : 'none';
-    }
-
-    // Initialize badge with current cart count
-    updateBadge(Cart.getCount());
-
-    document.addEventListener('cart:updated', e => {
-        updateBadge(e.detail.count);
-        if (document.getElementById('cart-page-root')) {
-            renderCartPage(e.detail.items);
-        }
-        if (document.getElementById('cart-summary')) {
-            renderCartSummary(e.detail.items);
-        }
-    });
-
-    // ─── Cart page rendering ──────────────────────────────────────────────────
+    // ─── Helper functions (must be declared before use) ───────────────────────
     function fmt(n) {
         return '$' + parseFloat(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
@@ -52,24 +30,69 @@ document.addEventListener('DOMContentLoaded', () => {
         return cachedBsRate;
     }
 
+    async function renderCartSummary(items) {
+        const summaryRoot = document.getElementById('cart-summary');
+        if (!summaryRoot) return;
 
-    // ─── Add-to-cart button delegation ───────────────────────────────────────
-    document.addEventListener('click', e => {
-        const btn = e.target.closest('[data-cart-add]');
-        if (!btn) return;
-
-        const { slug, name, brand, price, image } = btn.dataset;
-        const qtyInput = btn.closest('[data-cart-context]')?.querySelector('[data-cart-qty]');
-        const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
-
-        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty });
-
-        if (result.action === 'added') {
-            Toast.show({ type: 'cart', message: `<strong>${name}</strong> agregado al carrito.` });
-        } else {
-            Toast.show({ type: 'success', message: `Cantidad actualizada en el carrito.` });
+        if (items.length === 0) {
+            summaryRoot.innerHTML = `
+                <div class="text-center py-8 text-helin-text">
+                    <i class="fas fa-shopping-cart text-turquesa text-2xl mb-2"></i>
+                    <p class="text-sm">Tu carrito está vacío</p>
+                    <a href="${window.location.origin}/catalogo" class="text-turquesa text-sm hover:underline mt-2 inline-block">Ver productos →</a>
+                </div>
+            `;
+            return;
         }
-    });
+
+        const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const discount = subtotal > 500 ? subtotal * 0.05 : 0;
+        const total = subtotal - discount;
+        const bsRate = await fetchBsRate();
+        const totalBs = (total * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const formattedBsRate = bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const itemsHtml = items.map(item => `
+            <div class="flex justify-between text-sm py-2 border-b border-helin-border/20 last:border-b-0">
+                <span class="text-helin-text">${item.name} <span class="text-helin-text/60">× ${item.qty}</span></span>
+                <span class="font-medium text-helin-heading">$${(item.price * item.qty).toFixed(2)}</span>
+            </div>
+        `).join('');
+
+        summaryRoot.innerHTML = `
+            <div class="bg-turquesa text-white rounded-t-lg flex justify-between text-sm font-semibold px-4 py-3">
+                <span>Producto</span>
+                <span>Subtotal</span>
+            </div>
+            <div class="px-4">
+                ${itemsHtml}
+            </div>
+            <div class="border-t border-helin-border/30 pt-3 mt-3 px-4 pb-4 rounded-b-lg">
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="text-helin-text">Subtotal</span>
+                    <span class="font-medium text-helin-heading">$${subtotal.toFixed(2)}</span>
+                </div>
+                ${discount > 0 ? `
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-helin-text">Descuento (5%)</span>
+                        <span class="text-green-500 font-medium">-$${discount.toFixed(2)}</span>
+                    </div>
+                ` : ''}
+                <div class="flex justify-between font-bold">
+                    <span class="text-helin-heading">Total</span>
+                    <span class="text-turquesa">$${total.toFixed(2)}</span>
+                </div>
+                <div class="bg-helin-soft rounded-lg p-3 mt-4">
+                    <p class="text-xs text-helin-text mb-1">Tasa de conversión a Bs.</p>
+                    <p class="text-sm text-helin-text mb-2">1 USD = ${formattedBsRate} Bs.</p>
+                    <div class="flex justify-between items-center border-t border-helin-border pt-2">
+                        <span class="font-semibold text-helin-heading">Total en Bs.</span>
+                        <span class="font-bold text-turquesa">${totalBs} Bs.</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     async function renderCartPage(items) {
         const root = document.getElementById('cart-page-root');
@@ -87,11 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
 
         bindCartPageEvents();
-    }
-
-    const cartRoot = document.getElementById('cart-page-root');
-    if (cartRoot) {
-        renderCartPage(Cart.getItems());
     }
 
     function renderEmpty() {
@@ -279,70 +297,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Render cart summary for solicitud page
-     */
-    async function renderCartSummary(items) {
-        const summaryRoot = document.getElementById('cart-summary');
-        if (!summaryRoot) return;
+    // ─── Header badge ─────────────────────────────────────────────────────────
+    const badge = document.getElementById('cart-badge');
 
-        if (items.length === 0) {
-            summaryRoot.innerHTML = `
-                <div class="text-center py-8 text-helin-text">
-                    <i class="fas fa-shopping-cart text-turquesa text-2xl mb-2"></i>
-                    <p class="text-sm">Tu carrito está vacío</p>
-                    <a href="${window.location.origin}/catalogo" class="text-turquesa text-sm hover:underline mt-2 inline-block">Ver productos →</a>
-                </div>
-            `;
-            return;
+    function updateBadge(count) {
+        if (!badge) return;
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+
+    // Initialize badge with current cart count
+    updateBadge(Cart.getCount());
+
+    document.addEventListener('cart:updated', e => {
+        updateBadge(e.detail.count);
+        if (document.getElementById('cart-page-root')) {
+            renderCartPage(e.detail.items);
         }
+        if (document.getElementById('cart-summary')) {
+            renderCartSummary(e.detail.items);
+        }
+    });
 
-        const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const discount = subtotal > 500 ? subtotal * 0.05 : 0; // 5% descuento si subtotal > 500
-        const total = subtotal - discount;
-        const bsRate = await fetchBsRate();
-        const totalBs = (total * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const formattedBsRate = bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // Initialize cart summary if present (in case cart:updated already fired)
+    if (document.getElementById('cart-summary')) {
+        renderCartSummary(Cart.getItems());
+    }
 
-        const itemsHtml = items.map(item => `
-            <div class="flex justify-between text-sm py-2 border-b border-helin-border/20 last:border-b-0">
-                <span class="text-helin-text">${item.name} <span class="text-helin-text/60">× ${item.qty}</span></span>
-                <span class="font-medium text-helin-heading">$${(item.price * item.qty).toFixed(2)}</span>
-            </div>
-        `).join('');
+    // ─── Add-to-cart button delegation ───────────────────────────────────────
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('[data-cart-add]');
+        if (!btn) return;
 
-        summaryRoot.innerHTML = `
-            <div class="bg-turquesa text-white rounded-t-lg flex justify-between text-sm font-semibold px-4 py-3">
-                <span>Producto</span>
-                <span>Subtotal</span>
-            </div>
-            <div class="px-4">
-                ${itemsHtml}
-            </div>
-            <div class="border-t border-helin-border/30 pt-3 mt-3 px-4 pb-4 rounded-b-lg">
-                <div class="flex justify-between text-sm mb-2">
-                    <span class="text-helin-text">Subtotal</span>
-                    <span class="font-medium text-helin-heading">$${subtotal.toFixed(2)}</span>
-                </div>
-                ${discount > 0 ? `
-                    <div class="flex justify-between text-sm mb-2">
-                        <span class="text-helin-text">Descuento (5%)</span>
-                        <span class="text-green-500 font-medium">-$${discount.toFixed(2)}</span>
-                    </div>
-                ` : ''}
-                <div class="flex justify-between font-bold">
-                    <span class="text-helin-heading">Total</span>
-                    <span class="text-turquesa">$${total.toFixed(2)}</span>
-                </div>
-                <div class="bg-helin-soft rounded-lg p-3 mt-4">
-                    <p class="text-xs text-helin-text mb-1">Tasa de conversión a Bs.</p>
-                    <p class="text-sm text-helin-text mb-2">1 USD = ${formattedBsRate} Bs.</p>
-                    <div class="flex justify-between items-center border-t border-helin-border pt-2">
-                        <span class="font-semibold text-helin-heading">Total en Bs.</span>
-                        <span class="font-bold text-turquesa">${totalBs} Bs.</span>
-                    </div>
-                </div>
-            </div>
-        `;
+        const { slug, name, brand, price, image } = btn.dataset;
+        const qtyInput = btn.closest('[data-cart-context]')?.querySelector('[data-cart-qty]');
+        const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
+
+        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty });
+
+        if (result.action === 'added') {
+            Toast.show({ type: 'cart', message: `<strong>${name}</strong> agregado al carrito.` });
+        } else {
+            Toast.show({ type: 'success', message: `Cantidad actualizada en el carrito.` });
+        }
+    });
+
+    // Initialize cart page if present
+    const cartRoot = document.getElementById('cart-page-root');
+    if (cartRoot) {
+        renderCartPage(Cart.getItems());
     }
 });
