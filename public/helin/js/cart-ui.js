@@ -19,11 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize badge with current cart count
     updateBadge(Cart.getCount());
 
-    // Initialize cart summary if present
-    if (document.getElementById('cart-summary')) {
-        renderCartSummary(Cart.getItems());
-    }
-
     document.addEventListener('cart:updated', e => {
         updateBadge(e.detail.count);
         if (document.getElementById('cart-page-root')) {
@@ -31,24 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (document.getElementById('cart-summary')) {
             renderCartSummary(e.detail.items);
-        }
-    });
-
-    // ─── Add-to-cart button delegation ───────────────────────────────────────
-    document.addEventListener('click', e => {
-        const btn = e.target.closest('[data-cart-add]');
-        if (!btn) return;
-
-        const { slug, name, brand, price, image } = btn.dataset;
-        const qtyInput = btn.closest('[data-cart-context]')?.querySelector('[data-cart-qty]');
-        const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
-
-        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty });
-
-        if (result.action === 'added') {
-            Toast.show({ type: 'cart', message: `<strong>${name}</strong> agregado al carrito.` });
-        } else {
-            Toast.show({ type: 'success', message: `Cantidad actualizada en el carrito.` });
         }
     });
 
@@ -74,6 +51,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return cachedBsRate;
     }
+
+
+    // ─── Add-to-cart button delegation ───────────────────────────────────────
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('[data-cart-add]');
+        if (!btn) return;
+
+        const { slug, name, brand, price, image } = btn.dataset;
+        const qtyInput = btn.closest('[data-cart-context]')?.querySelector('[data-cart-qty]');
+        const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
+
+        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty });
+
+        if (result.action === 'added') {
+            Toast.show({ type: 'cart', message: `<strong>${name}</strong> agregado al carrito.` });
+        } else {
+            Toast.show({ type: 'success', message: `Cantidad actualizada en el carrito.` });
+        }
+    });
 
     async function renderCartPage(items) {
         const root = document.getElementById('cart-page-root');
