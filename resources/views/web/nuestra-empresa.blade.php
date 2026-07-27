@@ -20,7 +20,6 @@
         <div class="about-hero-copy">
             @if($companyHeroSection && $companyHeroSection->status == 1 && $companyHeroSection->status_content == 1)
                 @if($companyHeroSection->layout_type === 'hero_buttons')
-                    <span class="hero-badge">{{ $companyHeroSection->subtitle ?? 'Nuestra empresa' }}</span>
                     <h1>{{ $companyHeroSection->title }}</h1>
                     @if($companyHeroSection->description)
                         <p>{{ $companyHeroSection->description }}</p>
@@ -30,9 +29,20 @@
                             $buttons = $companyHeroSection->buttons ? json_decode($companyHeroSection->buttons, true) : [];
                         @endphp
                         @foreach($buttons as $button)
-                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}"
-                               class="{{ $button['style'] === 'primary' ? 'btn-primary' : 'btn-outline' }}">
-                                {{ $button['text'] }}
+                            @php
+                                $isContact = $button['url'] === 'contactanos';
+                                $isCatalogo = $button['url'] === 'catalogo';
+                                $btnUrl = $isCatalogo ? route('catalogo') : ($isContact ? route('contactanos') : $button['url']);
+                                $btnClass = $button['style'] === 'primary' ? 'btn-primary' : 'btn-outline';
+                                $btnText = $isContact ? 'Contactar a un asesor' : rtrim(str_replace(['→', '←'], '', $button['text']));
+                            @endphp
+                            <a href="{{ $btnUrl }}" class="{{ $btnClass }}">
+                                {{ $btnText }}
+                                @if($isContact)
+                                    <i class="fas fa-envelope"></i>
+                                @elseif($isCatalogo)
+                                    <i class="fas fa-arrow-right"></i>
+                                @endif
                             </a>
                         @endforeach
                     </div>
@@ -41,12 +51,11 @@
                 @endif
             @else
                 <!-- Fallback hardcoded -->
-                <span class="hero-badge">Nuestra empresa</span>
                 <h1>Comprometidos con la excelencia en cada solución</h1>
                 <p>En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.</p>
                 <div class="hero-actions">
-                    <a href="{{ route('catalogo') }}" class="btn-primary">Conoce nuestro portafolio →</a>
-                    <a href="{{ route('contactanos') }}" class="btn-outline">☏ Háblale con un asesor</a>
+                    <a href="{{ route('catalogo') }}" class="btn-primary">Conoce nuestro portafolio <i class="fas fa-arrow-right"></i></a>
+                    <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Contactar a un asesor</a>
                 </div>
             @endif
         </div>
@@ -57,7 +66,27 @@
         <div>
             <span class="section-label">Quiénes somos</span>
             <h2>{{ $aboutSection->title }}</h2>
-            {!! $aboutSection->content !!}
+            <p>Somos más que una casa comercial: un aliado con visión quirúrgica, clínica y digital, trabajando junto a especialistas, con educación sin fronteras, ética, foco en respaldo y calidad real.</p>
+            <p>Seleccionamos e importamos lo mejor en odontología y trabajamos codo a codo con ustedes para que cada procedimiento sea un reflejo de la diferencia real: la sonrisa clínica.</p>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-shield-halved"></i>
+                    <h4>Calidad comprobada</h4>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-stethoscope"></i>
+                    <h4>Asesoría especializada</h4>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-table-cells-large"></i>
+                    <h4>Portafolio completo</h4>
+                </div>
+                <div class="feature">
+                    <i class="far fa-handshake"></i>
+                    <h4>Respaldo y confianza</h4>
+                </div>
+            </div>
         </div>
         <div class="about-visual">
             <div class="implants-row">
@@ -73,7 +102,22 @@
     <!-- Mission and Vision -->
     <section id="mision-vision">
         <span class="section-label">Misión y visión</span>
-        {!! $missionSection->content !!}
+        <div class="mission-vision">
+            <article class="mv-card">
+                <div class="mv-icon"><i class="fas fa-crosshairs"></i></div>
+                <div>
+                    <h3>Misión</h3>
+                    <p>Acompañar a odontólogos, implantólogos, cirujanos maxilofaciales y especialistas con soluciones integrales para sus procedimientos, combinando productos de alto valor clínico, asesoría técnica y una atención cercana que facilite su trabajo antes, durante y después de cada caso.</p>
+                </div>
+            </article>
+            <article class="mv-card">
+                <div class="mv-icon"><i class="fas fa-binoculars"></i></div>
+                <div>
+                    <h3>Visión</h3>
+                    <p>Convertirnos en el aliado estratégico de referencia para los especialistas en odontología quirúrgica en Venezuela, ayudándolos a resolver sus casos con mayor seguridad, precisión y respaldo técnico.</p>
+                </div>
+            </article>
+        </div>
     </section>
 
     <!-- Team Section -->
@@ -82,14 +126,10 @@
             <span class="section-label">Nuestro team</span>
             <h2>{{ $teamSection->title }}</h2>
             <p>{{ $teamSection->description ?: strip_tags($teamSection->content) }}</p>
-            <a href="{{ $teamSection->url_button }}" class="btn-outline">{{ $teamSection->name_button }}</a>
+            <a href="{{ route('contactanos', ['asunto' => 'informacion-comercial']) }}" class="btn-outline">Solicitar atención comercial <i class="fas fa-comments"></i></a>
         </div>
         <div class="team-photo">
-            <div class="people">
-                @for($i = 0; $i < 8; $i++)
-                    <div class="person"></div>
-                @endfor
-            </div>
+            <img src="{{ asset('images/team_helin_test.png') }}" alt="Team Helin">
         </div>
     </section>
 

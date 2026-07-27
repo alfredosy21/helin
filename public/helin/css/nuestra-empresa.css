@@ -3,10 +3,7 @@
 /* About Hero Section */
 .about-hero {
     min-height: 420px;
-    background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 255, 255, 0.28) 72%),
-        radial-gradient(circle at 70% 40%, rgba(151, 213, 212, 0.30), transparent 34%),
-        linear-gradient(135deg, var(--bg-turquesa-light-1), var(--bg-turquesa-light-3));
+    background: url('/images/banner_empresa.png') right center/cover no-repeat;
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 22px rgba(16, 45, 68, 0.055);
     position: relative;
@@ -18,34 +15,9 @@
     margin-bottom: 28px;
 }
 
-.about-hero:after {
-    content: "";
-    position: absolute;
-    right: 54px;
-    top: 48px;
-    width: 430px;
-    height: 290px;
-    border-radius: 28px;
-    background:
-        radial-gradient(circle at 52% 42%, var(--gray-mist-light) 0 7%, transparent 8%),
-        linear-gradient(135deg, var(--helin-primary-light), var(--bg-turquesa-light-3) 48%, var(--bg-turquesa-light-1));
-    filter: blur(0.1px);
-    box-shadow: 0 20px 46px rgba(16, 45, 68, 0.12);
-    opacity: 0.88;
-}
-
+.about-hero:after,
 .about-hero:before {
-    content: "";
-    position: absolute;
-    right: 265px;
-    top: 125px;
-    width: 78px;
-    height: 180px;
-    border-radius: 24px 24px 12px 12px;
-    background: linear-gradient(90deg, var(--gray-metal), var(--white), var(--gray-darker));
-    transform: rotate(-10deg);
-    z-index: 2;
-    box-shadow: 180px 56px 0 -26px var(--gray-mist), 95px 134px 0 -34px var(--gray-cloud);
+    display: none;
 }
 
 .about-hero-copy {
@@ -80,33 +52,51 @@
 
 .hero-actions {
     display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
+    gap: 12px;
+    flex-wrap: nowrap;
 }
 
 .btn-primary, .btn-outline {
-    height: 44px;
-    padding: 0 22px;
+    height: 38px;
+    padding: 0 16px;
     border-radius: 9999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    font-size: 13px;
     font-weight: 900;
     text-decoration: none;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 
+.btn-primary i,
+.btn-outline i {
+    font-size: 13px;
+}
+
 .btn-primary {
-    border: 0;
+    border: 2px solid var(--helin-primary);
     background: var(--helin-primary);
     color: var(--white);
     box-shadow: 0 13px 22px rgba(107, 194, 195, 0.20);
+}
+
+.btn-primary:hover {
+    background: var(--white);
+    color: var(--helin-primary);
 }
 
 .btn-outline {
     border: 2px solid var(--helin-primary);
     background: var(--white);
     color: var(--helin-primary);
+}
+
+.btn-outline:hover {
+    background: var(--helin-primary);
+    color: var(--white);
 }
 
 /* Section Cards */
@@ -179,87 +169,61 @@
     font-size: var(--text-25px);
 }
 
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.feature {
+    text-align: center;
+}
+
+.feature i {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-gray);
+    color: var(--text-blue-gray);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    font-size: var(--text-25px);
+    margin-bottom: 10px;
+}
+
+.feature h4 {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-dark);
+    line-height: 1.3;
+}
+
+@media (max-width: 720px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 /* About Visual */
 .about-visual {
     min-height: 380px;
     border-radius: 12px;
-    background:
-        radial-gradient(circle at 65% 28%, rgba(255, 255, 255, 0.8), transparent 25%),
-        linear-gradient(135deg, var(--bg-turquesa-light-1), var(--bg-turquesa-light-3));
+    background: url('/images/imagen_empresa.png') center/cover no-repeat;
     position: relative;
     overflow: hidden;
     box-shadow: 0 8px 22px rgba(16, 45, 68, 0.055);
 }
 
-.about-visual:before {
-    content: "helin.";
-    position: absolute;
-    right: 95px;
-    top: 92px;
-    color: var(--white);
-    font-size: 2.75rem;
-    font-weight: 950;
-    letter-spacing: 0;
-    z-index: 2;
-}
-
-.about-visual:after {
-    content: "";
-    position: absolute;
-    right: 52px;
-    top: 62px;
-    width: 260px;
-    height: 155px;
-    border-radius: 22px;
-    background: linear-gradient(135deg, var(--helin-primary-dark), var(--helin-primary));
-    box-shadow: 0 20px 42px rgba(16, 45, 68, 0.16);
-}
-
-.kit-base {
-    position: absolute;
-    right: 82px;
-    bottom: 70px;
-    width: 275px;
-    height: 128px;
-    border-radius: 28px;
-    border: 12px solid rgba(107, 194, 195, 0.30);
-    background: var(--bg-gray);
-    box-shadow: 0 18px 38px rgba(16, 45, 68, 0.14);
-    z-index: 3;
-}
-
-.kit-base:after {
-    content: "";
-    position: absolute;
-    inset: 38px 24px 18px;
-    background: radial-gradient(circle, var(--gray-warm) 0 5px, transparent 6px);
-    background-size: 28px 22px;
-}
-
-.implants-row {
-    position: absolute;
-    left: 54px;
-    bottom: 86px;
-    display: flex;
-    gap: 16px;
-    z-index: 3;
-}
-
-.implant {
-    width: 36px;
-    height: 100px;
-    border-radius: 14px 14px 7px 7px;
-    background: linear-gradient(90deg, var(--gray-warm), var(--white), var(--gray-darkest));
-    position: relative;
-    box-shadow: 0 14px 24px rgba(16, 45, 68, 0.14);
-}
-
-.implant:after {
-    content: "";
-    position: absolute;
-    inset: 32px 5px 8px;
-    background: repeating-linear-gradient(0deg, rgba(8, 20, 28, 0.34) 0 3px, transparent 3px 7px);
-    border-radius: 6px;
+.about-visual:before,
+.about-visual:after,
+.about-visual .kit-base,
+.about-visual .implants-row,
+.about-visual .implant {
+    display: none;
 }
 
 /* Mission Vision */
@@ -320,48 +284,15 @@
 .team-photo {
     min-height: 260px;
     border-radius: 10px;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.40)),
-        linear-gradient(135deg, var(--helin-primary-light), var(--bg-turquesa-light-1));
-    position: relative;
     overflow: hidden;
     box-shadow: 0 8px 22px rgba(16, 45, 68, 0.055);
 }
 
-.people {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 12px;
-    padding-bottom: 18px;
-}
-
-.person {
-    width: 56px;
-    height: 138px;
-    border-radius: 28px 28px 12px 12px;
-    background: var(--gray-blue-dark);
-    position: relative;
-}
-
-.person:nth-child(even) {
-    height: 156px;
-    background: var(--white);
-    border: 1px solid var(--border-color);
-}
-
-.person:before {
-    content: "";
-    position: absolute;
-    top: -32px;
-    left: 13px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: var(--gray-brown);
-    box-shadow: 0 -8px 0 var(--gray-blue-darkest) inset;
+.team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* Allies Section */
@@ -493,6 +424,13 @@
 
     .about-hero h1 {
         font-size: 2.125rem;
+    }
+
+    .hero-actions .btn-primary,
+    .hero-actions .btn-outline {
+        height: 34px;
+        padding: 0 12px;
+        font-size: 12px;
     }
 
     .section-card {

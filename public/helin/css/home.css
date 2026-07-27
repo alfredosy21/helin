@@ -331,6 +331,12 @@
     font-weight: 950;
     box-shadow: 0 16px 30px rgba(15, 47, 67, 0.16);
     text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.hero-btn-primary:hover {
+    background: var(--helin-primary);
+    color: var(--white);
 }
 
 .hero-btn-secondary {
@@ -766,6 +772,11 @@
     font-size: var(--text-12px);
     font-weight: 950;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cart-btn:hover {
+    background: #123F4A;
 }
 
 /* Testimonials Section */
