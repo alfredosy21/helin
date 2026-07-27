@@ -372,7 +372,7 @@
         .then(data => {
             if (data.success) {
                 // Redirect to success page
-                window.location.href = data.redirect_url || '{{ route("solicitud-enviada") }}';
+                window.location.href = data.redirect_url;
             } else {
                 // Show error message
                 alert('Error: ' + (data.message || 'Hubo un error al procesar tu solicitud'));
