@@ -111,14 +111,14 @@
                     <label>Asunto <span>*</span></label>
                     <div class="select-wrapper">
                         <select name="asunto" required>
-                            <option value="" disabled hidden selected>Selecciona un asunto</option>
-                            <option value="informacion-comercial">Información comercial</option>
-                            <option value="asesoria-productos">Asesoría de productos</option>
-                            <option value="cotizacion">Cotización</option>
-                            <option value="disponibilidad">Disponibilidad de productos</option>
-                            <option value="soporte-orden">Soporte de orden</option>
-                            <option value="recursos-clinicos">Recursos clínicos</option>
-                            <option value="otro">Otro</option>
+                            <option value="" disabled hidden {{ request('asunto') ? '' : 'selected' }}>Selecciona un asunto</option>
+                            <option value="informacion-comercial" {{ request('asunto') == 'informacion-comercial' ? 'selected' : '' }}>Información comercial</option>
+                            <option value="asesoria-productos" {{ request('asunto') == 'asesoria-productos' ? 'selected' : '' }}>Asesoría de productos</option>
+                            <option value="cotizacion" {{ request('asunto') == 'cotizacion' ? 'selected' : '' }}>Cotización</option>
+                            <option value="disponibilidad" {{ request('asunto') == 'disponibilidad' ? 'selected' : '' }}>Disponibilidad de productos</option>
+                            <option value="soporte-orden" {{ request('asunto') == 'soporte-orden' ? 'selected' : '' }}>Soporte de orden</option>
+                            <option value="recursos-clinicos" {{ request('asunto') == 'recursos-clinicos' ? 'selected' : '' }}>Recursos clínicos</option>
+                            <option value="otro" {{ request('asunto') == 'otro' ? 'selected' : '' }}>Otro</option>
                         </select>
                         <span class="select-arrow">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>

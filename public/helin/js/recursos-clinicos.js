@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (resourcesContent) resourcesContent.style.opacity = '1';
     }
 
-    function getFilters() {
+    function getFilters(page = 1) {
         const params = new URLSearchParams();
 
         if (searchInput && searchInput.value.trim()) params.append('search', searchInput.value.trim());
@@ -46,12 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        if (page > 1) {
+            params.append('page', page);
+        }
+
         console.log('[Recursos] Filtros activos:', Object.fromEntries(params.entries()));
-        return params.toString();
+        return params;
     }
 
-    async function applyFilters() {
-        const queryString = getFilters();
+    async function applyFilters(page = 1) {
+        const params = getFilters(page);
+        const queryString = params.toString();
         console.log('[Recursos] Llamando AJAX con:', queryString);
 
         try {
@@ -125,21 +130,21 @@ document.addEventListener('DOMContentLoaded', function() {
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
             console.log('[Recursos] Form submit interceptado');
-            applyFilters();
+            applyFilters(1);
         });
     }
 
     if (searchButton) {
         searchButton.addEventListener('click', function(e) {
             e.preventDefault();
-            applyFilters();
+            applyFilters(1);
         });
     }
 
     if (searchInput) {
         searchInput.addEventListener('input', function() {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(applyFilters, 500);
+            debounceTimer = setTimeout(function() { applyFilters(1); }, 500);
             updateClearButton();
         });
     }
@@ -148,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (select) {
             select.addEventListener('change', function() {
                 console.log('[Recursos] Select cambiado:', select.id, '=', select.value);
-                applyFilters();
+                applyFilters(1);
                 updateClearButton();
             });
         }
@@ -162,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 value: checkbox.value,
                 checked: checkbox.checked
             });
-            applyFilters();
+            applyFilters(1);
             updateClearButton();
         });
     });
@@ -178,12 +183,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const sortSelect = document.getElementById('sortSelect');
             if (sortSelect) sortSelect.value = 'position';
             updateClearButton();
-            applyFilters();
+            applyFilters(1);
         });
     }
 
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
-        sortSelect.addEventListener('change', applyFilters);
+        sortSelect.addEventListener('change', function() { applyFilters(1); });
+    }
+
+    updateClearButton();
+
+    // Paginación por AJAX (event delegation)
+    if (resourcesContainer) {
+        resourcesContainer.addEventListener('click', function(e) {
+            const link = e.target.closest('.pagination-wrapper a[href*="page="], .pagination-wrapper a');
+            if (link) {
+                e.preventDefault();
+                const url = new URL(link.href, window.location.origin);
+                const page = parseInt(url.searchParams.get('page') || '1', 10);
+                console.log('[Recursos] Paginación clickeada, página:', page);
+                applyFilters(page);
+            }
+        });
     }
 });

@@ -4,6 +4,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/caso-clinico.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -48,11 +49,9 @@
             </div>
 
             <div class="hero-actions">
-                @if($resource->video_url)
-                    <a href="{{ $resource->video_url }}" target="_blank" class="primary-btn">
-                        <i class="fas fa-play"></i> Ver video completo
-                    </a>
-                @endif
+                <a href="{{ $resource->video_url ?? '#' }}" target="_blank" class="primary-btn">
+                    <i class="fas fa-play"></i> Ver video completo
+                </a>
                 @if($resource->file_path)
                     <a href="{{ asset('storage/' . $resource->file_path) }}" download class="outline-btn">
                         <i class="fas fa-download"></i> Descargar PDF
@@ -61,64 +60,74 @@
             </div>
         </div>
 
-        @if($resource->image)
-            <div class="clinical-photo" style="background-image: url('{{ asset('storage/' . $resource->image) }}'); background-size: cover; background-position: center;"></div>
-        @else
-            <div class="clinical-photo" aria-label="Imagen clínica de referencia"></div>
-        @endif
+        <div class="clinical-photo" style="background-image: url('{{ asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
     </section>
 
     <nav class="tabs">
         <a class="tab active" href="#descripcion">Descripción</a>
-        <a class="tab" href="#protocolo">Protocolo</a>
         <a class="tab" href="#materiales">Materiales utilizados</a>
         <a class="tab" href="#resultados">Resultados</a>
     </nav>
 
     <section class="content-layout">
-        <article class="case-card">
-            <h2>Descripción del caso</h2>
-            <p>{!! $resource->content ?? 'Contenido del caso clínico...' !!}</p>
+        <div class="tab-panels">
+            <section id="descripcion" class="tab-panel active">
+                <article class="case-card">
+                    <h2>Descripción del caso</h2>
+                    <p>Caso clínico de regeneración ósea guiada (ROG) en la zona posterior, realizado para recuperar el volumen óseo perdido y crear las condiciones ideales para una rehabilitación implantológica predecible. El tratamiento se planificó mediante evaluación clínica y radiográfica, priorizando la estabilidad del injerto y la regeneración de tejido óseo de calidad.</p>
+                    <p>{!! $resource->content !!}</p>
 
-            @if($resource->diagnosis)
-                <h3>Diagnóstico inicial</h3>
-                <ul>
-                    @foreach(explode("\n", $resource->diagnosis) as $item)
-                        @if(trim($item))
-                            <li>{{ trim($item) }}</li>
-                        @endif
-                    @endforeach
-                </ul>
-            @endif
+                    <img src="{{ asset('images/regeneracion-osea-guiada-recursos2.jpg') }}" alt="Regeneración ósea guiada" class="case-detail-image">
 
-            @if($resource->gallery && count($resource->gallery) > 0)
-                <div class="case-gallery">
-                    @foreach($resource->gallery as $image)
-                        <div class="case-img" style="background-image: url('{{ asset('storage/' . $image) }}'); background-size: cover; background-position: center;"></div>
-                    @endforeach
-                </div>
-            @endif
-        </article>
+                    @if($resource->diagnosis)
+                        <h3>Diagnóstico inicial</h3>
+                        <ul>
+                            @foreach(explode("\n", $resource->diagnosis) as $item)
+                                @if(trim($item))
+                                    <li>{{ trim($item) }}</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    @if($resource->gallery && count($resource->gallery) > 0)
+                        <div class="case-gallery">
+                            @foreach($resource->gallery as $image)
+                                <div class="case-img" style="background-image: url('{{ asset('storage/' . $image) }}'); background-size: cover; background-position: center;"></div>
+                            @endforeach
+                        </div>
+                    @endif
+                </article>
+            </section>
+
+            <section id="materiales" class="tab-panel">
+                <article class="case-card">
+                    <h2>Materiales utilizados</h2>
+                    <ul>
+                        <li>Biomaterial de injerto óseo.</li>
+                        <li>Membrana para regeneración ósea guiada.</li>
+                        <li>Instrumental de cirugía oral e implantología.</li>
+                        <li>Material de sutura.</li>
+                        <li>Soluciones de irrigación y desinfección.</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section id="resultados" class="tab-panel">
+                <article class="case-card">
+                    <h2>Resultados</h2>
+                    <p>Se evidenció una adecuada regeneración del volumen óseo, con una cicatrización favorable y una integración estable del injerto. El seguimiento confirmó condiciones óptimas para la futura colocación de implantes y una rehabilitación funcional con un pronóstico favorable.</p>
+                </article>
+            </section>
+        </div>
 
         <aside>
             <section class="share-card">
-                <h3>Comparte este recurso</h3>
-                <div class="share-grid">
-                    <a href="https://wa.me/?text={{ urlencode(route('caso-clinico', $resource->id)) }}" target="_blank" class="share-item">
-                        <div class="share-icon"><i class="fab fa-whatsapp"></i></div>
-                        WhatsApp
-                    </a>
-                    <a href="mailto:?subject=Caso Clínico Helin&body={{ urlencode(route('caso-clinico', $resource->id)) }}" class="share-item">
-                        <div class="share-icon"><i class="fas fa-envelope"></i></div>
-                        Correo
-                    </a>
-                    <a href="https://linkedin.com/sharing/share-offsite/?url={{ urlencode(route('caso-clinico', $resource->id)) }}" target="_blank" class="share-item">
-                        <div class="share-icon"><i class="fab fa-linkedin-in"></i></div>
-                        LinkedIn
-                    </a>
-                    <button onclick="navigator.clipboard.writeText(window.location.href)" class="share-item" style="background:none;border:none;cursor:pointer;">
-                        <div class="share-icon"><i class="fas fa-link"></i></div>
-                        Copiar link
+                <div class="share-header">
+                    <h3>Compartir este recurso</h3>
+                    <button type="button" class="share-copy" onclick="copyPageLink(this)" aria-label="Copiar enlace">
+                        <i class="fas fa-link"></i>
+                        <span class="tooltip">Enlace copiado</span>
                     </button>
                 </div>
             </section>
@@ -141,14 +150,53 @@
     <section class="bottom-cta">
         <div class="bottom-icon"><i class="fas fa-comments"></i></div>
         <div>
-            <h2>¿Tienes dudas sobre este caso o los materiales utilizados?</h2>
-            <p>Nuestros asesores clínicos están listos para ayudarte.</p>
+            <h2>¿Tienes un caso similar o necesitas orientación?</h2>
+            <p>Nuestro equipo de especialistas está disponible para brindarte asesoría personalizada y acompañarte en la planificación de tus procedimientos.</p>
         </div>
-        <a href="{{ route('contactanos') }}" class="advisor-btn">
-            <i class="fas fa-phone"></i> Consultar con un asesor
+        <a href="{{ route('contactanos', ['asunto' => 'recursos-clinicos']) }}" class="advisor-btn">
+            <i class="material-icons">email</i> Solicitar asesoría especializada
         </a>
     </section>
 </main>
 
 @include('web.partials.beneficios')
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tabs .tab');
+        const panels = document.querySelectorAll('.tab-panel');
+
+        function activateTab(targetId) {
+            tabs.forEach(function (tab) {
+                tab.classList.toggle('active', tab.getAttribute('href') === '#' + targetId);
+            });
+            panels.forEach(function (panel) {
+                panel.classList.toggle('active', panel.id === targetId);
+            });
+        }
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function (e) {
+                e.preventDefault();
+                activateTab(this.getAttribute('href').substring(1));
+            });
+        });
+
+        if (window.location.hash) {
+            activateTab(window.location.hash.substring(1));
+        }
+    });
+
+    function copyPageLink(button) {
+        navigator.clipboard.writeText(window.location.href).then(function () {
+            const tooltip = button.querySelector('.tooltip');
+            tooltip.classList.add('show');
+            setTimeout(function () {
+                tooltip.classList.remove('show');
+            }, 2000);
+        });
+    }
+</script>
+@endpush
 @endsection

@@ -542,6 +542,13 @@ header .lg\:hidden {
                 radial-gradient(circle at 74% 32%, rgba(255, 255, 255, 0.95), transparent 34%);
 }
 
+.resource-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .resource-type {
     position: absolute;
     top: 14px;

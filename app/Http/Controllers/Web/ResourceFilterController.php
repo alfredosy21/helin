@@ -16,9 +16,9 @@ class ResourceFilterController extends Controller
         $search    = $request->get('search', '');
         $typeId    = $request->get('type', '');
         $specialtyId = $request->get('specialty', '');
-        $format    = $request->get('format[]', []);
-        $resourceType    = $request->get('resource_type[]', []);
-        $resourceSpecialty = $request->get('resource_specialty[]', []);
+        $format            = $request->get('format', []);
+        $resourceType      = $request->get('resource_type', []);
+        $resourceSpecialty = $request->get('resource_specialty', []);
         $sortBy    = $request->get('sort', 'position');
 
         $resourcesQuery = Resource::where('is_active', true);

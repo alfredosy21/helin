@@ -31,7 +31,7 @@
                 </div>
                 <div class="quick-cards">
                     <article class="quick-card">
-                        <div class="quick-icon">C</div>
+                        <div class="quick-icon"><i class="fa fa-file" aria-hidden="true"></i></div>
                         <h4>Casos clínicos</h4>
                         <p>Protocolos, materiales utilizados y resultados.</p>
                     </article>
@@ -46,7 +46,7 @@
                         <p>Documentos técnicos y descargables.</p>
                     </article>
                     <article class="quick-card">
-                        <div class="quick-icon">F</div>
+                        <div class="quick-icon"><i class="fa fa-cloud-download" aria-hidden="true"></i></div>
                         <h4>Fichas técnicas</h4>
                         <p>Información clave de productos y soluciones.</p>
                     </article>
@@ -109,17 +109,17 @@
 
     <!-- Formulario de Búsqueda -->
     <form class="resource-search" id="resourceSearchForm" onsubmit="return false;">
-        <input type="search" name="search" placeholder="Buscar por tema, producto o procedimiento..." id="searchInput">
+        <input type="search" name="search" placeholder="Buscar por tema, producto o procedimiento..." id="searchInput" value="{{ request('search', '') }}">
         <select name="specialty" id="specialtySelect">
             <option value="">Especialidad</option>
                         @foreach($resourceSpecialties as $specialty)
-                <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                <option value="{{ $specialty->id }}" {{ request('specialty') == $specialty->id ? 'selected' : '' }}>{{ $specialty->name }}</option>
             @endforeach
         </select>
         <select name="type" id="typeSelect">
             <option value="">Tipo de recurso</option>
                         @foreach($resourceTypes as $type)
-                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                <option value="{{ $type->id }}" {{ request('type') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
             @endforeach
         </select>
         <button type="button" id="searchButton">Buscar</button>
@@ -140,7 +140,7 @@
                         $count = $type->resources_count;
                     @endphp
                     <label class="filter-check">
-                        <span><input type="checkbox" name="resource_type[]" value="{{ $type->id }}" class="filter-checkbox" data-filter-type="resource_type"> {{ $type->name }}</span>
+                        <span><input type="checkbox" name="resource_type[]" value="{{ $type->id }}" class="filter-checkbox" data-filter-type="resource_type" {{ in_array($type->id, (array) request('resource_type')) ? 'checked' : '' }}> {{ $type->name }}</span>
                         <b class="count">{{ $count }}</b>
                     </label>
                 @endforeach
@@ -152,7 +152,7 @@
                         $count = $specialty->resources_count;
                     @endphp
                     <label class="filter-check">
-                        <span><input type="checkbox" name="resource_specialty[]" value="{{ $specialty->id }}" class="filter-checkbox" data-filter-type="resource_specialty"> {{ $specialty->name }}</span>
+                        <span><input type="checkbox" name="resource_specialty[]" value="{{ $specialty->id }}" class="filter-checkbox" data-filter-type="resource_specialty" {{ in_array($specialty->id, (array) request('resource_specialty')) ? 'checked' : '' }}> {{ $specialty->name }}</span>
                         <b class="count">{{ $count }}</b>
                     </label>
                 @endforeach
@@ -169,7 +169,7 @@
                         };
                     @endphp
                     <label class="filter-check">
-                        <span><input type="checkbox" name="format[]" value="{{ $format->format }}" class="filter-checkbox" data-filter-type="format"> {{ $formatName }}</span>
+                        <span><input type="checkbox" name="format[]" value="{{ $format->format }}" class="filter-checkbox" data-filter-type="format" {{ in_array($format->format, (array) request('format')) ? 'checked' : '' }}> {{ $formatName }}</span>
                         <b class="count">{{ $format->count }}</b>
                     </label>
                 @endforeach

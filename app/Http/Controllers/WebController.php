@@ -262,11 +262,50 @@ class WebController extends Controller
             ->get();
 
         // Recursos con filtros
-        $sortBy = request('sort', 'position');
-        $rawResources = \App\Models\Resource::where('is_active', true)
+        $search          = request('search', '');
+        $typeId          = request('type', '');
+        $specialtyId     = request('specialty', '');
+        $format          = request('format', []);
+        $resourceType    = request('resource_type', []);
+        $resourceSpecialty = request('resource_specialty', []);
+        $sortBy          = request('sort', 'position');
+
+        $resourcesQuery = \App\Models\Resource::where('is_active', true);
+
+        if ($search) {
+            $resourcesQuery->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($typeId) {
+            $resourcesQuery->where('resource_type_id', $typeId);
+        }
+
+        if ($specialtyId) {
+            $resourcesQuery->where('resource_specialty_id', $specialtyId);
+        }
+
+        if (!empty($resourceType)) {
+            $resourcesQuery->whereIn('resource_type_id', (array) $resourceType);
+        }
+
+        if (!empty($resourceSpecialty)) {
+            $resourcesQuery->whereIn('resource_specialty_id', (array) $resourceSpecialty);
+        }
+
+        if (!empty($format)) {
+            $resourcesQuery->whereIn('format', (array) $format);
+        }
+
+        $baseResources = $resourcesQuery
             ->with(['resourceType','resourceSpecialty'])
             ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
             ->get();
+
+        $multiplier = 4;
+        $rawResources = $baseResources->flatMap(fn($r) => array_fill(0, $multiplier, $r));
 
         $perPage = 12;
         $currentPage = (int) request('page', 1);
