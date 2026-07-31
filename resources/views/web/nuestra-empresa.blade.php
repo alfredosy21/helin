@@ -137,20 +137,28 @@
     <section class="section-card allies" id="nuestros-aliados">
         <div>
             <span class="section-label">Nuestros aliados</span>
-            <h2>{{ $alliesSection->title }}</h2>
-            {!! $alliesSection->content !!}
+            <h2>Trabajamos junto a marcas líderes</h2>
+            <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
+        </div>
+        <div class="logos-grid">
+            <div class="brand-card"><img src="{{ asset('images/gdt_logo.jpg') }}" alt="GDT"></div>
+            <div class="brand-card"><img src="{{ asset('images/ab_logo.jpg') }}" alt="AB"></div>
+            <div class="brand-card"><img src="{{ asset('images/bluem_logo.jpg') }}" alt="Bluem"></div>
+            <div class="brand-card"><img src="{{ asset('images/logo_czmedietch.jpg') }}" alt="CZ Medietch"></div>
+            <div class="brand-card"><img src="{{ asset('images/tealth_logo.jpg') }}" alt="Tealth"></div>
+            <div class="brand-card"><img src="{{ asset('images/tissum_logo.jpg') }}" alt="Tissum"></div>
         </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta">
         <div>
-            <h2>{{ $ctaSection->title }}</h2>
-            {!! $ctaSection->content !!}
+            <h2>¿Listo para transformar tu práctica clínica?</h2>
+            <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
         </div>
         <div class="cta-actions">
-            <a href="https://wa.me/584241232025" target="_blank" class="btn-primary">☏ Háblale con WhatsApp</a>
-            <a href="{{ route('contactanos') }}" class="btn-outline">✉ Escríbenos por correo</a>
+            <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Enviar un correo</a>
         </div>
     </section>
 </main>

@@ -1,11 +1,11 @@
 <!-- Barra Informativa Superior -->
 <div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
-    <div class="container mx-auto px-4 py-2 flex items-center justify-center gap-2 sm:gap-4">
+    <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-y-1.5 gap-x-3 sm:gap-4 text-center">
         @php
             $settings = \App\Models\Settings::getSettings();
         @endphp
-        <span class="truncate">{{ $settings->tagline }}</span>
-        <a href="{{ route('catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap">VER PRODUCTOS</a>
+        <span class="leading-snug">{{ $settings->tagline }}</span>
+        <a href="{{ route('catalogo') }}" class="border border-white/30 rounded-full px-3 sm:px-4 py-1 hover:bg-white/10 transition text-xs sm:text-sm whitespace-nowrap flex-shrink-0">VER PRODUCTOS</a>
     </div>
 </div>
 
@@ -263,16 +263,17 @@
             </div>
         </div>
         <!-- Menú Mobile - Scrollable -->
-        <div class="lg:hidden border-t border-helin-border">
-            <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-4 text-sm whitespace-nowrap">
-                <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Productos</a>
-                <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Inicio</a>
-                <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Cirugía Bucal</a>
-                <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Maxilofacial</a>
-                <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Periodoncia</a>
-                <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Ortodoncia</a>
-                <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa font-bold flex-shrink-0">Endodoncia</a>
+        <div class="lg:hidden border-t border-helin-border mobile-category-menu relative">
+            <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-3 text-xs sm:text-sm whitespace-nowrap">
+                <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Productos</a>
+                <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Inicio</a>
+                <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Cirugía Bucal</a>
+                <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Maxilofacial</a>
+                <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Periodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Ortodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Endodoncia</a>
             </div>
+            <span class="scroll-hint-fade" aria-hidden="true"></span>
         </div>
     </div>
 </header>

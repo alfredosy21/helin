@@ -19,13 +19,7 @@
       position: relative;
       overflow: hidden;
       ">
-            <div class="hero-inner relative max-w-6xl mx-auto px-6 py-16 lg:py-20" style="
-         position: relative;
-         display: grid;
-         grid-template-columns: auto 1fr;
-         gap: 2rem;
-         align-items: center;
-         ">
+            <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 lg:gap-8 items-center">
          <!-- Hero Badges -->
          @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
              @php
@@ -50,35 +44,35 @@
          <!-- Hero Copy -->
          <div class="hero-copy text-center lg:text-left">
             <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Precisión para cada procedimiento</small>
-            <h1 class="text-5xl lg:text-7xl leading-tight mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl leading-tight mb-3 sm:mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
                {!! $heroSection->content !!}
             </h1>
             @if($heroSection->description)
-                <p class="text-white text-base lg:text-lg font-body font-normal mb-6 max-w-2xl mx-auto lg:mx-0" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{!! $heroSection->description !!}</p>
+                <p class="text-white text-sm sm:text-base lg:text-lg font-body font-normal mb-4 sm:mb-6 max-w-2xl mx-auto lg:mx-0" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{!! $heroSection->description !!}</p>
             @endif
             @if($heroSection->buttons)
                 @php
                     $buttons = json_decode($heroSection->buttons, true);
                 @endphp
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
+                <div class="grid grid-cols-1 w-fit mx-auto gap-3 sm:flex sm:flex-row sm:w-auto sm:mx-0 sm:gap-4 sm:items-center justify-center lg:justify-start mt-5 sm:mt-8">
                     @foreach($buttons as $button)
                         @if($button['style'] === 'primary')
-                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
+                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-10 px-5 sm:h-12 sm:px-8 rounded-full bg-white text-turquesa text-xs sm:text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
                             {{ $button['text'] }}
                             </a>
                         @else
-                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+                            <a href="{{ $button['url'] === 'catalogo' ? route('catalogo') : ($button['url'] === 'contactanos' ? route('contactanos') : $button['url']) }}" class="w-full sm:w-auto inline-flex items-center justify-center h-10 px-5 sm:h-12 sm:px-8 rounded-full border-2 border-white text-white text-xs sm:text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
                             {{ $button['text'] }}
                             </a>
                         @endif
                     @endforeach
                 </div>
             @else
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8">
-                   <a href="{{ route('catalogo') }}" class="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-white text-turquesa text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
+                <div class="grid grid-cols-1 w-fit mx-auto gap-3 sm:flex sm:flex-row sm:w-auto sm:mx-0 sm:gap-4 sm:items-center justify-center lg:justify-start mt-5 sm:mt-8">
+                   <a href="{{ route('catalogo') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-10 px-5 sm:h-12 sm:px-8 rounded-full bg-white text-turquesa text-xs sm:text-sm font-black shadow-xl hover:shadow-2xl transition-all hover:scale-105" style="box-shadow: 0 16px 30px rgba(15,47,67,.16);">
                    Ir a productos →
                    </a>
-                   <a href="{{ route('contactanos') }}" class="inline-flex items-center justify-center h-12 px-8 rounded-full border-2 border-white text-white text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
+                   <a href="{{ route('contactanos') }}" class="w-full sm:w-auto inline-flex items-center justify-center h-10 px-5 sm:h-12 sm:px-8 rounded-full border-2 border-white text-white text-xs sm:text-sm font-black hover:bg-white/10 transition-all hover:scale-105">
                    Hablar con un asesor
                    </a>
                 </div>
@@ -96,20 +90,12 @@
       <div class="container mx-auto px-4">
          <div class="categories bg-white border border-helin-border rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
             <!-- Categoría Destacada -->
-            <article class="category-featured relative min-h-[200px] rounded-2xl bg-gradient-to-r from-helin-soft to-white/78 p-8 mb-4 border border-helin-border overflow-hidden grid md:grid-cols-2 gap-6 items-center" style="
-               background: linear-gradient(90deg, #f8ffff 0%, rgba(255,255,255,.78) 48%, rgba(151,213,212,.22)),
-               radial-gradient(circle at 76% 40%, rgba(107,194,195,.12), transparent 26%);
-               ">
-               <div>
+            <article class="category-featured relative min-h-[200px] rounded-2xl mb-4 border border-helin-border overflow-hidden">
+               <img src="{{ asset('images/categoria1.png') }}" alt="Implantología" class="category-featured-bg hidden md:block">
+               <div class="category-featured-content">
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
                   <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-link">Ver categoría →</a>
-               </div>
-               <div class="implant-visual relative h-32 hidden md:block">
-                  <div class="implant absolute bottom-2 left-4 w-12 h-32 rounded-2xl bg-gradient-to-r from-gray-300 to-white to-gray-400 transform rotate-12" style="
-                     box-shadow: 72px -18px 0 -7px #c9d4d7, 152px 10px 0 2px #f2ffff;
-                     "></div>
-                  <div class="kit absolute right-2 bottom-0 w-48 h-28 rounded-2xl bg-turquesa/40 border-4 border-turquesa/25"></div>
                </div>
             </article>
             <!-- Skeleton Loader para Categorías -->
@@ -121,12 +107,12 @@
 
             <!-- Grid de Categorías -->
             <div id="categoriesGrid" class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 hidden">
-               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo', ['category' => 'regeneracion-guiada-bucal-gbr'])])
-               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo', ['category' => 'placas'])])
-               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo', ['category' => 'cuidados-especiales-quirurgicos'])])
-               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo', ['category' => 'tijeras'])])
-               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo', ['category' => 'equipos-odontologicos'])])
-               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo', ['category' => 'planificacion-digital'])])
+               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo', ['category' => 'regeneracion-guiada-bucal-gbr']), 'categoryImage' => asset('images/cat2.png')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo', ['category' => 'placas']), 'categoryImage' => asset('images/cat3.png')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo', ['category' => 'cuidados-especiales-quirurgicos']), 'categoryImage' => asset('images/cat4.png')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo', ['category' => 'tijeras']), 'categoryImage' => asset('images/cat5.png')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo', ['category' => 'equipos-odontologicos']), 'categoryImage' => asset('images/cat6.png')])
+               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo', ['category' => 'planificacion-digital']), 'categoryImage' => asset('images/cat7.png')])
             </div>
          </div>
       </div>
@@ -218,7 +204,7 @@
                    ->take(4)
                    ->get() : collect();
            @endphp
-           <section class="py-12 sm:py-16 {{ $index % 2 == 0 ? 'bg-helin-soft' : '' }}">
+           <section class="py-8 sm:py-16 {{ $index % 2 == 0 ? 'bg-helin-soft' : '' }}">
                <div class="container mx-auto px-4">
                    <div class="section-title flex items-end justify-between gap-5 mb-5">
                        <div>
@@ -289,7 +275,7 @@
    @endforeach
 
    <!-- Destacados en Instrumentos y Equipos -->
-   <section class="py-12 sm:py-16">
+   <section class="py-8 sm:py-16">
        <div class="container mx-auto px-4">
            <div class="section-title flex items-end justify-between gap-5 mb-5">
                <div>

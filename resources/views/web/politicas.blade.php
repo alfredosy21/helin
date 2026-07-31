@@ -15,7 +15,9 @@
         ]
     ])
 
-    <h1 class="page-title">Políticas</h1>
+    <header class="policies-header">
+        <h1 class="page-title">Políticas</h1>
+    </header>
 
     <section class="policies">
 
@@ -38,8 +40,11 @@
                      * Parse HTML content to extract policy points
                      */
                     $dom = new DOMDocument();
-                    @$dom->loadHTML($policyContent);
+                    @$dom->loadHTML(mb_convert_encoding($policyContent, 'HTML-ENTITIES', 'UTF-8'));
                     $xpath = new DOMXPath($dom);
+
+                    $introNode = $xpath->query("//body/p")->item(0);
+                    $policyIntro = $introNode ? trim($introNode->textContent) : strip_tags($policyContent);
 
                     $policyPoints = [];
                     $pointNodes = $xpath->query("//div[@class='point']");
@@ -85,7 +90,7 @@
 
                 @include('web.components.policy-card', array_merge($policyData, [
                     'policyTitle' => $section->title,
-                    'policyDescription' => strip_tags($policyContent),
+                    'policyDescription' => $policyIntro,
                     'policyPoints' => $policyPoints
                 ]))
             @endif
