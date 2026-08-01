@@ -32,16 +32,11 @@
 
             <!-- Columna 2: Nuestra Empresa + Políticas -->
             <div>
-                <h4 class="text-base md:text-lg mb-2.5 md:mb-4">Nuestra Empresa</h4>
+                <h4 class="text-base md:text-lg mb-2.5 md:mb-4"><a href="{{ route('nuestra-empresa') }}" class="hover:text-white/80 transition-colors">Nuestra Empresa</a></h4>
                 <ul class="space-y-1.5 md:space-y-2 text-white/80 text-xs md:text-sm leading-snug">
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#mision-vision" class="hover:text-white transition-colors">Misión y visión</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestro-team" class="hover:text-white transition-colors">Nuestro Team</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Nuestro Alianza</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('contactanos') }}" class="hover:text-white transition-colors">Contáctanos</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#envio-garantias" class="hover:text-white transition-colors">Políticas de envío y garantías</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#terminos-condiciones" class="hover:text-white transition-colors">Términos y condiciones</a></li>
-                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}#privacidad" class="hover:text-white transition-colors">Política de privacidad</a></li>
+                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Aliados comerciales</a></li>
+                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}" class="hover:text-white transition-colors">Nuestras políticas</a></li>
                 </ul>
             </div>
 

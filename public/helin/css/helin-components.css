@@ -1,5 +1,17 @@
 /* Helen Components - Shared CSS */
 
+/* Smooth anchor scroll with offset for sticky header */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 120px;
+}
+
+@media (max-width: 768px) {
+    html {
+        scroll-padding-top: 100px;
+    }
+}
+
 /* CSS Variables */
 :root {
     --helin-primary: #6BC2C3;

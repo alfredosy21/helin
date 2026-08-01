@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function getActiveFiltersChips() { return document.getElementById('activeFiltersChips'); }
 
     const filterLabelMap = {
-        'tag': { 'featured': 'Destacados', 'on_sale': 'Ofertas', 'new': 'Nuevos' }
+        'tag': { 'featured': 'Destacados', 'on_sale': 'Ofertas', 'new': 'Nuevos', 'biomaterial': 'Biomateriales' }
     };
 
     function getFilterLabel(type, value) {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chips.forEach(chip => {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'inline-flex items-center gap-1.5 bg-white border border-turquesa text-turquesa text-xs px-3 py-1.5 rounded-full hover:bg-turquesa hover:text-white transition-colors';
+            btn.className = 'inline-flex items-center gap-1.5 bg-white border border-helin-heading text-helin-heading text-xs px-3 py-1.5 rounded-full hover:bg-[rgba(18,63,74,0.08)] transition-colors';
             btn.innerHTML = `<span>${chip.label}</span><i class="fas fa-times"></i>`;
             btn.addEventListener('click', () => removeFilter(chip.type, chip.value));
             activeFiltersChips.appendChild(btn);
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (chips.length > 1) {
             const clearBtn = document.createElement('button');
             clearBtn.type = 'button';
-            clearBtn.className = 'text-xs text-turquesa hover:underline ml-1';
+            clearBtn.className = 'text-xs text-helin-heading hover:underline ml-1';
             clearBtn.textContent = 'Limpiar todos';
             clearBtn.addEventListener('click', clearAll);
             activeFiltersChips.appendChild(clearBtn);
@@ -364,22 +364,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     let hasInitialFilters = false;
 
-    if (urlParams.has('category')) {
-        const slug = urlParams.get('category');
-        const match = document.querySelector(`.filter-checkbox[data-filter-type="category"][value="${slug}"]`);
+    function getParamValues(key) {
+        // Soporta tanto ?key=val como ?key[]=val1&key[]=val2
+        const values = [];
+        if (urlParams.has(key)) {
+            urlParams.getAll(key).forEach(v => values.push(v));
+        }
+        if (urlParams.has(key + '[]')) {
+            urlParams.getAll(key + '[]').forEach(v => values.push(v));
+        }
+        return values;
+    }
+
+    function checkFilter(type, value) {
+        const match = document.querySelector(`.filter-checkbox[data-filter-type="${type}"][value="${value}"]`);
         if (match) {
             match.checked = true;
             hasInitialFilters = true;
         }
     }
-    // Manejar tanto ?featured=1 como ?tag[]=featured
-    if (urlParams.has('featured') || urlParams.has('tag[]')) {
-        const match = document.querySelector(`.filter-checkbox[data-filter-type="tag"][value="featured"]`);
-        if (match) {
-            match.checked = true;
-            hasInitialFilters = true;
-        }
-    }
+
+    getParamValues('category').forEach(v => checkFilter('category', v));
+    getParamValues('brand').forEach(v => checkFilter('brand', v));
+    getParamValues('material').forEach(v => checkFilter('material', v));
+    getParamValues('tag').forEach(v => checkFilter('tag', v));
+
     if (urlParams.has('search') && searchInput) {
         searchInput.value = urlParams.get('search');
         hasInitialFilters = true;

@@ -70,52 +70,29 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
             <p class="text-helin-text mb-6">{{ $product->description }}</p>
 
-            <!-- Selector de Tamaño (Dropdown Custom) -->
+            <!-- Selector de Dimensiones -->
             <div class="mb-6">
-                <h3 class="font-semibold text-helin-heading mb-3">Tamaño</h3>
-                <div class="relative w-48" id="sizeDropdown">
-                    <!-- Trigger -->
-                    <button type="button" id="sizeDropdownTrigger"
-                        class="w-full flex items-center justify-between border border-helin-border rounded-lg px-4 py-2.5 text-sm text-helin-heading bg-white cursor-pointer hover:border-turquesa transition-colors focus:outline-none"
-                        onclick="toggleSizeDropdown()">
-                        <span id="sizeDropdownLabel">Ø3.3 mm</span>
-                        <svg id="sizeDropdownArrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <!-- Options -->
-                    <div id="sizeDropdownMenu" class="hidden absolute z-50 w-full mt-1 bg-white border border-helin-border rounded-lg shadow-lg overflow-hidden">
-                        @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
-                        <div onclick="selectSize(this, '{{ $size }}')"
-                            class="size-option px-4 py-2.5 text-sm cursor-pointer transition-colors {{ $si === 0 ? 'bg-turquesa text-white font-semibold' : 'text-helin-heading hover:bg-turquesa/10 hover:text-turquesa' }}">
+                <h3 class="font-semibold text-helin-heading mb-3">Dimensiones</h3>
+                <div role="radiogroup" aria-label="Dimensiones" class="flex flex-wrap gap-1.5" id="sizeSelector">
+                    @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
+                    <label class="dimension-pill cursor-pointer">
+                        <input type="radio" name="dimension" value="{{ $size }}" {{ $si === 0 ? 'checked' : '' }}
+                            onchange="updatePriceBySize(this.value)"
+                            class="peer sr-only">
+                        <span class="inline-flex items-center justify-center h-7 px-2.5 rounded-full border text-xs font-medium transition-all
+                            bg-white border-gray-300 text-helin-heading
+                            peer-checked:bg-turquesa peer-checked:border-turquesa peer-checked:text-white
+                            peer-focus:ring-1 peer-focus:ring-turquesa/20
+                            hover:bg-slate-50">
                             {{ $size }}
-                        </div>
-                        @endforeach
-                    </div>
+                        </span>
+                    </label>
+                    @endforeach
                 </div>
             </div>
             <script>
-            function toggleSizeDropdown() {
-                const menu = document.getElementById('sizeDropdownMenu');
-                const arrow = document.getElementById('sizeDropdownArrow');
-                menu.classList.toggle('hidden');
-                arrow.classList.toggle('rotate-180');
-            }
-            function selectSize(el, label) {
-                document.getElementById('sizeDropdownLabel').textContent = label;
-                document.querySelectorAll('.size-option').forEach(o => {
-                    o.classList.remove('bg-turquesa','text-white','font-semibold');
-                    o.classList.add('text-helin-heading','hover:bg-turquesa/10','hover:text-turquesa');
-                });
-                el.classList.add('bg-turquesa','text-white','font-semibold');
-                el.classList.remove('text-helin-heading','hover:bg-turquesa/10','hover:text-turquesa');
-                document.getElementById('sizeDropdownMenu').classList.add('hidden');
-                document.getElementById('sizeDropdownArrow').classList.remove('rotate-180');
-
-                // Actualizar precio según el tamaño seleccionado
-                updatePriceBySize(label);
-            }
-
             function updatePriceBySize(size) {
-                // Precios base según tamaño (ajustar según tus datos reales)
+                // Precios base según dimensión (ajustar según tus datos reales)
                 const sizePrices = {
                     'Ø3.3 mm': {
                         base: @json($product->price),
@@ -172,12 +149,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     if (oldPriceEl) oldPriceEl.style.opacity = '0.7';
                 }, 200);
             }
-            document.addEventListener('click', function(e) {
-                if (!document.getElementById('sizeDropdown').contains(e.target)) {
-                    document.getElementById('sizeDropdownMenu').classList.add('hidden');
-                    document.getElementById('sizeDropdownArrow').classList.remove('rotate-180');
-                }
-            });
             </script>
 
             <!-- Cantidad y Botón -->
@@ -199,287 +170,84 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 </button>
             </div>
 
-            <!-- Tags dinámicos del producto -->
-            <div class="mt-6">
-                <div class="flex flex-wrap gap-2" id="productTags">
-                    @php
-                        $productTags = [];
-
-                        // Tags de estado del producto
-                        if($product->is_new) {
-                            $productTags[] = [
-                                'type' => 'status',
-                                'label' => 'Nuevo',
-                                'icon' => 'fas fa-star',
-                                'color' => 'turquesa',
-                                'filter' => 'new'
-                            ];
-                        }
-
-                        if($product->is_featured) {
-                            $productTags[] = [
-                                'type' => 'status',
-                                'label' => 'Destacado',
-                                'icon' => 'fas fa-award',
-                                'color' => 'yellow',
-                                'filter' => 'featured'
-                            ];
-                        }
-
-                        if($product->is_on_sale) {
-                            $productTags[] = [
-                                'type' => 'status',
-                                'label' => 'Oferta',
-                                'icon' => 'fas fa-tag',
-                                'color' => 'red',
-                                'filter' => 'on_sale'
-                            ];
-                        }
-
-                        // Tags de categoría y marca
-                        if($product->category) {
-                            $productTags[] = [
-                                'type' => 'category',
-                                'label' => $product->category->name,
-                                'icon' => 'fas fa-folder',
-                                'color' => 'helin',
-                                'filter' => 'category:' . $product->category->slug
-                            ];
-                        }
-
-                        if($product->brand) {
-                            $productTags[] = [
-                                'type' => 'brand',
-                                'label' => $product->brand->name,
-                                'icon' => 'fas fa-certificate',
-                                'color' => 'helin',
-                                'filter' => 'brand:' . $product->brand->slug
-                            ];
-                        }
-
-                        // Tags adicionales basados en atributos del producto
-                        if($product->material) {
-                            $productTags[] = [
-                                'type' => 'attribute',
-                                'label' => $product->material,
-                                'icon' => 'fas fa-cube',
-                                'color' => 'purple',
-                                'filter' => 'material:' . strtolower($product->material)
-                            ];
-                        }
-
-                        // Tag de biomateriales si aplica
-                        if($product->is_biomaterial ?? false) {
-                            $productTags[] = [
-                                'type' => 'attribute',
-                                'label' => 'Biomateriales',
-                                'icon' => 'fas fa-leaf',
-                                'color' => 'green',
-                                'filter' => 'biomaterial'
-                            ];
-                        }
-                    @endphp
-
-                    @foreach($productTags as $tag)
-                        <a href="{{ route('catalogo', ['tag' => $tag['filter']]) }}"
-                           class="product-tag tag-{{ $tag['type'] }} tag-{{ $tag['color'] }}"
-                           data-tag-type="{{ $tag['type'] }}"
-                           data-tag-filter="{{ $tag['filter'] }}"
-                           onclick="handleTagClick(event, '{{ $tag['filter'] }}')">
-                            <i class="{{ $tag['icon'] }} tag-icon"></i>
-                            <span class="tag-label">{{ $tag['label'] }}</span>
+            <!-- Metadatos del producto -->
+            <div class="mt-6 space-y-3">
+                @if($product->category)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Categoría:</span>
+                        <a href="{{ route('catalogo', ['category' => $product->category->slug]) }}" class="text-helin-heading/90 hover:text-helin-heading hover:underline">
+                            {{ $product->category->name }}
                         </a>
-                    @endforeach
+                    </div>
+                @endif
+
+                @php
+                    $productTags = [];
+
+                    if($product->is_new) {
+                        $productTags[] = ['label' => 'Nuevo', 'filter' => 'new'];
+                    }
+
+                    if($product->is_featured) {
+                        $productTags[] = ['label' => 'Destacado', 'filter' => 'featured'];
+                    }
+
+                    if($product->is_on_sale) {
+                        $productTags[] = ['label' => 'Oferta', 'filter' => 'on_sale'];
+                    }
+
+                    if($product->brand) {
+                        $productTags[] = ['label' => $product->brand->name, 'filter' => 'brand:' . $product->brand->slug];
+                    }
+
+                    if($product->material) {
+                        $productTags[] = ['label' => $product->material, 'filter' => 'material:' . strtolower($product->material)];
+                    }
+
+                    if($product->is_biomaterial ?? false) {
+                        $productTags[] = ['label' => 'Biomateriales', 'filter' => 'biomaterial'];
+                    }
+                @endphp
+
+                @if(count($productTags) > 0)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Tags:</span>
+                        <span class="text-helin-text">
+                            @foreach($productTags as $i => $tag)
+                                @php
+                                    $filter = $tag['filter'];
+                                    if(str_starts_with($filter, 'category:')) {
+                                        $tagUrl = route('catalogo', ['category' => substr($filter, 9)]);
+                                    } elseif(str_starts_with($filter, 'brand:')) {
+                                        $tagUrl = route('catalogo', ['brand' => substr($filter, 6)]);
+                                    } elseif(str_starts_with($filter, 'material:')) {
+                                        $tagUrl = route('catalogo', ['material' => substr($filter, 9)]);
+                                    } else {
+                                        $tagUrl = route('catalogo', ['tag' => $filter]);
+                                    }
+                                @endphp
+                                <a href="{{ $tagUrl }}" class="text-helin-heading/90 hover:text-helin-heading hover:underline">{{ $tag['label'] }}</a>{{ $i < count($productTags) - 1 ? ', ' : '' }}
+                            @endforeach
+                        </span>
+                    </div>
+                @endif
+
+                <div>
+                    <a href="{{ asset('images/ficha_test.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-9 px-4 rounded-full border border-helin-heading/90 bg-white text-sm font-medium text-helin-heading/90 transition-colors hover:text-helin-heading hover:border-helin-heading hover:bg-turquesa/10">
+                        <i class="fas fa-file-pdf text-base mr-2"></i>
+                        Descargar ficha técnica
+                    </a>
                 </div>
             </div>
-
-            <style>
-            .product-tag {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-size: 11px;
-                font-weight: 600;
-                text-decoration: none;
-                transition: all 0.2s ease;
-                border: 1px solid transparent;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .product-tag::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-                transition: left 0.5s ease;
-            }
-
-            .product-tag:hover::before {
-                left: 100%;
-            }
-
-            .product-tag:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            }
-
-            .tag-icon {
-                font-size: 10px;
-                flex-shrink: 0;
-            }
-
-            .tag-label {
-                white-space: nowrap;
-            }
-
-            /* Colores de tags */
-            .tag-turquesa {
-                background: rgba(107, 194, 195, 0.1);
-                color: #0d9488;
-                border-color: rgba(107, 194, 195, 0.2);
-            }
-
-            .tag-turquesa:hover {
-                background: rgba(107, 194, 195, 0.2);
-                color: #0f766e;
-            }
-
-            .tag-yellow {
-                background: rgba(251, 191, 36, 0.1);
-                color: #d97706;
-                border-color: rgba(251, 191, 36, 0.2);
-            }
-
-            .tag-yellow:hover {
-                background: rgba(251, 191, 36, 0.2);
-                color: #b45309;
-            }
-
-            .tag-red {
-                background: rgba(239, 68, 68, 0.1);
-                color: #dc2626;
-                border-color: rgba(239, 68, 68, 0.2);
-            }
-
-            .tag-red:hover {
-                background: rgba(239, 68, 68, 0.2);
-                color: #b91c1c;
-            }
-
-            .tag-helin {
-                background: rgba(71, 85, 105, 0.1);
-                color: #475569;
-                border-color: rgba(71, 85, 105, 0.2);
-            }
-
-            .tag-helin:hover {
-                background: rgba(71, 85, 105, 0.2);
-                color: #334155;
-            }
-
-            .tag-purple {
-                background: rgba(147, 51, 234, 0.1);
-                color: #9333ea;
-                border-color: rgba(147, 51, 234, 0.2);
-            }
-
-            .tag-purple:hover {
-                background: rgba(147, 51, 234, 0.2);
-                color: #7c3aed;
-            }
-
-            .tag-green {
-                background: rgba(34, 197, 94, 0.1);
-                color: #16a34a;
-                border-color: rgba(34, 197, 94, 0.2);
-            }
-
-            .tag-green:hover {
-                background: rgba(34, 197, 94, 0.2);
-                color: #15803d;
-            }
-
-            /* Responsive */
-            @media (max-width: 640px) {
-                .product-tag {
-                    font-size: 10px;
-                    padding: 4px 8px;
-                    gap: 4px;
-                }
-
-                .tag-icon {
-                    font-size: 8px;
-                }
-            }
-            </style>
-
-            <script>
-            function handleTagClick(event, filterValue) {
-                event.preventDefault();
-
-                // Mostrar loading
-                const tag = event.currentTarget;
-                const originalContent = tag.innerHTML;
-                tag.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Cargando...</span>';
-                tag.style.pointerEvents = 'none';
-
-                // Construir URL según el tipo de filtro
-                let url = '/catalogo?';
-
-                if(filterValue.includes(':')) {
-                    const [type, value] = filterValue.split(':');
-                    if(type === 'category') {
-                        url += 'category=' + encodeURIComponent(value);
-                    } else if(type === 'brand') {
-                        url += 'brand=' + encodeURIComponent(value);
-                    } else if(type === 'material') {
-                        url += 'material=' + encodeURIComponent(value);
-                    } else {
-                        url += 'tag=' + encodeURIComponent(filterValue);
-                    }
-                } else {
-                    url += 'tag=' + encodeURIComponent(filterValue);
-                }
-
-                // Redirigir después de un breve delay para mostrar el loading
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 300);
-            }
-            </script>
         </div>
     </div>
 
-    <!-- Sección Central: Tabs + Widget Soporte -->
+    <!-- Sección de Especificaciones + Widget Soporte -->
     <div class="flex flex-col lg:flex-row gap-8 mb-12">
-        <!-- Tabs de Información -->
+        <!-- Especificaciones -->
         <div class="lg:w-2/3">
-            <!-- Tabs Header -->
-            <div class="border-b border-helin-border mb-6">
-                <nav class="flex gap-8">
-                    <button onclick="showTab('descripcion', this)" id="tab-btn-descripcion" class="pb-4 border-b-2 border-turquesa text-turquesa font-bold text-xl">
-                        Descripción
-                    </button>
-                    <button onclick="showTab('especificaciones', this)" id="tab-btn-especificaciones" class="pb-4 border-b-2 border-transparent text-helin-heading hover:text-turquesa font-bold text-xl transition-colors">
-                        Especificaciones
-                    </button>
-                </nav>
-            </div>
-
-            <!-- Contenido Tab Descripción -->
-            <div id="tab-descripcion" class="prose max-w-none leading-relaxed text-helin-text">
-                <p class="mb-4">Producto especializado para procedimientos de osteosíntesis odontológica, diseñado para ofrecer estabilidad, precisión y resistencia en aplicaciones quirúrgicas.</p>
-                <p class="mb-4">Fabricado en titanio grado 5, cuenta con alta biocompatibilidad y resistencia a la corrosión, lo que permite un desempeño confiable en procedimientos de fijación ósea y uso clínico especializado.</p>
-            </div>
-
-            <!-- Contenido Tab Especificaciones -->
-            <div id="tab-especificaciones" class="prose max-w-none leading-relaxed text-helin-text hidden">
+            <h2 class="text-2xl font-bold text-helin-heading mb-6 pb-4 border-b border-helin-border">Especificaciones</h2>
+            <div class="prose max-w-none leading-relaxed text-helin-text">
                 <table class="w-full text-sm border-collapse">
                     <tbody>
                         @foreach([
@@ -492,43 +260,23 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                             'Origen'            => 'Importado',
                         ] as $key => $value)
                         <tr class="border-b border-helin-border">
-                            <td class="py-3 pr-6 font-semibold text-helin-heading w-1/3">{{ $key }}</td>
+                            <td class="py-3 pr-6 font-medium text-helin-heading w-1/3">{{ $key }}</td>
                             <td class="py-3 text-helin-text">{{ $value }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-
-                <div class="mt-6">
-                    <a href="{{ asset('images/ficha_test.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-white text-turquesa border border-turquesa text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-turquesa/10 transition-colors">
-                        <i class="fas fa-file-pdf"></i>
-                        Descargar ficha técnica
-                    </a>
-                </div>
             </div>
-
-            <script>
-            function showTab(tab, btn) {
-                ['descripcion','especificaciones'].forEach(t => {
-                    document.getElementById('tab-' + t).classList.add('hidden');
-                    document.getElementById('tab-btn-' + t).classList.remove('border-turquesa','text-turquesa');
-                    document.getElementById('tab-btn-' + t).classList.add('border-transparent','text-helin-heading');
-                });
-                document.getElementById('tab-' + tab).classList.remove('hidden');
-                btn.classList.remove('border-transparent','text-helin-heading');
-                btn.classList.add('border-turquesa','text-turquesa');
-            }
-            </script>
         </div>
 
         <!-- Widget Soporte -->
         <div class="lg:w-1/3 ml-auto">
             <div class="bg-white rounded-xl overflow-hidden">
                 <div class="flex flex-col items-center pt-4 px-4">
-                    <img src="{{ asset('images/atencion_cliente.png') }}" alt="Atención al cliente Helin" class="h-auto object-cover" style="width: 52%;">
-                    <div class="w-full mt-3 mb-4" style="width: 52%;">
-                        <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-1.5 rounded-full transition-colors flex items-center justify-center gap-2 text-[10px] sm:text-xs">
-                            <i class="fab fa-whatsapp text-sm"></i>
+                    <img src="{{ asset('images/atencion_cliente.png') }}" alt="Atención al cliente Helin" class="h-auto object-cover" style="width: 60%;">
+                    <div class="w-full mt-3 mb-4" style="width: 60%;">
+                        <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2 text-[11px] sm:text-sm">
+                            <i class="fab fa-whatsapp text-base"></i>
                             <span>Chatear con ejecutivo</span>
                         </a>
                     </div>
@@ -540,12 +288,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
     <!-- Productos Relacionados -->
     <section class="mb-12">
-        <div class="mb-6 flex justify-between items-end">
-            <div>
-                <h2 class="text-2xl text-helin-heading mb-1">Productos Relacionados</h2>
-                <p class="text-helin-text text-sm">Conoce los productos relacionados para ti</p>
+        <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+            <div class="w-full">
+                <h2 class="text-2xl text-helin-heading mb-3">Productos Relacionados</h2>
+                <p class="text-helin-text text-sm w-full">Conoce los productos relacionados para ti</p>
             </div>
-            <a href="{{ route('catalogo') }}" class="text-turquesa font-semibold border-b border-turquesa pb-0.5">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
+            <a href="{{ route('catalogo') }}" class="self-start sm:self-auto text-turquesa font-semibold sm:border-b sm:border-turquesa sm:pb-0.5 whitespace-nowrap">Ver todos los productos <i class="fas fa-arrow-right ml-1 text-turquesa"></i></a>
         </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @if($relatedProducts->count() > 0)

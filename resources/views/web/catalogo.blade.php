@@ -21,6 +21,12 @@
 @php
     $sidebarCategories = \App\Models\Category::active()->ordered()->withCount(['products' => fn($q) => $q->where('is_active', true)])->get();
     $sidebarBrands     = \App\Models\Brand::active()->ordered()->get();
+    $sidebarMaterials  = \App\Models\Product::where('is_active', true)->whereNotNull('material')->where('material', '!=', '')->distinct()->orderBy('material')->pluck('material');
+
+    $selectedCategories = (array) request()->input('category');
+    $selectedBrands     = (array) request()->input('brand');
+    $selectedMaterials  = (array) request()->input('material');
+    $selectedTags       = (array) request()->input('tag');
 
     $initSearch   = request('search', '');
     $initCategory = request('category', '');
@@ -84,7 +90,7 @@
                                            class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border"
                                            data-filter-type="category"
                                            value="{{ $cat->slug }}"
-                                           {{ $initCategory === $cat->slug ? 'checked' : '' }}>
+                                           {{ in_array($cat->slug, $selectedCategories) ? 'checked' : '' }}>
                                     <span class="text-helin-text text-sm group-hover:text-turquesa">{{ $cat->name }}</span>
                                 </span>
                                 <span class="w-6 h-6 rounded-full bg-helin-soft text-helin-text text-xs flex items-center justify-center flex-shrink-0">{{ $cat->products_count }}</span>
@@ -104,8 +110,28 @@
                                 <input type="checkbox"
                                        class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border"
                                        data-filter-type="brand"
-                                       value="{{ $brand->slug }}">
+                                       value="{{ $brand->slug }}"
+                                       {{ in_array($brand->slug, $selectedBrands) ? 'checked' : '' }}>
                                 <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">{{ $brand->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <hr class="border-helin-border">
+
+                <!-- Materiales -->
+                <div class="mb-4">
+                    <h4 class="font-semibold text-helin-heading mb-3 text-sm">Materiales</h4>
+                    <div class="space-y-2">
+                        @foreach($sidebarMaterials as $material)
+                            <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors group">
+                                <input type="checkbox"
+                                       class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border"
+                                       data-filter-type="material"
+                                       value="{{ strtolower($material) }}"
+                                       {{ in_array(strtolower($material), $selectedMaterials) ? 'checked' : '' }}>
+                                <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">{{ $material }}</span>
                             </label>
                         @endforeach
                     </div>
@@ -118,16 +144,20 @@
                     <h4 class="font-semibold text-helin-heading mb-3 text-sm">Filtros rápidos</h4>
                     <div class="space-y-2">
                         <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors group">
-                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="featured">
+                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="featured" {{ in_array('featured', $selectedTags) ? 'checked' : '' }}>
                             <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">Destacados</span>
                         </label>
                         <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors group">
-                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="on_sale">
+                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="on_sale" {{ in_array('on_sale', $selectedTags) ? 'checked' : '' }}>
                             <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">Ofertas</span>
                         </label>
                         <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors group">
-                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="new">
+                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="new" {{ in_array('new', $selectedTags) ? 'checked' : '' }}>
                             <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">Nuevos</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer hover:text-turquesa transition-colors group">
+                            <input type="checkbox" class="filter-checkbox w-4 h-4 accent-turquesa rounded border-helin-border" data-filter-type="tag" value="biomaterial" {{ in_array('biomaterial', $selectedTags) ? 'checked' : '' }}>
+                            <span class="ml-2 text-helin-text text-sm group-hover:text-turquesa">Biomateriales</span>
                         </label>
                     </div>
                 </div>

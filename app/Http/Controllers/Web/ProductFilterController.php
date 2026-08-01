@@ -36,9 +36,20 @@ class ProductFilterController extends Controller
         }
 
         if (!empty($tags)) {
-            if (in_array('featured', $tags)) $query->where('is_featured', true);
-            if (in_array('on_sale', $tags))  $query->where('is_on_sale', true);
-            if (in_array('new', $tags))      $query->where('is_new', true);
+            if (in_array('featured', $tags))  $query->where('is_featured', true);
+            if (in_array('on_sale', $tags))   $query->where('is_on_sale', true);
+            if (in_array('new', $tags))       $query->where('is_new', true);
+            if (in_array('biomaterial', $tags)) $query->where('is_biomaterial', true);
+        }
+
+        $material = $request->get('material', []);
+        if (!empty($material)) {
+            $materials = (array) $material;
+            $query->where(function ($q) use ($materials) {
+                foreach ($materials as $m) {
+                    $q->orWhere('material', 'like', '%' . $m . '%');
+                }
+            });
         }
 
         // Apply featured filter if passed directly

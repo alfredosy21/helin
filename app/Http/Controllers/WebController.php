@@ -77,40 +77,45 @@ class WebController extends Controller
         }
 
         // Apply brand filter if present
-        $brandSlug = request('brand');
-        if ($brandSlug) {
-            $brand = \App\Models\Brand::where('slug', $brandSlug)->where('is_active', true)->first();
-            if ($brand) {
-                $query->where('brand_id', $brand->id);
+        $brandSlugs = (array) request('brand');
+        if (!empty($brandSlugs)) {
+            $brandIds = \App\Models\Brand::whereIn('slug', $brandSlugs)->where('is_active', true)->pluck('id');
+            if ($brandIds->isNotEmpty()) {
+                $query->whereIn('brand_id', $brandIds);
             }
         }
 
         // Apply tag filter if present
-        $tag = request('tag');
-        if ($tag) {
-            // Handle different tag types
-            if ($tag === 'new') {
-                $query->where('is_new', true);
-            } elseif ($tag === 'featured') {
-                $query->where('is_featured', true);
-            } elseif ($tag === 'on_sale') {
-                $query->where('is_on_sale', true);
-            } elseif ($tag === 'biomaterial') {
-                $query->where('is_biomaterial', true);
-            } elseif (str_contains($tag, ':')) {
-                // Handle compound tags like "category:slug" or "brand:slug"
-                [$tagType, $tagValue] = explode(':', $tag, 2);
+        $tags = (array) request('tag');
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                if ($tag === 'new') {
+                    $query->where('is_new', true);
+                } elseif ($tag === 'featured') {
+                    $query->where('is_featured', true);
+                } elseif ($tag === 'on_sale') {
+                    $query->where('is_on_sale', true);
+                } elseif ($tag === 'biomaterial') {
+                    $query->where('is_biomaterial', true);
+                } elseif (str_contains($tag, ':')) {
+                    // Handle compound tags like "category:slug" or "brand:slug"
+                    [$tagType, $tagValue] = explode(':', $tag, 2);
 
-                if ($tagType === 'material') {
-                    $query->where('material', 'like', '%' . $tagValue . '%');
+                    if ($tagType === 'material') {
+                        $query->where('material', 'like', '%' . $tagValue . '%');
+                    }
                 }
             }
         }
 
         // Apply material filter if present
-        $material = request('material');
-        if ($material) {
-            $query->where('material', 'like', '%' . $material . '%');
+        $materials = (array) request('material');
+        if (!empty($materials)) {
+            $query->where(function ($q) use ($materials) {
+                foreach ($materials as $m) {
+                    $q->orWhere('material', 'like', '%' . $m . '%');
+                }
+            });
         }
 
 
