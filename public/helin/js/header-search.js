@@ -17,10 +17,10 @@ class HelinHeaderSearch {
 
     init() {
         // Buscador Desktop
-        this.setupSearch('desktop', '#header-search-input', '#header-search-dropdown');
+        this.setupSearch('desktop', '#header-search-input', '#header-search-dropdown', '#header-search-submit');
 
         // Buscador Móvil
-        this.setupSearch('mobile', '#mobile-search-input', '#mobile-search-dropdown');
+        this.setupSearch('mobile', '#mobile-search-input', '#mobile-search-dropdown', '#mobile-search-submit');
 
         // Cerrar dropdowns al hacer clic fuera
         document.addEventListener('click', this.handleOutsideClick.bind(this));
@@ -29,11 +29,20 @@ class HelinHeaderSearch {
         document.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
     }
 
-    setupSearch(type, inputSelector, dropdownSelector) {
+    setupSearch(type, inputSelector, dropdownSelector, submitSelector) {
         const input = document.querySelector(inputSelector);
         const dropdown = document.querySelector(dropdownSelector);
+        const submitBtn = submitSelector ? document.querySelector(submitSelector) : null;
 
         if (!input || !dropdown) return;
+
+        // Botón de lupa
+        if (submitBtn) {
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.executeSearch(type);
+            });
+        }
 
         input.addEventListener('input', (e) => {
             clearTimeout(this.searchTimeout);
@@ -58,8 +67,17 @@ class HelinHeaderSearch {
         });
 
         input.addEventListener('keydown', (e) => {
-            this.handleInputKeydown(e, dropdown);
+            this.handleInputKeydown(e, dropdown, type);
         });
+    }
+
+    executeSearch(type) {
+        const input = document.querySelector(type === 'mobile' ? '#mobile-search-input' : '#header-search-input');
+        const query = input?.value.trim() || '';
+
+        if (query) {
+            window.location.href = '/catalogo?search=' + encodeURIComponent(query);
+        }
     }
 
     async performSearch(query, dropdown, type) {
@@ -93,7 +111,7 @@ class HelinHeaderSearch {
             <div class="${dropdownClass}">
                 <div class="search-results-header">
                     <span class="results-count">${products.length} productos encontrados</span>
-                    <button class="view-all-btn" onclick="window.location.href='/catalogo?search=${encodeURIComponent(searchValue)}'">
+                    <button class="view-all-btn" data-type="${type}">
                         Ver todos <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -104,6 +122,14 @@ class HelinHeaderSearch {
         `;
 
         // Agregar event listeners a los resultados
+        const viewAllBtn = dropdown.querySelector('.view-all-btn');
+        if (viewAllBtn) {
+            viewAllBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.executeSearch(type);
+            });
+        }
+
         dropdown.querySelectorAll('.search-result-item').forEach((item, index) => {
             item.addEventListener('click', () => {
                 if (products[index] && products[index].url) {
@@ -228,7 +254,7 @@ class HelinHeaderSearch {
         }
     }
 
-    handleInputKeydown(e, dropdown) {
+    handleInputKeydown(e, dropdown, type) {
         const items = dropdown.querySelectorAll('.search-result-item');
 
         switch(e.key) {
@@ -248,6 +274,8 @@ class HelinHeaderSearch {
                 e.preventDefault();
                 if (this.selectedIndex >= 0 && items[this.selectedIndex]) {
                     items[this.selectedIndex].click();
+                } else {
+                    this.executeSearch(type);
                 }
                 break;
 
@@ -260,6 +288,8 @@ class HelinHeaderSearch {
 
     handleKeyboardNavigation(e) {
         // Manejar navegación global si está activo el buscador
+        if (e.defaultPrevented) return;
+
         const activeElement = document.activeElement;
         const isSearchInput = activeElement?.id === 'header-search-input' || activeElement?.id === 'mobile-search-input';
 
@@ -269,8 +299,9 @@ class HelinHeaderSearch {
                                '#header-search-dropdown' : '#mobile-search-dropdown';
         const dropdown = document.querySelector(dropdownSelector);
 
-        if (dropdown && !dropdown.classList.contains('hidden')) {
-            this.handleInputKeydown(e, dropdown);
+        if (dropdown) {
+            const type = activeElement?.id === 'header-search-input' ? 'desktop' : 'mobile';
+            this.handleInputKeydown(e, dropdown, type);
         }
     }
 

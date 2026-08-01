@@ -41,7 +41,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
+                            <button type="button" id="header-search-submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-1">
                                 <i class="fas fa-search text-sm"></i>
                             </button>
                         </div>
@@ -88,7 +88,7 @@
                             <i class="fas fa-search text-helin-text mr-2 text-sm"></i>
                             <input type="text" id="mobile-search-input" placeholder="Buscar productos..." autocomplete="off" class="flex-1 outline-none text-helin-heading text-sm w-full">
                         </div>
-                        <button type="submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
+                        <button type="button" id="mobile-search-submit" class="bg-turquesa hover:bg-turquesa-dark text-white w-10 h-10 flex items-center justify-center transition-colors flex-shrink-0 rounded-full mx-0.5">
                             <i class="fas fa-search text-sm"></i>
                         </button>
                     </div>
