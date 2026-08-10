@@ -2,10 +2,9 @@
     <div class="resource-thumb">
         @if(!empty($resourceImage))
             <img src="{{ $resourceImage }}"
-                 data-src="{{ $resourceImage }}"
-                 data-fallback="{{ asset('images/placeholder-resource.webp') }}"
                  alt="{{ $resourceTitle ?? '' }}"
-                 class="resource-thumb-img lazy-image">
+                 class="resource-thumb-img"
+                 loading="lazy">
         @endif
         <span class="resource-type">{{ $resourceType ?? '' }}</span>
         <span class="resource-play">{{ $resourcePlay ?? '→' }}</span>

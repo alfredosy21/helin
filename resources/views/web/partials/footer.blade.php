@@ -9,10 +9,8 @@
             @endphp
             @if($settings && $settings->image)
                 <img src="{{ asset('storage/' . $settings->image) }}"
-                     data-src="{{ asset('storage/' . $settings->image) }}"
-                     data-fallback="{{ asset('images/logo-helin.webp') }}"
                      alt="Helin"
-                     class="h-9 md:h-12 w-auto mb-2 md:mb-4 lazy-image">
+                     class="h-9 md:h-12 w-auto mb-2 md:mb-4">
             @else
                 <h3 class="text-2xl md:text-3xl mb-2 md:mb-4 lowercase">helin.</h3>
             @endif

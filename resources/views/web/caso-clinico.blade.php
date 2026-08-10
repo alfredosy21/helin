@@ -77,7 +77,7 @@
                     <p>Caso clínico de regeneración ósea guiada (ROG) en la zona posterior, realizado para recuperar el volumen óseo perdido y crear las condiciones ideales para una rehabilitación implantológica predecible. El tratamiento se planificó mediante evaluación clínica y radiográfica, priorizando la estabilidad del injerto y la regeneración de tejido óseo de calidad.</p>
                     <p>{!! $resource->content !!}</p>
 
-                    <img src="{{ asset('images/regeneracion-osea-guiada-recursos2.jpg') }}" alt="Regeneración ósea guiada" class="case-detail-image">
+                    <img src="{{ asset('images/regeneracion-osea-guiada-recursos2.jpg') }}" alt="Regeneración ósea guiada" class="case-detail-image" loading="lazy">
 
                     @if($resource->diagnosis)
                         <h3>Diagnóstico inicial</h3>
