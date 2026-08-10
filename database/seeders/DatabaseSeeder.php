@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             CustomerTypeSeeder::class,
             DeliveryMethodSeeder::class,
             StateCitySeeder::class,
+            WhatsAppNumberSeeder::class,
         ]);
     }
 }

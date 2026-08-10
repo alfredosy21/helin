@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Resource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ResourceFilterController extends Controller
 {
@@ -72,6 +73,13 @@ class ResourceFilterController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
+        // Contadores dinámicos por grupo de filtros (excluyendo el propio grupo)
+        $counts = [
+            'resource_type' => $this->countByGroup($search, $typeId, $specialtyId, $format, $resourceType, $resourceSpecialty, 'resource_type'),
+            'resource_specialty' => $this->countByGroup($search, $typeId, $specialtyId, $format, $resourceType, $resourceSpecialty, 'resource_specialty'),
+            'format' => $this->countByGroup($search, $typeId, $specialtyId, $format, $resourceType, $resourceSpecialty, 'format'),
+        ];
+
         $iconMap  = [
             'case_study'        => '→',
             'video'             => '▶',
@@ -94,6 +102,60 @@ class ResourceFilterController extends Controller
             'success' => true,
             'html'    => $html,
             'count'   => $resources->total(),
+            'counts'  => $counts,
         ]);
+    }
+
+    /**
+     * Cuenta recursos por grupo excluyendo el filtro del propio grupo.
+     */
+    private function countByGroup(
+        string $search,
+        $typeId,
+        $specialtyId,
+        $format,
+        $resourceType,
+        $resourceSpecialty,
+        string $group
+    ): array {
+        $query = Resource::where('is_active', true);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($typeId && $group !== 'resource_type') {
+            $query->where('resource_type_id', $typeId);
+        }
+
+        if ($specialtyId && $group !== 'resource_specialty') {
+            $query->where('resource_specialty_id', $specialtyId);
+        }
+
+        if (!empty($format) && $group !== 'format') {
+            $query->whereIn('format', (array) $format);
+        }
+
+        if (!empty($resourceType) && $group !== 'resource_type') {
+            $query->whereIn('resource_type_id', (array) $resourceType);
+        }
+
+        if (!empty($resourceSpecialty) && $group !== 'resource_specialty') {
+            $query->whereIn('resource_specialty_id', (array) $resourceSpecialty);
+        }
+
+        $column = match ($group) {
+            'resource_type' => 'resource_type_id',
+            'resource_specialty' => 'resource_specialty_id',
+            'format' => 'format',
+        };
+
+        return $query->select($column, DB::raw('count(*) as total'))
+            ->groupBy($column)
+            ->pluck('total', $column)
+            ->toArray();
     }
 }

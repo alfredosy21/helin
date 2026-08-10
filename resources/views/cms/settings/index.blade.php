@@ -128,31 +128,30 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Caracas Office -->
                     <div class="space-y-4">
-                        <h3 class="font-semibold text-slate-800 border-b pb-2">Caracas</h3>
-                        <x-ui-input label="Teléfono Oficina Caracas" wire:model="phone" placeholder="+58 424 278 9481" />
-                        <x-ui-input label="WhatsApp Caracas (URL)" wire:model="caracas_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
-                        <x-ui-textarea label="Ubicación Caracas" wire:model="caracas_location" rows="2" placeholder="Dirección completa de la sede Caracas" />
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Caracas (Zona 1)</h3>
+                        <x-ui-input label="WhatsApp Caracas (URL)" wire:model="caracas_whatsapp" placeholder="https://wa.me/584242789481" />
+                        <x-ui-textarea label="Dirección punto de retiro Caracas" wire:model="caracas_location" rows="2" placeholder="Dirección del punto de retiro Caracas" />
                     </div>
 
                     <!-- Valencia Office -->
                     <div class="space-y-4">
-                        <h3 class="font-semibold text-slate-800 border-b pb-2">Valencia</h3>
-                        <x-ui-input label="WhatsApp Valencia (URL)" wire:model="valencia_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
-                        <x-ui-textarea label="Ubicación Valencia" wire:model="valencia_location" rows="2" placeholder="Dirección completa de la sede Valencia" />
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Valencia (Zona 2)</h3>
+                        <x-ui-input label="WhatsApp Valencia (URL)" wire:model="valencia_whatsapp" placeholder="https://wa.me/584244669150" />
+                        <x-ui-textarea label="Dirección punto de retiro Valencia" wire:model="valencia_location" rows="2" placeholder="Dirección del punto de retiro Valencia" />
                     </div>
 
                     <!-- Maracaibo Office -->
                     <div class="space-y-4">
-                        <h3 class="font-semibold text-slate-800 border-b pb-2">Maracaibo</h3>
-                        <x-ui-input label="WhatsApp Maracaibo (URL)" wire:model="maracaibo_whatsapp" placeholder="https://wa.me/58424XXXXXXX" />
-                        <x-ui-textarea label="Ubicación Maracaibo" wire:model="maracaibo_location" rows="2" placeholder="Dirección completa de la sede Maracaibo" />
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Maracaibo (Zona 4)</h3>
+                        <x-ui-input label="WhatsApp Maracaibo (URL)" wire:model="maracaibo_whatsapp" placeholder="https://wa.me/584242550811" />
+                        <x-ui-textarea label="Dirección punto de retiro Maracaibo" wire:model="maracaibo_location" rows="2" placeholder="Dirección del punto de retiro Maracaibo" />
                     </div>
 
                     <!-- Barquisimeto Office -->
                     <div class="space-y-4">
-                        <h3 class="font-semibold text-slate-800 border-b pb-2">Barquisimeto</h3>
-                        <x-ui-input label="WhatsApp Barquisimeto (URL)" wire:model="barquisimeto_whatsapp" placeholder="https://wa.me/58414XXXXXXX" />
-                        <x-ui-textarea label="Ubicación Barquisimeto" wire:model="barquisimeto_location" rows="2" placeholder="Dirección completa de la sede Barquisimeto" />
+                        <h3 class="font-semibold text-slate-800 border-b pb-2">Barquisimeto (Zona 3)</h3>
+                        <x-ui-input label="WhatsApp Barquisimeto (URL)" wire:model="barquisimeto_whatsapp" placeholder="https://wa.me/584143805640" />
+                        <x-ui-textarea label="Dirección punto de retiro Barquisimeto" wire:model="barquisimeto_location" rows="2" placeholder="Dirección del punto de retiro Barquisimeto" />
                     </div>
                 </div>
             </div>

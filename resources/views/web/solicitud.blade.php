@@ -174,7 +174,8 @@
                     <!-- Información de punto de retiro -->
                     <div id="pickup-info" class="mt-4 hidden bg-turquesa/10 border border-turquesa/30 rounded-lg p-4">
                         <p class="text-sm font-medium text-helin-heading mb-1">Punto de retiro</p>
-                        <p class="text-sm text-helin-heading/80">Centro Ciudad Comercial Tamanaco, Caracas.</p>
+                        <p id="pickup-location" class="text-sm text-helin-heading/80 mb-2"></p>
+                        <a id="pickup-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm text-turquesa font-medium hover:underline"></a>
                     </div>
                 </div>
 
@@ -424,6 +425,31 @@
     const pickupInfoBlock = document.getElementById('pickup-info');
     const shippingFields = document.querySelectorAll('.shipping-field');
 
+    const pickupData = @json($pickups);
+    const estadoInput = document.getElementById('estado-input');
+    const pickupLocation = document.getElementById('pickup-location');
+    const pickupWhatsapp = document.getElementById('pickup-whatsapp');
+
+    function updatePickupInfo() {
+        const stateCode = estadoInput?.value;
+        const info = stateCode ? pickupData[stateCode] : null;
+
+        if (!info || !info.location) {
+            pickupInfoBlock?.classList.add('hidden');
+            return;
+        }
+
+        pickupLocation.textContent = info.location;
+
+        if (info.whatsapp) {
+            pickupWhatsapp.href = info.whatsapp;
+            pickupWhatsapp.textContent = `WhatsApp ${info.label}`;
+            pickupWhatsapp.classList.remove('hidden');
+        } else {
+            pickupWhatsapp.classList.add('hidden');
+        }
+    }
+
     function updateShippingFields() {
         const selectedEnvio = envioInput?.value;
         const hasDeliveryMethod = !!selectedEnvio;
@@ -432,6 +458,10 @@
 
         shippingDataBlock?.classList.toggle('hidden', !needsShipping);
         pickupInfoBlock?.classList.toggle('hidden', !isPickup);
+
+        if (isPickup) {
+            updatePickupInfo();
+        }
 
         if (paymentMethodsBlock) {
             paymentMethodsBlock.classList.toggle('opacity-50', !hasDeliveryMethod);
@@ -452,6 +482,11 @@
     }
 
     envioInput?.addEventListener('change', updateShippingFields);
+    estadoInput?.addEventListener('change', function () {
+        if (envioInput?.value === 'pickup') {
+            updatePickupInfo();
+        }
+    });
     updateShippingFields();
 
     const panel      = document.getElementById('payment-description');

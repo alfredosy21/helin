@@ -27,7 +27,7 @@
             <div class="hero-panel">
                 <div class="panel-title">
                     <h3>Encuentra contenido por tipo</h3>
-         
+
                 </div>
                 <div class="quick-cards">
                     <article class="quick-card">
@@ -141,7 +141,7 @@
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="resource_type[]" value="{{ $type->id }}" class="filter-checkbox" data-filter-type="resource_type" {{ in_array($type->id, (array) request('resource_type')) ? 'checked' : '' }}> {{ $type->name }}</span>
-                        <b class="count">{{ $count }}</b>
+                        <b class="count" data-count-type="resource_type" data-count-id="{{ $type->id }}">{{ $count }}</b>
                     </label>
                 @endforeach
             </div>
@@ -153,7 +153,7 @@
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="resource_specialty[]" value="{{ $specialty->id }}" class="filter-checkbox" data-filter-type="resource_specialty" {{ in_array($specialty->id, (array) request('resource_specialty')) ? 'checked' : '' }}> {{ $specialty->name }}</span>
-                        <b class="count">{{ $count }}</b>
+                        <b class="count" data-count-type="resource_specialty" data-count-id="{{ $specialty->id }}">{{ $count }}</b>
                     </label>
                 @endforeach
             </div>
@@ -170,7 +170,7 @@
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="format[]" value="{{ $format->format }}" class="filter-checkbox" data-filter-type="format" {{ in_array($format->format, (array) request('format')) ? 'checked' : '' }}> {{ $formatName }}</span>
-                        <b class="count">{{ $format->count }}</b>
+                        <b class="count" data-count-type="format" data-count-id="{{ $format->format }}">{{ $format->count }}</b>
                     </label>
                 @endforeach
             </div>

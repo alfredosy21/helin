@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const typeSelect = document.getElementById('typeSelect');
     const searchButton = document.getElementById('searchButton');
     const resourcesContent = document.getElementById('resourcesContent');
+    const resourcesContainer = document.getElementById('resourcesContainer');
     const loadingIndicator = document.getElementById('loadingIndicator');
     const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
 
@@ -91,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 resourcesContent.innerHTML = data.html;
                 console.log(`[Recursos] DOM actualizado con ${data.count} recursos`);
 
+                updateCounts(data.counts);
+
                 const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
                 window.history.pushState({}, '', newUrl);
 
@@ -111,6 +114,18 @@ document.addEventListener('DOMContentLoaded', function() {
         } finally {
             hideLoading();
         }
+    }
+
+    function updateCounts(counts) {
+        if (!counts) return;
+
+        Object.keys(counts).forEach(group => {
+            const groupCounts = counts[group];
+            Object.keys(groupCounts).forEach(id => {
+                const el = document.querySelector(`.count[data-count-type="${group}"][data-count-id="${CSS.escape(id)}"]`);
+                if (el) el.textContent = groupCounts[id];
+            });
+        });
     }
 
     function hasActiveFilters() {
@@ -197,12 +212,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Paginación por AJAX (event delegation)
     if (resourcesContainer) {
         resourcesContainer.addEventListener('click', function(e) {
-            const link = e.target.closest('.pagination-wrapper a[href*="page="], .pagination-wrapper a');
+            const link = e.target.closest('.pagination-wrapper a');
             if (link) {
                 e.preventDefault();
                 const url = new URL(link.href, window.location.origin);
-                const page = parseInt(url.searchParams.get('page') || '1', 10);
+                const pageMatch = url.search.match(/[?&]page=(\d+)/);
+                const page = pageMatch ? parseInt(pageMatch[1], 10) : 1;
                 console.log('[Recursos] Paginación clickeada, página:', page);
+                window.scrollTo({ top: resourcesContainer.offsetTop - 100, behavior: 'smooth' });
                 applyFilters(page);
             }
         });

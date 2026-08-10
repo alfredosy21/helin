@@ -18,7 +18,9 @@ class StateCitySeeder extends Seeder
             'LA' => 'Lara',
             'AN' => 'Anzoátegui',
             'AP' => 'Apure',
+            'AM' => 'Amazonas',
             'BA' => 'Barinas',
+            'CO' => 'Cojedes',
             'BO' => 'Bolívar',
             'DF' => 'Delta Amacuro',
             'FA' => 'Falcón',
@@ -70,6 +72,12 @@ class StateCitySeeder extends Seeder
             ],
             'AP' => [
                 'San Fernando de Apure', 'Achaguas', 'Biruaca', 'Mucuchíes', 'El Samán', 'Guasdualito', 'San Juan de Payara', 'Elorza', 'Bruzual',
+            ],
+            'AM' => [
+                'Puerto Ayacucho', 'San Fernando de Atabapo', 'La Esmeralda', 'Maroa', 'Isla Ratón',
+            ],
+            'CO' => [
+                'San Carlos', 'Tinaquillo', 'El Baúl', 'Tinaco', 'Las Vegas',
             ],
             'BA' => [
                 'Barinas', 'Santo Domingo', 'Ciudad Bolivia', 'Barinitas', 'Calabozo', 'Santa Bárbara', 'Sabaneta', 'Obispos', 'Pedraza', 'Los Cortijos', 'San Silvestre',

@@ -175,8 +175,52 @@ class WebController extends Controller
         $paymentMethods  = \App\Models\PaymentMethod::active()->ordered()->get();
         $states          = \App\Models\State::ordered()->get();
         $cities          = \App\Models\City::all(); // all for JS filter
+        $settings        = \App\Models\Settings::getSettings();
 
-        return view('web.solicitud', compact('customerTypes', 'deliveryMethods', 'paymentMethods', 'states', 'cities'));
+        $pickupInfo = [
+            // Zona 1 - Ejecutivo Caracas
+            'DC' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'MI' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'VA' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'AN' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'SU' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'MO' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'NE' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'DF' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'BO' => ['city' => 'caracas', 'label' => 'Caracas'],
+            // Zona 2 - Ejecutivo Valencia
+            'CA' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'AR' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'CO' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'GU' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'AP' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'AM' => ['city' => 'valencia', 'label' => 'Valencia'],
+            // Zona 3 - Ejecutivo Barquisimeto
+            'LA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'YA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'PO' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'BA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'ME' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'TR' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'TA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            // Zona 4 - Ejecutivo Maracaibo
+            'ZU' => ['city' => 'maracaibo', 'label' => 'Maracaibo'],
+            'FA' => ['city' => 'maracaibo', 'label' => 'Maracaibo'],
+        ];
+
+        $pickups = [];
+        foreach ($pickupInfo as $code => $meta) {
+            $whatsapp = $settings->{"{$meta['city']}_whatsapp"} ?? null;
+            $location = $settings->{"{$meta['city']}_location"} ?? null;
+
+            $pickups[$code] = [
+                'label'    => $meta['label'],
+                'whatsapp' => $whatsapp,
+                'location' => $location,
+            ];
+        }
+
+        return view('web.solicitud', compact('customerTypes', 'deliveryMethods', 'paymentMethods', 'states', 'cities', 'settings', 'pickups'));
     }
 
     /**
@@ -416,6 +460,20 @@ class WebController extends Controller
             }
         }
 
-        return view('web.solicitud-enviada', compact('uuid', 'commercialRequest', 'cartItems', 'subtotal'));
+        // Obtener tasa de conversión a Bs. desde la API CV (DolarAPI Venezuela)
+        $tasa = 0;
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(10)
+                ->get('https://ve.dolarapi.com/v1/dolares/oficial');
+            if ($response->successful()) {
+                $tasa = (float) ($response->json('promedio') ?? 0);
+            }
+        } catch (\Exception $e) {
+            report($e);
+        }
+
+        $total = $subtotal * $tasa;
+
+        return view('web.solicitud-enviada', compact('uuid', 'commercialRequest', 'cartItems', 'subtotal', 'tasa', 'total'));
     }
 }

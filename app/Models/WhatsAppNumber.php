@@ -8,6 +8,7 @@ class WhatsAppNumber extends Model
 {
     protected $fillable = [
         'phone_number',
+        'executive_name',
         'state_id',
         'is_active',
         'description',
