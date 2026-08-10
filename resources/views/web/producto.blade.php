@@ -73,22 +73,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             <!-- Selector de Dimensiones -->
             <div class="mb-6">
                 <h3 class="font-semibold text-helin-heading mb-3">Dimensiones</h3>
-                <div role="radiogroup" aria-label="Dimensiones" class="flex flex-wrap gap-1.5" id="sizeSelector">
+                <select id="sizeSelector" aria-label="Dimensiones" onchange="updatePriceBySize(this.value)"
+                    class="w-full sm:w-56 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-helin-heading outline-none cursor-pointer focus:ring-1 focus:ring-turquesa/30 focus:border-turquesa">
                     @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
-                    <label class="dimension-pill cursor-pointer">
-                        <input type="radio" name="dimension" value="{{ $size }}" {{ $si === 0 ? 'checked' : '' }}
-                            onchange="updatePriceBySize(this.value)"
-                            class="peer sr-only">
-                        <span class="inline-flex items-center justify-center h-7 px-2.5 rounded-full border text-xs font-medium transition-all
-                            bg-white border-gray-300 text-helin-heading
-                            peer-checked:bg-turquesa peer-checked:border-turquesa peer-checked:text-white
-                            peer-focus:ring-1 peer-focus:ring-turquesa/20
-                            hover:bg-slate-50">
-                            {{ $size }}
-                        </span>
-                    </label>
+                        <option value="{{ $size }}" {{ $si === 0 ? 'selected' : '' }}>{{ $size }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
             <script>
             function updatePriceBySize(size) {
@@ -172,6 +162,13 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
             <!-- Metadatos del producto -->
             <div class="mt-6 space-y-3">
+                @if($product->sku)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">SKU:</span>
+                        <span class="text-helin-heading/90">{{ $product->sku }}</span>
+                    </div>
+                @endif
+
                 @if($product->category)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">Categoría:</span>
