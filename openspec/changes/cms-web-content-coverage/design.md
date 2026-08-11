@@ -84,6 +84,30 @@ Proyecto Laravel + Livewire + Blade brownfield. El CMS vive bajo `/cms` con cont
 
 **Alternativa considerada**: Tabla `offices` con CRUD. Se descarta por ser pocos datos y ya existir el patrón de Settings con campos individuales — el JSON es el paso natural.
 
+### D11: Resolución de `page_slug` en el layout mediante `Route::currentRouteName()`
+**Decisión**: El layout `app.blade.php` obtiene el slug de la página actual con `Route::currentRouteName()` (ej. `home`, `contactanos`, `nuestra-empresa`, `politicas`, `recursos-clinicos`) y consulta `PageSeo::where('page_slug', $routeName)->first()`. Si no existe registro, usa los valores globales de `Settings` como fallback.
+
+**Rationale**: Laravel expone `Route::currentRouteName()` en cualquier vista sin necesidad de pasar variables desde el controlador. Los nombres de ruta ya existen y son estables (`home`, `catalogo`, `producto`, `contactanos`, `nuestra-empresa`, `politicas`, `recursos-clinicos`, `caso-clinico`, `solicitud`, `solicitud-enviada`). No requiere modificar ningún controlador. La consulta se cachea con `Cache::remember()` o se carga en `View::share()` desde un middleware para evitar una consulta por render.
+
+**Alternativa considerada 1**: Pasar `$pageSlug` desde cada controlador. Se descarta porque requiere modificar todos los controladores web y es propenso a olvidos.
+**Alternativa considerada 2**: Usar `request()->path()` en lugar del nombre de ruta. Se descarta porque las rutas pueden cambiar de path sin cambiar de nombre, y los paths tienen prefijos/parámetros (`producto/{slug}`) que no mapean a un slug estable.
+
+### D12: Migración de datos de sedes individuales a JSON `offices` dentro de la migración (no solo seeder)
+**Decisión**: La migración que añade `offices` a `settings` incluye un paso de migración de datos que lee los valores existentes de `caracas_location`, `valencia_location`, `barquisimeto_location` y los consolida en el JSON `offices` con un `UPDATE`. El método `down()` revierte el JSON a los campos individuales antes de eliminar la columna.
+
+**Rationale**: Si hay datos en producción, el seeder no es suficiente porque los seeders se usan para datos iniciales, no para migrar datos existentes. La migración debe ser idempotente: si los campos individuales ya tienen valores, los migra al JSON; si están vacíos, deja `offices` como null. Esto garantiza que la transición no pierda datos en ningún entorno.
+
+**Estructura del `up()`**:
+1. Añadir columna `offices` JSON nullable.
+2. Leer el registro único de `settings`.
+3. Si `caracas_location` o `valencia_location` o `barquisimeto_location` tienen valor, construir el JSON `[{name: "Caracas", url: "...", active: true}, ...]` y hacer `UPDATE`.
+4. (Opcional) Mantener las columnas individuales durante esta migración para rollback seguro; se eliminan en una migración posterior una vez verificado que `offices` funciona.
+
+**Estructura del `down()`**:
+1. Leer `offices` JSON.
+2. Para cada entrada, restaurar el valor en el campo individual correspondiente (`caracas_location`, etc.).
+3. Eliminar la columna `offices`.
+
 ## Risks / Trade-offs
 
 - **[Riesgo] Alcance amplio** → Mitigación: División en 3 fases aplicables incrementalmente. Cada fase deja el sistema funcional.

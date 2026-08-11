@@ -138,15 +138,19 @@ La vista de solicitud enviada SHALL mostrar los datos reales de la solicitud y n
 - **THEN** la vista muestra un mensaje indicando que no hay productos, no productos falsos hardcodeados
 
 ### Requirement: SEO por página estática gestionable
-El título, meta description y meta keywords de cada página estática (home, contacto, nuestra-empresa, políticas, recursos-clinicos) SHALL provenir de la tabla `page_seo`, consultada por `page_slug`, con fallback a `Settings` globales. No se usarán literales hardcodeados en Blade.
+El título, meta description y meta keywords de cada página estática (home, contacto, nuestra-empresa, políticas, recursos-clinicos) SHALL provenir de la tabla `page_seo`, consultada por `page_slug` usando `Route::currentRouteName()` como slug, con fallback a `Settings` globales. No se usarán literales hardcodeados en Blade.
 
 #### Scenario: Editar SEO de la página de contacto
-- **WHEN** el administrador edita el SEO de la página con slug `contacto` desde el submódulo Page SEO
+- **WHEN** el administrador edita el SEO de la página con slug `contactanos` (nombre de la ruta) desde el submódulo Page SEO
 - **THEN** la meta description y keywords de la página `/contactanos` se actualizan
 
 #### Scenario: Página sin SEO específico
-- **WHEN** una página no tiene registro en `page_seo`
+- **WHEN** una página no tiene registro en `page_seo` para su nombre de ruta
 - **THEN** el layout usa los valores globales de `Settings` como fallback
+
+#### Scenario: Página dinámica (producto, caso clínico)
+- **WHEN** la página es dinámica (ej. `/producto/{slug}`)
+- **THEN** el SEO proviene del propio modelo (Product::seo_description, Resource::seo si aplica) con fallback a `page_seo` por nombre de ruta y luego a `Settings`
 
 ### Requirement: Sedes dinámicas en contacto
 La vista de contacto SHALL mostrar las sedes dinámicamente iterando el campo JSON `offices` de `Settings` (estructura `[{name, url, active}]`), no con nombres hardcodeados en Blade.

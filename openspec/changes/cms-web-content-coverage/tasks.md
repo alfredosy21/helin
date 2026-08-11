@@ -53,7 +53,7 @@
 - [ ] 4.6 Crear migración para `resource_types`: añadir `image`, `banner_title`, `banner_description`, `banner_image`
 - [ ] 4.7 Crear migración para `resource_specialties`: añadir `banner_title`, `banner_description`, `banner_image` (`image` ya existe)
 - [ ] 4.8 Crear migración para `resources`: añadir `content` (longText), `diagnosis` (text), `gallery` (JSON), `video_url` (string), `materials` (JSON), `results` (longText)
-- [ ] 4.9 Crear migración para `settings`: añadir `opinion_url` (string nullable) y `offices` (JSON nullable)
+- [ ] 4.9 Crear migración para `settings`: añadir `opinion_url` (string nullable) y `offices` (JSON nullable). La migración incluye paso de migración de datos: leer `caracas_location`/`valencia_location`/`barquisimeto_location` existentes y consolidarlos en el JSON `offices` con `[{name, url, active}]`. El `down()` revierte el JSON a los campos individuales antes de eliminar la columna. Mantener las columnas individuales en esta migración (se eliminan en migración posterior tras verificar).
 - [ ] 4.10 Crear migración para tabla nueva `contact_messages` (id, nombre, email, telefono, asunto, mensaje, is_read boolean, timestamps)
 - [ ] 4.11 Crear migración para tabla nueva `page_seo` (id, page_slug unique, seo_title, seo_description, seo_keywords, og_image nullable, timestamps)
 - [ ] 4.12 Ejecutar `php artisan migrate` y verificar que todas las migraciones se aplican sin error
@@ -94,7 +94,7 @@
 - [ ] 6.14 Reemplazar el WhatsApp hardcodeado en `solicitud-enviada.blade.php` (`584244669150`) por `WhatsAppNumber`/`Settings`
 - [ ] 6.15 Eliminar los productos de ejemplo hardcodeados y datos de cliente falsos en `solicitud-enviada.blade.php` (fallbacks); mostrar mensaje apropiado cuando no hay datos
 - [ ] 6.16 Eliminar la tasa de cambio hardcodeada y totales falsos en `solicitud-enviada.blade.php`
-- [ ] 6.17 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', ...)` con fallback a `Settings`
+- [ ] 6.17 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', Route::currentRouteName())->first()` con fallback a `Settings` en el layout `app.blade.php`. Para páginas dinámicas (producto, caso clínico) usar el SEO del propio modelo con fallback a `page_seo` por nombre de ruta. Considerar cargar `PageSeo` via `View::share()` o cache para evitar consulta por render.
 - [ ] 6.18 Hacer dinámicas las sedes de `contactanos.blade.php` iterando `Settings::offices` (JSON) en lugar de los 3 bloques hardcodeados con nombres fijos
 
 ## 7. Fase 3D — Selector de dimensiones dinámico
@@ -123,6 +123,7 @@
 - [ ] 9.9 Crear `PageSeoSeeder` con el SEO actualmente hardcodeado en las vistas (home, contacto, empresa, políticas, recursos)
 - [ ] 9.10 Verificar y completar `WhatsAppNumberSeeder` y crear `AttributeSeeder`/`AttributeValueSeeder` si no existen
 - [ ] 9.11 Ejecutar `php artisan db:seed` y verificar que la web pública no se ve vacía
+- [ ] 9.12 Tras verificar que `offices` JSON funciona correctamente en la web, crear migración que elimine las columnas individuales `caracas_location`/`valencia_location`/`barquisimeto_location` de `settings` (ya obsoletas)
 
 ## 10. Verificación final
 
