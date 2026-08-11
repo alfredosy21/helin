@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class WhatsAppNumber extends Model
 {
+    protected $table = 'whatsapp_numbers';
+
     protected $fillable = [
         'phone_number',
         'executive_name',

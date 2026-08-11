@@ -173,9 +173,11 @@
 
                     <!-- Información de punto de retiro -->
                     <div id="pickup-info" class="mt-4 hidden bg-turquesa/10 border border-turquesa/30 rounded-lg p-4">
-                        <p class="text-sm font-medium text-helin-heading mb-1">Punto de retiro</p>
-                        <p id="pickup-location" class="text-sm text-helin-heading/80 mb-2"></p>
-                        <a id="pickup-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm text-turquesa font-medium hover:underline"></a>
+                        <p class="text-sm font-semibold text-helin-heading mb-3">Punto de Retiro</p>
+                        <div id="pickup-zone-content">
+                            <p id="pickup-zone-address" class="text-sm text-helin-text"></p>
+                        </div>
+                        <p id="pickup-zone-empty" class="text-sm text-helin-text">Selecciona tu estado para ver tu punto de retiro asignado.</p>
                     </div>
                 </div>
 
@@ -427,26 +429,21 @@
 
     const pickupData = @json($pickups);
     const estadoInput = document.getElementById('estado-input');
-    const pickupLocation = document.getElementById('pickup-location');
-    const pickupWhatsapp = document.getElementById('pickup-whatsapp');
+    const pickupZoneContent = document.getElementById('pickup-zone-content');
+    const pickupZoneEmpty = document.getElementById('pickup-zone-empty');
+    const pickupZoneAddress = document.getElementById('pickup-zone-address');
 
     function updatePickupInfo() {
         const stateCode = estadoInput?.value;
         const info = stateCode ? pickupData[stateCode] : null;
 
-        if (!info || !info.location) {
-            pickupInfoBlock?.classList.add('hidden');
-            return;
-        }
-
-        pickupLocation.textContent = info.location;
-
-        if (info.whatsapp) {
-            pickupWhatsapp.href = info.whatsapp;
-            pickupWhatsapp.textContent = `WhatsApp ${info.label}`;
-            pickupWhatsapp.classList.remove('hidden');
+        if (info && info.location) {
+            pickupZoneAddress.textContent = info.location;
+            pickupZoneContent.classList.remove('hidden');
+            pickupZoneEmpty.classList.add('hidden');
         } else {
-            pickupWhatsapp.classList.add('hidden');
+            pickupZoneContent.classList.add('hidden');
+            pickupZoneEmpty.classList.remove('hidden');
         }
     }
 

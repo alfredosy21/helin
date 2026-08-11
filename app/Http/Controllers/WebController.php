@@ -179,33 +179,33 @@ class WebController extends Controller
 
         $pickupInfo = [
             // Zona 1 - Ejecutivo Caracas
-            'DC' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'MI' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'VA' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'AN' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'SU' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'MO' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'NE' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'DF' => ['city' => 'caracas', 'label' => 'Caracas'],
-            'BO' => ['city' => 'caracas', 'label' => 'Caracas'],
+            'DC' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'MI' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'VA' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'AN' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'SU' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'MO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'NE' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'DF' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
+            'BO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
             // Zona 2 - Ejecutivo Valencia
-            'CA' => ['city' => 'valencia', 'label' => 'Valencia'],
-            'AR' => ['city' => 'valencia', 'label' => 'Valencia'],
-            'CO' => ['city' => 'valencia', 'label' => 'Valencia'],
-            'GU' => ['city' => 'valencia', 'label' => 'Valencia'],
-            'AP' => ['city' => 'valencia', 'label' => 'Valencia'],
-            'AM' => ['city' => 'valencia', 'label' => 'Valencia'],
+            'CA' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
+            'AR' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
+            'CO' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
+            'GU' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
+            'AP' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
+            'AM' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
             // Zona 3 - Ejecutivo Barquisimeto
-            'LA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'YA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'PO' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'BA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'ME' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'TR' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
-            'TA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto'],
+            'LA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'YA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'PO' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'BA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'ME' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'TR' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
+            'TA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
             // Zona 4 - Ejecutivo Maracaibo
-            'ZU' => ['city' => 'maracaibo', 'label' => 'Maracaibo'],
-            'FA' => ['city' => 'maracaibo', 'label' => 'Maracaibo'],
+            'ZU' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
+            'FA' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
         ];
 
         $pickups = [];
@@ -215,6 +215,8 @@ class WebController extends Controller
 
             $pickups[$code] = [
                 'label'    => $meta['label'],
+                'zone'     => $meta['zone'],
+                'phone'    => $meta['phone'],
                 'whatsapp' => $whatsapp,
                 'location' => $location,
             ];
