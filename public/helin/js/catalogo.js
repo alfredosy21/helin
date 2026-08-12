@@ -123,6 +123,61 @@ document.addEventListener('DOMContentLoaded', function () {
         if (clearFiltersBtn) {
             clearFiltersBtn.style.display = hasActiveFilters() ? 'inline-flex' : 'none';
         }
+        updateMobileFiltersCount();
+    }
+
+    // --- Panel de Filtros Móvil ---
+    const mobileFiltersToggle = document.getElementById('mobileFiltersToggle');
+    const filtersPanel        = document.getElementById('filtersPanel');
+    const filtersOverlay      = document.getElementById('filtersOverlay');
+    const closeFiltersBtn     = document.getElementById('closeFiltersBtn');
+    const mobileClearFilters  = document.getElementById('mobileClearFilters');
+    const mobileApplyFilters  = document.getElementById('mobileApplyFilters');
+    const mobileFiltersCount  = document.getElementById('mobileFiltersCount');
+
+    function countActiveFilters() {
+        return Array.from(filterCheckboxes).filter(cb => cb.checked).length;
+    }
+
+    function updateMobileFiltersCount() {
+        if (!mobileFiltersCount) return;
+        const count = countActiveFilters();
+        if (count > 0) {
+            mobileFiltersCount.textContent = count;
+            mobileFiltersCount.classList.remove('hidden');
+        } else {
+            mobileFiltersCount.classList.add('hidden');
+        }
+    }
+
+    function openFiltersPanel() {
+        if (!filtersPanel || !filtersOverlay) return;
+        filtersPanel.classList.remove('-translate-x-full');
+        filtersOverlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeFiltersPanel() {
+        if (!filtersPanel || !filtersOverlay) return;
+        filtersPanel.classList.add('-translate-x-full');
+        filtersOverlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    if (mobileFiltersToggle) mobileFiltersToggle.addEventListener('click', openFiltersPanel);
+    if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', closeFiltersPanel);
+    if (filtersOverlay) filtersOverlay.addEventListener('click', closeFiltersPanel);
+
+    if (mobileClearFilters) {
+        mobileClearFilters.addEventListener('click', () => {
+            clearAll();
+        });
+    }
+
+    if (mobileApplyFilters) {
+        mobileApplyFilters.addEventListener('click', () => {
+            closeFiltersPanel();
+        });
     }
 
     async function applyFilters() {

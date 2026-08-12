@@ -65,11 +65,30 @@
     'separatorAttributes' => 'class="text-helin-text mx-1"'
 ])
 
+    <!-- Botón Filtros - solo móvil/tablet -->
+    <div class="lg:hidden mb-4">
+        <button type="button" id="mobileFiltersToggle" class="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-full py-2.5 text-sm font-medium text-helin-heading hover:bg-slate-50 transition-colors relative">
+            <i class="fas fa-sliders-h text-sm"></i>
+            <span>Filtros</span>
+            <span id="mobileFiltersCount" class="hidden ml-1 bg-turquesa text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </button>
+    </div>
+
+    <!-- Backdrop del panel de filtros móvil -->
+    <div id="filtersOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
+
     <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- Sidebar Filtros -->
-        <aside class="hidden lg:block w-64 flex-shrink-0">
-            <div class="space-y-6">
+        <aside id="filtersPanel" class="w-80 max-w-[85%] lg:w-64 lg:max-w-none flex-shrink-0 fixed lg:static inset-y-0 left-0 z-50 lg:z-auto bg-white lg:bg-transparent shadow-2xl lg:shadow-none transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto lg:overflow-visible flex flex-col">
+
+            <!-- Encabezado del panel - solo móvil -->
+            <div class="lg:hidden flex items-center justify-between px-4 py-4 border-b border-helin-border sticky top-0 bg-white z-10">
+                <h3 class="font-semibold text-helin-heading text-base">Filtros</h3>
+                <button type="button" id="closeFiltersBtn" class="text-helin-text text-2xl leading-none p-1 hover:text-turquesa transition-colors">&times;</button>
+            </div>
+
+            <div class="space-y-6 p-4 lg:p-0 flex-1">
                 <!-- Búsqueda en sidebar -->
                 <div class="relative mt-4" id="catalogSearchWrapper">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-helin-text text-xs z-10"></i>
@@ -161,6 +180,16 @@
                         </label>
                     </div>
                 </div>
+            </div>
+
+            <!-- Footer del panel - solo móvil -->
+            <div class="lg:hidden sticky bottom-0 bg-white border-t border-helin-border p-4 flex gap-3">
+                <button type="button" id="mobileClearFilters" class="flex-1 border border-helin-border text-helin-heading rounded-full py-2.5 text-sm font-medium hover:bg-slate-50 transition-colors">
+                    Limpiar filtros
+                </button>
+                <button type="button" id="mobileApplyFilters" class="flex-1 bg-turquesa hover:bg-turquesa-dark text-white rounded-full py-2.5 text-sm font-semibold transition-colors">
+                    Ver productos
+                </button>
             </div>
         </aside>
 

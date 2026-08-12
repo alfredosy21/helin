@@ -28,33 +28,48 @@ const Cart = (() => {
         }));
     }
 
-    function findIndex(items, slug) {
-        return items.findIndex(i => i.slug === slug);
+    /**
+     * Build the unique cart identity for a product + variant (dimension).
+     * Products without a dimension use their slug as the identity.
+     */
+    function makeId(slug, dimension) {
+        return dimension ? `${slug}::${dimension}` : slug;
+    }
+
+    function findIndex(items, id) {
+        return items.findIndex(i => (i.id || i.slug) === id);
     }
 
     // ─── Public API ───────────────────────────────────────────────────────────
 
     /**
-     * Add or increment a product.
-     * @param {object} product - { slug, name, brand, price, image, qty }
+     * Add or increment a product variant.
+     * @param {object} product - { slug, name, brand, price, image, qty, sku, dimension }
      */
     function add(product) {
         const items = load();
-        const idx   = findIndex(items, product.slug);
+        const id    = makeId(product.slug, product.dimension);
+        const idx   = findIndex(items, id);
 
         if (idx > -1) {
             items[idx].qty += (product.qty || 1);
+            // Mantener precio/SKU actualizados por si la variante cambió
+            items[idx].price = parseFloat(product.price) || items[idx].price;
+            if (product.sku) items[idx].sku = product.sku;
             save(items);
             return { action: 'updated', item: items[idx] };
         }
 
         const item = {
-            slug:  product.slug,
-            name:  product.name,
-            brand: product.brand  || '',
-            price: parseFloat(product.price) || 0,
-            image: product.image  || '',
-            qty:   parseInt(product.qty, 10) || 1,
+            id,
+            slug:      product.slug,
+            name:      product.name,
+            brand:     product.brand  || '',
+            price:     parseFloat(product.price) || 0,
+            image:     product.image  || '',
+            qty:       parseInt(product.qty, 10) || 1,
+            sku:       product.sku || '',
+            dimension: product.dimension || '',
         };
         items.push(item);
         save(items);
@@ -62,11 +77,11 @@ const Cart = (() => {
     }
 
     /**
-     * Set exact quantity for a product. qty <= 0 removes it.
+     * Set exact quantity for a product variant. qty <= 0 removes it.
      */
-    function setQty(slug, qty) {
+    function setQty(id, qty) {
         const items = load();
-        const idx   = findIndex(items, slug);
+        const idx   = findIndex(items, id);
         if (idx === -1) return null;
 
         if (qty <= 0) {
@@ -81,11 +96,11 @@ const Cart = (() => {
     }
 
     /**
-     * Remove a product entirely.
+     * Remove a product variant entirely.
      */
-    function remove(slug) {
+    function remove(id) {
         const items = load();
-        const idx   = findIndex(items, slug);
+        const idx   = findIndex(items, id);
         if (idx === -1) return null;
 
         const removed = items.splice(idx, 1)[0];

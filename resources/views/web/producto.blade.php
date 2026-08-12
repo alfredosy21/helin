@@ -72,9 +72,11 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
             <!-- Selector de Dimensiones -->
             <div class="mb-6">
-                <h3 class="font-semibold text-helin-heading mb-3">Dimensiones</h3>
+                <h3 class="font-semibold text-helin-heading mb-1">Dimensiones</h3>
+                <p class="text-[13px] font-normal mb-1" style="color: #626772;">Seleccione una dimensión</p>
                 <select id="sizeSelector" aria-label="Dimensiones" onchange="updatePriceBySize(this.value)"
-                    class="w-full sm:w-56 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-helin-heading outline-none cursor-pointer focus:ring-1 focus:ring-turquesa/30 focus:border-turquesa">
+                    class="w-full sm:w-56 h-9 pl-3 pr-9 rounded-lg border border-gray-300 bg-white text-sm text-helin-heading outline-none cursor-pointer focus:ring-1 focus:ring-turquesa/30 focus:border-turquesa appearance-none"
+                    style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23123F4A%22><path fill-rule=%22evenodd%22 d=%22M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z%22 clip-rule=%22evenodd%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 14px;"
                     @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
                         <option value="{{ $size }}" {{ $si === 0 ? 'selected' : '' }}>{{ $size }}</option>
                     @endforeach
@@ -82,25 +84,30 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             </div>
             <script>
             function updatePriceBySize(size) {
-                // Precios base según dimensión (ajustar según tus datos reales)
+                // Precios y SKU por dimensión (ajustar según tus datos reales)
+                const baseSku = @json($product->sku ?? '');
                 const sizePrices = {
                     'Ø3.3 mm': {
                         base: @json($product->price),
-                        sale: @json($product->sale_price ?? null)
+                        sale: @json($product->sale_price ?? null),
+                        sku: baseSku ? baseSku + '-33' : ''
                     },
                     'Ø4.1 mm': {
                         base: @json($product->price * 1.15), // 15% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.15)
+                        sale: @json(($product->sale_price ?? $product->price) * 1.15),
+                        sku: baseSku ? baseSku + '-41' : ''
                     },
                     'Ø4.8 mm': {
                         base: @json($product->price * 1.25), // 25% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.25)
+                        sale: @json(($product->sale_price ?? $product->price) * 1.25),
+                        sku: baseSku ? baseSku + '-48' : ''
                     }
                 };
 
                 const priceInfo = sizePrices[size] || sizePrices['Ø3.3 mm'];
                 const currentPriceEl = document.getElementById('currentPrice');
                 const oldPriceEl = document.getElementById('oldPrice');
+                const skuEl = document.getElementById('productSkuValue');
                 const cartButton = document.querySelector('[data-cart-add]');
 
                 // Actualizar precios con animación
@@ -129,9 +136,16 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         oldPriceEl.style.display = 'none';
                     }
 
-                    // Actualizar data-price del botón de carrito
+                    // Actualizar SKU mostrado según la dimensión seleccionada
+                    if (skuEl && priceInfo.sku) {
+                        skuEl.textContent = priceInfo.sku;
+                    }
+
+                    // Actualizar datos del botón de carrito (precio, SKU y dimensión)
                     if (cartButton) {
                         cartButton.setAttribute('data-price', priceInfo.sale.toFixed(2));
+                        if (priceInfo.sku) cartButton.setAttribute('data-sku', priceInfo.sku);
+                        cartButton.setAttribute('data-dimension', size);
                     }
 
                     // Restaurar opacidad con animación
@@ -154,7 +168,9 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-slug="{{ $product->slug }}"
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
-                    data-price="{{ $product->price }}"
+                    data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
+                    data-sku="{{ $product->sku ? $product->sku . '-33' : '' }}"
+                    data-dimension="Ø3.3 mm"
                     data-image="{{ asset('images/im3.png') }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
@@ -165,7 +181,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 @if($product->sku)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">SKU:</span>
-                        <span class="text-helin-heading/90">{{ $product->sku }}</span>
+                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}-33</span>
                     </div>
                 @endif
 
@@ -239,49 +255,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         </div>
     </div>
 
-    <!-- Sección de Especificaciones + Widget Soporte -->
-    <div class="flex flex-col lg:flex-row gap-8 mb-12">
-        <!-- Especificaciones -->
-        <div class="lg:w-2/3">
-            <h2 class="text-2xl font-bold text-helin-heading mb-6 pb-4 border-b border-helin-border">Especificaciones</h2>
-            <div class="prose max-w-none leading-relaxed text-helin-text">
-                <table class="w-full text-sm border-collapse">
-                    <tbody>
-                        @foreach([
-                            'Material'          => 'Titanio Grado 5',
-                            'Uso clínico'       => 'Osteosíntesis y fijación ósea odontológica',
-                            'Compatibilidad'    => 'Placas quirúrgicas y sistemas de fijación',
-                            'Esterilización'    => 'Autoclave 134°C',
-                            'Propiedades'       => 'Alta resistencia mecánica, estabilidad estructural y biocompatibilidad',
-                            'Certificación'     => 'ISO 13485',
-                            'Origen'            => 'Importado',
-                        ] as $key => $value)
-                        <tr class="border-b border-helin-border">
-                            <td class="py-3 pr-6 font-medium text-helin-heading w-1/3">{{ $key }}</td>
-                            <td class="py-3 text-helin-text">{{ $value }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Widget Soporte -->
-        <div class="lg:w-1/3 ml-auto">
-            <div class="bg-white rounded-xl overflow-hidden">
-                <div class="flex flex-col items-center pt-4 px-4">
-                    <img src="{{ asset('images/atencion_cliente.png') }}" alt="Atención al cliente Helin" class="h-auto object-cover" style="width: 60%;">
-                    <div class="w-full mt-3 mb-4" style="width: 60%;">
-                        <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="w-full bg-turquesa hover:bg-turquesa-dark text-white font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2 text-[11px] sm:text-sm">
-                            <i class="fab fa-whatsapp text-base"></i>
-                            <span>Chatear con ejecutivo</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="h-3"></div>
-            </div>
-        </div>
-    </div>
+    <hr class="border-helin-border mb-12">
 
     <!-- Productos Relacionados -->
     <section class="mb-12">

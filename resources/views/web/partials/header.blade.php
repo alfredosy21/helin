@@ -106,7 +106,7 @@
                 <nav class="flex items-center gap-6 xl:gap-8 text-sm">
                     <!-- Productos con Mega Menú -->
                     <div class="relative group">
-                        <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold">
+                        <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold border-b-2 border-transparent pb-1">
                             <i class="fas fa-bars"></i>
                             Productos
                         </a>
@@ -244,15 +244,16 @@
                     @php
                         $currentRoute = request()->route()->getName();
                         $currentCategory = request()->route('category') ?? request('category');
+                        $currentTag = request('tag');
                     @endphp
                     <!-- Inicio -->
                     <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16 border-b-2 border-transparent pb-1 {{ $currentRoute === 'home' ? 'text-turquesa border-turquesa' : '' }}">Inicio</a>
                     <!-- Categorías -->
-                    <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'cirugia-bucal' ? 'text-turquesa border-turquesa' : '' }}">Cirugía Bucal <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'maxilofacial' ? 'text-turquesa border-turquesa' : '' }}">Maxilofacial <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'periodoncia' ? 'text-turquesa border-turquesa' : '' }}">Periodoncia <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'ortodoncia' ? 'text-turquesa border-turquesa' : '' }}">Ortodoncia <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'endodoncia' ? 'text-turquesa border-turquesa' : '' }}">Endodoncia <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'implantologia' ? 'text-turquesa border-turquesa' : '' }}">Implantología <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'osteosintesis' ? 'text-turquesa border-turquesa' : '' }}">Osteosíntesis <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'instrumentos' ? 'text-turquesa border-turquesa' : '' }}">Instrumentos <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'planificacion-digital' ? 'text-turquesa border-turquesa' : '' }}">Planificación digital <span class="text-xs">+</span></a>
+                    <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentTag === 'on_sale' ? 'text-turquesa border-turquesa' : '' }}">Ofertas</a>
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
                     <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors mr-12">
@@ -267,11 +268,11 @@
             <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-3 text-xs sm:text-sm whitespace-nowrap">
                 <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Productos</a>
                 <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Inicio</a>
-                <a href="{{ route('catalogo', ['category' => 'cirugia-bucal']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Cirugía Bucal</a>
-                <a href="{{ route('catalogo', ['category' => 'maxilofacial']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Maxilofacial</a>
-                <a href="{{ route('catalogo', ['category' => 'periodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Periodoncia</a>
-                <a href="{{ route('catalogo', ['category' => 'ortodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Ortodoncia</a>
-                <a href="{{ route('catalogo', ['category' => 'endodoncia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Endodoncia</a>
+                <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Implantología</a>
+                <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Osteosíntesis</a>
+                <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Instrumentos</a>
+                <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Planificación digital</a>
+                <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Ofertas</a>
             </div>
             <span class="scroll-hint-fade" aria-hidden="true"></span>
         </div>

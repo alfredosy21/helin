@@ -125,21 +125,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderItemsTable(items) {
-        const rows = items.map(item => `
-            <div class="cart-row p-4 md:p-0 border-b border-helin-border" data-slug="${item.slug}">
+        const rows = items.map(item => {
+            const itemId = item.id || item.slug;
+            const metaParts = [item.brand];
+            if (item.dimension) metaParts.push(item.dimension);
+            if (item.sku) metaParts.push('SKU: ' + item.sku);
+            const metaLine = metaParts.filter(Boolean).join(' · ');
+            return `
+            <div class="cart-row p-4 md:p-0 border-b border-helin-border" data-id="${itemId}">
                 <!-- Mobile -->
                 <div class="md:hidden flex gap-4">
                     <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-contain rounded-lg flex-shrink-0 bg-helin-soft">
                     <div class="flex-1">
                         <h3 class="font-semibold text-turquesa text-sm mb-1">${item.name}</h3>
-                        <p class="text-helin-text text-xs mb-2">${item.brand}</p>
+                        <p class="text-helin-text text-xs mb-2">${metaLine}</p>
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-turquesa text-sm font-bold">${fmt(item.price)}</span>
                             ${renderQtyControl(item, 'sm')}
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="font-bold text-turquesa">${fmt(item.price * item.qty)}</span>
-                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-slug="${item.slug}" aria-label="Eliminar">
+                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-id="${itemId}" aria-label="Eliminar">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -151,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain rounded-lg bg-helin-soft">
                         <div>
                             <h3 class="font-semibold text-turquesa text-sm">${item.name}</h3>
-                            <p class="text-helin-text text-xs">${item.brand}</p>
+                            <p class="text-helin-text text-xs">${metaLine}</p>
                         </div>
                     </div>
                     <div class="col-span-2 px-4 py-5 text-center">
@@ -163,13 +169,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="col-span-2 px-6 py-5 text-right">
                         <div class="flex items-center justify-end gap-3">
                             <span class="font-bold text-turquesa cart-row-subtotal">${fmt(item.price * item.qty)}</span>
-                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-slug="${item.slug}" aria-label="Eliminar">
+                            <button class="cart-remove text-helin-text hover:text-turquesa transition text-sm opacity-70 hover:opacity-100" data-id="${itemId}" aria-label="Eliminar">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
 
         return `
             <div class="lg:w-[65%] xl:w-[70%]">
@@ -187,13 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderQtyControl(item, size) {
         const inputWidth = size === 'sm' ? 'w-8' : 'w-10';
+        const itemId = item.id || item.slug;
         return `
             <div class="flex items-center rounded-full gap-1 px-1.5" style="background-color: rgba(107,194,195,0.45); height: 38px;">
-                <button class="cart-qty-dec qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-slug="${item.slug}">−</button>
+                <button class="cart-qty-dec qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-id="${itemId}">−</button>
                 <input type="number" value="${item.qty}" min="1"
                        class="cart-qty-input ${inputWidth} text-center outline-none bg-transparent text-sm font-semibold"
-                       style="color:#9ca3af; -moz-appearance:textfield; appearance:textfield;" data-slug="${item.slug}" onwheel="return false;">
-                <button class="cart-qty-inc qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-slug="${item.slug}">+</button>
+                       style="color:#9ca3af; -moz-appearance:textfield; appearance:textfield;" data-id="${itemId}" onwheel="return false;">
+                <button class="cart-qty-inc qty-btn w-7 h-7 bg-white rounded-full flex items-center justify-center transition-all text-sm font-bold leading-none flex-shrink-0" style="color:#6BC2C3;" data-id="${itemId}">+</button>
             </div>`;
     }
 
@@ -240,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Remove buttons
         document.querySelectorAll('.cart-remove').forEach(btn => {
             btn.addEventListener('click', () => {
-                const result = Cart.remove(btn.dataset.slug);
+                const result = Cart.remove(btn.dataset.id);
                 if (result) {
                     Toast.show({ type: 'error', message: `<strong>${result.item.name}</strong> eliminado del carrito.` });
                 }
@@ -250,22 +258,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // Qty increment / decrement buttons
         document.querySelectorAll('.cart-qty-dec').forEach(btn => {
             btn.addEventListener('click', () => {
-                const input = document.querySelector(`.cart-qty-input[data-slug="${btn.dataset.slug}"]`);
+                const input = document.querySelector(`.cart-qty-input[data-id="${btn.dataset.id}"]`);
                 const newQty = parseInt(input?.value || 1, 10) - 1;
                 if (newQty <= 0) {
-                    const result = Cart.remove(btn.dataset.slug);
+                    const result = Cart.remove(btn.dataset.id);
                     if (result) Toast.show({ type: 'error', message: `<strong>${result.item.name}</strong> eliminado del carrito.` });
                 } else {
-                    Cart.setQty(btn.dataset.slug, newQty);
+                    Cart.setQty(btn.dataset.id, newQty);
                 }
             });
         });
 
         document.querySelectorAll('.cart-qty-inc').forEach(btn => {
             btn.addEventListener('click', () => {
-                const input = document.querySelector(`.cart-qty-input[data-slug="${btn.dataset.slug}"]`);
+                const input = document.querySelector(`.cart-qty-input[data-id="${btn.dataset.id}"]`);
                 const newQty = parseInt(input?.value || 1, 10) + 1;
-                Cart.setQty(btn.dataset.slug, newQty);
+                Cart.setQty(btn.dataset.id, newQty);
             });
         });
 
@@ -277,10 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 qtyTimer = setTimeout(() => {
                     const qty = parseInt(input.value, 10);
                     if (qty <= 0 || isNaN(qty)) {
-                        const result = Cart.remove(input.dataset.slug);
+                        const result = Cart.remove(input.dataset.id);
                         if (result) Toast.show({ type: 'error', message: `<strong>${result.item.name}</strong> eliminado del carrito.` });
                     } else {
-                        Cart.setQty(input.dataset.slug, qty);
+                        Cart.setQty(input.dataset.id, qty);
                         Toast.show({ type: 'info', message: 'Cantidad actualizada.' });
                     }
                 }, 400);
@@ -329,11 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = e.target.closest('[data-cart-add]');
         if (!btn) return;
 
-        const { slug, name, brand, price, image } = btn.dataset;
+        const { slug, name, brand, price, image, sku, dimension } = btn.dataset;
         const qtyInput = btn.closest('[data-cart-context]')?.querySelector('[data-cart-qty]');
         const qty = qtyInput ? parseInt(qtyInput.value, 10) || 1 : 1;
 
-        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty });
+        const result = Cart.add({ slug, name, brand, price: parseFloat(price), image, qty, sku, dimension });
 
         if (result.action === 'added') {
             Toast.show({ type: 'cart', message: `<strong>${name}</strong> agregado al carrito.` });
