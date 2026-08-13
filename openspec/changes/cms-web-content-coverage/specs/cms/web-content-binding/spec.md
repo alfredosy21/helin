@@ -98,7 +98,7 @@ La ficha de producto SHALL mostrar productos relacionados desde `$relatedProduct
 - **THEN** la vista muestra los productos relacionados dinámicos
 
 ### Requirement: Imagen de testimonio real
-El carrusel de testimonios del home SHALL mostrar la imagen almacenada en `$testimonial->image`, no imágenes hardcodeadas basadas en el nombre del autor.
+El carrusel de testimonios del home SHALL mostrar la imagen almacenada en `$testimonial->image`, no imágenes hardcodeadas basadas en el nombre del autor. El carrusel SHALL manejar graceful los casos con pocos testimonios sin duplicar datos manualmente en la vista.
 
 #### Scenario: Testimonio con imagen
 - **WHEN** un testimonio tiene imagen subida desde el CMS
@@ -108,12 +108,20 @@ El carrusel de testimonios del home SHALL mostrar la imagen almacenada en `$test
 - **WHEN** un testimonio no tiene imagen
 - **THEN** el home muestra una imagen placeholder por defecto
 
+#### Scenario: Pocos testimonios en el carrusel
+- **WHEN** hay menos de 4 testimonios activos
+- **THEN** el carrusel no duplica manualmente ningún testimonio para llenar slides
+
 ### Requirement: Contenido enriquecido de casos clínicos
-La vista de caso clínico SHALL mostrar el contenido detallado, diagnóstico, galería, video, materiales y resultados desde los campos de `Resource`, no desde literales hardcodeados.
+La vista de caso clínico SHALL mostrar el contenido detallado, diagnóstico, galería, video, materiales, resultados y descripción desde los campos de `Resource`, no desde literales hardcodeados.
 
 #### Scenario: Editar materiales de un caso
 - **WHEN** el administrador edita los materiales de un recurso tipo caso clínico
 - **THEN** la vista de caso clínico muestra los nuevos materiales
+
+#### Scenario: Editar descripción de un caso
+- **WHEN** el administrador edita el campo `content` de un recurso tipo caso clínico
+- **THEN** la vista de caso clínico muestra el nuevo contenido en el párrafo de descripción
 
 #### Scenario: Relaciones correctas en caso clínico
 - **WHEN** la vista de caso clínico muestra la especialidad y el tipo
@@ -137,6 +145,41 @@ La vista de solicitud enviada SHALL mostrar los datos reales de la solicitud y n
 - **WHEN** no hay items en el carrito
 - **THEN** la vista muestra un mensaje indicando que no hay productos, no productos falsos hardcodeados
 
+### Requirement: Recursos clínicos sin duplicación artificial
+La página de recursos clínicos SHALL mostrar los recursos reales paginados sin multiplicar artificialmente el número de resultados.
+
+#### Scenario: Lista de recursos clínicos
+- **WHEN** un usuario visita la página de recursos clínicos
+- **THEN** cada recurso aparece una sola vez en la paginación, sin duplicación por multiplicador
+
+### Requirement: Búsqueda de productos con imágenes reales
+La búsqueda AJAX de productos SHALL mostrar las imágenes reales de cada producto, no un pool estático de imágenes.
+
+#### Scenario: Buscar un producto
+- **WHEN** un usuario busca un producto desde el header o el catálogo
+- **THEN** los resultados muestran la imagen real del producto, no `im1.png`–`im6.png`
+
+### Requirement: Productos fake del home eliminados
+El home SHALL mostrar productos reales del catálogo en todas las secciones de productos destacados, no productos con nombres, imágenes y precios inventados.
+
+#### Scenario: Sección de Instrumentos y Equipos
+- **WHEN** un usuario visita el home y ve la sección de productos destacados
+- **THEN** los productos mostrados son reales del catálogo, no placeholders con nombres fake
+
+### Requirement: Imagen del team desde CMS
+La vista de Nuestra Empresa SHALL mostrar la imagen del team desde `$teamSection->image`, no desde un literal hardcodeado.
+
+#### Scenario: Cambiar foto del team
+- **WHEN** el administrador sube una nueva imagen para la sección del team
+- **THEN** la vista de Nuestra Empresa muestra la nueva imagen
+
+### Requirement: WhatsApp de CTAs desde BD
+Los CTAs de Nuestra Empresa y otras vistas que incluyen enlaces de WhatsApp SHALL obtener el número desde `WhatsAppNumber`/`Settings`, no desde literales hardcodeados.
+
+#### Scenario: Cambiar número de WhatsApp del CTA
+- **WHEN** el administrador cambia el número de WhatsApp en Settings o WhatsAppNumber
+- **THEN** los CTAs de Nuestra Empresa y otras vistas usan el nuevo número
+
 ### Requirement: SEO por página estática gestionable
 El título, meta description y meta keywords de cada página estática (home, contacto, nuestra-empresa, políticas, recursos-clinicos) SHALL provenir de la tabla `page_seo`, consultada por `page_slug` usando `Route::currentRouteName()` como slug, con fallback a `Settings` globales. No se usarán literales hardcodeados en Blade.
 
@@ -153,7 +196,7 @@ El título, meta description y meta keywords de cada página estática (home, co
 - **THEN** el SEO proviene del propio modelo (Product::seo_description, Resource::seo si aplica) con fallback a `page_seo` por nombre de ruta y luego a `Settings`
 
 ### Requirement: Sedes dinámicas en contacto
-La vista de contacto SHALL mostrar las sedes dinámicamente iterando el campo JSON `offices` de `Settings` (estructura `[{name, url, active}]`), no con nombres hardcodeados en Blade.
+La vista de contacto SHALL mostrar las sedes dinámicamente iterando el campo JSON `offices` de `Settings` (estructura `[{name, url, active}]`), no con nombres hardcodeados en Blade. Esto incluye todas las sedes que tengan `active: true`, sin limitarse a un subconjunto fijo.
 
 #### Scenario: Añadir una sede nueva
 - **WHEN** el administrador añade una entrada `{name: "Maracay", url: "...", active: true}` al JSON `offices` en Settings
@@ -166,3 +209,10 @@ La vista de contacto SHALL mostrar las sedes dinámicamente iterando el campo JS
 #### Scenario: Sede sin URL
 - **WHEN** una sede tiene `active: true` pero `url` vacío
 - **THEN** la vista muestra el nombre de la sede sin enlace
+
+### Requirement: Políticas sin fallback hardcodeado en Blade
+La vista de políticas SHALL consumir siempre el contenido de `$section->content` desde la BD, sin un `match()` con HTML hardcodeado como fallback.
+
+#### Scenario: Editar contenido de políticas
+- **WHEN** el administrador edita el contenido HTML de una sección de políticas
+- **THEN** la vista de políticas muestra el contenido exacto de la BD, sin fallback hardcodeado

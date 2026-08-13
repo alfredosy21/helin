@@ -46,6 +46,13 @@ El sistema SHALL proporcionar un editor visual para gestionar los botones de una
 - **WHEN** el administrador añade o edita un botón con su texto y URL
 - **THEN** el sistema persiste el botón en el JSON de botones de la sección
 
+### Requirement: Fillable sin duplicados
+El modelo de secciones SHALL tener un array `$fillable` sin duplicados. El campo `status` no debe aparecer dos veces en el array.
+
+#### Scenario: Asignación masiva sin duplicados
+- **WHEN** el controlador guarda una sección con campo `status`
+- **THEN** el valor se persiste correctamente sin error por duplicado en `$fillable`
+
 ### Requirement: Gestión de visibilidad
 El sistema SHALL permitir controlar la visibilidad de una sección mediante los campos `status` y `status_content` desde el CMS.
 

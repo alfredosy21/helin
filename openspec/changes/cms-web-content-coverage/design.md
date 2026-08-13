@@ -48,9 +48,9 @@ Proyecto Laravel + Livewire + Blade brownfield. El CMS vive bajo `/cms` con cont
 **Alternativa considerada**: Reutilizar `commercial_requests` con un flag `type`. Se descarta porque el esquema de solicitudes comerciales es distinto (campos de cliente, método de pago, etc.) y mezclarlos complicaría las consultas.
 
 ### D5: Fase 1 sin migraciones para minimizar riesgo
-**Decisión**: La Fase 1 (bugs críticos) no crea migraciones. Solo actualiza `$fillable`, elimina `dd()`, corrige relaciones en vistas, añade verificaciones de permisos y unifica paginación.
+**Decisión**: La Fase 1 (bugs críticos) no crea migraciones. Solo actualiza `$fillable`, elimina `dd()`, corrige relaciones en vistas, añade verificaciones de permisos, unifica paginación, y corrige bugs del `WebController` (multiplicador de recursos, imágenes hardcoded en búsqueda, eager loading faltante).
 
-**Rationale**: Esto permite aplicar Fase 1 rápidamente con riesgo mínimo y sin downtime. Los campos ya existen en BD; el problema es que los modelos no los exponen.
+**Rationale**: Esto permite aplicar Fase 1 rápidamente con riesgo mínimo y sin downtime. Los campos ya existen en BD; el problema es que los modelos no los exponen. Los bugs del `WebController` son correcciones de lógica que no requieren cambios de schema.
 
 ### D6: Seeders con el contenido hardcodeado actual
 **Decisión**: Tras las migraciones de Fase 3, actualizar los seeders para sembrar los nuevos campos (`banner_*`, `image`, `seo_keywords`, `items`, `buttons`, `materials`, `results`, `opinion_url`) con el contenido que actualmente está hardcodeado en las vistas.
@@ -91,6 +91,28 @@ Proyecto Laravel + Livewire + Blade brownfield. El CMS vive bajo `/cms` con cont
 
 **Alternativa considerada 1**: Pasar `$pageSlug` desde cada controlador. Se descarta porque requiere modificar todos los controladores web y es propenso a olvidos.
 **Alternativa considerada 2**: Usar `request()->path()` en lugar del nombre de ruta. Se descarta porque las rutas pueden cambiar de path sin cambiar de nombre, y los paths tienen prefijos/parámetros (`producto/{slug}`) que no mapean a un slug estable.
+
+### D13: Eliminar multiplicador de recursos en `WebController::recursosClinicos()`
+**Decisión**: Eliminar el código que duplica recursos ×4 (`array_fill(0, $multiplier, $r)`) y paginar los recursos reales directamente.
+
+**Rationale**: El multiplicador era un parche temporal para simular más contenido del que existe. Mostrar recursos repetidos 4 veces degrada la experiencia de usuario y infla la paginación artificialmente. Con los seeders actualizados (Fase 3F) habrá suficientes recursos reales. Si hay pocos, la paginación simplemente mostrará menos páginas.
+
+**Alternativa considerada**: Mantener el multiplicador hasta tener más recursos. Se descarta porque es un bug que muestra datos duplicados al usuario final.
+
+### D14: Auto-generación de slug en `ResourceController`
+**Decisión**: Añadir auto-generación de slug desde el título en `ResourceController::save()` usando `Str::slug($this->title)`, con un hook `updatedTitle()` que genere el slug en tiempo real como ya hacen otros controladores del CMS.
+
+**Rationale**: El patrón consistente en el resto del CMS es que el slug se genere automáticamente. Requerir que el usuario lo ingrese manualmente es propenso a errores y inconsistencias.
+
+### D15: Eliminar fallback `match()` de políticas en la vista Blade
+**Decisión**: Eliminar el `match($section->title)` con HTML hardcoded en `politicas.blade.php` (líneas 28-35) y consumir siempre `$section->content` directamente.
+
+**Rationale**: El `match()` duplica contenido que debería vivir en la BD. Si el contenido de las políticas necesita formato HTML estructurado, debe guardarse como HTML en el campo `content` de la sección, no como un fallback en la vista. El seeder debe encargarse de poblar el contenido correctamente.
+
+### D16: No duplicar testimonios manualmente en el carrusel
+**Decisión**: Eliminar la duplicación manual de un testimonio en `home.blade.php` (líneas 381-389) para llenar el carrusel. El carrusel JS debe manejar graceful los casos con pocos elementos (1-3) sin necesidad de duplicar datos.
+
+**Rationale**: Duplicar un testimonio manualmente en la vista es un hack que confunde al usuario (ve el mismo testimonio repetido) y mezcla lógica de presentación con datos. El JS del carrusel ya tiene lógica de clonado para infinito — si necesita más slides, puede clonar visualmente sin que el HTML los duplique.
 
 ### D12: Migración de datos de sedes individuales a JSON `offices` dentro de la migración (no solo seeder)
 **Decisión**: La migración que añade `offices` a `settings` incluye un paso de migración de datos que lee los valores existentes de `caracas_location`, `valencia_location`, `barquisimeto_location` y los consolida en el JSON `offices` con un `UPDATE`. El método `down()` revierte el JSON a los campos individuales antes de eliminar la columna.

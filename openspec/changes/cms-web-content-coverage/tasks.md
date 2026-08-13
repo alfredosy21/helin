@@ -1,17 +1,21 @@
 ## 1. Fase 1 — Bugs críticos (sin migraciones)
 
 - [ ] 1.1 Eliminar el `dd()` en `SectionController::update()` y restaurar la lógica de guardado real
-- [ ] 1.2 Añadir a `Sections::$fillable`: `subtitle`, `description`, `items`, `buttons`, `layout_type`, `icon_style`
+- [ ] 1.2 Añadir a `Sections::$fillable`: `subtitle`, `description`, `items`, `buttons`, `layout_type`, `icon_style`. Eliminar `status` duplicado del array.
 - [ ] 1.3 Añadir a `Product::$fillable`: `material`, `is_biomaterial`, `seo_description`, `seo_keywords`, `system_product_id`, `product_platform_id`
 - [ ] 1.4 Corregir `Testimonial::$fillable` a `['name', 'specialty', 'content', 'image', 'is_active', 'position']` (quitar `description`/`charge`/`order` inexistentes)
 - [ ] 1.5 Añadir `image` a `ResourceSpecialty::$fillable` (columna ya existe por migración `2026_07_24_120002`)
-- [ ] 1.6 Quitar `specialty` y `tags` de `Resource::$fillable` (no existen como columnas)
-- [ ] 1.7 Corregir `ResourceController::filterSpecialty` para filtrar por `resource_specialty_id` (FK) en lugar de `specialty` (string)
-- [ ] 1.8 Corregir `caso-clinico.blade.php`: `$resource->specialty->name` → `$resource->resourceSpecialty->name`, `$resource->type->name` → `$resource->resourceType->name`
-- [ ] 1.9 Añadir verificación de permisos en `mount()` de `CommercialRequestsController`, `ResourceController`, `ResourceSpecialtyController`, `ResourceTypeController`
-- [ ] 1.10 Cambiar `paginationTheme` de `'bootstrap'` a `'tailwind'` en `ResourceController`, `ResourceSpecialtyController`, `ResourceTypeController`
-- [ ] 1.11 Quitar o implementar correctamente `ResourceTypeController::updatedName()` (genera `$this->slug` inexistente)
-- [ ] 1.12 Verificar Fase 1: editar una sección, un producto, un testimonio y un recurso desde el CMS y confirmar que se guardan
+- [ ] 1.6 Quitar `specialty` y `tags` de `Resource::$fillable` (no existen como columnas). Añadir `slug` (existe en BD y se usa en rutas/vistas)
+- [ ] 1.7 Corregir `ResourceController` en todos los métodos que usan `specialty`/`tags` inexistentes: `filterSpecialty` (filtrar por `resource_specialty_id`), `render()` búsqueda (línea 82), `edit()` (líneas 118-120), `save()` (líneas 154-156), `$rules` (líneas 54-56), `resetForm()` (línea 217)
+- [ ] 1.8 Añadir auto-generación de `slug` en `ResourceController::save()` con `Str::slug($this->title)` y hook `updatedTitle()`
+- [ ] 1.9 Corregir `caso-clinico.blade.php`: `$resource->specialty->name` → `$resource->resourceSpecialty->name`, `$resource->type->name` → `$resource->resourceType->name`
+- [ ] 1.10 Añadir verificación de permisos en `mount()` de `CommercialRequestsController`, `ResourceController`, `ResourceSpecialtyController`, `ResourceTypeController`
+- [ ] 1.11 Cambiar `paginationTheme` de `'bootstrap'` a `'tailwind'` en `ResourceController`, `ResourceSpecialtyController`, `ResourceTypeController`
+- [ ] 1.12 Quitar o implementar correctamente `ResourceTypeController::updatedName()` (genera `$this->slug` inexistente)
+- [ ] 1.13 Eliminar el multiplicador ×4 de recursos en `WebController::recursosClinicos()` (líneas 358-359) y paginar recursos reales directamente
+- [ ] 1.14 Reemplazar el pool de imágenes hardcoded `['im1.png'...'im6.png']` en `WebController::searchProducts()` por las imágenes reales del producto
+- [ ] 1.15 Añadir `with(['attributeValues'])` al eager loading en `WebController::producto()`
+- [ ] 1.16 Verificar Fase 1: editar una sección, un producto, un testimonio y un recurso desde el CMS y confirmar que se guardan. Verificar que la búsqueda de productos usa imágenes reales y que la página de recursos clínicos no muestra recursos duplicados
 
 ## 2. Fase 2A — Infraestructura existente sin usar (cambios simples, sin migraciones nuevas)
 
@@ -29,10 +33,14 @@
 - [ ] 2.12 Reemplazar el pool estático `im1.png`–`im6.png` por `Product::mainImageUrl`/`images()` en `producto.blade.php`, `product-results.blade.php` y home
 - [ ] 2.13 Reemplazar el gallery hardcodeado de `producto.blade.php` por `$product->images`
 - [ ] 2.14 Reemplazar los productos relacionados hardcodeados en `producto.blade.php` por `$relatedProducts`
-- [ ] 2.15 Reemplazar imágenes hardcodeadas de testimonios en `home.blade.php` por `$testimonial->image` con fallback
+- [ ] 2.15 Reemplazar imágenes hardcodeadas de testimonios en `home.blade.php` por `$testimonial->image` con fallback. Eliminar la duplicación manual de un testimonio (líneas 381-389) para llenar el carrusel
 - [ ] 2.16 Reemplazar el WhatsApp hardcodeado del sidebar de `caso-clinico.blade.php` por `WhatsAppNumber`/`Settings`
 - [ ] 2.17 Reemplazar la imagen hero hardcodeada de `caso-clinico.blade.php` por `$resource->thumbnail`
-- [ ] 2.18 Verificar Fase 2A: gestionar WhatsApp y atributos desde el CMS; confirmar que la web consume imágenes reales de productos
+- [ ] 2.18 Reemplazar el bloque "Categoría Destacada" hardcoded en `home.blade.php` (líneas 93-100, `categoria1.png`) por `Category::where('is_featured', true)->first()` o sección CMS
+- [ ] 2.19 Reemplazar la sección "Destacados en Instrumentos y Equipos" en `home.blade.php` (líneas 277-330, 4 productos fake) por productos reales o eliminar si `$productSections` ya la cubre
+- [ ] 2.20 Reemplazar `team_helin_test.png` hardcoded en `nuestra-empresa.blade.php` (línea 132) por `$teamSection->image` con fallback
+- [ ] 2.21 Reemplazar WhatsApp `584244669150` hardcoded en `nuestra-empresa.blade.php` CTA (línea 160) por `WhatsAppNumber`/`Settings`
+- [ ] 2.22 Verificar Fase 2A: gestionar WhatsApp y atributos desde el CMS; confirmar que la web consume imágenes reales de productos y no muestra contenido fake
 
 ## 3. Fase 2B — Editor repeater de items/buttons JSON (complejo, aislado)
 
@@ -90,12 +98,13 @@
 - [ ] 6.10 Reemplazar aliados/logos hardcodeados en `nuestra-empresa.blade.php` por `items` JSON de la sección `ALLIES`
 - [ ] 6.11 Reemplazar el enlace de opinión hardcodeado por `Settings::opinion_url` en `partials/opinion.blade.php`
 - [ ] 6.12 Reemplazar "Estamos cerca de ti" hardcodeado en `partials/near.blade.php` por sección + `Settings`/`WhatsAppNumber`
-- [ ] 6.13 Reemplazar materiales y resultados hardcodeados en `caso-clinico.blade.php` por `$resource->materials` y `$resource->results`
-- [ ] 6.14 Reemplazar el WhatsApp hardcodeado en `solicitud-enviada.blade.php` (`584244669150`) por `WhatsAppNumber`/`Settings`
-- [ ] 6.15 Eliminar los productos de ejemplo hardcodeados y datos de cliente falsos en `solicitud-enviada.blade.php` (fallbacks); mostrar mensaje apropiado cuando no hay datos
-- [ ] 6.16 Eliminar la tasa de cambio hardcodeada y totales falsos en `solicitud-enviada.blade.php`
-- [ ] 6.17 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', Route::currentRouteName())->first()` con fallback a `Settings` en el layout `app.blade.php`. Para páginas dinámicas (producto, caso clínico) usar el SEO del propio modelo con fallback a `page_seo` por nombre de ruta. Considerar cargar `PageSeo` via `View::share()` o cache para evitar consulta por render.
-- [ ] 6.18 Hacer dinámicas las sedes de `contactanos.blade.php` iterando `Settings::offices` (JSON) en lugar de los 3 bloques hardcodeados con nombres fijos
+- [ ] 6.13 Reemplazar materiales y resultados hardcodeados en `caso-clinico.blade.php` por `$resource->materials` y `$resource->results`. Reemplazar también el párrafo de descripción hardcoded (línea 77) por `$resource->content`
+- [ ] 6.14 Eliminar el fallback `match($section->title)` con HTML hardcoded en `politicas.blade.php` (líneas 28-35) y consumir siempre `$section->content` directamente
+- [ ] 6.15 Reemplazar el WhatsApp hardcodeado en `solicitud-enviada.blade.php` (`584244669150`) por `WhatsAppNumber`/`Settings`
+- [ ] 6.16 Eliminar los productos de ejemplo hardcodeados y datos de cliente falsos en `solicitud-enviada.blade.php` (fallbacks); mostrar mensaje apropiado cuando no hay datos
+- [ ] 6.17 Eliminar la tasa de cambio hardcodeada y totales falsos en `solicitud-enviada.blade.php`
+- [ ] 6.18 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', Route::currentRouteName())->first()` con fallback a `Settings` en el layout `app.blade.php`. Para páginas dinámicas (producto, caso clínico) usar el SEO del propio modelo con fallback a `page_seo` por nombre de ruta. Considerar cargar `PageSeo` via `View::share()` o cache para evitar consulta por render.
+- [ ] 6.19 Hacer dinámicas las sedes de `contactanos.blade.php` iterando `Settings::offices` (JSON) en lugar de los 3 bloques hardcodeados con nombres fijos. Incluir Maracay que ya tiene `maracay_location` en Settings pero no se muestra en la vista
 
 ## 7. Fase 3D — Selector de dimensiones dinámico
 
