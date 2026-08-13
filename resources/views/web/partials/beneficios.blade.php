@@ -1,5 +1,5 @@
 <!-- Barra de Beneficios -->
-<section class="bg-white py-4 sm:py-5">
+<section class="bg-white pt-2 pb-4 sm:pt-2 sm:pb-5">
     <div class="container mx-auto px-4">
         <div class="beneficios-scroll-wrap relative md:overflow-visible">
         <div class="flex md:grid md:grid-cols-5 gap-4 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide">

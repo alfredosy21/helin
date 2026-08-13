@@ -45,7 +45,7 @@
     $products = $productsQuery->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 @endphp
 
-<main class="container mx-auto px-4 py-8">
+<main class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
     @php
     $breadcrumbItems = [
         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"']

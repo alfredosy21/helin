@@ -294,6 +294,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             @endif
         </div>
     </section>
+
+    <hr class="border-helin-border mb-0">
 </main>
 
 @include('web.partials.beneficios')

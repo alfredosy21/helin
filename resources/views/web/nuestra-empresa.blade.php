@@ -120,6 +120,66 @@
         </div>
     </section>
 
+    <!-- Nuestros Valores -->
+    <section class="valores-section" id="nuestros-valores">
+        <div class="valores-layout">
+            <div class="valores-header">
+                <span class="section-label">Valores</span>
+                <h2 class="valores-title">Nuestros<br>Valores</h2>
+                <div class="valores-accent-line"></div>
+                <p class="valores-description">Creemos en construir relaciones de confianza con los especialistas, ofreciendo respaldo, conocimiento y soluciones pensadas para su práctica profesional.</p>
+            </div>
+            <div class="valores-cards">
+                <!-- Fila 1: 2 tarjetas -->
+                <div class="valores-row valores-row--2">
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="far fa-handshake"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">01. &nbsp;Cercanía Profesional</h4>
+                        <p class="valor-text">Atendemos al especialista con criterio técnico, pero también con una relación humana, clara y accesible.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">02. &nbsp;Responsabilidad Clínica</h4>
+                        <p class="valor-text">Sabemos que cada decisión impacta un procedimiento real, por eso actuamos con seriedad y precisión.</p>
+                    </div>
+                </div>
+                <!-- Fila 2: 3 tarjetas -->
+                <div class="valores-row valores-row--3">
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">03. &nbsp;Servicio Ágil</h4>
+                        <p class="valor-text">Buscamos responder con rapidez, claridad y soluciones concretas a las necesidades del profesional.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">04. &nbsp;Formación Continua</h4>
+                        <p class="valor-text">Creemos en compartir conocimiento, apoyar la educación y fortalecer la práctica de los especialistas.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-people-group"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">05. &nbsp;Respaldo Integral</h4>
+                        <p class="valor-text">Ofrecemos más que productos: ofrecemos orientación, soporte y soluciones conectadas entre sí.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Team Section -->
     <section class="section-card team" id="nuestro-team">
         <div>

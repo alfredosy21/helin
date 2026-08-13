@@ -12,7 +12,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 @endpush
 
 @section('content')
-<main class="container mx-auto px-4 pt-2 pb-8">
+<main class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 pt-2 pb-8">
     <div class="mb-8">
         @include('web.components.breadcrumb', [
             'attributes' => 'text-sm',

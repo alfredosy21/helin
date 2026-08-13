@@ -273,6 +273,158 @@
     line-height: 1.65;
 }
 
+/* Nuestros Valores Section */
+.valores-section {
+    background: #f7fafa;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 48px 50px;
+    margin-bottom: 24px;
+}
+
+.valores-layout {
+    display: grid;
+    grid-template-columns: 0.32fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.valores-header {
+    position: sticky;
+    top: 100px;
+}
+
+.valores-title {
+    margin: 0 0 18px;
+    color: #123F4A;
+    font-size: 2.75rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.valores-accent-line {
+    width: 48px;
+    height: 3px;
+    background: #6BC2C3;
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.valores-description {
+    color: #2D3740;
+    font-size: 0.938rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.valores-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.valores-row {
+    display: grid;
+    gap: 20px;
+}
+
+.valores-row--2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.valores-row--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.valor-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease;
+}
+
+.valor-card:hover {
+    box-shadow: 0 8px 22px rgba(16, 45, 68, 0.08);
+}
+
+.valor-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(107, 194, 195, 0.12);
+    color: #6BC2C3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 16px;
+    border: 1px solid rgba(107, 194, 195, 0.25);
+}
+
+.valor-line {
+    width: 40px;
+    height: 2px;
+    background: #6BC2C3;
+    border-radius: 1px;
+    margin-bottom: 16px;
+}
+
+.valor-number-title {
+    margin: 0 0 10px;
+    color: #123F4A;
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.valor-text {
+    margin: 0;
+    color: #2D3740;
+    font-size: 0.875rem;
+    line-height: 1.65;
+}
+
+@media (max-width: 1120px) {
+    .valores-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .valores-header {
+        position: static;
+        text-align: center;
+    }
+
+    .valores-accent-line {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .valores-title {
+        font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 720px) {
+    .valores-section {
+        padding: 32px 22px;
+    }
+
+    .valores-row--2,
+    .valores-row--3 {
+        grid-template-columns: 1fr;
+    }
+
+    .valores-title {
+        font-size: 1.875rem;
+    }
+}
+
 /* Team Section */
 .team {
     display: grid;
