@@ -318,6 +318,34 @@
             <textarea wire:model="clinical_specs" rows="3" placeholder="{{ __('cms.products.clinical_specs_placeholder') }}"
                class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none placeholder-slate-300"></textarea>
          </div>
+         {{-- Atributos del Producto --}}
+         @if($attributeGroups->isNotEmpty())
+         <div class="space-y-4">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Atributos del Producto</h4>
+            @foreach($attributeGroups as $attribute)
+               @if($attribute->activeValues->isNotEmpty())
+               <div class="rounded-lg border border-slate-100 bg-slate-50/50 p-4 space-y-2">
+                  <div class="flex items-center justify-between">
+                     <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">{{ $attribute->name }}</span>
+                     @if($attribute->unit)
+                        <span class="text-xs text-slate-400">{{ $attribute->unit }}</span>
+                     @endif
+                  </div>
+                  <div class="flex flex-wrap gap-3">
+                     @foreach($attribute->activeValues as $value)
+                     <label class="inline-flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                        <input type="checkbox" value="{{ $value->id }}" wire:model="attribute_value_ids"
+                               class="rounded border-slate-300 text-primary focus:ring-primary">
+                        {{ $value->display_label }}
+                     </label>
+                     @endforeach
+                  </div>
+               </div>
+               @endif
+            @endforeach
+            @error('attribute_value_ids') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+         </div>
+         @endif
          {{-- Imágenes y Documentos --}}
          <div class="border-t border-slate-100 pt-5 space-y-4">
             <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.media_section') }}</h4>

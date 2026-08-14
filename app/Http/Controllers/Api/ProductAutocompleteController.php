@@ -42,12 +42,7 @@ class ProductAutocompleteController extends Controller
             ->limit(8)
             ->get();
 
-        $products = $query->unique('id')->values()->map(function ($product, $index) {
-            // Usar las mismas imágenes que la página de producto (im1.png - im6.png)
-            $imagePool = ['im1.png', 'im2.png', 'im3.png', 'im4.png', 'im5.png', 'im6.png'];
-            $imageIndex = $index % count($imagePool);
-            $imageUrl = asset('images/' . $imagePool[$imageIndex]);
-
+        $products = $query->unique('id')->values()->map(function ($product) {
             return [
                 'id' => $product->id,
                 'slug' => $product->slug,
@@ -55,7 +50,7 @@ class ProductAutocompleteController extends Controller
                 'price' => $product->price,
                 'formatted_price' => '$' . number_format($product->price, 2),
                 'category' => $product->category?->name ?? 'Helin',
-                'image' => $imageUrl,
+                'image' => $product->main_image_url,
                 'url' => route('producto', ['slug' => $product->slug]),
             ];
         });

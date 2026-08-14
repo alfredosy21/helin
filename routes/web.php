@@ -30,7 +30,10 @@ use App\Http\Controllers\Cms\{
     ResourceTypeController,
     CustomerTypesController,
     DeliveryMethodsController,
-    CommercialRequestsController
+    CommercialRequestsController,
+    WhatsAppNumbersController,
+    AttributesController,
+    AttributeValuesController
 };
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\Web\ResourceFilterController;
@@ -150,6 +153,18 @@ Route::prefix('cms')->group(function () {
         /* 3.13. Commercial Requests Management */
         Route::get('/commercial-requests', CommercialRequestsController::class)->name('commercial-requests.index')
                 ->middleware('permission:6,1'); // Solicitudes (ID:6), Solicitudes Comerciales (submódulo 1)
+
+        /* 3.14. WhatsApp Numbers Management */
+        Route::get('/whatsapp-numbers', WhatsAppNumbersController::class)->name('whatsapp-numbers.index')
+                ->middleware('permission:' . \App\Models\Module::SETTINGS . ',' . \App\Models\Submodule::WHATSAPP_NUMBERS); // Configuración (ID:2), Números de WhatsApp
+
+        /* 3.15. Attributes Management */
+        Route::get('/attributes', AttributesController::class)->name('attributes.index')
+                ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::ATTRIBUTES); // Catálogo (ID:3), Atributos de Productos
+
+        /* 3.16. Attribute Values Management */
+        Route::get('/attribute-values', AttributeValuesController::class)->name('attribute-values.index')
+                ->middleware('permission:' . \App\Models\Module::CATALOG . ',' . \App\Models\Submodule::ATTRIBUTE_VALUES); // Catálogo (ID:3), Valores de Atributos
 
         /* 3.10. Website Menu Management */
         Route::get('/menu', MenuController::class)->name('menu.index')

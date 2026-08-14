@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Models\ResourceType;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
-use Illuminate\Support\Str;
 
 #[Title('Gestión de Tipos de Recursos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
@@ -28,7 +28,7 @@ class ResourceTypeController extends Component
     public $search = '';
     public $perPage = 10;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -39,6 +39,10 @@ class ResourceTypeController extends Component
 
     public function mount()
     {
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, __('cms.abort.resource_types'));
+        }
         $this->resetFilters();
     }
 
@@ -150,10 +154,5 @@ class ResourceTypeController extends Component
     public function updatingPerPage()
     {
         $this->resetPage();
-    }
-
-    public function updatedName()
-    {
-        $this->slug = Str::slug($this->name);
     }
 }

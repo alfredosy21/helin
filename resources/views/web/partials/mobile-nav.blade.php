@@ -17,28 +17,18 @@
             </a>
             <div class="border-t border-helin-border my-3"></div>
             <p class="px-4 py-2 text-xs text-helin-text uppercase font-semibold tracking-wide">Categorías</p>
-            <a href="#" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <span class="flex items-center gap-3"><i class="fas fa-tooth text-helin-text w-5"></i> Implantología</span>
-                <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-            </a>
-            <a href="#" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <span class="flex items-center gap-3"><i class="fas fa-bone text-helin-text w-5"></i> Regeneración Ósea</span>
-                <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-            </a>
-            <a href="#" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <span class="flex items-center gap-3"><i class="fas fa-layer-group text-helin-text w-5"></i> Osteosíntesis</span>
-                <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-            </a>
-            <a href="#" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <span class="flex items-center gap-3"><i class="fas fa-smile text-helin-text w-5"></i> Cuidado Bucal</span>
-                <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-            </a>
-            <a href="#" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <span class="flex items-center gap-3"><i class="fas fa-scissors text-helin-text w-5"></i> Instrumentos</span>
-                <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-            </a>
+            @foreach(\App\Models\Category::active()->ordered()->get() as $category)
+                <a href="{{ route('catalogo', ['category' => $category->slug]) }}" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                    <span class="flex items-center gap-3"><i class="fas fa-th text-helin-text w-5"></i> {{ $category->name }}</span>
+                    <i class="fas fa-chevron-right text-xs text-helin-text"></i>
+                </a>
+            @endforeach
             <div class="border-t border-helin-border my-3"></div>
-            <a href="https://wa.me/584127398580" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+            @php
+                $settings = \App\Models\Settings::getSettings();
+                $mobileWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+            @endphp
+            <a href="https://wa.me/{{ $mobileWhatsApp }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fab fa-whatsapp text-green-500"></i> Escríbenos por WhatsApp
             </a>
             <a href="{{ route('solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">

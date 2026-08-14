@@ -29,14 +29,14 @@
                     <div class="meta-icon"><i class="fas fa-heartbeat"></i></div>
                     <div>
                         <small>Especialidad</small>
-                        <strong>{{ $resource->specialty->name ?? 'General' }}</strong>
+                        <strong>{{ $resource->resourceSpecialty->name ?? 'General' }}</strong>
                     </div>
                 </div>
                 <div class="meta-item">
                     <div class="meta-icon"><i class="fas fa-file-alt"></i></div>
                     <div>
                         <small>Formato</small>
-                        <strong>{{ $resource->type->name ?? 'Artículo' }}</strong>
+                        <strong>{{ $resource->resourceType->name ?? 'Artículo' }}</strong>
                     </div>
                 </div>
                 <div class="meta-item">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="clinical-photo" style="background-image: url('{{ asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
+        <div class="clinical-photo" style="background-image: url('{{ $resource->image_url ?: asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
     </section>
 
     <nav class="tabs">
@@ -140,7 +140,11 @@
                         <p>Un asesor Helin puede ayudarte a resolver dudas sobre este caso y los materiales utilizados.</p>
                     </div>
                 </div>
-                <a href="https://wa.me/584244669150?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
+                @php
+                    $settings = \App\Models\Settings::getSettings();
+                    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+                @endphp
+                <a href="https://wa.me/{{ $caseWhatsApp }}?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
                     <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
                 </a>
             </section>

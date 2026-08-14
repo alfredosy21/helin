@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Models\ResourceSpecialty;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -33,7 +34,7 @@ class ResourceSpecialtyController extends Component
     public $search = '';
     public $perPage = 10;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -45,6 +46,10 @@ class ResourceSpecialtyController extends Component
 
     public function mount()
     {
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, __('cms.abort.resource_specialties'));
+        }
         $this->resetFilters();
     }
 

@@ -88,13 +88,6 @@
                                     <div class="flex-1">
                                         <div class="font-medium text-[#222] mb-1">{{ $resource->title }}</div>
                                         <div class="text-xs text-slate-500 line-clamp-2">{{ Str::limit($resource->description, 80) }}</div>
-                                        @if($resource->tags)
-                                        <div class="flex flex-wrap gap-1 mt-2">
-                                            @foreach(json_decode($resource->tags) as $tag)
-                                            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">{{ $tag }}</span>
-                                            @endforeach
-                                        </div>
-                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -104,7 +97,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-xs text-slate-600">{{ $resource->speciality ?? '-' }}</span>
+                                <span class="text-xs text-slate-600">{{ $resource->resourceSpecialty->name ?? '-' }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="text-xs text-slate-600">{{ $resource->format ?? '-' }}</span>

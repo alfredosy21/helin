@@ -42,6 +42,7 @@ class ModuleSeeder extends Seeder
                     ['name' => 'Métodos de Pago',     'url' => '/cms/payment-methods', 'icon' => 'credit-card'],
                     ['name' => 'Tipos de Cliente',    'url' => '/cms/customer-types',  'icon' => 'users'],
                     ['name' => 'Métodos de Entrega',  'url' => '/cms/delivery-methods','icon' => 'truck'],
+                    ['name' => 'Números de WhatsApp', 'url' => '/cms/whatsapp-numbers', 'icon' => 'message-circle'],
                 ]
             ],
             [
@@ -55,6 +56,8 @@ class ModuleSeeder extends Seeder
                     ['name' => 'Líneas de Productos', 'url' => '/cms/catalog/lines', 'icon' => 'layers'],
                     ['name' => 'Sistema de Productos', 'url' => '/cms/catalog/system-products', 'icon' => 'layers'],
                     ['name' => 'Plataforma de Productos', 'url' => '/cms/catalog/product-platforms', 'icon' => 'layers'],
+                    ['name' => 'Atributos de Productos', 'url' => '/cms/attributes', 'icon' => 'sliders-horizontal'],
+                    ['name' => 'Valores de Atributos', 'url' => '/cms/attribute-values', 'icon' => 'list'],
                 ]
             ],
             [

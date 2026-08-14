@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\CommercialRequest;
 use App\Models\Activities;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
@@ -26,7 +27,10 @@ class CommercialRequestsController extends Component
 
     public function mount(): void
     {
-        // Authorization check if needed
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, __('cms.abort.commercial_requests'));
+        }
     }
 
     public function render()

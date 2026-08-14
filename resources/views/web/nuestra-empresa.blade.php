@@ -129,7 +129,7 @@
             <a href="{{ route('contactanos', ['asunto' => 'informacion-comercial']) }}" class="btn-outline">Solicitar atención comercial <i class="fas fa-comments"></i></a>
         </div>
         <div class="team-photo">
-            <img src="{{ asset('images/team_helin_test.png') }}" alt="Team Helin">
+            <img src="{{ $teamSection->image ? asset('storage/' . $teamSection->image) : asset('images/team_helin_test.png') }}" alt="Team Helin">
         </div>
     </section>
 
@@ -157,7 +157,11 @@
             <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
         </div>
         <div class="cta-actions">
-            <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            @php
+                $settings = \App\Models\Settings::getSettings();
+                $companyWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+            @endphp
+            <a href="https://wa.me/{{ $companyWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
             <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Enviar un correo</a>
         </div>
     </section>

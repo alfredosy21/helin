@@ -90,14 +90,26 @@
       <div class="container mx-auto px-4">
          <div class="categories bg-white border border-helin-border rounded-3xl p-6 shadow-lg mb-8" style="box-shadow: 0 18px 45px rgba(15,47,67,.08);">
             <!-- Categoría Destacada -->
+            @php
+                $featuredCategory = \Illuminate\Support\Facades\Schema::hasColumn('categories', 'is_featured')
+                    ? \App\Models\Category::where('is_featured', true)->where('is_active', true)->first()
+                    : null;
+
+                if (!$featuredCategory) {
+                    $featuredCategory = \App\Models\Category::where('slug', 'implantologia')->where('is_active', true)->first()
+                        ?? \App\Models\Category::where('is_active', true)->orderBy('order')->first();
+                }
+            @endphp
+            @if($featuredCategory)
             <article class="category-featured relative min-h-[200px] rounded-2xl mb-4 border border-helin-border overflow-hidden">
-               <img src="{{ asset('images/categoria1.png') }}" alt="Implantología" class="category-featured-bg hidden md:block">
+               <img src="{{ asset('images/categoria1.png') }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
                <div class="category-featured-content">
                   <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
-                  <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">Implantología</h2>
-                  <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-link">Ver categoría →</a>
+                  <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">{{ $featuredCategory->name }}</h2>
+                  <a href="{{ route('catalogo', ['category' => $featuredCategory->slug]) }}" class="text-link">Ver categoría →</a>
                </div>
             </article>
+            @endif
             <!-- Skeleton Loader para Categorías -->
             <div id="categoriesSkeleton" class="skeleton-grid skeleton-grid-responsive">
                @for($i = 1; $i <= 6; $i++)
@@ -152,36 +164,20 @@
            </div>
 
                       <div class="mini-grid">
+                @forelse($featuredProducts as $product)
                 @include('web.components.product-card', [
-                    'productImage' => asset('images/im1.png'),
-                    'productName' => 'Producto Destacado 1',
-                    'productBrand' => 'Helin',
-                    'productPrice' => 0.00,
-                    'productOldPrice' => null,
-                    'productBadge' => 'Nuevo',
-                    'productLink' => route('catalogo'),
-                    'productSlug' => 'producto-destacado-1'
+                    'productImage' => $product->main_image_url,
+                    'productName' => $product->name,
+                    'productBrand' => $product->brand->name ?? 'Helin',
+                    'productPrice' => $product->price,
+                    'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                    'productBadge' => $product->is_new ? 'Nuevo' : ($product->is_on_sale ? 'Oferta' : ''),
+                    'productLink' => route('producto', ['slug' => $product->slug]),
+                    'productSlug' => $product->slug
                 ])
-                @include('web.components.product-card', [
-                    'productImage' => asset('images/im2.png'),
-                    'productName' => 'Producto Destacado 2',
-                    'productBrand' => 'Helin',
-                    'productPrice' => 0.00,
-                    'productOldPrice' => null,
-                    'productBadge' => '',
-                    'productLink' => route('catalogo'),
-                    'productSlug' => 'producto-destacado-2'
-                ])
-                @include('web.components.product-card', [
-                    'productImage' => asset('images/im3.png'),
-                    'productName' => 'Producto Destacado 3',
-                    'productBrand' => 'Helin',
-                    'productPrice' => 0.00,
-                    'productOldPrice' => null,
-                    'productBadge' => 'Oferta',
-                    'productLink' => route('catalogo'),
-                    'productSlug' => 'producto-destacado-3'
-                ])
+                @empty
+                    <p class="text-sm text-helin-text col-span-full">No hay productos destacados disponibles.</p>
+                @endforelse
            </div>
          </div>
       </section>
@@ -189,14 +185,10 @@
 
 
    @foreach($productSections as $index => $section)
-       @php
-           $sectionTitleLower = strtolower($section->title ?? '');
-           $isInstrumentosEquipos = str_contains($sectionTitleLower, 'instrumentos') || str_contains($sectionTitleLower, 'equipos');
-       @endphp
-       @if($section->status == 1 && $section->status_content == 1 && !$isInstrumentosEquipos)
-           @php
-               $sectionCat   = $sectionCategories[$section->id] ?? null;
-               $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
+        @if($section->status == 1 && $section->status_content == 1)
+            @php
+                $sectionCat   = $sectionCategories[$section->id] ?? null;
+                $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
                $categorySlug = $sectionCat['slug'] ?? null;
                $products     = $category ? \App\Models\Product::where('category_id', $category->id)
                    ->where('is_active', true)
@@ -241,93 +233,31 @@
                        </div>
                        <a href="{{ $categorySlug ? route('catalogo', ['category' => $categorySlug]) : ($section->url_button ?: route('catalogo')) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
                    </div>
-                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                       @if($products->count() > 0)
-                           @foreach($products as $product)
-                               @php
-                                   $badge = '';
-                                   if($product->is_new) $badge = 'Nuevo';
-                                   elseif($product->is_on_sale) $badge = 'Oferta';
-                                   $sectionImages = [asset('images/im1.png'), asset('images/im2.png'), asset('images/im3.png'), asset('images/im4.png')];
-                                   $sectionImage = $sectionImages[($loop->index) % 4];
-                               @endphp
-                               @include('web.components.product-card', [
-                                   'productImage' => $sectionImage,
-                                   'productName' => $product->name,
-                                   'productBrand' => $product->brand->name ?? 'Helin',
-                                   'productPrice' => $product->price,
-                                   'productOldPrice' => $product->is_on_sale ? $product->price : null,
-                                   'productBadge' => $badge,
-                                   'productLink' => route('producto', ['slug' => $product->slug]),
-                                   'productSlug' => $product->slug,
-                               ])
-                           @endforeach
-                       @else
-                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 1', 'productBrand' => 'Helin', 'productPrice' => 299.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
-                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 2', 'productBrand' => 'Helin', 'productPrice' => 149.00, 'productBadge' => ''])
-                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 3', 'productBrand' => 'Helin', 'productPrice' => 89.00, 'productOldPrice' => 120.00, 'productBadge' => 'Oferta'])
-                           @include('web.components.product-card', ['productImage' => asset('storage/products/73432-21300078.webp'), 'productName' => 'Producto Destacado 4', 'productBrand' => 'Helin', 'productPrice' => 45.00, 'productBadge' => ''])
-                       @endif
-                   </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @if($products->count() > 0)
+                            @foreach($products as $product)
+                                @php
+                                    $badge = '';
+                                    if($product->is_new) $badge = 'Nuevo';
+                                    elseif($product->is_on_sale) $badge = 'Oferta';
+                                @endphp
+                                @include('web.components.product-card', [
+                                    'productImage' => $product->main_image_url,
+                                    'productName' => $product->name,
+                                    'productBrand' => $product->brand->name ?? 'Helin',
+                                    'productPrice' => $product->price,
+                                    'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                                    'productBadge' => $badge,
+                                    'productLink' => route('producto', ['slug' => $product->slug]),
+                                    'productSlug' => $product->slug,
+                                ])
+                            @endforeach
+                        @endif
+                    </div>
                </div>
            </section>
        @endif
    @endforeach
-
-   <!-- Destacados en Instrumentos y Equipos -->
-   <section class="py-8 sm:py-16">
-       <div class="container mx-auto px-4">
-           <div class="section-title flex items-end justify-between gap-5 mb-5">
-               <div>
-                   <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">Destacados en Instrumentos y Equipos</h2>
-                   <p class="text-helin-text text-sm mt-1">Explora instrumentos y equipos diseñados para aportar precisión y eficiencia a la práctica odontológica.</p>
-               </div>
-               <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">Ver todos los productos →</a>
-           </div>
-           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-               @include('web.components.product-card', [
-                   'productImage' => asset('images/im1.png'),
-                   'productName' => 'Instrumento Destacado 1',
-                   'productBrand' => 'Helin',
-                   'productPrice' => 0.00,
-                   'productOldPrice' => null,
-                   'productBadge' => 'Nuevo',
-                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
-                   'productSlug' => 'instrumento-destacado-1'
-               ])
-               @include('web.components.product-card', [
-                   'productImage' => asset('images/im2.png'),
-                   'productName' => 'Instrumento Destacado 2',
-                   'productBrand' => 'Helin',
-                   'productPrice' => 0.00,
-                   'productOldPrice' => null,
-                   'productBadge' => '',
-                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
-                   'productSlug' => 'instrumento-destacado-2'
-               ])
-               @include('web.components.product-card', [
-                   'productImage' => asset('images/im3.png'),
-                   'productName' => 'Instrumento Destacado 3',
-                   'productBrand' => 'Helin',
-                   'productPrice' => 0.00,
-                   'productOldPrice' => null,
-                   'productBadge' => 'Oferta',
-                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
-                   'productSlug' => 'instrumento-destacado-3'
-               ])
-               @include('web.components.product-card', [
-                   'productImage' => asset('images/im4.png'),
-                   'productName' => 'Instrumento Destacado 4',
-                   'productBrand' => 'Helin',
-                   'productPrice' => 0.00,
-                   'productOldPrice' => null,
-                   'productBadge' => '',
-                   'productLink' => route('catalogo', ['category' => 'equipos-odontologicos']),
-                   'productSlug' => 'instrumento-destacado-4'
-               ])
-           </div>
-       </div>
-   </section>
 
    <!-- Testimonios -->
    <section class="testimonials container mx-auto px-4 mt-14 rounded-3xl p-9" style="
@@ -353,41 +283,16 @@
       </div>
       <div class="testimonial-carousel overflow-hidden -mx-2.5">
          <div id="testimonialTrack" class="testimonial-track flex transition-transform duration-500 ease-in-out px-2.5">
-             @php
-                 $duplicatedTestimonial = null;
-             @endphp
              @foreach($testimonials as $testimonial)
-                 @php
-                     $authorName = strtolower($testimonial->name ?? '');
-                     $testimonialImage = '';
-                     if (str_contains($authorName, 'maría fernanda lópez')) {
-                         $testimonialImage = asset('images/dra_test.png');
-                     } elseif (str_contains($authorName, 'josé andrés rivas')) {
-                         $testimonialImage = asset('images/dr_test.png');
-                         $duplicatedTestimonial = $testimonial;
-                     } elseif (str_contains($authorName, 'sorrisa') || str_contains($authorName, 'sonrisa') || str_contains($authorName, 'integral')) {
-                         $testimonialImage = asset('images/clinica_test.png');
-                     }
-                 @endphp
                  <div class="testimonial-slide w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2.5">
                      @include('web.components.testimonial-card', [
                          'testimonialText' => $testimonial->content,
                          'testimonialAuthor' => $testimonial->name,
                          'testimonialTitle' => $testimonial->specialty,
-                         'testimonialImage' => $testimonialImage
+                         'testimonialImage' => $testimonial->image ? asset('storage/' . $testimonial->image) : null
                      ])
                  </div>
              @endforeach
-             @if($duplicatedTestimonial)
-                 <div class="testimonial-slide w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2.5">
-                     @include('web.components.testimonial-card', [
-                         'testimonialText' => $duplicatedTestimonial->content,
-                         'testimonialAuthor' => $duplicatedTestimonial->name,
-                         'testimonialTitle' => $duplicatedTestimonial->specialty,
-                         'testimonialImage' => asset('images/dr_test.png')
-                     ])
-                 </div>
-             @endif
          </div>
       </div>
    </section>

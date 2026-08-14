@@ -67,6 +67,8 @@ class ProductsController extends Component {
     // --- Propiedades de Relaciones ---
     public ?int $system_product_id = null;
     public ?int $product_platform_id = null;
+    // --- Atributos Dinámicos del Producto ---
+    public array $attribute_value_ids = [];
     // --- Gestión de Archivos (Temporary uploads) ---
     public $featured_image;
     public $gallery = [];
@@ -98,6 +100,8 @@ class ProductsController extends Component {
             'featured_image' => 'nullable|image|max:2048', // 2MB Max
             'gallery.*' => 'nullable|image|max:2048',
             'documents.*' => 'nullable|mimes:pdf,doc,docx|max:5120', // 5MB Max
+            'attribute_value_ids' => 'nullable|array',
+            'attribute_value_ids.*' => 'exists:attribute_values,id',
         ];
     }
 
@@ -137,6 +141,10 @@ class ProductsController extends Component {
             'brands' => Brand::all(),
             'systemProducts' => \App\Models\SystemProduct::all(),
             'productPlatforms' => \App\Models\ProductPlatform::all(),
+            'attributeGroups' => \App\Models\Attribute::active()
+                ->with(['activeValues'])
+                ->ordered()
+                ->get(),
         ]);
     }
 
@@ -234,6 +242,9 @@ class ProductsController extends Component {
                 }
             }
 
+            // 4. Atributos dinámicos
+            $product->attributeValues()->sync(array_map('intval', array_values($this->attribute_value_ids)));
+
             Activities::saveActivity(__('cms.controllers.products.activity_managed', ['name' => $product->name, 'sku' => $product->sku]));
             DB::commit();
 
@@ -278,6 +289,11 @@ class ProductsController extends Component {
         $this->sale_start_date = $product->sale_start_date ? $product->sale_start_date->format('Y-m-d') : null;
         $this->sale_end_date = $product->sale_end_date ? $product->sale_end_date->format('Y-m-d') : null;
         $this->published_at = $product->published_at ? $product->published_at->format('Y-m-d\TH:i') : null;
+
+        $this->attribute_value_ids = $product->attributeValues()
+            ->pluck('attribute_values.id')
+            ->map(fn($id) => (string) $id)
+            ->all();
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -374,6 +390,7 @@ class ProductsController extends Component {
             'is_active', 'is_featured', 'is_new', 'is_on_sale',
             'sale_price', 'sale_start_date', 'sale_end_date', 'published_at',
             'system_product_id', 'product_platform_id',
+            'attribute_value_ids',
             'featured_image', 'gallery', 'documents', 'editingId'
         ]);
         $this->resetValidation();

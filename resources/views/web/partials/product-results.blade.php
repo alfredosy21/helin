@@ -30,16 +30,14 @@
     </div>
 @else
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        @foreach($products as $index => $product)
+        @foreach($products as $product)
             @php
                 $badge = '';
                 if($product->is_new) $badge = 'Nuevo';
                 elseif($product->is_on_sale) $badge = 'Oferta';
-                $imgPool = ['im2.png','im3.png','im4.png','im5.png','im6.png'];
-                $productImg = asset("images/" . $imgPool[$index % count($imgPool)]);
             @endphp
             @include('web.components.product-card', [
-                'productImage'    => $productImg,
+                'productImage'    => $product->main_image_url,
                 'productName'     => $product->name,
                 'productBrand'    => $product->brand->name ?? 'Helin',
                 'productPrice'    => $product->price,

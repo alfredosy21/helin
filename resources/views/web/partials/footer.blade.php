@@ -16,15 +16,27 @@
             @endif
                 <p class="text-white/80 text-xs md:text-sm leading-relaxed mb-3 md:mb-6">{{ $settings->tagline }}</p>
                 <div class="flex space-x-2 md:space-x-3">
-                    <a href="https://www.instagram.com/helin.latam/" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-sm md:text-base">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/helin-latam" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-sm md:text-base">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://www.facebook.com/helin.latam.user" target="_blank" class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-sm md:text-base">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
+                    @php
+                        $socials = [
+                            'instagram' => $settings->instagram ?? null,
+                            'facebook' => $settings->facebook ?? null,
+                            'linkedin' => $settings->linkedin ?? null,
+                            'youtube' => $settings->youtube ?? null,
+                        ];
+                        $socialIcons = [
+                            'instagram' => 'fab fa-instagram',
+                            'facebook' => 'fab fa-facebook-f',
+                            'linkedin' => 'fab fa-linkedin-in',
+                            'youtube' => 'fab fa-youtube',
+                        ];
+                    @endphp
+                    @foreach($socials as $network => $url)
+                        @if($url)
+                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-sm md:text-base">
+                                <i class="{{ $socialIcons[$network] }}"></i>
+                            </a>
+                        @endif
+                    @endforeach
                 </div>
             </div>
 
@@ -148,19 +160,19 @@
             <div>
                 <h4 class="text-base md:text-lg mb-2.5 md:mb-4">Contáctanos</h4>
                 <div class="space-y-2 md:space-y-3 text-white/80 text-xs md:text-sm">
-                    <a href="mailto:{{ $settings->email ?? 'info@helinbeam.com' }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
+                    <a href="mailto:{{ $settings->email ?? 'hola@helin.company' }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-7 h-7 md:w-8 md:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300 text-xs md:text-sm">
                             <i class="fas fa-envelope"></i>
                         </div>
-                        <span>{{ $settings->email ?? 'info@helinbeam.com' }}</span>
+                        <span>{{ $settings->email ?? 'hola@helin.company' }}</span>
                     </a>
-                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 412 739 8580') }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
+                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 424 466 9150') }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-7 h-7 md:w-8 md:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300 text-xs md:text-sm">
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-[11px] md:text-xs">Central telefónica</span>
-                            <span>{{ $settings->phone ?? '+58 412 739 8580' }}</span>
+                            <span>{{ $settings->phone ?? '+58 424 466 9150' }}</span>
                         </div>
                     </a>
                 </div>

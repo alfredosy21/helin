@@ -4,7 +4,7 @@
 @section('meta-description', $product->seo_description ?? $product->description ?? 'Compra ' . $product->name . ' en Helin. ' . ($product->category->name ?? '') . ' de alta calidad para profesionales odontológicos. Envíos a todo Venezuela.')
 @section('meta-keywords', $product->seo_keywords ?? ($product->name . ', ' . ($product->category->name ?? '') . ', implantes dentales, material dental, helin, productos odontológicos'))
 @section('og-type', 'product')
-@section('og-image', $product->image ? asset('storage/' . $product->image) : asset('images/helin-product-default.jpg'))
+@section('og-image', $product->main_image_url)
 @section('twitter-card', 'product')
 
 @push('styles')
@@ -32,18 +32,20 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
             @php
-                $galleryImages = [
-                    asset('images/im3.png'),
-                    asset('images/im4.png'),
-                    asset('images/im5.png'),
-                    asset('images/im6.png'),
-                ];
+                $galleryImages = $product->images->map(function ($img) {
+                    return asset('storage/' . $img->file_path);
+                })->values()->all();
+
+                if (empty($galleryImages)) {
+                    $galleryImages = [$product->main_image_url];
+                }
             @endphp
             <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4">
                 <div class="w-full" style="aspect-ratio: 1 / 1;">
                     <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="w-full h-full object-contain" loading="eager">
                 </div>
             </div>
+            @if(count($galleryImages) > 1)
             <div class="grid grid-cols-4 gap-3">
                 @foreach($galleryImages as $i => $img)
                 <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 bg-white transition-all">
@@ -53,6 +55,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 </button>
                 @endforeach
             </div>
+            @endif
         </div>
 
         <!-- Info del Producto -->
@@ -171,7 +174,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
                     data-sku="{{ $product->sku ? $product->sku . '-33' : '' }}"
                     data-dimension="Ø3.3 mm"
-                    data-image="{{ asset('images/im3.png') }}">
+                    data-image="{{ $product->main_image_url }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
             </div>
@@ -268,15 +271,14 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @if($relatedProducts->count() > 0)
-                @foreach($relatedProducts as $ri => $related)
+                @foreach($relatedProducts as $related)
                     @php
                         $badge = '';
                         if($related->is_new) $badge = 'Nuevo';
                         elseif($related->is_on_sale) $badge = 'Oferta';
-                        $relatedImg = asset('images/im' . (($ri % 6) + 1) . '.png');
                     @endphp
                     @include('web.components.product-card', [
-                        'productImage' => $relatedImg,
+                        'productImage' => $related->main_image_url,
                         'productName' => $related->name,
                         'productBrand' => $related->brand->name ?? 'Helin',
                         'productPrice' => $related->price,
@@ -286,11 +288,6 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         'productSlug' => $related->slug,
                     ])
                 @endforeach
-            @else
-                @include('web.components.product-card', ['productImage' => asset('images/im1.png'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im2.png'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im3.png'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im4.png'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => '', 'productLink' => route('catalogo')])
             @endif
         </div>
     </section>

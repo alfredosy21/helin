@@ -53,13 +53,18 @@ class Sections extends Model {
      */
     protected $fillable = [
         'title',
+        'subtitle',
         'content',
+        'description',
+        'items',
+        'layout_type',
+        'icon_style',
         'image',
         'status',
         'position',
         'name_button',
         'url_button',
-        'status',
+        'buttons',
         'status_content'
     ];
 

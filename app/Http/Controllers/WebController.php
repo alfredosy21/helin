@@ -141,7 +141,7 @@ class WebController extends Controller
      */
     public function producto(string $slug)
     {
-        $product = \App\Models\Product::with(['category', 'brand'])
+        $product = \App\Models\Product::with(['category', 'brand', 'attributeValues', 'images'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -177,48 +177,35 @@ class WebController extends Controller
         $cities          = \App\Models\City::all(); // all for JS filter
         $settings        = \App\Models\Settings::getSettings();
 
-        $pickupInfo = [
-            // Zona 1 - Ejecutivo Caracas
-            'DC' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'MI' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'VA' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'AN' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'SU' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'MO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'NE' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'DF' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'BO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            // Zona 2 - Ejecutivo Valencia
-            'CA' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AR' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'CO' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'GU' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AP' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AM' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            // Zona 3 - Ejecutivo Barquisimeto
-            'LA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'YA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'PO' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'BA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'ME' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'TR' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'TA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            // Zona 4 - Ejecutivo Maracaibo
-            'ZU' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
-            'FA' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
-        ];
-
         $pickups = [];
-        foreach ($pickupInfo as $code => $meta) {
-            $whatsapp = $settings->{"{$meta['city']}_whatsapp"} ?? null;
-            $location = $settings->{"{$meta['city']}_location"} ?? null;
+        $offices = ['caracas' => 1, 'valencia' => 2, 'barquisimeto' => 3, 'maracaibo' => 4];
+        $settings = is_object($settings) ? $settings : null;
 
-            $pickups[$code] = [
-                'label'    => $meta['label'],
-                'zone'     => $meta['zone'],
-                'phone'    => $meta['phone'],
-                'whatsapp' => $whatsapp,
-                'location' => $location,
+        $officeByPhone = [];
+        foreach ($offices as $city => $zone) {
+            $whatsapp = $settings?->{"{$city}_whatsapp"} ?? null;
+            if ($whatsapp) {
+                $officeByPhone[preg_replace('/[^0-9]/', '', $whatsapp)] = ['city' => $city, 'zone' => $zone];
+            }
+        }
+
+        $activeNumbers = \App\Models\WhatsAppNumber::with('state')->where('is_active', true)->get();
+        foreach ($activeNumbers as $number) {
+            $state = $number->state;
+            if (!$state) {
+                continue;
+            }
+
+            $phoneDigits = preg_replace('/[^0-9]/', '', $number->phone_number);
+            $office = $officeByPhone[$phoneDigits] ?? ['city' => null, 'zone' => null];
+            $city = $office['city'];
+
+            $pickups[$state->code] = [
+                'label'    => $city ? ucfirst($city) : ($number->executive_name ?? $state->name),
+                'zone'     => $office['zone'],
+                'phone'    => $number->formatted_number,
+                'whatsapp' => $city ? ($settings?->{"{$city}_whatsapp"} ?? null) : null,
+                'location' => $city ? ($settings?->{"{$city}_location"} ?? null) : null,
             ];
         }
 
@@ -355,14 +342,11 @@ class WebController extends Controller
             ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
             ->get();
 
-        $multiplier = 4;
-        $rawResources = $baseResources->flatMap(fn($r) => array_fill(0, $multiplier, $r));
-
         $perPage = 12;
         $currentPage = (int) request('page', 1);
         $resources = new \Illuminate\Pagination\LengthAwarePaginator(
-            $rawResources->forPage($currentPage, $perPage)->values(),
-            $rawResources->count(),
+            $baseResources->forPage($currentPage, $perPage)->values(),
+            $baseResources->count(),
             $perPage,
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
@@ -398,19 +382,14 @@ class WebController extends Controller
             ->limit($limit)
             ->get();
 
-        $results = $products->map(function($product, $index) {
-            // Usar las mismas imágenes que la página de producto (im1.png - im6.png)
-            $imagePool = ['im1.png', 'im2.png', 'im3.png', 'im4.png', 'im5.png', 'im6.png'];
-            $imageIndex = $index % count($imagePool);
-            $imageUrl = asset('images/' . $imagePool[$imageIndex]);
-
+        $results = $products->map(function($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'sale_price' => $product->sale_price,
-                'image' => $imageUrl,
+                'image' => $product->main_image_url,
                 'category' => $product->category ? $product->category->name : 'Sin categoría',
                 'category_slug' => $product->category ? $product->category->slug : null,
                 'brand' => $product->brand ? $product->brand->name : 'Helin',

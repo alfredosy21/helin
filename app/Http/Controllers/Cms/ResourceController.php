@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Models\Resource;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -24,9 +25,7 @@ class ResourceController extends Component
     public $slug;
     public $description;
     public $type;
-    public $specialty;
     public $format;
-    public $tags;
     public $file_path;
     public $url;
     public $thumbnail;
@@ -44,16 +43,14 @@ class ResourceController extends Component
     public $filterSpecialty = '';
     public $perPage = 10;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'title' => 'required|string|max:255',
         'slug' => 'required|string|max:255|unique:resources,slug',
         'description' => 'required|string',
         'type' => 'required|in:case_study,video,manual,technical_sheet,downloadable_guide,article',
-        'specialty' => 'nullable|string|max:100',
         'format' => 'nullable|string|max:50',
-        'tags' => 'nullable|string|max:500',
         'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,zip|max:10240',
         'url' => 'nullable|url|max:500',
         'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -67,6 +64,10 @@ class ResourceController extends Component
 
     public function mount()
     {
+        $user = Auth::user();
+        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+            abort(403, __('cms.abort.resources'));
+        }
         $this->resetFilters();
     }
 
@@ -78,8 +79,7 @@ class ResourceController extends Component
         if ($this->search) {
             $query->where(function($q) {
                 $q->where('title', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('specialty', 'like', '%' . $this->search . '%');
+                  ->orWhere('description', 'like', '%' . $this->search . '%');
             });
         }
 
@@ -89,7 +89,7 @@ class ResourceController extends Component
         }
 
         if ($this->filterSpecialty) {
-            $query->where('specialty', $this->filterSpecialty);
+            $query->where('resource_specialty_id', $this->filterSpecialty);
         }
 
         // Order by position
@@ -115,9 +115,7 @@ class ResourceController extends Component
         $this->slug = $resource->slug;
         $this->description = $resource->description;
         $this->type = $resource->type;
-        $this->specialty = $resource->specialty;
         $this->format = $resource->format;
-        $this->tags = $resource->tags ? implode(', ', json_decode($resource->tags)) : '';
         $this->url = $resource->url;
         $this->current_thumbnail = $resource->thumbnail;
         $this->resource_type_id = $resource->resource_type_id;
@@ -132,6 +130,11 @@ class ResourceController extends Component
 
     public function save()
     {
+        // Auto-generar slug desde el título si no se proporciona
+        if (empty($this->slug)) {
+            $this->slug = Str::slug($this->title);
+        }
+
         // Update validation for slug to ignore current record when editing
         $rules = $this->rules;
         if ($this->editingId) {
@@ -139,21 +142,12 @@ class ResourceController extends Component
         }
         $this->validate($rules);
 
-        // Process tags
-        $tagsArray = [];
-        if ($this->tags) {
-            $tagsArray = array_map('trim', explode(',', $this->tags));
-            $tagsArray = array_filter($tagsArray);
-        }
-
         $data = [
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
             'type' => $this->type,
-            'specialty' => $this->specialty,
             'format' => $this->format,
-            'tags' => json_encode($tagsArray),
             'url' => $this->url,
             'resource_type_id' => $this->resource_type_id,
             'resource_specialty_id' => $this->resource_specialty_id,
@@ -214,7 +208,7 @@ class ResourceController extends Component
     public function resetForm()
     {
         $this->reset([
-            'title', 'slug', 'description', 'type', 'specialty', 'format', 'tags',
+            'title', 'slug', 'description', 'type', 'format',
             'file_path', 'url', 'thumbnail', 'current_thumbnail',
             'resource_type_id', 'resource_specialty_id',
             'is_active', 'featured'
@@ -246,6 +240,13 @@ class ResourceController extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function updatedTitle()
+    {
+        if (empty($this->slug)) {
+            $this->slug = Str::slug($this->title);
+        }
     }
 
     public function updatingFilterType()
