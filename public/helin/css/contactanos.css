@@ -1,5 +1,11 @@
 /* Contáctanos Page - Specific Styles from helin-components-new.css */
 
+/* Header */
+.policies-header {
+    text-align: center;
+    margin: 20px 0 28px;
+}
+
 /* Page Title */
 .page-title {
     text-align: center;
@@ -363,17 +369,93 @@ label span {
 }
 
 @media (max-width: 720px) {
+    .policies-header {
+        margin: 8px 0 12px;
+    }
+
     .page-title {
-        font-size: 2.625rem;
-        margin-bottom: 54px;
+        font-size: 2.5rem;
+        margin-bottom: 36px;
+    }
+
+    .page-title:after {
+        bottom: -16px;
+        width: 60px;
+        height: 3px;
     }
 
     .contact-layout {
-        gap: 32px;
+        gap: 24px;
     }
 
+    /* ── Contacto Mobile: encabezado ── */
     .info-block h2 {
-        font-size: 2rem;
+        font-size: 1.375rem;
+        text-align: center;
+        margin-bottom: 29px;
+    }
+
+    .info-block > p {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+        font-size: 14px;
+    }
+
+    /* ── Contacto Mobile: bloques de info ── */
+    .info-list {
+        gap: 0;
+        margin-bottom: 0;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 20px 0;
+        border: none;
+        border-bottom: 1px solid #DDE5E7;
+    }
+
+    .info-item:first-child {
+        padding-top: 0;
+    }
+
+    .info-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .info-item > div:last-child {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .info-item h3 {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .info-item p {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    /* ── Contacto Mobile: sedes ── */
+    .sedes {
+        padding-top: 22px;
+        margin-top: 0;
+        max-width: 100%;
+        border-top: none;
     }
 
     .form-card {

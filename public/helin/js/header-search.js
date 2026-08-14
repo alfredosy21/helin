@@ -77,6 +77,8 @@ class HelinHeaderSearch {
 
         if (query) {
             window.location.href = '/catalogo?search=' + encodeURIComponent(query);
+        } else {
+            window.location.href = '/catalogo';
         }
     }
 

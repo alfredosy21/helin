@@ -217,8 +217,8 @@
             <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
         </div>
         <div class="cta-actions">
-            <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
-            <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Enviar un correo</a>
+            <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" class="cta-btn-helin"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <a href="{{ route('contactanos') }}" class="cta-btn-helin btn-white"><i class="fas fa-envelope"></i> Enviar un correo</a>
         </div>
     </section>
 </main>

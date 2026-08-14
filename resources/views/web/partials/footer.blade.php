@@ -35,6 +35,7 @@
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Aliados comerciales</a></li>
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}" class="hover:text-white transition-colors">Nuestras políticas</a></li>
+                    <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('contactanos') }}" class="hover:text-white transition-colors">Contáctanos</a></li>
                 </ul>
             </div>
 

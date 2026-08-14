@@ -539,6 +539,40 @@
     margin-top: 6px;
 }
 
+.cta-btn-helin {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #6BC2C3;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background-color .2s;
+}
+
+.cta-btn-helin:hover {
+    background-color: #55b0b1;
+    color: #fff;
+}
+
+.cta-btn-helin.btn-white {
+    background-color: #fff;
+    color: #23384a;
+    border: 1px solid #e0e0e0;
+}
+
+.cta-btn-helin.btn-white:hover {
+    background-color: #f5f5f5;
+    color: #23384a;
+}
+
+.cta-btn-helin i {
+    font-size: 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 1120px) {
     .about-hero,

@@ -5,6 +5,40 @@
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/caso-clinico.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+.tabs-wrapper {
+    position: relative;
+}
+@media (max-width: 1023px) {
+    .tabs-scroll-hint {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        background: linear-gradient(to right, transparent, #fff 70%);
+        pointer-events: none;
+        z-index: 2;
+        color: #9ca3af;
+        font-size: 11px;
+        opacity: 0.7;
+        transition: opacity .25s;
+        border-radius: 0 10px 10px 0;
+    }
+    .tabs-scroll-hint.hidden {
+        opacity: 0;
+    }
+}
+@media (min-width: 1024px) {
+    .tabs-scroll-hint {
+        display: none;
+    }
+}
+</style>
 @endsection
 
 @section('content')
@@ -63,11 +97,16 @@
         <div class="clinical-photo" style="background-image: url('{{ asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
     </section>
 
-    <nav class="tabs">
-        <a class="tab active" href="#descripcion">Descripción</a>
-        <a class="tab" href="#materiales">Materiales utilizados</a>
-        <a class="tab" href="#resultados">Resultados</a>
-    </nav>
+    <div class="tabs-wrapper">
+        <nav class="tabs" id="tabsNav">
+            <a class="tab active" href="#descripcion">Descripción</a>
+            <a class="tab" href="#materiales">Materiales utilizados</a>
+            <a class="tab" href="#resultados">Resultados</a>
+        </nav>
+        <span class="tabs-scroll-hint" id="tabsScrollHint" aria-hidden="true">
+            <i class="fas fa-chevron-right"></i>
+        </span>
+    </div>
 
     <section class="content-layout">
         <div class="tab-panels">
@@ -197,6 +236,28 @@
             }, 2000);
         });
     }
+
+    // Tabs scroll hint
+    (function() {
+        const nav = document.getElementById('tabsNav');
+        const hint = document.getElementById('tabsScrollHint');
+        if (!nav || !hint) return;
+
+        function checkScroll() {
+            const maxScroll = nav.scrollWidth - nav.clientWidth;
+            if (maxScroll <= 2) {
+                hint.classList.add('hidden');
+            } else if (nav.scrollLeft >= maxScroll - 4) {
+                hint.classList.add('hidden');
+            } else {
+                hint.classList.remove('hidden');
+            }
+        }
+
+        nav.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+        checkScroll();
+    })();
 </script>
 @endpush
 @endsection

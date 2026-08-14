@@ -1,5 +1,5 @@
 <!-- Barra Informativa Superior -->
-<div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
+<div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20 hidden sm:block">
     <div class="container mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-y-1.5 gap-x-3 sm:gap-4 text-center">
         @php
             $settings = \App\Models\Settings::getSettings();
@@ -68,10 +68,6 @@
                     </div>
                     <span class="hidden sm:inline text-sm">Ver carrito</span>
                 </a>
-                <!-- Mobile Search Button -->
-                <button id="mobile-search-btn" class="sm:hidden text-white p-2 hover:bg-white/10 rounded-lg transition">
-                    <i class="fas fa-search text-lg"></i>
-                </button>
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition">
                     <i class="fas fa-bars text-lg sm:text-xl"></i>
@@ -79,8 +75,11 @@
             </div>
         </div>
 
-        <!-- Buscador Móvil - Expandible -->
-        <div id="mobile-search" class="hidden sm:hidden mt-2 pb-1">
+        <!-- Línea divisora mobile -->
+        <hr class="sm:hidden w-full" style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin-top:0.5rem;">
+
+        <!-- Buscador Móvil - Siempre visible -->
+        <div id="mobile-search" class="sm:hidden mt-2 pb-1">
             <div class="mobile-search-wrapper">
                 <div class="bg-white rounded-full p-1 shadow-sm">
                     <div class="flex items-center">
@@ -99,11 +98,12 @@
     </div>
 
     <!-- Barra de Menú de Categorías con Mega Menú -->
-    <div class="bg-white border-t border-helin-border relative">
+    <div class="hidden lg:block bg-white border-t border-helin-border relative">
         <!-- Menú Desktop -->
-        <div class="hidden lg:block py-3">
-            <div class="flex items-center justify-between w-full max-w-[1200px] mx-auto px-10">
-                <nav class="flex items-center gap-6 xl:gap-8 text-sm">
+        <div class="py-3">
+            <div class="flex items-center w-full max-w-[1200px] mx-auto px-10">
+                <!-- Productos - Posición fija izquierda -->
+                <nav class="flex items-center text-sm">
                     <!-- Productos con Mega Menú -->
                     <div class="relative group">
                         <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa flex items-center gap-2 font-bold border-b-2 border-transparent py-1">
@@ -246,15 +246,17 @@
                         $currentCategory = request()->route('category') ?? request('category');
                         $currentTag = request('tag');
                     @endphp
-                    <!-- Inicio -->
+                </nav>
+                <!-- Inicio → Ofertas - Bloque central bajo el buscador -->
+                <div class="flex-1 flex items-center justify-center gap-7 text-sm">
                     <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'home' ? 'text-turquesa border-turquesa' : '' }}">Inicio</a>
-                    <!-- Categorías -->
                     <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'implantologia' ? 'text-turquesa border-turquesa' : '' }}">Implantología <span class="text-xs">+</span></a>
                     <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'osteosintesis' ? 'text-turquesa border-turquesa' : '' }}">Osteosíntesis <span class="text-xs">+</span></a>
                     <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'instrumentos' ? 'text-turquesa border-turquesa' : '' }}">Instrumentos <span class="text-xs">+</span></a>
                     <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'planificacion-digital' ? 'text-turquesa border-turquesa' : '' }}">Planificación digital <span class="text-xs">+</span></a>
                     <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent py-1 {{ $currentRoute === 'catalogo' && $currentTag === 'on_sale' ? 'text-turquesa border-turquesa' : '' }}">Ofertas</a>
-                </nav>
+                </div>
+                <!-- Recursos Clínicos - Posición fija derecha -->
                 <div class="flex items-center gap-4 flex-shrink-0">
                     <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors">
                         Recursos Clínicos
@@ -263,18 +265,6 @@
                 </div>
             </div>
         </div>
-        <!-- Menú Mobile - Scrollable -->
-        <div class="lg:hidden border-t border-helin-border mobile-category-menu relative">
-            <div class="flex overflow-x-auto scrollbar-hide py-2 px-4 gap-3 text-xs sm:text-sm whitespace-nowrap">
-                <a href="{{ route('catalogo') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Productos</a>
-                <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Inicio</a>
-                <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Implantología</a>
-                <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Osteosíntesis</a>
-                <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Instrumentos</a>
-                <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Planificación digital</a>
-                <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="text-helin-heading hover:text-turquesa font-semibold flex-shrink-0 px-1">Ofertas</a>
-            </div>
-            <span class="scroll-hint-fade" aria-hidden="true"></span>
-        </div>
+        
     </div>
 </header>

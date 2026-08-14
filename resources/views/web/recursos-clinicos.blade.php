@@ -128,10 +128,21 @@
         </button>
     </form>
 
+    <!-- Botón Filtros - solo móvil/tablet -->
+    <div class="lg:hidden mb-4">
+        <button type="button" id="rcFiltersToggle" class="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-full py-2.5 text-sm font-medium text-helin-heading hover:bg-slate-50 transition-colors">
+            <i class="fas fa-sliders-h text-sm"></i>
+            <span>Filtros</span>
+        </button>
+    </div>
+
+    <!-- Backdrop del panel de filtros móvil -->
+    <div id="rcFiltersOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
+
     <!-- Layout Principal -->
     <section class="layout">
         <!-- Sidebar Filtros -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="rcFiltersPanel">
             <h3>Filtros</h3>
             <div class="filter-group">
                 <div class="group-title">Tipo de recurso</div>
@@ -175,6 +186,27 @@
                 @endforeach
             </div>
         </aside>
+        <style>
+            @media (max-width: 1023px) {
+                #rcFiltersPanel {
+                    position: fixed;
+                    inset: 0;
+                    right: auto;
+                    width: 20rem;
+                    max-width: 85%;
+                    z-index: 50;
+                    background: #fff;
+                    box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+                    transform: translateX(-100%);
+                    transition: transform .3s ease-in-out;
+                    overflow-y: auto;
+                    padding: 1rem;
+                }
+                #rcFiltersPanel.open {
+                    transform: translateX(0);
+                }
+            }
+        </style>
 
         <!-- Grid de Recursos -->
         <section id="resourcesContainer">
@@ -213,6 +245,28 @@
 
 @push('scripts')
 <script src="{{ asset('helin/js/recursos-clinicos.js') }}"></script>
+<script>
+(function() {
+    const toggle = document.getElementById('rcFiltersToggle');
+    const panel = document.getElementById('rcFiltersPanel');
+    const overlay = document.getElementById('rcFiltersOverlay');
+    if (!toggle || !panel || !overlay) return;
+
+    function open() {
+        panel.classList.add('open');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function close() {
+        panel.classList.remove('open');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', open);
+    overlay.addEventListener('click', close);
+})();
+</script>
 @endpush
 
 @endsection
