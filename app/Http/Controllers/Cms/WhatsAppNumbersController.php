@@ -45,7 +45,7 @@ class WhatsAppNumbersController extends Component
     public function mount()
     {
         $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+        if (!$user) {
             abort(403, __('cms.abort.whatsapp_numbers'));
         }
         $this->resetFilters();

@@ -18,13 +18,28 @@
          <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
       </h2>
       <p class="text-helin-text font-bold mt-1">
-         <a href="https://wa.me/584242789481?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Caracas</a>
-         ·
-         <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hover:text-turquesa transition-colors">Valencia</a>
-         ·
-         <a href="https://wa.me/584143805640?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Barquisimeto</a>
-         ·
-         <a href="https://wa.me/584242550811?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Maracaibo</a>
+         @php
+             $nearSettings = \App\Models\Settings::getSettings();
+             $nearCities = [
+                 'Caracas' => 'caracas_whatsapp',
+                 'Valencia' => 'valencia_whatsapp',
+                 'Barquisimeto' => 'barquisimeto_whatsapp',
+                 'Maracaibo' => 'maracaibo_whatsapp',
+             ];
+             $nearWhatsApps = [
+                 'Caracas' => '584242789481',
+                 'Valencia' => '584244669150',
+                 'Barquisimeto' => '584143805640',
+                 'Maracaibo' => '584242550811',
+             ];
+             $nearMessage = 'Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.';
+         @endphp
+         @foreach($nearCities as $nearCity => $nearSettingKey)
+             @php
+                 $nearPhone = ($nearSettings && !empty($nearSettings->{$nearSettingKey})) ? preg_replace('/[^0-9]/', '', $nearSettings->{$nearSettingKey}) : $nearWhatsApps[$nearCity];
+             @endphp
+             <a href="https://wa.me/{{ $nearPhone }}?text={{ urlencode($nearMessage) }}" target="_blank" class="hover:text-turquesa transition-colors">{{ $nearCity }}</a>@if(!$loop->last)<span> · </span>@endif
+         @endforeach
       </p>
    </div>
 </section>

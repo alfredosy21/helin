@@ -108,6 +108,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 };
 
                 const priceInfo = sizePrices[size] || sizePrices['Ø3.3 mm'];
+                const displayPrice = priceInfo.sale ?? priceInfo.base;
                 const currentPriceEl = document.getElementById('currentPrice');
                 const oldPriceEl = document.getElementById('oldPrice');
                 const skuEl = document.getElementById('productSkuValue');
@@ -119,7 +120,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
                 setTimeout(() => {
                     // Actualizar precio actual
-                    currentPriceEl.textContent = '$' + priceInfo.sale.toFixed(2);
+                    currentPriceEl.textContent = '$' + displayPrice.toFixed(2);
 
                     // Actualizar precio anterior si hay oferta
                     if (priceInfo.sale < priceInfo.base) {
@@ -146,7 +147,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
                     // Actualizar datos del botón de carrito (precio, SKU y dimensión)
                     if (cartButton) {
-                        cartButton.setAttribute('data-price', priceInfo.sale.toFixed(2));
+                        cartButton.setAttribute('data-price', displayPrice.toFixed(2));
                         if (priceInfo.sku) cartButton.setAttribute('data-sku', priceInfo.sku);
                         cartButton.setAttribute('data-dimension', size);
                     }
@@ -248,12 +249,14 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     </div>
                 @endif
 
+                @if($product->documents->count() > 0)
                 <div>
-                    <a href="{{ asset('images/ficha_test.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-9 px-4 rounded-full border border-helin-heading/90 bg-white text-sm font-medium text-helin-heading/90 transition-colors hover:text-helin-heading hover:border-helin-heading hover:bg-turquesa/10">
+                    <a href="{{ asset('storage/' . $product->documents->first()->file_path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-9 px-4 rounded-full border border-helin-heading/90 bg-white text-sm font-medium text-helin-heading/90 transition-colors hover:text-helin-heading hover:border-helin-heading hover:bg-turquesa/10">
                         <i class="fas fa-file-pdf text-base mr-2"></i>
                         Descargar ficha técnica
                     </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -281,8 +284,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         'productImage' => $related->main_image_url,
                         'productName' => $related->name,
                         'productBrand' => $related->brand->name ?? 'Helin',
-                        'productPrice' => $related->price,
-                        'productOldPrice' => $related->is_on_sale ? $related->price : null,
+                        'productPrice' => $related->is_on_sale && $related->sale_price ? $related->sale_price : $related->price,
+                        'productOldPrice' => $related->is_on_sale && $related->sale_price ? $related->price : null,
                         'productBadge' => $badge,
                         'productLink' => route('producto', ['slug' => $related->slug]),
                         'productSlug' => $related->slug,

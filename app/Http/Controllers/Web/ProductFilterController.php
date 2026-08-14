@@ -17,7 +17,7 @@ class ProductFilterController extends Controller
         $featured   = $request->get('featured', '');
         $sortBy     = $request->get('sort', 'recent');
 
-        $query = Product::with(['category', 'brand'])->where('is_active', true);
+        $query = Product::with(['category', 'brand', 'images'])->where('is_active', true);
 
         if ($search) {
             $query->where(function ($q) use ($search) {

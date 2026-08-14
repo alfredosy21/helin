@@ -126,7 +126,7 @@
 - [ ] 9.3 Actualizar `BrandSeeder`, `LineSeeder`, `SystemProductSeeder`, `ProductPlatformSeeder` con `image`, `seo_keywords`, `banner_*`
 - [ ] 9.4 Actualizar `ResourceTypeSeeder` y `ResourceSpecialtySeeder` con `image`, `banner_*`
 - [ ] 9.5 Actualizar `ResourceSeeder` con `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results` de los casos clínicos hardcodeados
-- [ ] 9.6 Actualizar `SettingsSeeder` con `opinion_url` y `offices` (migrar los datos de `caracas_location`/`valencia_location`/`barquisimeto_location` al JSON `offices`)
+- [ ] 9.6 Actualizar `SettingsSeeder` con `opinion_url` y `offices` (migrar los datos de `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` al JSON `offices`)
 - [ ] 9.7 Actualizar `TestimonialSeeder` con `specialty` y `content` correctos
 - [ ] 9.8 Crear `ContactMessageSeeder` (vacío)
 - [ ] 9.9 Crear `PageSeoSeeder` con el SEO actualmente hardcodeado en las vistas (home, contacto, empresa, políticas, recursos)

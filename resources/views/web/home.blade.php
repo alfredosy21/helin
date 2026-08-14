@@ -119,12 +119,39 @@
 
             <!-- Grid de Categorías -->
             <div id="categoriesGrid" class="category-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 hidden">
-               @include('web.components.category-card', ['categorySubtitle' => 'Recuperación y soporte', 'categoryTitle' => 'Regeneración ósea guiada', 'categoryLink' => route('catalogo', ['category' => 'regeneracion-guiada-bucal-gbr']), 'categoryImage' => asset('images/cat2.png')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Fijación y precisión', 'categoryTitle' => 'Osteosíntesis', 'categoryLink' => route('catalogo', ['category' => 'placas']), 'categoryImage' => asset('images/cat3.png')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Bienestar oral', 'categoryTitle' => 'Cuidado Bucal', 'categoryLink' => route('catalogo', ['category' => 'cuidados-especiales-quirurgicos']), 'categoryImage' => asset('images/cat4.png')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Precisión clínica', 'categoryTitle' => 'Instrumentos', 'categoryLink' => route('catalogo', ['category' => 'tijeras']), 'categoryImage' => asset('images/cat5.png')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Tecnología para tu práctica', 'categoryTitle' => 'Equipos', 'categoryLink' => route('catalogo', ['category' => 'equipos-odontologicos']), 'categoryImage' => asset('images/cat6.png')])
-               @include('web.components.category-card', ['categorySubtitle' => 'Diagnóstico y exactitud', 'categoryTitle' => 'Planificación Digital', 'categoryLink' => route('catalogo', ['category' => 'planificacion-digital']), 'categoryImage' => asset('images/cat7.png')])
+               @php
+                   $categoryCards = \App\Models\Category::where('is_active', true)
+                       ->whereNull('parent_id')
+                       ->orderBy('order')
+                       ->take(6)
+                       ->get();
+                   $categoryCardImages = [
+                       asset('images/cat2.png'),
+                       asset('images/cat3.png'),
+                       asset('images/cat4.png'),
+                       asset('images/cat5.png'),
+                       asset('images/cat6.png'),
+                       asset('images/cat7.png'),
+                   ];
+                   $categoryCardSubtitles = [
+                       'regeneracion-guiada-bucal-gbr' => 'Recuperación y soporte',
+                       'placas' => 'Fijación y precisión',
+                       'cuidados-especiales-quirurgicos' => 'Bienestar oral',
+                       'tijeras' => 'Precisión clínica',
+                       'equipos-odontologicos' => 'Tecnología para tu práctica',
+                       'planificacion-digital' => 'Diagnóstico y exactitud',
+                   ];
+               @endphp
+               @forelse($categoryCards as $cardIndex => $categoryCard)
+                   @include('web.components.category-card', [
+                       'categorySubtitle' => $categoryCardSubtitles[$categoryCard->slug] ?? 'Productos Helin',
+                       'categoryTitle' => $categoryCard->name,
+                       'categoryLink' => route('catalogo', ['category' => $categoryCard->slug]),
+                       'categoryImage' => $categoryCardImages[$cardIndex % 6],
+                   ])
+               @empty
+                   <p class="text-sm text-helin-text col-span-full">No hay categorías disponibles.</p>
+               @endforelse
             </div>
          </div>
       </div>
@@ -138,6 +165,10 @@
 
       <!-- Flow Highlight Section -->
       <section class="flow-highlight">
+                @php
+                    $flowSettings = \App\Models\Settings::getSettings();
+                    $flowWhatsApp = ($flowSettings && !empty($flowSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $flowSettings->valencia_whatsapp) : '584244669150';
+                @endphp
                 <aside class="how-card">
                    <h3>¿Cómo solicitar productos Helin?</h3>
                    <div class="step">
@@ -151,7 +182,7 @@
                       <div class="number">2</div>
                    </div>
                    <div class="step">
-                      <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <a href="https://api.whatsapp.com/send/?phone={{ $flowWhatsApp }}&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
                       <div><strong>Contacta a tu ejecutivo</strong><span>Envía la solicitud por WhatsApp al ejecutivo asignado según tu zona.</span></div>
                       <div class="number">3</div>
                    </div>
@@ -169,8 +200,8 @@
                     'productImage' => $product->main_image_url,
                     'productName' => $product->name,
                     'productBrand' => $product->brand->name ?? 'Helin',
-                    'productPrice' => $product->price,
-                    'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                    'productPrice' => $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price,
+                    'productOldPrice' => $product->is_on_sale && $product->sale_price ? $product->price : null,
                     'productBadge' => $product->is_new ? 'Nuevo' : ($product->is_on_sale ? 'Oferta' : ''),
                     'productLink' => route('producto', ['slug' => $product->slug]),
                     'productSlug' => $product->slug
@@ -192,6 +223,7 @@
                $categorySlug = $sectionCat['slug'] ?? null;
                $products     = $category ? \App\Models\Product::where('category_id', $category->id)
                    ->where('is_active', true)
+                   ->with('images')
                    ->inRandomOrder()
                    ->take(4)
                    ->get() : collect();
@@ -245,8 +277,8 @@
                                     'productImage' => $product->main_image_url,
                                     'productName' => $product->name,
                                     'productBrand' => $product->brand->name ?? 'Helin',
-                                    'productPrice' => $product->price,
-                                    'productOldPrice' => $product->is_on_sale ? $product->price : null,
+                                    'productPrice' => $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price,
+                                    'productOldPrice' => $product->is_on_sale && $product->sale_price ? $product->price : null,
                                     'productBadge' => $badge,
                                     'productLink' => route('producto', ['slug' => $product->slug]),
                                     'productSlug' => $product->slug,

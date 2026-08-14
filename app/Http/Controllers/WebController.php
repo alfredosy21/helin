@@ -20,6 +20,7 @@ class WebController extends Controller
         // Featured products
         $featuredProducts = \App\Models\Product::where('is_active', true)
             ->where('is_featured', true)
+            ->with('images')
             ->inRandomOrder()
             ->take(4)
             ->get();
@@ -68,7 +69,7 @@ class WebController extends Controller
         }
 
         // Get products with filters
-        $query = \App\Models\Product::with(['category', 'brand'])
+        $query = \App\Models\Product::with(['category', 'brand', 'images'])
             ->where('is_active', true);
 
         // Apply category filter if present
@@ -141,7 +142,7 @@ class WebController extends Controller
      */
     public function producto(string $slug)
     {
-        $product = \App\Models\Product::with(['category', 'brand', 'attributeValues', 'images'])
+        $product = \App\Models\Product::with(['category', 'brand', 'attributeValues', 'images', 'documents'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -150,6 +151,7 @@ class WebController extends Controller
         $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
+            ->with('images')
             ->inRandomOrder()
             ->take(4)
             ->get();
@@ -371,7 +373,7 @@ class WebController extends Controller
             return response()->json([]);
         }
 
-        $products = \App\Models\Product::with(['category', 'brand'])
+        $products = \App\Models\Product::with(['category', 'brand', 'images'])
             ->where('is_active', true)
             ->where(function($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')

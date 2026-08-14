@@ -73,7 +73,7 @@ class AttributeValuesController extends Component
     public function mount(): void
     {
         $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
+        if (!$user) {
             abort(403, __('cms.abort.attribute_values'));
         }
     }

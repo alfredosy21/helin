@@ -22,7 +22,15 @@
         <h1>¡Hemos recibido tu solicitud!</h1>
         <p>Número de solicitud: <span class="request-number">{{ $commercialRequest->correlative ?? '#HELIN-Z1-01' }}</span></p>
         <p>Nuestro equipo comercial revisará tu pedido<br>y te contactará para continuar con la atención.</p>
-        <a href="https://wa.me/584244669150?text={{ urlencode('Hola, he enviado una solicitud comercial ' . ($commercialRequest->correlative ?? '#HELIN-Z1-01') . ' y me gustaría seguir con el proceso.') }}" target="_blank" class="whatsapp-btn">
+        @php
+            $orderWhatsApp = $commercialRequest->whatsappNumber->phone_number ?? null;
+            if (!$orderWhatsApp) {
+                $orderSettings = \App\Models\Settings::getSettings();
+                $orderWhatsApp = ($orderSettings && !empty($orderSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $orderSettings->valencia_whatsapp) : '584244669150';
+            }
+            $orderWhatsAppMessage = 'Hola, he enviado una solicitud comercial ' . ($commercialRequest->correlative ?? '#HELIN-Z1-01') . ' y me gustaría seguir con el proceso.';
+        @endphp
+        <a href="https://wa.me/{{ $orderWhatsApp }}?text={{ urlencode($orderWhatsAppMessage) }}" target="_blank" class="whatsapp-btn">
             <span class="whatsapp-mark"><i class="fab fa-whatsapp"></i></span>
             Enviar orden al WhatsApp de Helin
         </a>

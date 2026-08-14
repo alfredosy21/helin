@@ -246,7 +246,15 @@ class Product extends Model {
      * @return string
      */
     public function getMainImageUrlAttribute(): string {
-        $mainImage = $this->mainImage()->first();
+        $mainImage = null;
+
+        if ($this->relationLoaded('images')) {
+            $mainImage = $this->images->first(fn ($img) => (bool) $img->is_main) ?? $this->images->first();
+        }
+
+        if (!$mainImage && !$this->relationLoaded('images')) {
+            $mainImage = $this->mainImage()->first();
+        }
 
         if ($mainImage) {
             return asset('storage/' . $mainImage->file_path);

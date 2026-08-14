@@ -19,7 +19,7 @@ class ProductAutocompleteController extends Controller
 
         $normalizedTerm = $this->normalize($term);
 
-        $query = Product::with(['category', 'brand'])
+        $query = Product::with(['category', 'brand', 'images'])
             ->where('is_active', true)
             ->where(function ($q) use ($term, $normalizedTerm) {
                 $q->where('name', 'like', '%' . $term . '%')
