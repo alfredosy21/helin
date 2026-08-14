@@ -21,6 +21,9 @@ class ResourceSpecialty extends Model
         'image',
         'is_active',
         'position',
+        'banner_title',
+        'banner_description',
+        'banner_image',
     ];
 
     /**

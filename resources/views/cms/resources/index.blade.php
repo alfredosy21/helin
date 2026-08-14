@@ -9,7 +9,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="6" :submodule-id="14" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::CLINICAL_RESOURCES" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.resources.breadcrumb') }}
                 </p>
@@ -319,6 +319,77 @@
                                 <input type="file" wire:model="thumbnail" class="hidden" accept="image/*" />
                             </label>
                             @error('thumbnail') <span class="text-xs text-red-500 font-medium italic mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    {{-- Video URL --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.video_url_label') }}</label>
+                        <input type="url" wire:model="video_url" placeholder="https://www.youtube.com/embed/..."
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('video_url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Contenido --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.content_label') }}</label>
+                        <textarea wire:model="content" rows="6"
+                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
+                                  placeholder="{{ __('cms.resources.content_placeholder') }}"></textarea>
+                        @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.diagnosis_label') }}</label>
+                        <textarea wire:model="diagnosis" rows="3"
+                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('diagnosis') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.materials_label') }}</label>
+                        <textarea wire:model="materials" rows="3"
+                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('materials') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.results_label') }}</label>
+                        <textarea wire:model="results" rows="3"
+                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('results') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Galería --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.gallery_label') }}</label>
+                        <div class="relative">
+                            @if($gallery)
+                            <div class="mb-3 flex flex-wrap gap-3">
+                                @foreach($gallery as $gIndex => $gImage)
+                                <div class="relative">
+                                    <img src="{{ $gImage->temporaryUrl() }}" class="w-24 h-24 object-cover rounded-lg border border-slate-100">
+                                    <button type="button" wire:click="$set('gallery.{{ $gIndex }}', null)" class="absolute top-1 right-1 p-0.5 bg-white rounded shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+                            @if($current_gallery)
+                            <div class="mb-3 flex flex-wrap gap-3">
+                                @foreach($current_gallery as $gIndex => $gImage)
+                                <div class="relative">
+                                    <img src="{{ asset('storage/' . $gImage) }}" class="w-24 h-24 object-cover rounded-lg border border-slate-100">
+                                    <button type="button" wire:click="$set('current_gallery.{{ $gIndex }}', null)" class="absolute top-1 right-1 p-0.5 bg-white rounded shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+                            <input type="file" wire:model="gallery" multiple class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            @error('gallery.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
 

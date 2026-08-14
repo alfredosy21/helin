@@ -3,7 +3,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
 
-                <x-cms-breadcrumb :module-id="1" :submodule-id="2" section="cms.permissions.breadcrumb" >
+                <x-cms-breadcrumb :module-id="\App\Models\Module::ADMINISTRATORS" :submodule-id="\App\Models\Submodule::ROLES" section="cms.permissions.breadcrumb" >
                     <x-slot name="sectionIcon">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>

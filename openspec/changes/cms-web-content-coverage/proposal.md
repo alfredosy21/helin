@@ -141,7 +141,7 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 - **Crash al guardar recursos**: eliminar la columna inexistente `views` de `Resource::$fillable`, `edit()` y `save()` (crear/editar un recurso crashea con `Unknown column 'views'`).
 - **Alinear IDs de submódulos BD↔constantes**: reescribir las constantes de `Submodule` para que coincidan con los IDs reales de la BD (PRODUCTS=8, PRODUCT_FAMILIES=9, PRODUCT_BRANDS=10, PRODUCT_LINES=11, SYSTEM_PRODUCTS=12, PRODUCT_PLATFORMS=13, BLOG_CATEGORIES=14, BLOG_ARTICLES=15, TESTIMONIALS=16, CLINICAL_RESOURCES=17, RESOURCE_TYPES=18, RESOURCE_SPECIALTIES=19, CUSTOMER_TYPES=6, DELIVERY_METHODS=7) y añadir las faltantes (COMMERCIAL_REQUESTS=20, WEBSITE_MENU=27, CONTACT_MESSAGES=21, CONTACT_MANAGEMENT=22, CONTACT_FORM_CONFIG=23).
 - **Crear en BD lo ausente**: submódulo "Menú del Sitio" (WEBSITE_MENU, bajo M2 Configuración — `MenuController` existe sin registro) y módulo "Contacto" (M7) con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG. Actualizar `ModuleSeeder` para forzar IDs por constantes en todos los submódulos y re-seed coherente con permisos.
-- **Fix RBAC**: `PermissionMiddleware` debe resolver por ID cuando el argumento es numérico (y por nombre si no lo es); corregir las rutas hardcodeadas (`permission:5,1`, `2,3`, `2,4`, `4,1`, `4,2`, `6,1`, `2,1`, `2,2`, dashboard `1`) para usar constantes. Sembrar permisos de submódulo para el rol Editor (rol 2) y verificar RBAC real (editor accede solo a sus módulos, 403 en el resto).
+- **Fix RBAC**: `PermissionMiddleware` debe resolver por ID cuando el argumento es numérico (y por nombre si no lo es); corregir las rutas hardcodeadas (`permission:5,1`, `2,3`, `2,4`, `4,1`, `4,2`, `6,1`, `2,1`, `2,2`, dashboard `1`) para usar constantes. Sembrar permisos de submódulo para el rol Editor (rol 2) y verificar RBAC real (editor accede solo a sus módulos, 403 en el resto). **✅ Implementado** (ver sección "Estado de implementación"): middleware por ID/nombre, rutas con constantes, seeder con IDs 1–6 + WEBSITE_MENU=6, `createPermissions` idempotente, helper `CmsAccess` en 11 mounts, cubierto por `PermissionSystemTest`.
 - **Breadcrumbs**: corregir `<x-cms-breadcrumb>` con IDs obsoletos en ~15 vistas CMS usando constantes (payment-methods apunta hoy al módulo 7 inexistente).
 - **Menores**: `PaymentMethodController::$paginationTheme` → `'tailwind'`; limpiar fillable muertos (`PaymentMethod`, `BlogCategory`).
 - **Blog (M4)**: el CMS del blog funciona pero no hay páginas públicas — documentado como fuera de alcance de este change (decisión de negocio pendiente).
@@ -194,3 +194,63 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 - **Compatibilidad de vistas**: Las vistas deben tener fallbacks graceful mientras se migran los datos.
 - **Editor de items JSON**: Requiere un componente repeater en el CMS (Livewire) para editar arrays de items de forma amigable sin que el usuario manipule JSON crudo.
 - **Alcance amplio**: El cambio toca prácticamente todos los módulos del CMS y casi todas las vistas web. Por eso se divide en 3 fases aplicables de forma incremental.
+
+---
+
+## Estado de implementación — Infraestructura de tests y sistema de permisos (RBAC)
+
+> Sección de seguimiento que documenta el trabajo ya ejecutado y su cobertura de tests. Se actualiza conforme avanzan las fases.
+
+### Infraestructura de tests (completada)
+
+- **Base de datos de testing** `helin_test` (MySQL, mismo servidor que `helin`), configurada en `phpunit.xml` y `.env.testing` (`APP_ENV=testing`, `SESSION_DRIVER=array`, `CACHE_STORE=array`). Migraciones aplicadas.
+- `tests/TestCase` añade `withoutVite()` en `setUp()` (los layouts CMS usan `@vite` y no existe manifest en testing).
+- Trait compartido `tests/Feature/Cms/Concerns/CreatesCmsUsers.php` (usuario admin/super-admin, settings por defecto). Los usuarios se crean con `forceCreate` porque `email_verified_at` no está en `$fillable`, y el middleware `verified` lo exige.
+
+### Bugs reales corregidos gracias a los tests
+
+- **Vistas blade rotas** (no renderizaban): `cms/lines/index`, `cms/system-products/index` y `cms/product-platforms/index` tenían `@endif`, `</form>` y `<script>` mal balanceados.
+- **`PageSeo` apuntaba a la tabla inexistente `page_seos`**: añadido `protected $table = 'page_seo'`.
+- **Migraciones nuevas** (aplicadas en `helin` y `helin_test`):
+  - `2026_08_14_120012_add_image_to_brands_table` — faltaba la columna `image` de marcas (el update crasheaba).
+  - `2026_08_14_120013_make_resources_file_path_nullable` y `2026_08_14_120014_make_resources_format_nullable` — columnas NOT NULL sin default que rompían la creación de recursos.
+  - `2026_08_14_120015_make_resources_materials_text` — `materials` era JSON con CHECK que rechazaba texto plano.
+- **`RoleSeeder`** con IDs fijos (1 Administrador / 2 Editores) y solo la columna `name` (única existente en `roles`).
+
+### Suite de tests actual
+
+**61 passed, 1 risky** (el risky es `ExampleTest` por output buffering, cosmético):
+
+| Archivo | Tests | Cobertura |
+|---|---|---|
+| `tests/Unit/SubmoduleTest.php` | — | integridad de constantes de submódulos (IDs únicos, sin colisiones) |
+| `tests/Unit/CmsModelsTest.php` | — | fillables/relaciones de modelos CMS |
+| `tests/Feature/Cms/CmsAccessTest.php` | 3 | guest → redirect login; editor sin permisos → 403; admin → 200 en las 10 URLs CMS |
+| `tests/Feature/Cms/CatalogCrudTest.php` | 5 | CRUD categories, brands, lines, system-products, product-platforms |
+| `tests/Feature/Cms/ResourcesCrudTest.php` | 3 | CRUD resource-types, resource-specialties, resources (content/diagnosis/materials/results/video_url) |
+| `tests/Feature/Cms/SettingsPageSeoCrudTest.php` | 3 | settings con `offices` repeater + `opinion_url`; page-seo CRUD + slug único |
+| `tests/Feature/Cms/PermissionSystemTest.php` | 4 | seeder con IDs 1–6 idempotente, `createPermissions` sin duplicados, editor con permisos → 200/403, middleware con IDs numéricos |
+| `tests/Feature/Cms/AdminCrudTest.php` | 5 | CRUD usuarios (password requerido solo al crear), CRUD roles (permisos auto-generados, rol 1 protegido), gestor de permisos por rol (toggles módulo/submódulo) |
+| `tests/Feature/Cms/ConfigCrudTest.php` | 6 | secciones (edit/update/delete), payment-methods, customer-types, delivery-methods, whatsapp-numbers (con toggle), menú del sitio (toggleStatus + delete) |
+| `tests/Feature/Cms/ProductsCrudTest.php` | 2 | CRUD productos (slug/sku automáticos, validación de campos requeridos) |
+| `tests/Feature/Cms/AttributesCrudTest.php` | 4 | CRUD attributes (con toggle) + attribute-values; rechazo de tipo inválido |
+| `tests/Feature/Cms/BlogCrudTest.php` | 3 | CRUD blog-categories + blog-articles (toggleStatus, published_at) |
+| `tests/Feature/Cms/TestimonialsCrudTest.php` | 2 | CRUD testimonios (campos requeridos) |
+| `tests/Feature/Cms/CommercialRequestsTest.php` | 3 | cambio de status, delete (soft delete), abrir/cerrar detalles |
+| `tests/Feature/Cms/DashboardProfileTest.php` | 4 | dashboard refreshStats, perfil (update usuario, cambio de password con validación de password actual) |
+
+### Bug real corregido al testear el dashboard
+
+- **`DashboardController::refreshStats()` generaba SQL inválido**: `whereMonth('created_at', '=', $currentMonth, true)` pasaba un 4º argumento boolean (que solo acepta `where()`, no `whereMonth()`) → en MariaDB `SQLSTATE 1064: ... near 'month(`created_at`) = ?'`. El `try/catch` silenciaba el error y el dashboard quedaba con `stats = []` (ninguna estadística visible, también en producción). Corregido a `whereMonth('created_at', $currentMonth)` en `new_users` y `new_products`; verificado con test de `refreshStats`.
+
+### Sistema de permisos (RBAC) — implementado y testeado
+
+Corresponde al fix RBAC previsto en la Fase 3F. Estado final:
+
+- **`ModuleSeeder`**: módulos con IDs fijos según constantes (`ADMINISTRATORS=1`, `SETTINGS=2`, `CATALOG=3`, `BLOG=4`, `CONTENT=5`, `CONTACT=6` — el antiguo "Solicitudes" pasa a "Contacto"). Submódulos registrados por nombre con ID explícito (`updateOrCreate`), incluido el faltante **`WEBSITE_MENU=6`** (Menú del Sitio, `MenuController` existía sin registro). Seeder idempotente: 6 módulos + 25 submódulos sin duplicados en corridas repetidas. Los submódulos CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG (19/20/21) se dejan sin registrar hasta tener rutas/controladores (Fase 3D).
+- **`Permission::createPermissions` idempotente**: por módulo usa `whereNull('submodule_id')` + update/insert; por submódulo usa `updateOrCreate`. Resultado: 31 permisos por rol (6 de módulo + 25 de submódulo), sin duplicados al re-ejecutar.
+- **`PermissionMiddleware`**: resuelve el módulo/submódulo por **ID numérico o por nombre** (`is_numeric`), con `status` activo requerido.
+- **`routes/web.php`**: eliminados todos los parámetros hardcodeados obsoletos (`permission:5,1`, `2,3`, `2,4`, `4,1`, `4,2`, `6,1`, `2,1`, `2,2`, `Administradores,Permisos`) → todas las rutas usan constantes `Module::*` / `Submodule::*`; la ruta de permisos detallados usa solo el módulo (no existe submódulo "Permisos").
+- **`app/Utils/CmsAccess.php`** (nuevo): helper de autorización para la capa `mount()` de los componentes Livewire — super-admin (level 1) pasa, resto valida permiso activo módulo+submódulo del rol. Aplicado en los mounts de **11 controladores** (Categories, Brands, Line, SystemProducts, ProductPlatforms, ResourceType, ResourceSpecialty, Resource, Settings, PageSeo, WhatsAppNumbers) que antes bloqueaban con 403 a cualquier editor.
+- **Comportamiento verificado por tests** (`PermissionSystemTest`): editor con permisos → 200 solo en sus módulos y 403 en el resto; editor sin permisos → 403; middleware resuelve IDs numéricos; seeder y `createPermissions` idempotentes.
+- Reseed aplicado en `helin`: módulos 1–6, 25 submódulos, 31 permisos por rol (Administrador y Editores), sin duplicados.

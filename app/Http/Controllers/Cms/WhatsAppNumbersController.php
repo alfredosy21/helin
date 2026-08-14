@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\WhatsAppNumber;
-use App\Models\State;
 use App\Models\Activities;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Module;
+use App\Models\State;
+use App\Models\Submodule;
+use App\Models\WhatsAppNumber;
+use App\Utils\CmsAccess;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
 
 #[Title('Números de WhatsApp | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
@@ -18,18 +20,25 @@ class WhatsAppNumbersController extends Component
     use WithPagination;
 
     public $showForm = false;
+
     public $editingId = null;
 
     // Form fields
     public $phone_number;
+
     public $executive_name;
+
     public $state_id;
+
     public $is_active = true;
+
     public $description;
 
     // Filters
     public $search = '';
+
     public $stateFilter = 'all';
+
     public $perPage = 10;
 
     protected $paginationTheme = 'tailwind';
@@ -44,10 +53,7 @@ class WhatsAppNumbersController extends Component
 
     public function mount()
     {
-        $user = Auth::user();
-        if (!$user) {
-            abort(403, __('cms.abort.whatsapp_numbers'));
-        }
+        CmsAccess::authorize(Module::SETTINGS, Submodule::WHATSAPP_NUMBERS, __('cms.abort.whatsapp_numbers'));
         $this->resetFilters();
     }
 
@@ -57,9 +63,9 @@ class WhatsAppNumbersController extends Component
             ->with(['state'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('phone_number', 'like', '%' . $this->search . '%')
-                      ->orWhere('executive_name', 'like', '%' . $this->search . '%')
-                      ->orWhere('description', 'like', '%' . $this->search . '%');
+                    $q->where('phone_number', 'like', '%'.$this->search.'%')
+                        ->orWhere('executive_name', 'like', '%'.$this->search.'%')
+                        ->orWhere('description', 'like', '%'.$this->search.'%');
                 });
             })
             ->when($this->stateFilter !== 'all', function ($query) {
@@ -113,7 +119,7 @@ class WhatsAppNumbersController extends Component
                 $whatsappNumber = WhatsAppNumber::findOrFail($this->editingId);
                 $whatsappNumber->update($data);
                 Activities::saveActivity(__('cms.controllers.whatsapp_numbers.activity_updated', [
-                    'id' => $whatsappNumber->id
+                    'id' => $whatsappNumber->id,
                 ]));
                 $this->dispatch('toast', message: __('cms.controllers.whatsapp_numbers.updated'), type: 'success');
             } else {
@@ -133,10 +139,10 @@ class WhatsAppNumbersController extends Component
     {
         try {
             $whatsappNumber = WhatsAppNumber::findOrFail($id);
-            $whatsappNumber->update(['is_active' => !$whatsappNumber->is_active]);
+            $whatsappNumber->update(['is_active' => ! $whatsappNumber->is_active]);
 
             Activities::saveActivity(__('cms.controllers.whatsapp_numbers.activity_toggled', [
-                'id' => $whatsappNumber->id
+                'id' => $whatsappNumber->id,
             ]));
 
             $this->dispatch('toast', message: __('cms.controllers.whatsapp_numbers.toggled'), type: 'success');
@@ -153,7 +159,7 @@ class WhatsAppNumbersController extends Component
             $whatsappNumber->delete();
 
             Activities::saveActivity(__('cms.controllers.whatsapp_numbers.activity_deleted', [
-                'id' => $id
+                'id' => $id,
             ]));
 
             $this->dispatch('toast', message: __('cms.controllers.whatsapp_numbers.deleted'), type: 'success');
@@ -174,7 +180,7 @@ class WhatsAppNumbersController extends Component
     {
         $this->reset([
             'phone_number', 'executive_name', 'state_id',
-            'description'
+            'description',
         ]);
 
         $this->is_active = true;

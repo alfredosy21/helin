@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\Settings;
 use App\Models\Activities;
+use App\Models\Module;
+use App\Models\Settings;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use App\Utils\Helpers;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -13,11 +16,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
 
 /**
  * Class SettingsController
@@ -26,12 +28,11 @@ use Livewire\Attributes\Layout;
  * social media links, and SEO metadata for Helin CMS.
  *
  * @version 1.1.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Configuración General | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class SettingsController extends Component {
-
+class SettingsController extends Component
+{
     use WithFileUploads;
 
     /** @var bool UI state controller to toggle between view and edit modes */
@@ -69,28 +70,48 @@ class SettingsController extends Component {
 
     /** @var string Social media URLs */
     public string $facebook = '';
+
     public string $instagram = '';
+
     public string $linkedin = '';
+
     public string $youtube = '';
 
     /** @var string SEO Metadata properties */
     public string $keywords = '';
+
     public string $description = '';
+
     public string $settings_description = '';
 
     /** @var string|null Analytics */
     public ?string $analytics_code = null;
 
+    /** @var string|null Opinion/satisfaction survey URL */
+    public ?string $opinion_url = null;
+
+    /** @var array<int, array{name: string, url: string, whatsapp: string, active: bool}> Office list */
+    public array $offices = [];
+
     /** @var string|null Office WhatsApp links and locations */
     public ?string $caracas_whatsapp = null;
+
     public ?string $caracas_location = null;
+
     public ?string $valencia_whatsapp = null;
+
     public ?string $valencia_location = null;
+
     public ?string $barquisimeto_whatsapp = null;
+
     public ?string $barquisimeto_location = null;
+
     public ?string $maracay_whatsapp = null;
+
     public ?string $maracay_location = null;
+
     public ?string $maracaibo_whatsapp = null;
+
     public ?string $maracaibo_location = null;
 
     /**
@@ -98,59 +119,63 @@ class SettingsController extends Component {
      *
      * @return array<string, string>
      */
-    protected function rules(): array {
+    protected function rules(): array
+    {
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:50',
             'image' => 'nullable|image|max:1024',
+            'opinion_url' => 'nullable|url|max:500',
+            'offices' => 'nullable|array',
+            'offices.*.name' => 'nullable|string|max:255',
+            'offices.*.url' => 'nullable|url|max:500',
+            'offices.*.whatsapp' => 'nullable|string|max:50',
+            'offices.*.active' => 'boolean',
         ];
     }
 
     /**
      * Component Lifecycle: Security Access Control and Data Hydration.
-     *
-     * @return void
      */
-    public function mount(): void {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.settings'));
-        }
+    public function mount(): void
+    {
+        CmsAccess::authorize(Module::SETTINGS, Submodule::GENERAL_SETTINGS, __('cms.abort.settings'));
 
         $this->loadSettings();
     }
 
     /**
      * Hydrates the component properties from the Settings model.
-     *
-     * @return void
      */
-    public function loadSettings(): void {
+    public function loadSettings(): void
+    {
         $settings = Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS]);
 
         $this->fill($settings->only([
-                    'name', 'email', 'address', 'tagline', 'contact_address', 'phone', 'shedule', 'copy',
-                    'facebook', 'instagram', 'linkedin', 'youtube',
-                    'keywords', 'description', 'settings_description', 'analytics_code',
-                    'caracas_whatsapp', 'caracas_location',
-                    'valencia_whatsapp', 'valencia_location',
-                    'barquisimeto_whatsapp', 'barquisimeto_location',
-                    'maracay_whatsapp', 'maracay_location',
-                    'maracaibo_whatsapp', 'maracaibo_location',
+            'name', 'email', 'address', 'tagline', 'contact_address', 'phone', 'shedule', 'copy',
+            'facebook', 'instagram', 'linkedin', 'youtube',
+            'keywords', 'description', 'settings_description', 'analytics_code',
+            'caracas_whatsapp', 'caracas_location',
+            'valencia_whatsapp', 'valencia_location',
+            'barquisimeto_whatsapp', 'barquisimeto_location',
+            'maracay_whatsapp', 'maracay_location',
+            'maracaibo_whatsapp', 'maracaibo_location',
+            'opinion_url',
         ]));
+
+        $this->offices = is_array($settings->offices) ? $settings->offices : [];
 
         $this->current_image = $settings->image;
     }
 
     /**
      * Toggles the UI state between read-only and edit mode.
-     *
-     * @return void
      */
-    public function toggleEdit(): void {
-        $this->isEditing = !$this->isEditing;
-        if (!$this->isEditing) {
+    public function toggleEdit(): void
+    {
+        $this->isEditing = ! $this->isEditing;
+        if (! $this->isEditing) {
             $this->loadSettings();
             $this->resetErrorBag();
         }
@@ -158,10 +183,9 @@ class SettingsController extends Component {
 
     /**
      * Persist system-wide configuration updates.
-     *
-     * @return void
      */
-    public function save(): void {
+    public function save(): void
+    {
         $this->validate();
 
         DB::beginTransaction();
@@ -195,6 +219,8 @@ class SettingsController extends Component {
                 'maracay_location' => $this->maracay_location,
                 'maracaibo_whatsapp' => $this->maracaibo_whatsapp,
                 'maracaibo_location' => $this->maracaibo_location,
+                'opinion_url' => $this->opinion_url,
+                'offices' => array_values($this->offices),
             ]);
 
             if ($this->image) {
@@ -216,18 +242,33 @@ class SettingsController extends Component {
             Log::info('Toast dispatched successfully: Configuración actualizada correctamente');
         } catch (Exception $ex) {
             DB::rollBack();
-            Log::error("Settings Persistence Failure: " . $ex->getMessage());
+            Log::error('Settings Persistence Failure: '.$ex->getMessage());
             $this->dispatch('toast', message: __('cms.controllers.settings.process_error'), type: 'error');
         }
     }
 
     /**
-     * Handle corporate image storage lifecycle.
-     *
-     * @param \App\Models\Settings $settings
-     * @return void
+     * Add a new empty office row to the repeater.
      */
-    private function processImage(Settings $settings): void {
+    public function addOffice(): void
+    {
+        $this->offices[] = ['name' => '', 'url' => '', 'whatsapp' => '', 'active' => true];
+    }
+
+    /**
+     * Remove an office row from the repeater.
+     */
+    public function removeOffice(int $index): void
+    {
+        unset($this->offices[$index]);
+        $this->offices = array_values($this->offices);
+    }
+
+    /**
+     * Handle corporate image storage lifecycle.
+     */
+    private function processImage(Settings $settings): void
+    {
         if ($settings->image) {
             Storage::disk('public')->delete($settings->image);
         }
@@ -238,9 +279,10 @@ class SettingsController extends Component {
         $settings->image = $path;
     }
 
-    public function render(): View {
+    public function render(): View
+    {
         return view('cms.settings.index', [
-            'settings' => Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS])
+            'settings' => Settings::firstOrNew(['id' => Settings::DEFAULT_SETTINGS]),
         ]);
     }
 }

@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\SystemProduct;
 use App\Models\Activities;
+use App\Models\Module;
+use App\Models\Submodule;
+use App\Models\SystemProduct;
+use App\Utils\CmsAccess;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 /**
  * Class SystemProductsController
  * * Manages the product systems for the Helin eCommerce catalog.
  * Handles primary product systems and their organizational sequencing (positioning).
+ *
  * * @version 1.0.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Gestión de Sistema de Productos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class SystemProductsController extends Component
 {
-
+    use WithFileUploads;
     use WithPagination;
 
     /** @var string Display name of the system */
@@ -43,6 +47,30 @@ class SystemProductsController extends Component
     /** @var string|null SEO description for meta tags */
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
+
+    /** @var string|null SEO keywords for meta tags */
+    #[Validate('nullable|string|max:500')]
+    public ?string $seo_keywords = '';
+
+    /** @var mixed|null Uploaded image file instance */
+    public $image;
+
+    /** @var string|null Existing image path from storage */
+    public ?string $current_image = null;
+
+    /** @var string|null Banner title */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_title = '';
+
+    /** @var string|null Banner description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $banner_description = '';
+
+    /** @var mixed|null Uploaded banner image file instance */
+    public $banner_image;
+
+    /** @var string|null Existing banner image path from storage */
+    public ?string $current_banner_image = null;
 
     /** @var int|null ID of the system being modified */
     public ?int $editingId = null;
@@ -70,10 +98,7 @@ class SystemProductsController extends Component
      */
     public function mount(): void
     {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.system_products'));
-        }
+        CmsAccess::authorize(Module::CATALOG, Submodule::SYSTEM_PRODUCTS, __('cms.abort.system_products'));
     }
 
     /**
@@ -82,12 +107,12 @@ class SystemProductsController extends Component
     public function render(): View
     {
         $systems = SystemProduct::query()
-                ->when($this->search, function ($query) {
-                    $query->where('name', 'like', "%{$this->search}%")
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%");
-                })
-                ->orderBy('order', 'asc')
-                ->paginate($this->perPage);
+            })
+            ->orderBy('order', 'asc')
+            ->paginate($this->perPage);
 
         return view('cms.system-products.index', [
             'systems' => $systems,
@@ -114,7 +139,12 @@ class SystemProductsController extends Component
         $this->slug = $system->slug;
         $this->description = $system->description;
         $this->seo_description = $system->seo_description;
+        $this->seo_keywords = $system->seo_keywords;
         $this->is_active = $system->is_active;
+        $this->banner_title = $system->banner_title;
+        $this->banner_description = $system->banner_description;
+        $this->current_image = $system->image;
+        $this->current_banner_image = $system->banner_image;
         $this->showForm = true;
     }
 
@@ -126,14 +156,29 @@ class SystemProductsController extends Component
         $this->validate();
 
         try {
-            $system = SystemProduct::create([
+            $data = [
                 'name' => $this->name,
                 'slug' => $this->slug ?: str()->slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
                 'order' => SystemProduct::max('order') + 1,
-            ]);
+            ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('system-products', $filename, 'public');
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('system-products/banners', $filename, 'public');
+            }
+
+            $system = SystemProduct::create($data);
 
             Activities::saveActivity(__('cms.controllers.system_products.activity_created', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.system_products.created'), type: 'success');
@@ -154,13 +199,33 @@ class SystemProductsController extends Component
 
         try {
             $system = SystemProduct::findOrFail($this->editingId);
-            $system->update([
+
+            $data = [
                 'name' => $this->name,
                 'slug' => $this->slug ?: str()->slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
-            ]);
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
+            ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('system-products', $filename, 'public');
+            } elseif ($this->current_image) {
+                $data['image'] = $this->current_image;
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('system-products/banners', $filename, 'public');
+            } elseif ($this->current_banner_image) {
+                $data['banner_image'] = $this->current_banner_image;
+            }
+
+            $system->update($data);
 
             Activities::saveActivity(__('cms.controllers.system_products.activity_updated', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.system_products.updated'), type: 'success');
@@ -196,11 +261,11 @@ class SystemProductsController extends Component
     {
         try {
             $system = SystemProduct::findOrFail($id);
-            $system->update(['is_active' => !$system->is_active]);
+            $system->update(['is_active' => ! $system->is_active]);
 
             $status = $system->is_active ? 'activated' : 'deactivated';
-            Activities::saveActivity(__('cms.controllers.system_products.activity_' . $status, ['user_id' => Auth::id()]));
-            $this->dispatch('toast', message: __('cms.controllers.system_products.' . $status), type: 'success');
+            Activities::saveActivity(__('cms.controllers.system_products.activity_'.$status, ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.system_products.'.$status), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.system_products.status_error'), type: 'error');

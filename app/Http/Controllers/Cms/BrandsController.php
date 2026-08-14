@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\Brand;
 use App\Models\Activities;
+use App\Models\Brand;
+use App\Models\Module;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class BrandsController
@@ -32,12 +37,12 @@ use Livewire\Attributes\Validate;
  * - Product association tracking
  *
  * @version 1.0.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Gestión de Marcas | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class BrandsController extends Component {
-
+class BrandsController extends Component
+{
+    use WithFileUploads;
     use WithPagination;
 
     /** @var string Commercial name of the brand */
@@ -51,6 +56,30 @@ class BrandsController extends Component {
     /** @var string|null SEO description for meta tags */
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
+
+    /** @var string|null SEO keywords for meta tags */
+    #[Validate('nullable|string|max:500')]
+    public ?string $seo_keywords = '';
+
+    /** @var mixed|null Uploaded image file instance */
+    public $image;
+
+    /** @var string|null Existing image path from storage */
+    public ?string $current_image = null;
+
+    /** @var string|null Banner title */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_title = '';
+
+    /** @var string|null Banner description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $banner_description = '';
+
+    /** @var mixed|null Uploaded banner image file instance */
+    public $banner_image;
+
+    /** @var string|null Existing banner image path from storage */
+    public ?string $current_banner_image = null;
 
     /** @var int|null ID of the brand being modified */
     public ?int $editingId = null;
@@ -79,14 +108,11 @@ class BrandsController extends Component {
      * Validates user permissions to access brand management.
      * Only administrators and content managers can access this module.
      *
-     * @return void
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws AccessDeniedHttpException
      */
-    public function mount(): void {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.brands'));
-        }
+    public function mount(): void
+    {
+        CmsAccess::authorize(Module::CATALOG, Submodule::PRODUCT_BRANDS, __('cms.abort.brands'));
     }
 
     /**
@@ -95,20 +121,19 @@ class BrandsController extends Component {
      * Displays commercial brands in a tabular format with search capabilities,
      * pagination, and ordering. Includes both active and inactive brands
      * for comprehensive management.
-     *
-     * @return View
      */
-    public function render(): View {
+    public function render(): View
+    {
         $brands = Brand::query()
-                ->when($this->search, function ($query) {
-                    $query->where('name', 'like', "%{$this->search}%");
-                })
-                ->orderBy('order', 'asc')
-                ->orderBy('name', 'asc')
-                ->paginate($this->perPage);
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%");
+            })
+            ->orderBy('order', 'asc')
+            ->orderBy('name', 'asc')
+            ->paginate($this->perPage);
 
         return view('cms.brands.index', [
-            'brands' => $brands
+            'brands' => $brands,
         ]);
     }
 
@@ -117,10 +142,9 @@ class BrandsController extends Component {
      *
      * Initializes form fields with default values and calculates the next
      * order position automatically. Opens the modal for data entry.
-     *
-     * @return void
      */
-    public function create(): void {
+    public function create(): void
+    {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -131,10 +155,9 @@ class BrandsController extends Component {
      *
      * Handles both creation and update operations with comprehensive validation.
      * Updates activity log and provides user feedback through toast notifications.
-     *
-     * @return void
      */
-    public function save(): void {
+    public function save(): void
+    {
         $this->isLoading = true;
         $this->validate();
 
@@ -144,8 +167,25 @@ class BrandsController extends Component {
                 'slug' => Str::slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
             ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('brands', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['image'] = $this->current_image;
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('brands/banners', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['banner_image'] = $this->current_banner_image;
+            }
 
             if ($this->editingId) {
                 $brand = Brand::findOrFail($this->editingId);
@@ -178,17 +218,22 @@ class BrandsController extends Component {
      * Loads all brand properties into the form for editing.
      * Opens the modal and prepares the interface for modification.
      *
-     * @param int $id The brand identifier
-     * @return void
+     * @param  int  $id  The brand identifier
      */
-    public function edit(int $id): void {
+    public function edit(int $id): void
+    {
         $brand = Brand::findOrFail($id);
 
         $this->editingId = $id;
         $this->name = $brand->name;
         $this->description = $brand->description;
         $this->seo_description = $brand->seo_description;
+        $this->seo_keywords = $brand->seo_keywords;
         $this->is_active = $brand->is_active;
+        $this->banner_title = $brand->banner_title;
+        $this->banner_description = $brand->banner_description;
+        $this->current_image = $brand->image;
+        $this->current_banner_image = $brand->banner_image;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -201,10 +246,10 @@ class BrandsController extends Component {
      * Updates activity log and provides user feedback.
      * Handles potential constraint violations gracefully.
      *
-     * @param int $id The brand identifier
-     * @return void
+     * @param  int  $id  The brand identifier
      */
-    public function confirmDelete(int $id): void {
+    public function confirmDelete(int $id): void
+    {
         try {
             $brand = Brand::findOrFail($id);
             $brandName = $brand->name;
@@ -224,10 +269,10 @@ class BrandsController extends Component {
      * Updates the order field for multiple brands in a single operation.
      * Validates the input data and updates activity log for audit trail.
      *
-     * @param array $orderedIds Array of IDs in the new order
-     * @return void
+     * @param  array  $orderedIds  Array of IDs in the new order
      */
-    public function updateOrder(array $orderedIds): void {
+    public function updateOrder(array $orderedIds): void
+    {
         try {
             foreach ($orderedIds as $index => $id) {
                 Brand::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -246,10 +291,9 @@ class BrandsController extends Component {
      *
      * Clears all form data, hides the modal, and resets validation state.
      * Dispatches event to notify frontend components of state change.
-     *
-     * @return void
      */
-    public function cancel(): void {
+    public function cancel(): void
+    {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -263,14 +307,16 @@ class BrandsController extends Component {
      *
      * @return void
      */
-    protected function validationAttributes(): array {
+    protected function validationAttributes(): array
+    {
         return [
             'name' => __('cms.validation_attributes.brand_name'),
         ];
     }
 
-    private function resetForm(): void {
-        $this->reset(['name', 'description', 'seo_description', 'is_active', 'editingId']);
+    private function resetForm(): void
+    {
+        $this->reset(['name', 'description', 'seo_description', 'seo_keywords', 'is_active', 'banner_title', 'banner_description', 'image', 'current_image', 'banner_image', 'current_banner_image', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }
@@ -280,10 +326,9 @@ class BrandsController extends Component {
      *
      * Automatically resets pagination to first page when search query changes.
      * Ensures consistent user experience during search operations.
-     *
-     * @return void
      */
-    public function updatedSearch(): void {
+    public function updatedSearch(): void
+    {
         $this->resetPage();
     }
 
@@ -292,13 +337,12 @@ class BrandsController extends Component {
      *
      * Provides backward compatibility for existing frontend components
      * that may rely on the old method naming convention.
-     *
-     * @return array
      */
-    public function getBrandLists(): array {
+    public function getBrandLists(): array
+    {
         return Brand::orderBy('order', 'asc')
-                        ->orderBy('name', 'asc')
-                        ->get()
-                        ->toArray();
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
     }
 }

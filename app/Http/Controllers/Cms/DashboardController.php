@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Cms;
 
 use App\Models\Activities;
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
-use Livewire\Component;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
 
 /**
  * DashboardController
@@ -23,8 +23,8 @@ use Livewire\Attributes\Layout;
  */
 #[Title('Escritorio | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class DashboardController extends Component {
-
+class DashboardController extends Component
+{
     /**
      * @var array Holds the calculated statistics for the dashboard view.
      */
@@ -33,7 +33,8 @@ class DashboardController extends Component {
     /**
      * Initialize the component and perform the first data fetch.
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->refreshStats();
     }
 
@@ -43,7 +44,8 @@ class DashboardController extends Component {
      * Uses the query() builder on Eloquent models to ensure clean
      * implementation and better IDE autocompletion.
      */
-    public function refreshStats(): void {
+    public function refreshStats(): void
+    {
         try {
 
             // Get current month as integer
@@ -57,12 +59,12 @@ class DashboardController extends Component {
                 'total_users' => User::query()->count(['id']),
                 // Growth Indicators (Current Month)
                 'new_users' => User::query()
-                        ->whereMonth('created_at', '=', $currentMonth, true)
-                        ->count(),
+                    ->whereMonth('created_at', $currentMonth)
+                    ->count(),
                 // Option B: Fallback using whereRaw if your DB driver is being strict
                 'new_products' => Product::query()
-                        ->whereMonth('created_at', '=', $currentMonth, true)
-                        ->count(),
+                    ->whereMonth('created_at', $currentMonth)
+                    ->count(),
                 // Operational Metrics
                 'active_products' => Product::query()->count(['id']), // Placeholder for status-based filtering
                 'total_blogs' => 0, // Blog model implementation pending
@@ -71,7 +73,7 @@ class DashboardController extends Component {
             ];
         } catch (\Exception $e) {
             // Log failure to prevent application crash while notifying admins via logs
-            Log::error("Dashboard stats sync failed: " . $e->getMessage());
+            Log::error('Dashboard stats sync failed: '.$e->getMessage());
         }
     }
 
@@ -80,24 +82,25 @@ class DashboardController extends Component {
      *
      * @return View The dashboard index view with activity and distribution data.
      */
-    public function render(): View {
+    public function render(): View
+    {
         /**
          * Fetch the latest 10 system activities, eager-loading users
          * to avoid N+1 query performance issues.
          */
         $recentActivities = Activities::query()
-                ->with('user')
-                ->latest()
-                ->take(10)
-                ->get()
-                ->map(function ($activity) {
-            return [
-        'description' => $activity->activity,
-        'time' => $activity->created_at->diffForHumans(),
-        'icon' => $this->getActivityIcon($activity->activity),
-        'user' => $activity->user ? $activity->user->name : __('cms.controllers.dashboard.system_user')
-            ];
-        });
+            ->with('user')
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function ($activity) {
+                return [
+                'description' => $activity->activity,
+                'time' => $activity->created_at->diffForHumans(),
+                'icon' => $this->getActivityIcon($activity->activity),
+                'user' => $activity->user ? $activity->user->name : __('cms.controllers.dashboard.system_user'),
+                ];
+            });
 
         return view('cms.dashboard.index', [
             'recentActivity' => $recentActivities,
@@ -106,20 +109,21 @@ class DashboardController extends Component {
              * for the top 5 largest categories.
              */
             'inventoryDistribution' => Category::query()
-                    ->withCount('products')
-                    ->orderBy('products_count', 'desc')
-                    ->take(5)
-                    ->get(),
+                ->withCount('products')
+                ->orderBy('products_count', 'desc')
+                ->take(5)
+                ->get(),
         ]);
     }
 
     /**
      * Map activity descriptions to specific UI icons.
      *
-     * @param string $activity The raw activity description string.
+     * @param  string  $activity  The raw activity description string.
      * @return string The icon identifier for the frontend component.
      */
-    private function getActivityIcon(string $activity): string {
+    private function getActivityIcon(string $activity): string
+    {
         $activity = strtolower($activity);
 
         return match (true) {

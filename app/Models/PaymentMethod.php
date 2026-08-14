@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class PaymentMethod extends Model
 {
@@ -17,20 +17,9 @@ class PaymentMethod extends Model
      */
     protected $fillable = [
         'name',
-        'slug',
-        'icon',
         'description',
-        'image',
-        'config',
         'is_active',
         'position',
-        'is_default',
-        'provider',
-        'provider_config',
-        'fee_percentage',
-        'fee_fixed',
-        'min_amount',
-        'max_amount',
     ];
 
     /**
@@ -96,7 +85,7 @@ class PaymentMethod extends Model
     {
         $percentageFee = $amount * ($this->fee_percentage / 100);
         $fixedFee = $this->fee_fixed;
-        
+
         return $percentageFee + $fixedFee;
     }
 
@@ -116,11 +105,11 @@ class PaymentMethod extends Model
         if ($this->min_amount && $amount < $this->min_amount) {
             return false;
         }
-        
+
         if ($this->max_amount && $amount > $this->max_amount) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -130,19 +119,19 @@ class PaymentMethod extends Model
     public function getFormattedFee(): string
     {
         $fees = [];
-        
+
         if ($this->fee_percentage > 0) {
             $fees[] = "{$this->fee_percentage}%";
         }
-        
+
         if ($this->fee_fixed > 0) {
-            $fees[] = "$" . number_format($this->fee_fixed, 2);
+            $fees[] = '$'.number_format($this->fee_fixed, 2);
         }
-        
+
         if (empty($fees)) {
             return 'Sin comisiones';
         }
-        
+
         return implode(' + ', $fees);
     }
 
@@ -152,15 +141,15 @@ class PaymentMethod extends Model
     public function getFormattedLimits(): string
     {
         $limits = [];
-        
+
         if ($this->min_amount) {
-            $limits[] = "Min: $" . number_format($this->min_amount, 2);
+            $limits[] = 'Min: $'.number_format($this->min_amount, 2);
         }
-        
+
         if ($this->max_amount) {
-            $limits[] = "Max: $" . number_format($this->max_amount, 2);
+            $limits[] = 'Max: $'.number_format($this->max_amount, 2);
         }
-        
+
         return implode(' | ', $limits);
     }
 

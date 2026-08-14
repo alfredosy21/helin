@@ -50,6 +50,12 @@ class Settings extends Model {
         'maracay_location',
         'maracaibo_whatsapp',
         'maracaibo_location',
+        'opinion_url',
+        'offices',
+    ];
+
+    protected $casts = [
+        'offices' => 'array',
     ];
 
     /**

@@ -23,9 +23,21 @@ class Resource extends Model {
         'resource_type_id',
         'resource_specialty_id',
         'is_active',
-        'views',
         'position',
-        'featured'
+        'featured',
+        'content',
+        'diagnosis',
+        'gallery',
+        'video_url',
+        'materials',
+        'results',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'featured' => 'boolean',
+        'position' => 'integer',
+        'gallery' => 'array',
     ];
 
 

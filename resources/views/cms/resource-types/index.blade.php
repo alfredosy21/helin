@@ -8,7 +8,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="6" :submodule-id="16" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::RESOURCE_TYPES" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.resource_types.breadcrumb') }}
                 </p>
@@ -165,6 +165,86 @@
                                   class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
                                   placeholder="{{ __('cms.resource_types.description_placeholder') }}"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Imagen --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.image_label') }}</label>
+                        <div class="relative">
+                            @if($image)
+                            <div class="mb-3 relative">
+                                <img src="{{ $image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            @elseif($current_image)
+                            <div class="mb-3 relative">
+                                <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('current_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            @endif
+                            <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                                <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                    <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-500">{{ __('cms.general.select_image') }}</p>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                                </div>
+                                <input type="file" wire:model="image" class="hidden" accept="image/*" />
+                            </label>
+                            @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    {{-- Banner --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.banner_title_label') }}</label>
+                        <input type="text" wire:model="banner_title"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('banner_title') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.banner_description_label') }}</label>
+                        <textarea wire:model="banner_description" rows="3"
+                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('banner_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.banner_image_label') }}</label>
+                        <div class="relative">
+                            @if($banner_image)
+                            <div class="mb-3 relative">
+                                <img src="{{ $banner_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('banner_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            @elseif($current_banner_image)
+                            <div class="mb-3 relative">
+                                <img src="{{ asset('storage/' . $current_banner_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
+                                <button type="button" wire:click="$set('current_banner_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            @endif
+                            <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
+                                <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                                    <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-500">{{ __('cms.general.select_banner_image') }}</p>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                                </div>
+                                <input type="file" wire:model="banner_image" class="hidden" accept="image/*" />
+                            </label>
+                            @error('banner_image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
 

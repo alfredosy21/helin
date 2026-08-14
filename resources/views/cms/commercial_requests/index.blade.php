@@ -7,7 +7,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="6" :submodule-id="14" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTACT" :submodule-id="\App\Models\Submodule::COMMERCIAL_REQUESTS" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     Gestión de Solicitudes Comerciales
                 </p>

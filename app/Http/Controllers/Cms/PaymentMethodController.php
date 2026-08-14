@@ -3,33 +3,37 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Models\PaymentMethod;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
-use Illuminate\Support\Str;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 #[Title('Gestión de Métodos de Pago | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class PaymentMethodController extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $showForm = false;
+
     public $editingId = null;
 
     // Form fields
     public $name;
+
     public $description;
+
     public $is_active = true;
 
     // Filters
     public $search = '';
+
     public $filterProvider = '';
+
     public $perPage = 10;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -48,10 +52,10 @@ class PaymentMethodController extends Component
 
         // Apply search
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('provider', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('provider', 'like', '%'.$this->search.'%');
             });
         }
 
@@ -62,7 +66,7 @@ class PaymentMethodController extends Component
 
         // Order by position
         $paymentMethods = $query->orderBy('position')->orderBy('updated_at', 'desc')
-                              ->paginate($this->perPage);
+            ->paginate($this->perPage);
 
         return view('cms.payment-methods.index', compact('paymentMethods'));
     }
@@ -133,7 +137,7 @@ class PaymentMethodController extends Component
     public function resetForm()
     {
         $this->reset([
-            'name', 'description', 'is_active'
+            'name', 'description', 'is_active',
         ]);
 
         $this->is_active = true;

@@ -8,7 +8,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="4" :submodule-id="12" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::BLOG" :submodule-id="\App\Models\Submodule::BLOG_ARTICLES" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.blog_articles.title') }}
                 </p>

@@ -5,7 +5,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="3" :submodule-id="25" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::ATTRIBUTES" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.attributes.breadcrumb') }}
                 </p>

@@ -5,7 +5,7 @@
         {{-- Header Section & Breadcrumb --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
             <div>
-                <x-cms-breadcrumb :module-id="2" :submodule-id="5" />
+                <x-cms-breadcrumb :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::DELIVERY_METHODS" />
                 <p class="text-sm text-slate-500 mt-2.5">
                     {{ __('cms.delivery_methods.title') }}
                 </p>
