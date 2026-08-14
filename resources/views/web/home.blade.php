@@ -48,7 +48,7 @@
                {!! $heroSection->content !!}
             </h1>
             @if($heroSection->description)
-                <p class="text-white text-sm sm:text-base lg:text-lg font-body font-normal mb-4 sm:mb-6 max-w-2xl mx-auto lg:mx-0" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{!! $heroSection->description !!}</p>
+                <p class="text-white text-sm sm:text-base lg:text-lg font-body font-normal mb-4 sm:mb-6 max-w-2xl mx-auto lg:mx-0" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">{{ $heroSection->description }}</p>
             @endif
             @if($heroSection->buttons)
                 @php

@@ -150,6 +150,36 @@
                         @error('title') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
+                    {{-- Subtítulo --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
+                        <input type="text" wire:model="subtitle" placeholder="{{ __('cms.sections.subtitle_placeholder') }}"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        @error('subtitle') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Tipo de layout e iconos --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
+                            <select wire:model="layout_type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                @foreach($this->layoutOptions() as $value => $label)
+                                <option value="{{ $value }}" @selected($layout_type === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('layout_type') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.icon_style_label') }}</label>
+                            <select wire:model="icon_style" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                @foreach($this->iconStyleOptions() as $value => $label)
+                                <option value="{{ $value }}" @selected($icon_style === $value)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('icon_style') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
                     {{-- Contenido con Quill Editor --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
@@ -158,6 +188,14 @@
                             <textarea wire:model="content" id="content-textarea" class="hidden">{{ $content }}</textarea>
                         </div>
                         @error('content') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Descripción --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
+                        <textarea wire:model="description" rows="3" placeholder="{{ __('cms.sections.description_placeholder') }}"
+                                  class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                        @error('description') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Botón CTA e URL en grid de dos columnas --}}
@@ -172,6 +210,126 @@
                             <input type="text" wire:model="url_button" placeholder="{{ __('cms.sections.url_placeholder') }}"
                                    class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                         </div>
+                    </div>
+
+                    {{-- Items estructurados (repeater) --}}
+                    @php
+                        $itemFields = $this->itemFields($layout_type);
+                        $itemFieldLabels = $this->itemFieldLabels();
+                        $repeaterItems = $items ?? [];
+                    @endphp
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
+                                <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.items_hint') }} <code class="text-primary font-mono">{{ $itemsGroup }}</code></p>
+                            </div>
+                            @if(count($itemFields) > 0)
+                            <button type="button" wire:click="addItem" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-white hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
+                                + {{ __('cms.sections.add_item') }}
+                            </button>
+                            @endif
+                        </div>
+
+                        @if(count($repeaterItems) === 0)
+                        <p class="text-xs text-slate-400 italic py-2">{{ __('cms.sections.no_items') }}</p>
+                        @endif
+
+                        <div class="space-y-3">
+                            @foreach($repeaterItems as $index => $item)
+                            <div wire:key="item-{{ $index }}" class="border border-slate-200 rounded-lg p-4 bg-slate-50/40">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ __('cms.sections.item_label') }} #{{ $index + 1 }}</span>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" wire:click="moveItem({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+                                        </button>
+                                        <button type="button" wire:click="moveItem({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterItems) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                        </button>
+                                        <button type="button" wire:click="removeItem({{ $index }})" title="{{ __('cms.sections.remove_item') }}" class="p-1.5 rounded-md border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 transition-colors cursor-pointer">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    @foreach($itemFields as $field)
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] font-medium text-slate-400 block">{{ $itemFieldLabels[$field] ?? $field }}</label>
+                                        @if($field === 'description')
+                                        <textarea wire:model="items.{{ $index }}.{{ $field }}" rows="2" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+                                        @else
+                                        <input type="text" wire:model="items.{{ $index }}.{{ $field }}" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                        @endif
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @error('items') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Botones de la sección (repeater) --}}
+                    @php
+                        $repeaterButtons = $buttons ?? [];
+                    @endphp
+                    <div class="space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
+                                <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.buttons_hint') }}</p>
+                            </div>
+                            <button type="button" wire:click="addButton" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-white hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
+                                + {{ __('cms.sections.add_button') }}
+                            </button>
+                        </div>
+
+                        @if(count($repeaterButtons) === 0)
+                        <p class="text-xs text-slate-400 italic py-2">{{ __('cms.sections.no_buttons') }}</p>
+                        @endif
+
+                        <div class="space-y-3">
+                            @foreach($repeaterButtons as $index => $button)
+                            <div wire:key="button-{{ $index }}" class="border border-slate-200 rounded-lg p-4 bg-slate-50/40">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ __('cms.sections.button_entry_label') }} #{{ $index + 1 }}</span>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" wire:click="moveButton({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+                                        </button>
+                                        <button type="button" wire:click="moveButton({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterButtons) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                                        </button>
+                                        <button type="button" wire:click="removeButton({{ $index }})" title="{{ __('cms.sections.remove_button') }}" class="p-1.5 rounded-md border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 transition-colors cursor-pointer">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_text_label') }}</label>
+                                        <input type="text" wire:model="buttons.{{ $index }}.text" placeholder="{{ __('cms.sections.button_placeholder') }}" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_url_label') }}</label>
+                                        <input type="text" wire:model="buttons.{{ $index }}.url" placeholder="catalogo" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_style_label') }}</label>
+                                        <select wire:model="buttons.{{ $index }}.style" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                            <option value="primary" @selected(($button['style'] ?? '') === 'primary')>{{ __('cms.sections.button_style_primary') }}</option>
+                                            <option value="secondary" @selected(($button['style'] ?? '') === 'secondary')>{{ __('cms.sections.button_style_secondary') }}</option>
+                                            <option value="outline" @selected(($button['style'] ?? '') === 'outline')>{{ __('cms.sections.button_style_outline') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @error('buttons') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Galería de imágenes múltiples --}}

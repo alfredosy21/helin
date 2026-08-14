@@ -1,3 +1,22 @@
+## 0. Fase 0 — Auditoría integral de módulos CMS
+
+- [x] 0.1 Auditar M1 Administradores: `UserController` (S1 Usuarios) y `RolController` (S2 Roles) — permisos en `mount()`, `$fillable` vs columnas reales de BD, CRUD completo, validación, vistas sin errores
+- [x] 0.2 Auditar M2 Configuración: `SettingsController` (S3), `MenuController` (controlador y vista existen **sin submódulo registrado** — verificar registro/rutas), `PaymentMethodController` (S5), `CustomerTypesController` (S6), `DeliveryMethodsController` (S7), `WhatsAppNumbersController` (S24)
+- [x] 0.3 Auditar M3 Catálogo: `ProductsController` (S8), `CategoriesController` (S9), `BrandsController` (S10), `LineController` (S11), `SystemProductsController` (S12), `ProductPlatformsController` (S13), `AttributesController` (S25), `AttributeValuesController` (S26)
+- [x] 0.4 Auditar M4 Blog (NO cubierto por el plan actual): `BlogCategoriesController` (S14) y `BlogArticlesController` (S15) — CRUD, fillable, permisos, vistas, y si hay vistas públicas de blog con contenido hardcodeado
+- [x] 0.5 Auditar M5 Contenido: `TestimonialsController` (S16), `ResourceController` (S17), `ResourceTypeController` (S18), `ResourceSpecialtyController` (S19)
+- [x] 0.6 Auditar M6 Solicitudes: `CommercialRequestsController` (S20) — CRUD completo, detalle, estados, permisos
+- [x] 0.7 Auditar periferia: `DashboardController`, `ProfileController`, auth (login/logout/reset) y verificar el registro real de submódulos en BD vs lo asumido en proposal.md (incluidos los CONTACT_* 19/20/21)
+- [x] 0.8 Consolidar hallazgos: crear tareas nuevas en las fases correspondientes del plan para corregir los problemas y brechas detectadas
+
+> **Hallazgos consolidados (0.8)** → corregidos en la **Fase 3G**:
+> - CRÍTICO: `ResourceController::save()` crashea al crear/editar un recurso (`Unknown column 'views'` — columna inexistente en `resources`, probado en vivo).
+> - RBAC roto: `PermissionMiddleware` resuelve permisos **por nombre** pero casi todas las rutas pasan **IDs numéricos** (`permission:2,1`, `5,1`…) → cualquier usuario con rol (level≠1) recibe 403; solo funciona el super admin (level 1). El editor (rol 2) no tiene permisos sembrados.
+> - IDs desalineados BD↔constantes: la BD numera submódulos por orden de menú (S7=Métodos de Entrega, S16=Testimonios…) mientras `Submodule::PRODUCTS=7`, `TESTIMONIALS=15`… Solo coinciden 1-5 y 24-26. Faltan en BD: submódulo "Menú del Sitio" (`MenuController` existe sin registro) y módulo "Contacto" (M6=Contacto asumido en la Fase 3E no existe; M6=Solicitudes) + IDs 21-23.
+> - ~15 breadcrumbs `<x-cms-breadcrumb>` y ~12 rutas con IDs hardcodeados obsoletos (payment-methods breadcrumb apunta al módulo 7 inexistente).
+> - Menores: `PaymentMethodController::$paginationTheme='bootstrap'`; fillable muertos en `PaymentMethod` (10 cols), `BlogCategory` (color/icon/image), `Resource` (views).
+> - Blog (M4): CMS completo pero **sin páginas públicas** — **documentado como fuera de alcance** (decisión del usuario).
+
 ## 1. Fase 1 — Bugs críticos (sin migraciones)
 
 - [x] 1.1 Eliminar el `dd()` en `SectionController::update()` y restaurar la lógica de guardado real
@@ -44,27 +63,27 @@
 
 ## 3. Fase 2B — Editor repeater de items/buttons JSON (complejo, aislado)
 
-- [ ] 3.1 Ampliar `SectionController` para gestionar campos estructurados (`subtitle`, `description`, `items`, `buttons`, `layout_type`, `icon_style`)
-- [ ] 3.2 Implementar componente repeater en Livewire para editar `items` JSON (añadir/editar/reordenar/eliminar items con campos icon, title, description, order, url según layout_type)
-- [ ] 3.3 Implementar componente repeater en Livewire para editar `buttons` JSON (añadir/editar/eliminar botones con texto y URL)
-- [ ] 3.4 Crear/actualizar vista CMS `cms/sections/index.blade.php` con el editor repeater
-- [ ] 3.5 Validar estructura JSON antes de guardar (esquema por `layout_type`)
-- [ ] 3.6 Verificar Fase 2B: editar una sección con items y botones desde el CMS; confirmar que se guarda y la web lo muestra
+- [x] 3.1 Ampliar `SectionController` para gestionar campos estructurados (`subtitle`, `description`, `items`, `buttons`, `layout_type`, `icon_style`)
+- [x] 3.2 Implementar componente repeater en Livewire para editar `items` JSON (añadir/editar/reordenar/eliminar items con campos icon, title, description, order, url según layout_type)
+- [x] 3.3 Implementar componente repeater en Livewire para editar `buttons` JSON (añadir/editar/eliminar botones con texto y URL)
+- [x] 3.4 Crear/actualizar vista CMS `cms/sections/index.blade.php` con el editor repeater
+- [x] 3.5 Validar estructura JSON antes de guardar (esquema por `layout_type`)
+- [x] 3.6 Verificar Fase 2B: editar una sección con items y botones desde el CMS; confirmar que se guarda y la web lo muestra
 
 ## 4. Fase 3A — Migraciones de campos nuevos
 
-- [ ] 4.1 Crear migración para `categories`: añadir `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.2 Crear migración para `brands`: añadir `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.3 Crear migración para `lines`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.4 Crear migración para `system_products`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.5 Crear migración para `product_platforms`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.6 Crear migración para `resource_types`: añadir `image`, `banner_title`, `banner_description`, `banner_image`
-- [ ] 4.7 Crear migración para `resource_specialties`: añadir `banner_title`, `banner_description`, `banner_image` (`image` ya existe)
-- [ ] 4.8 Crear migración para `resources`: añadir `content` (longText), `diagnosis` (text), `gallery` (JSON), `video_url` (string), `materials` (JSON), `results` (longText)
-- [ ] 4.9 Crear migración para `settings`: añadir `opinion_url` (string nullable) y `offices` (JSON nullable). La migración incluye paso de migración de datos: leer `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` existentes y consolidarlos en el JSON `offices` con `[{name, url, whatsapp, active}]`. El `down()` revierte el JSON a los campos individuales antes de eliminar la columna. Mantener las columnas individuales en esta migración (se eliminan en migración posterior tras verificar).
-- [ ] 4.10 Crear migración para tabla nueva `contact_messages` (id, nombre, email, telefono, asunto, mensaje, is_read boolean, timestamps)
-- [ ] 4.11 Crear migración para tabla nueva `page_seo` (id, page_slug unique, seo_title, seo_description, seo_keywords, og_image nullable, timestamps)
-- [ ] 4.12 Ejecutar `php artisan migrate` y verificar que todas las migraciones se aplican sin error
+- [x] 4.1 Crear migración para `categories`: añadir `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.2 Crear migración para `brands`: añadir `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.3 Crear migración para `lines`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.4 Crear migración para `system_products`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.5 Crear migración para `product_platforms`: añadir `image`, `seo_keywords`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.6 Crear migración para `resource_types`: añadir `image`, `banner_title`, `banner_description`, `banner_image`
+- [x] 4.7 Crear migración para `resource_specialties`: añadir `banner_title`, `banner_description`, `banner_image` (`image` ya existe)
+- [x] 4.8 Crear migración para `resources`: añadir `content` (longText), `diagnosis` (text), `gallery` (JSON), `video_url` (string), `materials` (JSON), `results` (longText)
+- [x] 4.9 Crear migración para `settings`: añadir `opinion_url` (string nullable) y `offices` (JSON nullable). La migración incluye paso de migración de datos: leer `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` existentes y consolidarlos en el JSON `offices` con `[{name, url, whatsapp, active}]`. El `down()` revierte el JSON a los campos individuales antes de eliminar la columna. Mantener las columnas individuales en esta migración (se eliminan en migración posterior tras verificar).
+- [x] 4.10 Crear migración para tabla nueva `contact_messages` (id, nombre, email, telefono, asunto, mensaje, is_read boolean, timestamps)
+- [x] 4.11 Crear migración para tabla nueva `page_seo` (id, page_slug unique, seo_title, seo_description, seo_keywords, og_image nullable, timestamps)
+- [x] 4.12 Ejecutar `php artisan migrate` y verificar que todas las migraciones se aplican sin error
 
 ## 5. Fase 3B — Actualizar modelos y controladores con nuevos campos
 
@@ -116,7 +135,7 @@
 - [ ] 8.1 Crear `ContactMessagesController` (Livewire) con listado, detalle, marcar como leído, eliminar
 - [ ] 8.2 Crear vista CMS `cms/contact-messages/index.blade.php`
 - [ ] 8.3 Modificar `ContactController::send` para guardar el mensaje en `contact_messages` además de enviar email
-- [ ] 8.4 Registrar rutas CMS para contact-messages bajo M6, reutilizando submódulos 19/20/21 existentes
+- [ ] 8.4 Registrar rutas CMS para contact-messages bajo el módulo **Contacto (M7, creado en la Fase 3G)** con los submódulos CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG (21/22/23) y sembrar permisos en el seeder
 - [ ] 8.5 Verificar que un mensaje enviado desde la web se guarda en BD y aparece en el CMS
 
 ## 9. Fase 3F — Seeders
@@ -134,11 +153,22 @@
 - [ ] 9.11 Ejecutar `php artisan db:seed` y verificar que la web pública no se ve vacía
 - [ ] 9.12 Tras verificar que `offices` JSON funciona correctamente en la web, crear migración que elimine las columnas individuales `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` de `settings` (ya obsoletas)
 
-## 10. Verificación final
+## 10. Fase 3G — Correcciones de la auditoría (RBAC, IDs, bugs)
 
-- [ ] 10.1 Ejecutar `openspec validate cms-web-content-coverage` y corregir cualquier error
-- [ ] 10.2 Ejecutar `openspec status --change cms-web-content-coverage`
-- [ ] 10.3 Recorrer toda la web pública y confirmar que no queda contenido hardcodeado sin gestionar (excepto `no-results.blade.php` que se deja hardcodeado por ser trivial)
-- [ ] 10.4 Recorrer todo el CMS y confirmar que todos los módulos funcionan y guardan correctamente
-- [ ] 10.5 Verificar permisos: usuario no admin no puede acceder a ningún submódulo CMS
-- [ ] 10.6 Verificar que las migraciones tienen método `down()` funcional (rollback test)
+- [ ] 10.1 Fix crash al guardar recursos: eliminar `views` de `Resource::$fillable`, de `edit()` y de `save()` (columna inexistente — probado: crear/editar crashea con `Unknown column 'views'`)
+- [ ] 10.2 Alinear `Submodule` constantes con los IDs reales de BD: PRODUCTS=8, PRODUCT_FAMILIES=9, PRODUCT_BRANDS=10, PRODUCT_LINES=11, SYSTEM_PRODUCTS=12, PRODUCT_PLATFORMS=13, BLOG_CATEGORIES=14, BLOG_ARTICLES=15, TESTIMONIALS=16, CLINICAL_RESOURCES=17, RESOURCE_TYPES=18, RESOURCE_SPECIALTIES=19, CUSTOMER_TYPES=6, DELIVERY_METHODS=7; añadir faltantes: COMMERCIAL_REQUESTS=20, WEBSITE_MENU=27, CONTACT_MESSAGES=21, CONTACT_MANAGEMENT=22, CONTACT_FORM_CONFIG=23
+- [ ] 10.3 Actualizar `ModuleSeeder` para forzar IDs por constantes en todos los submódulos y crear los ausentes en BD: "Menú del Sitio" (WEBSITE_MENU, bajo M2) y módulo "Contacto" (M7) con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG; re-seed y verificar coherencia BD↔constantes↔permisos
+- [ ] 10.4 Fix `PermissionMiddleware`: resolver por ID cuando el argumento es numérico (por nombre si no lo es). Corregir las rutas hardcodeadas para usar constantes: testimonials `5,1`→(CONTENT,TESTIMONIALS), resources `5,2`→(CONTENT,CLINICAL_RESOURCES), resource-types `5,3`→(CONTENT,RESOURCE_TYPES), resource-specialties `5,4`→(CONTENT,RESOURCE_SPECIALTIES), payment-methods `2,3`→(SETTINGS,PAYMENT_METHODS), menu `2,4`→(SETTINGS,WEBSITE_MENU), blog `4,1`/`4,2`→(BLOG,BLOG_CATEGORIES/BLOG_ARTICLES), settings `2,1`→(SETTINGS,GENERAL_SETTINGS), sections `2,2`→(SETTINGS,SECTIONS), commercial-requests `6,1`→(SOLICITUDES,COMMERCIAL_REQUESTS), dashboard `1`→(ADMINISTRATORS)
+- [ ] 10.5 Corregir `<x-cms-breadcrumb>` con IDs obsoletos en las vistas CMS usando constantes: products `(3,5)`→(3,8), categories `(3,6)`→(3,9), brands `(3,7)`→(3,10), lines `(3,8)`→(3,11), system-products `(3,9)`→(3,12), product-platforms `(3,10)`→(3,13), blog_categories `(4,11)`→(4,14), blog_articles `(4,12)`→(4,15), testimonials `(5,13)`→(5,16), resources `(6,14)`→(5,17), resource-types `(6,16)`→(5,18), resource-specialties `(6,17)`→(5,19), commercial_requests `(6,14)`→(6,20), payment-methods `(7,15)`→(2,5), delivery-methods `(2,5)`→(2,7), customer-types `(2,4)`→(2,6), menu `(1,1)`→(2,27)
+- [ ] 10.6 Sembrar permisos de submódulo para el rol Editor (rol 2, level 2) y verificar RBAC real: el editor accede a sus módulos y recibe 403 en los que no tiene; super admin sigue con acceso total
+- [ ] 10.7 Menores: `PaymentMethodController::$paginationTheme` → `'tailwind'`; limpiar fillable muertos (`PaymentMethod`: slug/icon/image/config/is_default/provider/provider_config/fee_*; `BlogCategory`: color/icon/image)
+- [ ] 10.8 Verificar Fase 3G: crear y editar un recurso desde el CMS sin error; breadcrumbs correctos en todos los módulos; rutas con permisos funcionando para admin y editor
+
+## 11. Verificación final
+
+- [ ] 11.1 Ejecutar `openspec validate cms-web-content-coverage` y corregir cualquier error
+- [ ] 11.2 Ejecutar `openspec status --change cms-web-content-coverage`
+- [ ] 11.3 Recorrer toda la web pública y confirmar que no queda contenido hardcodeado sin gestionar (excepto `no-results.blade.php` que se deja hardcodeado por ser trivial)
+- [ ] 11.4 Recorrer todo el CMS y confirmar que todos los módulos funcionan y guardan correctamente
+- [ ] 11.5 Verificar permisos: usuario con rol solo accede a sus módulos (403 en el resto); super admin acceso total
+- [ ] 11.6 Verificar que las migraciones tienen método `down()` funcional (rollback test)

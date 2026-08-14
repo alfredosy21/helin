@@ -4,7 +4,31 @@ La web pública de Helin contiene una gran cantidad de contenido **hardcodeado e
 
 ## What Changes
 
-> El cambio se organiza en **3 fases** dentro del mismo change, aplicables de forma incremental. Cada fase deja el sistema funcional. Fase 1 = bugs críticos (urgente, bajo riesgo, sin migraciones). Fase 2 = infraestructura ya existente sin usar (mediano riesgo, sin migraciones nuevas). Fase 3 = features nuevas y migraciones (mayor esfuerzo). Los "opcionales" previos (banners de marcas/tipos/especialidades) se confirman como incluidos.
+> El cambio se organiza en fases dentro del mismo change, aplicables de forma incremental. Cada fase deja el sistema funcional. Fase 0 = auditoría integral de todos los módulos del CMS (detectar brechas y bugs no cubiertos por el resto del plan). Fase 1 = bugs críticos (urgente, bajo riesgo, sin migraciones). Fase 2 = infraestructura ya existente sin usar (mediano riesgo, sin migraciones nuevas). Fase 3 = features nuevas y migraciones (mayor esfuerzo). Los "opcionales" previos (banners de marcas/tipos/especialidades) se confirman como incluidos.
+
+---
+
+### FASE 0 — Auditoría integral de módulos CMS
+
+El plan original cubre los módulos relacionados con el contenido web público (secciones, recursos, testimonios, productos, taxonomías, settings, whatsapp, atributos), pero **no audita la totalidad del CMS**. Hay submódulos y controladores que el plan no toca y que pueden tener los mismos problemas que la Fase 1 corrigió (permisos faltantes, `$fillable` desactualizados, uso de columnas inexistentes, CRUD incompleto, paginación inconsistente) o contener contenido hardcodeado no gestionable desde el CMS.
+
+- Auditar sistemáticamente cada módulo del CMS (M1–M6: 26 submódulos + menú, dashboard, perfil y auth) contra la checklist estándar usada en la Fase 1: verificación de permisos en `mount()`, `$fillable` alineado con las columnas reales de BD, CRUD completo (index/create/edit/update/delete), validación coherente con las columnas, `paginationTheme` uniforme (`tailwind`), vistas CMS que renderizan sin error, rutas registradas en `routes/web.php`, submódulos registrados en `Submodule`, relaciones correctas.
+- Módulos **no cubiertos** por el resto del plan y que la auditoría debe revisar en detalle:
+  - **Blog (M4: categorías S14 y artículos S15)** — incluyendo si existen vistas públicas de blog y si muestran contenido hardcodeado.
+  - **Configuración → Métodos de Pago (S5), Tipos de Cliente (S6), Métodos de Entrega (S7)**.
+  - **Menú del Sitio** — `MenuController` existe con vista pero **sin submódulo registrado en BD** (gap de registro y rutas).
+  - **Administradores (M1: Usuarios S1, Roles S2)** y **Dashboard, Perfil y Auth**.
+  - **Solicitudes Comerciales (M6: S20)** — CRUD completo y detalle.
+- Verificar el registro real de submódulos en BD contra lo asumido en este documento (p.ej. los submódulos CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG 19/20/21 y el orden real de IDs tras reseeding).
+- Consolidar los hallazgos como tareas nuevas en las fases correspondientes del plan (correcciones de bugs, campos gestionables, contenido hardcodeado detectado en módulos no cubiertos).
+
+> **Resultado de la auditoría** (ejecutada): la corrección de los hallazgos se consolida en la **Fase 3G**:
+> - **Crítico**: `ResourceController::save()` crashea al crear/editar un recurso (`Unknown column 'views'` — columna inexistente).
+> - **RBAC roto**: `PermissionMiddleware` resuelve permisos por nombre pero las rutas pasan IDs numéricos → usuarios con rol (level≠1) reciben 403 en casi todo el CMS; solo el super admin (level 1) funciona.
+> - **IDs desalineados BD↔constantes**: la BD numera los submódulos por orden de menú (S7=Métodos de Entrega, S16=Testimonios…) mientras las constantes del modelo usan otro esquema (PRODUCTS=7, TESTIMONIALS=15…). Faltan en BD: submódulo "Menú del Sitio" (`MenuController` existe sin registro) y el módulo "Contacto" (los submódulos CONTACT_* 19/20/21 que asumía la Fase 3D no existen).
+> - **~15 breadcrumbs `<x-cms-breadcrumb>` y ~12 rutas** con IDs hardcodeados obsoletos.
+> - **Menores**: `PaymentMethodController::$paginationTheme='bootstrap'`; fillable muertos en `PaymentMethod`, `BlogCategory` y `Resource`.
+> - **Blog (M4)**: CMS completo pero sin páginas públicas — documentado como fuera de alcance.
 
 ---
 
@@ -96,19 +120,31 @@ Actualizar `$fillable` y controladores CMS de todas las entidades anteriores par
 
 - Reemplazar el selector de dimensiones JS hardcodeado en `producto.blade.php` (Ø3.3/Ø4.1/Ø4.8 mm con precios en JS) por los `attribute_values` del producto (gestionados en fase 2).
 
-#### 3D. Módulo de Mensajes de Contacto (M6)
+#### 3D. Módulo de Mensajes de Contacto (M7)
 
-> Los submódulos 19 (CONTACT_MESSAGES), 20 (CONTACT_MANAGEMENT), 21 (CONTACT_FORM_CONFIG) existen en `Submodule` pero **no tienen controladores ni rutas**.
+> La auditoría (Fase 0) verificó que los submódulos CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG **no existen en la BD** (la propuesta original asumía IDs 19/20/21 que en realidad corresponden a Especialidades y Solicitudes Comerciales). El módulo "Contacto" se crea en la Fase 3G (M7, submódulos 21/22/23).
 
 - Crear modelo `ContactMessage` y `ContactMessagesController` (Livewire) para gestionar mensajes (listar, ver, marcar como leído, eliminar).
 - Modificar `ContactController::send` para **guardar el mensaje en BD** además de enviar el email.
-- Registrar rutas CMS para contact-messages bajo el módulo Contacto (M6), reutilizando los submódulos existentes.
+- Registrar rutas CMS para contact-messages bajo el módulo Contacto (M7, creado en 3G).
 
 #### 3E. Seeders
 
 - Actualizar/crear seeders para sembrar los nuevos campos (`banner_*`, `image`, `seo_keywords`, `items`, `buttons`, `opinion_url`, `materials`, `results`, etc.) con el contenido hardcodeado actual de las vistas, para que la web no se vea vacía tras el cambio.
 - Sembrar `contact_messages` vacío (tabla nueva).
 - Verificar y completar seeders de `whatsapp_numbers` y `attributes`/`attribute_values` si no tienen datos.
+
+#### 3F. Correcciones de la auditoría (RBAC, IDs, bugs)
+
+Derivadas de la Fase 0 (auditoría integral del CMS):
+
+- **Crash al guardar recursos**: eliminar la columna inexistente `views` de `Resource::$fillable`, `edit()` y `save()` (crear/editar un recurso crashea con `Unknown column 'views'`).
+- **Alinear IDs de submódulos BD↔constantes**: reescribir las constantes de `Submodule` para que coincidan con los IDs reales de la BD (PRODUCTS=8, PRODUCT_FAMILIES=9, PRODUCT_BRANDS=10, PRODUCT_LINES=11, SYSTEM_PRODUCTS=12, PRODUCT_PLATFORMS=13, BLOG_CATEGORIES=14, BLOG_ARTICLES=15, TESTIMONIALS=16, CLINICAL_RESOURCES=17, RESOURCE_TYPES=18, RESOURCE_SPECIALTIES=19, CUSTOMER_TYPES=6, DELIVERY_METHODS=7) y añadir las faltantes (COMMERCIAL_REQUESTS=20, WEBSITE_MENU=27, CONTACT_MESSAGES=21, CONTACT_MANAGEMENT=22, CONTACT_FORM_CONFIG=23).
+- **Crear en BD lo ausente**: submódulo "Menú del Sitio" (WEBSITE_MENU, bajo M2 Configuración — `MenuController` existe sin registro) y módulo "Contacto" (M7) con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG. Actualizar `ModuleSeeder` para forzar IDs por constantes en todos los submódulos y re-seed coherente con permisos.
+- **Fix RBAC**: `PermissionMiddleware` debe resolver por ID cuando el argumento es numérico (y por nombre si no lo es); corregir las rutas hardcodeadas (`permission:5,1`, `2,3`, `2,4`, `4,1`, `4,2`, `6,1`, `2,1`, `2,2`, dashboard `1`) para usar constantes. Sembrar permisos de submódulo para el rol Editor (rol 2) y verificar RBAC real (editor accede solo a sus módulos, 403 en el resto).
+- **Breadcrumbs**: corregir `<x-cms-breadcrumb>` con IDs obsoletos en ~15 vistas CMS usando constantes (payment-methods apunta hoy al módulo 7 inexistente).
+- **Menores**: `PaymentMethodController::$paginationTheme` → `'tailwind'`; limpiar fillable muertos (`PaymentMethod`, `BlogCategory`).
+- **Blog (M4)**: el CMS del blog funciona pero no hay páginas públicas — documentado como fuera de alcance de este change (decisión de negocio pendiente).
 
 ## Capabilities
 
@@ -125,12 +161,13 @@ Actualizar `$fillable` y controladores CMS de todas las entidades anteriores par
 ## Impact
 
 ### Código afectado
+- **Auditoría Fase 0**: revisión de todos los controladores CMS existentes contra la checklist estándar, incluidos los no cubiertos por el resto del plan: `UserController`, `RolController`, `BlogCategoriesController`, `BlogArticlesController`, `PaymentMethodController`, `CustomerTypesController`, `DeliveryMethodsController`, `MenuController`, `DashboardController`, `ProfileController` y auth. Correcciones según hallazgos (bugs, `$fillable`, permisos, registros de submódulos/rutas).
 - **Controladores CMS**: `SectionController` (arreglo bug + exponer campos estructurados ya en BD + editor repeater de `items`/`buttons`). **Nuevos**: `WhatsAppNumbersController` (tabla existente), `AttributesController` + `AttributeValuesController` (tablas existentes), `ContactMessagesController` (tabla nueva). Ampliación de `CategoriesController`, `BrandsController`, `LineController`, `SystemProductsController`, `ProductPlatformsController`, `ResourceTypeController`, `ResourceSpecialtyController`, `ResourceController`, `TestimonialsController`, `SettingsController` para gestionar nuevos campos (imagen, banner, SEO keywords, etc.).
 - **Modelos**: `Sections` (añadir a `$fillable`: `subtitle`, `description`, `items`, `buttons`, `layout_type`, `icon_style` — columnas ya existentes), `Product` (añadir a `$fillable`: `material`, `is_biomaterial`, `seo_description`, `seo_keywords`, `system_product_id`, `product_platform_id` — columnas ya existentes), `Resource` (quitar `specialty`/`tags` inexistentes; añadir `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results` — requieren migración), `Testimonial` (fillable correcto: `['name', 'specialty', 'content', 'image', 'is_active', 'position']` — quitar `description`/`charge`/`order` inexistentes), `Category` (añadir `seo_keywords`, `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image`), `Brand` (añadir `seo_keywords`, `banner_title`, `banner_description`, `banner_image`), `Line` (añadir `image`, `seo_keywords`, `banner_*`), `SystemProduct` (añadir `image`, `seo_keywords`, `banner_*`), `ProductPlatform` (añadir `image`, `seo_keywords`, `banner_*`), `ResourceType` (añadir `image`, `banner_*`), `ResourceSpecialty` (añadir `image` — columna ya existe; `banner_*`), `Settings` (añadir `opinion_url`, `offices` JSON). **Nuevos modelos**: `PageSeo`, `ContactMessage`. Los modelos `Attribute`, `AttributeValue`, `WhatsAppNumber` ya existen.
 - **Vistas web**: `home.blade.php`, `nuestra-empresa.blade.php`, `politicas.blade.php`, `recursos-clinicos.blade.php`, `caso-clinico.blade.php`, `producto.blade.php`, `solicitud.blade.php`, `solicitud-enviada.blade.php`, `contactanos.blade.php`, `catalogo.blade.php`, y partials (`header`, `footer`, `beneficios`, `near`, `opinion`, `mobile-nav`, `product-results`, `resource-results`).
 - **WebController**: `recursosClinicos()` (eliminar multiplicador ×4 de recursos), `searchProducts()` (usar imágenes reales), `producto()` (añadir eager loading de `attributeValues`), `solicitud()` (reemplazar `$pickupInfo` hardcodeado).
 - **Vistas CMS**: `cms/sections/index.blade.php` (editor ampliado con campos estructurados y repeater de items/buttons), nuevas vistas para whatsapp-numbers, attributes, attribute-values, contact-messages. Ampliación de vistas de categories, brands, lines, system-products, product-platforms, resource-types, resource-specialties, resources, testimonials, settings para gestionar nuevos campos.
-- **Rutas**: `routes/web.php` — nuevas rutas CMS para whatsapp-numbers (M2), attributes y attribute-values (M3), contact-messages (M6).
+- **Rutas**: `routes/web.php` — nuevas rutas CMS para whatsapp-numbers (M2), attributes y attribute-values (M3), contact-messages (M7). Corrección de rutas con IDs hardcodeados a constantes (Fase 3G).
 - **Migraciones**: **Sin migración para `sections` ni `products`** (las columnas ya existen, solo falta actualizar `$fillable`). Migraciones nuevas para:
   - `settings.opinion_url`
   - `resources`: añadir `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results`
@@ -147,7 +184,7 @@ Actualizar `$fillable` y controladores CMS de todas las entidades anteriores par
   - Registro de los nuevos submódulos en `submodules` (whatsapp-numbers, attributes, attribute-values, page-seo) si no se insertan por seeder.
   - **Tablas nuevas**: `contact_messages` y `page_seo` (whatsapp_numbers, attributes, attribute_values ya existen).
 - **Seeders**: Actualizar `SectionSeeder`, `CategorySeeder`, `BrandSeeder`, `LineSeeder`, `SystemProductSeeder`, `ProductPlatformSeeder`, `ResourceTypeSeeder`, `ResourceSpecialtySeeder`, `ResourceSeeder`, `SettingsSeeder`, `TestimonialSeeder` con los nuevos campos y el contenido hardcodeado actual. Crear `ContactMessageSeeder` (vacío). Verificar `WhatsAppNumberSeeder` y crear `AttributeSeeder`/`AttributeValueSeeder` si no existen.
-- **Permisos**: 4 nuevos submódulos en `Submodule` (WhatsApp Numbers en M2, Attributes y Attribute Values en M3, Page SEO en M2) + asignación al rol administrador por defecto. Los submódulos 19/20/21 (CONTACT_MESSAGES, CONTACT_MANAGEMENT, CONTACT_FORM_CONFIG) ya existen en `Submodule` pero sin controlador — se reutilizan.
+- **Permisos**: submódulos nuevos en `Submodule` (WhatsApp Numbers y Page SEO en M2, Attributes y Attribute Values en M3, Menú del Sitio en M2, Contacto M7 con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG) + asignación al rol administrador por defecto y al rol Editor. Corrección de `PermissionMiddleware` (resolver por ID) y de las rutas con IDs hardcodeados (Fase 3G).
 
 ### Dependencias
 - No se introducen nuevas dependencias externas; se reutilizan Livewire, Tailwind y las convenciones existentes.
