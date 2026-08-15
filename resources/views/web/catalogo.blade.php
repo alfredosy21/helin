@@ -250,5 +250,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('helin/js/catalogo.js') }}"></script>
+<script src="@minAsset('helin/js/catalogo.js')"></script>
 @endpush

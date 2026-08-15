@@ -35,11 +35,11 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('helin/css/fonts.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/variables.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/helin-components.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/custom-container.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/skeleton.css') }}">
+    <link rel="stylesheet" href="@minAsset('helin/css/fonts.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/variables.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/helin-components.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/custom-container.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/skeleton.css')">
 
     @yield('styles')
     <!-- Habilitar soporte para @push('styles') si lo usas en el futuro -->
@@ -86,13 +86,13 @@
 
 @include('web.partials.footer')
 
-<script src="{{ asset('helin/js/helin-theme.js') }}"></script>
-<script src="{{ asset('helin/js/lazy-loading.js') }}"></script>
-<script src="{{ asset('helin/js/cart.js') }}"></script>
-<script src="{{ asset('helin/js/cart-toast.js') }}"></script>
-<script src="{{ asset('helin/js/cart-ui.js') }}"></script>
-<script src="{{ asset('helin/js/header-search.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('helin/css/header-search.css') }}">
+<script src="@minAsset('helin/js/helin-theme.js')"></script>
+<script src="@minAsset('helin/js/lazy-loading.js')"></script>
+<script src="@minAsset('helin/js/cart.js')"></script>
+<script src="@minAsset('helin/js/cart-toast.js')"></script>
+<script src="@minAsset('helin/js/cart-ui.js')"></script>
+<script src="@minAsset('helin/js/header-search.js')"></script>
+<link rel="stylesheet" href="@minAsset('helin/css/header-search.css')">
 
 <!-- Mantenemos el yield por si lo usas en otras vistas antiguas -->
 @yield('scripts')

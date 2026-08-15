@@ -147,5 +147,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('helin/js/contactanos.js') }}"></script>
+<script src="@minAsset('helin/js/contactanos.js')"></script>
 @endpush

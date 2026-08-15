@@ -3,7 +3,7 @@
 @section('title', $pageSeo?->seo_title ?? 'Políticas - Helin')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('helin/css/politicas.css') }}">
+<link rel="stylesheet" href="@minAsset('helin/css/politicas.css')">
 @endsection
 
 @section('content')

@@ -264,7 +264,7 @@
 @include('web.partials.beneficios')
 
 @push('scripts')
-<script src="{{ asset('helin/js/recursos-clinicos.js') }}"></script>
+<script src="@minAsset('helin/js/recursos-clinicos.js')"></script>
 @endpush
 
 @endsection

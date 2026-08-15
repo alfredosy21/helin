@@ -303,5 +303,5 @@
     }
 @endphp
 <script>window.HelinSolicitud = { pickups: @json($pickups), cities: @json($solicitudCities) };</script>
-<script src="{{ asset('helin/js/solicitud.js') }}"></script>
+<script src="@minAsset('helin/js/solicitud.js')"></script>
 @endpush

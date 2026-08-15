@@ -3,7 +3,7 @@
 @section('title', $pageSeo?->seo_title ?? 'Solicitud Comercial Enviada - Helin')
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('helin/css/solicitud-enviada.css') }}">
+<link rel="stylesheet" href="@minAsset('helin/css/solicitud-enviada.css')">
 @endsection
 
 @section('content')

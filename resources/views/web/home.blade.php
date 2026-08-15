@@ -7,7 +7,7 @@
 @section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : (\App\Models\Settings::getSettings()?->image ? asset('storage/' . \App\Models\Settings::getSettings()->image) : null))
 
 @section('styles')
-<link rel="stylesheet" href="{{ asset('helin/css/home.css') }}">
+<link rel="stylesheet" href="@minAsset('helin/css/home.css')">
 @endsection
 
 @section('content')
@@ -321,6 +321,6 @@
 </main>
 
 @push('scripts')
-<script src="{{ asset('helin/js/home.js') }}"></script>
+<script src="@minAsset('helin/js/home.js')"></script>
 @endpush
 @endsection

@@ -8,7 +8,7 @@
 @section('twitter-card', 'product')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('helin/css/producto.css') }}">
+<link rel="stylesheet" href="@minAsset('helin/css/producto.css')">
 @endpush
 
 @section('content')
@@ -264,5 +264,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('helin/js/producto.js') }}"></script>
+<script src="@minAsset('helin/js/producto.js')"></script>
 @endpush

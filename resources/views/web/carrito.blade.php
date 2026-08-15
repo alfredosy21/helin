@@ -3,7 +3,7 @@
 @section('title', 'Carrito de Compras - Helin')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('helin/css/carrito.css') }}">
+<link rel="stylesheet" href="@minAsset('helin/css/carrito.css')">
 @endpush
 
 @section('content')
