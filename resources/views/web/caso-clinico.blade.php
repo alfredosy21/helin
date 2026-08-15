@@ -8,6 +8,14 @@
 @endsection
 
 @section('content')
+@php
+    $shareSection = \App\Models\Sections::find(\App\Models\Sections::CASE_SHARE);
+    $advisorSection = \App\Models\Sections::find(\App\Models\Sections::CASE_ADVISOR);
+    $bottomCtaSection = \App\Models\Sections::find(\App\Models\Sections::CASE_BOTTOM_CTA);
+
+    $settings = \App\Models\Settings::getSettings();
+    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
+@endphp
 <main class="page">
     @include('web.components.breadcrumb', [
         'items' => [
@@ -134,87 +142,58 @@
         </div>
 
         <aside>
+            @if($shareSection && $shareSection->status == 1 && $shareSection->status_content == 1)
             <section class="share-card">
                 <div class="share-header">
-                    <h3>Compartir este recurso</h3>
+                    <h3>{{ $shareSection->title }}</h3>
                     <button type="button" class="share-copy" onclick="copyPageLink(this)" aria-label="Copiar enlace">
                         <i class="fas fa-link"></i>
                         <span class="tooltip">Enlace copiado</span>
                     </button>
                 </div>
             </section>
+            @endif
 
+            @if($advisorSection && $advisorSection->status == 1 && $advisorSection->status_content == 1)
             <section class="advisor-card">
                 <div class="advisor-head">
                     <div class="advisor-icon"><i class="fas fa-headset"></i></div>
                     <div>
-                        <h3>¿Necesitas asesoría personalizada?</h3>
-                        <p>Un asesor Helin puede ayudarte a resolver dudas sobre este caso y los materiales utilizados.</p>
+                        <h3>{{ $advisorSection->title }}</h3>
+                        @if($advisorSection->description)
+                        <p>{{ $advisorSection->description }}</p>
+                        @endif
                     </div>
                 </div>
-                @php
-                    $settings = \App\Models\Settings::getSettings();
-                    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
-                @endphp
                 @if($caseWhatsApp)
                 <a href="https://wa.me/{{ $caseWhatsApp }}?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
-                    <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
+                    <i class="fab fa-whatsapp"></i> {{ $advisorSection->name_button ?: 'Hablar por WhatsApp' }}
                 </a>
                 @endif
             </section>
+            @endif
         </aside>
     </section>
 
+    @if($bottomCtaSection && $bottomCtaSection->status == 1 && $bottomCtaSection->status_content == 1)
     <section class="bottom-cta">
         <div class="bottom-icon"><i class="fas fa-comments"></i></div>
         <div>
-            <h2>¿Tienes un caso similar o necesitas orientación?</h2>
-            <p>Nuestro equipo de especialistas está disponible para brindarte asesoría personalizada y acompañarte en la planificación de tus procedimientos.</p>
+            <h2>{{ $bottomCtaSection->title }}</h2>
+            @if($bottomCtaSection->description)
+            <p>{{ $bottomCtaSection->description }}</p>
+            @endif
         </div>
         <a href="{{ route('contactanos', ['asunto' => 'recursos-clinicos']) }}" class="advisor-btn">
-            <i class="material-icons">email</i> Solicitar asesoría especializada
+            <i class="material-icons">email</i> {{ $bottomCtaSection->name_button ?: 'Solicitar asesoría especializada' }}
         </a>
     </section>
+    @endif
 </main>
 
 @include('web.partials.beneficios')
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabs = document.querySelectorAll('.tabs .tab');
-        const panels = document.querySelectorAll('.tab-panel');
-
-        function activateTab(targetId) {
-            tabs.forEach(function (tab) {
-                tab.classList.toggle('active', tab.getAttribute('href') === '#' + targetId);
-            });
-            panels.forEach(function (panel) {
-                panel.classList.toggle('active', panel.id === targetId);
-            });
-        }
-
-        tabs.forEach(function (tab) {
-            tab.addEventListener('click', function (e) {
-                e.preventDefault();
-                activateTab(this.getAttribute('href').substring(1));
-            });
-        });
-
-        if (window.location.hash) {
-            activateTab(window.location.hash.substring(1));
-        }
-    });
-
-    function copyPageLink(button) {
-        navigator.clipboard.writeText(window.location.href).then(function () {
-            const tooltip = button.querySelector('.tooltip');
-            tooltip.classList.add('show');
-            setTimeout(function () {
-                tooltip.classList.remove('show');
-            }, 2000);
-        });
-    }
-</script>
+<script src="{{ asset('helin/js/caso-clinico.js') }}"></script>
 @endpush
 @endsection

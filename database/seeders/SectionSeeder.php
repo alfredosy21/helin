@@ -643,6 +643,41 @@ HTML,
                 'buttons' => json_encode([]),
             ],
 
+            // ==========================================
+            // ---------- SECCIONES DE CASO CLÍNICO ------
+            // ==========================================
+            Sections::CASE_SHARE => [
+                'title' => 'Compartir este recurso',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+            Sections::CASE_ADVISOR => [
+                'title' => '¿Necesitas asesoría personalizada?',
+                'subtitle' => null,
+                'description' => 'Un asesor Helin puede ayudarte a resolver dudas sobre este caso y los materiales utilizados.',
+                'image' => null,
+                'name_button' => 'Hablar por WhatsApp',
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+            Sections::CASE_BOTTOM_CTA => [
+                'title' => '¿Tienes un caso similar o necesitas orientación?',
+                'subtitle' => null,
+                'description' => 'Nuestro equipo de especialistas está disponible para brindarte asesoría personalizada y acompañarte en la planificación de tus procedimientos.',
+                'image' => null,
+                'name_button' => 'Solicitar asesoría especializada',
+                'url_button' => 'contactanos',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+
         ];
 
         foreach ($sections as $id => $data) {

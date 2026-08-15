@@ -52,30 +52,18 @@
                     }
 
                     /**
-                     * Determine icon and ID based on title
+                     * Policy ID from url_button (e.g. "#envio-garantias" -> "envio-garantias"),
+                     * fallback to "policy-{id}". Icon and number come from the section record.
                      */
-                    $policyData = match($section->title) {
-                        'Políticas de envío y garantías' => [
-                            'policyId' => 'envio-garantias',
-                            'policyIcon' => $section->image ?? '<i class="fas fa-truck" aria-hidden="true"></i>',
-                            'policyNumber' => ($index + 1) . '.'
-                        ],
-                        'Términos y condiciones' => [
-                            'policyId' => 'terminos-condiciones',
-                            'policyIcon' => $section->image ?? '<i class="fa fa-file-text-o" aria-hidden="true"></i>',
-                            'policyNumber' => ($index + 1) . '.'
-                        ],
-                        'Políticas de privacidad' => [
-                            'policyId' => 'privacidad',
-                            'policyIcon' => $section->image ?? '<i class="fas fa-shield-alt" aria-hidden="true"></i>',
-                            'policyNumber' => ($index + 1) . '.'
-                        ],
-                        default => [
-                            'policyId' => 'policy-' . $section->id,
-                            'policyIcon' => $section->image ?? '📋',
-                            'policyNumber' => ($index + 1) . '.'
-                        ]
-                    };
+                    $policyId = $section->url_button
+                        ? ltrim($section->url_button, '#')
+                        : 'policy-' . $section->id;
+
+                    $policyData = [
+                        'policyId' => $policyId,
+                        'policyIcon' => $section->image,
+                        'policyNumber' => ($index + 1) . '.',
+                    ];
                 @endphp
 
                 @include('web.components.policy-card', array_merge($policyData, [

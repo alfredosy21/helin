@@ -38,6 +38,7 @@ class Category extends Model {
         'is_active',
         'is_featured',
         'order',
+        'banner_label',
         'banner_title',
         'banner_description',
         'banner_image',

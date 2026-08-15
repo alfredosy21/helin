@@ -61,6 +61,11 @@ class Sections extends Model
     // GLOBAL SECTIONS
     const BENEFITS = 23; // Barra de beneficios (Envíos, Garantía, Asesoría...)
 
+    // CASO CLÍNICO SECTIONS
+    const CASE_SHARE = 24; // Compartir este recurso
+    const CASE_ADVISOR = 25; // ¿Necesitas asesoría personalizada?
+    const CASE_BOTTOM_CTA = 26; // ¿Tienes un caso similar o necesitas orientación?
+
     /**
      * Name of the table
      *

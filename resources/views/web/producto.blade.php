@@ -8,12 +8,7 @@
 @section('twitter-card', 'product')
 
 @push('styles')
-<style>
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance: textfield; appearance: textfield; }
-.qty-btn:hover { background-color: #6BC2C3 !important; color: #ffffff !important; }
-</style>
+<link rel="stylesheet" href="{{ asset('helin/css/producto.css') }}">
 @endpush
 
 @section('content')
@@ -87,14 +82,10 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     return $opt['label'] !== '';
                 })->values()->all();
 
-                if (empty($dimensionOptions)) {
-                    $dimensionOptions = [
-                        ['label' => 'Ø3.3 mm', 'suffix' => '33'],
-                        ['label' => 'Ø4.1 mm', 'suffix' => '41'],
-                        ['label' => 'Ø4.8 mm', 'suffix' => '48'],
-                    ];
-                }
-                $defaultDimension = $dimensionOptions[0];
+                $hasDimensions = count($dimensionOptions) > 0;
+                $defaultDimension = $hasDimensions
+                    ? $dimensionOptions[0]
+                    : ['label' => '', 'suffix' => ''];
                 $dimensionPrices = collect($dimensionOptions)->mapWithKeys(function ($opt) use ($product) {
                     return [$opt['label'] => [
                         'base' => (float) $product->price,
@@ -103,7 +94,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     ]];
                 })->all();
             @endphp
-            @if(count($dimensionOptions) > 0)
+            @if($hasDimensions)
             <div class="mb-6">
                 <h3 class="font-semibold text-helin-heading mb-1">Dimensiones</h3>
                 <p class="text-[13px] font-normal mb-1" style="color: #626772;">Seleccione una dimensión</p>
@@ -115,63 +106,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     @endforeach
                 </select>
             </div>
-            <script>
-            function updatePriceBySize(size) {
-                // Precios y SKU por dimensión (desde attribute_values del producto)
-                const baseSku = @json($product->sku ?? '');
-                const sizePrices = @json($dimensionPrices);
-
-                const priceInfo = sizePrices[size] || Object.values(sizePrices)[0];
-                const displayPrice = priceInfo.sale ?? priceInfo.base;
-                const currentPriceEl = document.getElementById('currentPrice');
-                const oldPriceEl = document.getElementById('oldPrice');
-                const skuEl = document.getElementById('productSkuValue');
-                const cartButton = document.querySelector('[data-cart-add]');
-
-                // Actualizar precios con animación
-                currentPriceEl.style.opacity = '0.5';
-                if (oldPriceEl) oldPriceEl.style.opacity = '0.5';
-
-                setTimeout(() => {
-                    // Actualizar precio actual
-                    currentPriceEl.textContent = '$' + displayPrice.toFixed(2);
-
-                    // Actualizar precio anterior si hay oferta
-                    if (priceInfo.sale && priceInfo.sale < priceInfo.base) {
-                        if (!oldPriceEl) {
-                            // Crear elemento de precio anterior si no existe
-                            const priceDisplay = document.getElementById('priceDisplay');
-                            const newOldPrice = document.createElement('span');
-                            newOldPrice.id = 'oldPrice';
-                            newOldPrice.className = 'text-lg text-helin-text line-through opacity-70';
-                            priceDisplay.insertBefore(newOldPrice, currentPriceEl);
-                            oldPriceEl = newOldPrice;
-                        }
-                        oldPriceEl.textContent = '$' + priceInfo.base.toFixed(2);
-                        oldPriceEl.style.display = 'inline';
-                    } else if (oldPriceEl) {
-                        // Ocultar precio anterior si no hay oferta
-                        oldPriceEl.style.display = 'none';
-                    }
-
-                    // Actualizar SKU mostrado según la dimensión seleccionada
-                    if (skuEl && priceInfo.sku) {
-                        skuEl.textContent = priceInfo.sku;
-                    }
-
-                    // Actualizar datos del botón de carrito (precio, SKU y dimensión)
-                    if (cartButton) {
-                        cartButton.setAttribute('data-price', displayPrice.toFixed(2));
-                        if (priceInfo.sku) cartButton.setAttribute('data-sku', priceInfo.sku);
-                        cartButton.setAttribute('data-dimension', size);
-                    }
-
-                    // Restaurar opacidad con animación
-                    currentPriceEl.style.opacity = '1';
-                    if (oldPriceEl) oldPriceEl.style.opacity = '0.7';
-                }, 200);
-            }
-            </script>
+            <script>window.HelinProduct = { sku: @json($product->sku ?? ''), prices: @json($dimensionPrices) };</script>
             @endif
 
             <!-- Cantidad y Botón -->
@@ -188,7 +123,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
                     data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
-                    data-sku="{{ $product->sku ? $product->sku . '-' . $defaultDimension['suffix'] : '' }}"
+                    data-sku="{{ $product->sku ? ($hasDimensions ? $product->sku . '-' . $defaultDimension['suffix'] : $product->sku) : '' }}"
                     data-dimension="{{ $defaultDimension['label'] }}"
                     data-image="{{ $product->main_image_url }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
@@ -200,7 +135,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 @if($product->sku)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">SKU:</span>
-                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}-{{ $defaultDimension['suffix'] }}</span>
+                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}{{ $hasDimensions ? '-' . $defaultDimension['suffix'] : '' }}</span>
                     </div>
                 @endif
 
@@ -313,3 +248,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 @include('web.partials.beneficios')
 @endsection
+
+@push('scripts')
+<script src="{{ asset('helin/js/producto.js') }}"></script>
+@endpush

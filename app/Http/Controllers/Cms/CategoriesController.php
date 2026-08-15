@@ -63,6 +63,10 @@ class CategoriesController extends Component
     #[Validate('boolean')]
     public bool $is_featured = false;
 
+    /** @var string|null Banner label (small text above title) */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_label = '';
+
     /** @var string|null Banner title */
     #[Validate('nullable|string|max:255')]
     public ?string $banner_title = '';
@@ -151,6 +155,7 @@ class CategoriesController extends Component
                 'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
                 'is_featured' => $this->is_featured,
+                'banner_label' => $this->banner_label,
                 'banner_title' => $this->banner_title,
                 'banner_description' => $this->banner_description,
             ];
@@ -210,6 +215,7 @@ class CategoriesController extends Component
         $this->seo_keywords = $category->seo_keywords;
         $this->is_active = $category->is_active;
         $this->is_featured = (bool) $category->is_featured;
+        $this->banner_label = $category->banner_label;
         $this->banner_title = $category->banner_title;
         $this->banner_description = $category->banner_description;
         $this->current_image = $category->image;
@@ -276,7 +282,7 @@ class CategoriesController extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'is_featured', 'banner_title', 'banner_description', 'image', 'current_image', 'banner_image', 'current_banner_image', 'editingId']);
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'is_featured', 'banner_label', 'banner_title', 'banner_description', 'image', 'current_image', 'banner_image', 'current_banner_image', 'editingId']);
         $this->is_active = true;
         $this->is_featured = false;
         $this->resetValidation();

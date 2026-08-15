@@ -473,3 +473,36 @@ document.addEventListener('DOMContentLoaded', function () {
     updateClearButton();
     renderActiveFilters();
 });
+
+// Ocultar skeleton y mostrar contenido cuando la página carga
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const skeleton = document.getElementById('productsSkeleton');
+        const content = document.getElementById('productsContent');
+
+        if (skeleton && content) {
+            skeleton.style.display = 'none';
+            content.classList.remove('hidden');
+        }
+    }, 500); // Pequeño delay para simular carga inicial
+});
+
+// Mostrar skeleton durante cargas AJAX
+function showProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+    const loading = document.getElementById('catalogLoading');
+
+    if (skeleton) skeleton.style.display = 'grid';
+    if (content) content.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+}
+
+// Ocultar skeleton y mostrar contenido
+function hideProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+
+    if (skeleton) skeleton.style.display = 'none';
+    if (content) content.classList.remove('hidden');
+}

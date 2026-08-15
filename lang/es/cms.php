@@ -58,6 +58,7 @@ return [
         'image_helper' => 'URL de la imagen o referencia',
         'select_image' => 'Seleccionar imagen',
         'banner_title_label' => 'Título del Banner',
+        'banner_label_label' => 'Etiqueta del Banner',
         'banner_description_label' => 'Descripción del Banner',
         'banner_image_label' => 'Imagen del Banner',
         'select_banner_image' => 'Seleccionar imagen del banner',

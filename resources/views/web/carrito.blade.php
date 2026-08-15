@@ -3,12 +3,7 @@
 @section('title', 'Carrito de Compras - Helin')
 
 @push('styles')
-<style>
-.qty-btn:hover { background-color: #6BC2C3 !important; color: #ffffff !important; }
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance: textfield; appearance: textfield; }
-</style>
+<link rel="stylesheet" href="{{ asset('helin/css/carrito.css') }}">
 @endpush
 
 @section('content')

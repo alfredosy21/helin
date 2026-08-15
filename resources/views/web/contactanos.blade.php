@@ -64,19 +64,20 @@
                 <h3>Nuestras sedes</h3>
                 <div class="sede-pills">
                     @php
-                        $sedeCities = [
-                            'Caracas'      => $settings->caracas_location ?? null,
-                            'Valencia'     => $settings->valencia_location ?? null,
-                            'Barquisimeto' => $settings->barquisimeto_location ?? null,
-                            'Maracaibo'    => $settings->maracaibo_location ?? null,
-                            'Maracay'      => $settings->maracay_location ?? null,
-                        ];
+                        $sedeOffices = $settings && is_array($settings->offices) ? $settings->offices : [];
                     @endphp
-                    @foreach($sedeCities as $sedeCity => $sedeLocation)
-                        @if($sedeLocation)
-                            <a href="{{ $sedeLocation }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ $sedeCity }}" width="10" height="10">{{ $sedeCity }}</a>
-                        @else
-                            <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ $sedeCity }}" width="10" height="10">{{ $sedeCity }}</span>
+                    @foreach($sedeOffices as $office)
+                        @php
+                            $sedeCity = $office['city'] ?? $office['name'] ?? null;
+                            $sedeLocation = $office['location'] ?? $office['url'] ?? null;
+                            $sedeActive = isset($office['active']) ? (bool) $office['active'] : true;
+                        @endphp
+                        @if($sedeCity && $sedeActive)
+                            @if($sedeLocation)
+                                <a href="{{ $sedeLocation }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ ucfirst($sedeCity) }}" width="10" height="10">{{ ucfirst($sedeCity) }}</a>
+                            @else
+                                <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ ucfirst($sedeCity) }}" width="10" height="10">{{ ucfirst($sedeCity) }}</span>
+                            @endif
                         @endif
                     @endforeach
                 </div>
