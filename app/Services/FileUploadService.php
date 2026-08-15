@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 use App\Utils\Helpers;
 use Exception;
 
@@ -54,7 +54,7 @@ class FileUploadService {
                 'url' => Storage::url($path),
                 'thumbnail_url' => $thumbnailPath ? Storage::url($thumbnailPath) : null
             ];
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception('Error al subir archivo: ' . $e->getMessage());
         }
     }
@@ -218,22 +218,17 @@ class FileUploadService {
         $height = $options['height'] ?? null;
         $quality = $options['quality'] ?? 85;
 
-        $image = Image::make($file->getPathname());
+        $image = $this->imageManager()->read($file->getPathname());
 
         if ($height) {
-            $image->resize($width, $height, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            $image->scaleDown($width, $height);
         } else {
-            $image->resize($width, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            $image->scaleDown($width);
         }
 
         $tempPath = tempnam(sys_get_temp_dir(), 'resized_');
-        $image->save($tempPath, $quality);
+        $extension = strtolower($file->getClientOriginalExtension());
+        $image->encodeByExtension($extension, $quality)->save($tempPath);
 
         return new UploadedFile($tempPath, $file->getClientOriginalName(), $file->getMimeType(), null, true);
     }
@@ -253,23 +248,19 @@ class FileUploadService {
             $thumbnailQuality = $options['thumbnail_quality'] ?? 75;
 
             $fullPath = Storage::disk('public')->path($originalPath);
-            $image = Image::make($fullPath);
+            $image = $this->imageManager()->read($fullPath);
 
-            // Create thumbnail
-            $image->fit($thumbnailSize, $thumbnailSize, function ($constraint) {
-                $constraint->upsize();
-            });
+            $image->fit($thumbnailSize, $thumbnailSize);
 
-            // Generate thumbnail filename
             $pathInfo = pathinfo($filename);
             $thumbnailFilename = $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];
 
-            // Save thumbnail
             $thumbnailPath = $directory . '/thumbnails/' . $thumbnailFilename;
             Storage::disk('public')->makeDirectory(dirname($thumbnailPath));
 
             $tempThumbnailPath = tempnam(sys_get_temp_dir(), 'thumb_');
-            $image->save($tempThumbnailPath, $thumbnailQuality);
+            $extension = strtolower($pathInfo['extension']);
+            $image->encodeByExtension($extension, $thumbnailQuality)->save($tempThumbnailPath);
 
             Storage::disk('public')->put($thumbnailPath, file_get_contents($tempThumbnailPath));
             unlink($tempThumbnailPath);
@@ -303,6 +294,16 @@ class FileUploadService {
      */
     private function isImage(UploadedFile $file): bool {
         return $this->isImageMimeType($file->getMimeType());
+    }
+
+    private function imageManager(): ImageManager {
+        static $manager = null;
+
+        if ($manager === null) {
+            $manager = ImageManager::gd();
+        }
+
+        return $manager;
     }
 
     /**
@@ -397,7 +398,7 @@ class FileUploadService {
             }
 
             $fullPath = Storage::disk('public')->path($path);
-            $image = Image::make($fullPath);
+            $image = $this->imageManager()->read($fullPath);
 
             return [
                 'width' => $image->width(),
@@ -423,29 +424,24 @@ class FileUploadService {
             }
 
             $fullPath = Storage::disk('public')->path($path);
-            $image = Image::make($fullPath);
+            $image = $this->imageManager()->read($fullPath);
 
             $quality = $options['quality'] ?? 80;
             $format = $options['format'] ?? null;
             $maxWidth = $options['max_width'] ?? 1920;
             $maxHeight = $options['max_height'] ?? 1080;
 
-            // Resize if needed
             if ($image->width() > $maxWidth || $image->height() > $maxHeight) {
-                $image->resize($maxWidth, $maxHeight, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $image->scaleDown($maxWidth, $maxHeight);
             }
 
-            // Convert format if needed
             if ($format && $format !== 'auto') {
                 $extension = $format;
             } else {
                 $extension = pathinfo($path, PATHINFO_EXTENSION);
             }
+            $extension = strtolower($extension);
 
-            // Save optimized image
             $pathInfo = pathinfo($path);
             $optimizedFilename = $pathInfo['filename'] . '_optimized.' . $extension;
             $optimizedPath = $pathInfo['dirname'] . '/optimized/' . $optimizedFilename;
@@ -453,7 +449,7 @@ class FileUploadService {
             Storage::disk('public')->makeDirectory(dirname($optimizedPath));
 
             $tempPath = tempnam(sys_get_temp_dir(), 'optimized_');
-            $image->save($tempPath, $quality, $extension === 'png' ? 'png' : 'jpg');
+            $image->encodeByExtension($extension, $quality)->save($tempPath);
 
             Storage::disk('public')->put($optimizedPath, file_get_contents($tempPath));
             unlink($tempPath);
