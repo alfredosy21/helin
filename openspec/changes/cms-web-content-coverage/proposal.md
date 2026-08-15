@@ -314,3 +314,30 @@ Patrón aplicado en todas las vistas: **dato CMS + fallback al contenido hardcod
 
 - `WebController::producto()` ya hace eager load de `attributeValues`; la vista construye `$dimensionOptions` desde `attributeValues` (`label ?? value` + sufijo numérico para el SKU) con fallback a Ø3.3/Ø4.1/Ø4.8 mm.
 - JS `updatePriceBySize` reconstruido desde `@json($dimensionPrices)` (base/sale/sku por dimensión) — **sin multiplicadores falsos ×1.15/×1.25**; el precio mostrado, `data-cart-add` y el SKU usan la primera dimensión por defecto. La tabla `attributes` está vacía en BD (los options usan el fallback hasta sembrar atributos).
+
+---
+
+## Fase 3E — Seeders (en progreso)
+
+> Pendiente de ejecutar sobre la BD de producción. La Fase 3E consiste en poblar las nuevas columnas y tablas con el contenido hardcodeado actual, para que la web no se vea vacía tras el cambio de vistas a binding CMS. Actualmente la BD tiene datos parciales (secciones 3 y 4 actualizadas manualmente, Settings con campos individuales pero `opinion_url`/`offices` NULL).
+
+### Estado actual de los seeders
+
+- **SectionSeeder**: contiene las secciones home, políticas, about, etc., pero **falta la sección `Sections::BENEFITS = 23`** (barra de beneficios con 5 items). La sección `CLINICAL_RESOURCES_HERO` (3) tiene `layout_type='feature_box'` pero los items JSON no coinciden exactamente con la BD actual (4 quick cards). La sección `CLINICAL_LIBRARY` (4) no tiene `subtitle` seteado.
+- **SettingsSeeder**: tiene los campos individuales `caracas_whatsapp`/`valencia_whatsapp`/`barquisimeto_whatsapp`/`maracaibo_whatsapp` y sus `*_location`, más `maracay_whatsapp`/`maracay_location` en fillable pero no sembrados. **Falta** `opinion_url` (URL Typeform/survey) y `offices` JSON (estructura `[{name,url,whatsapp,active}]` para reemplazar los campos individuales en la vista). El WebController::solicitud() ya deriva offices con fallback al mapa de 5 ciudades (añadido Maracay).
+- **CategorySeeder**: tiene 18 categorías con `seo_keywords` y descripciones, pero **falta** los campos `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image` para la categoría destacada (Implantología). La categoría `implantologia` (id 1) debería tener `is_featured=true` y `banner_title`/`banner_image` para que el home show la categoría destacada.
+- **Nuevos seeders necesarios**:
+  - `PageSeoSeeder`: con el SEO actualmente hardcodeado en las vistas (home, contacto, empresa, políticas, recursos). 9 páginas estáticas con `page_slug` y fallback a `Settings`.
+  - `AttributeSeeder`/`AttributeValueSeeder`: atributo "Dimensión" con valores Ø3.3/Ø4.1/Ø4.8 mm y labels/ Sufijos para el SKU.
+  - `ContactMessageSeeder`: tabla vacía (solo estructura, los mensajes se persisten vía `ContactController::send`).
+- **DatabaseSeeder**: debe registrar `PageSeoSeeder` y `AttributeSeeder`/`AttributeValueSeeder` (y opcionalmente `ContactMessageSeeder`).
+
+### Próximos pasos para completar la Fase 3E
+
+1. Ejecutar `php artisan db:seed` sobre BD de producción y verificar que la web pública no se ve vacía (todos los fallbacks funcionan correctamente).
+2. Tras verificar el funcionamiento de `offices` JSON, crear la migración que elimine las columnas individuales `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracaibo_location` y `maracay_location` y sus `*_whatsapp` de `settings` (ya obsoletas, sustituidas por el JSON `offices`).
+3. Completar la actualización del `SectionSeeder` con la sección BENEFITS (5 items con icon/title/description/order) y los items/buttons de las secciones CLINICAL_RESOURCES_HERO y CLINICAL_LIBRARY para que coincidan con la BD actual.
+4. Poblar `CategorySeeder` con `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image` para la categoría destacada (Implantología).
+5. Ejecutar `php artisan db:seed --force` y recorrer la web pública para confirmar que todos los bindings funcionan y no hay contenido duro sin gestionar.
+
+**Relación con el task.md:** La Fase 3E del task.md (ítems 9.1–9.12) sigue sin marcar (`[ ]`) y es la única fase pendiente de ejecución en BD. Una vez completada, se pasará a la Fase 3G (RBAC) y la verificación final (Fase 11).
