@@ -52,7 +52,7 @@ class SectionSeeder extends Seeder
                 'title' => 'helin.',
                 'subtitle' => 'Soluciones que cuidan.',
                 'description' => 'Instrumental, insumos y soluciones diseñadas para procedimientos quirúrgicos seguros, precisos y eficientes.',
-                'image' => 'sections/banner3.png',
+                'image' => 'sections/banner111.png',
                 'layout_type' => self::LAYOUT_HERO_BADGES,
                 'icon_style' => self::ICON_EMOJI,
                 'items' => json_encode([
