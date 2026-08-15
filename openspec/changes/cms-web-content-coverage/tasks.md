@@ -87,48 +87,48 @@
 
 ## 5. Fase 3B — Actualizar modelos y controladores con nuevos campos
 
-- [ ] 5.1 Actualizar `Category::$fillable` (añadir `seo_keywords`, `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image`) y `CategoriesController` (gestionar imagen, banner, destacado)
-- [ ] 5.2 Actualizar `Brand::$fillable` (añadir `seo_keywords`, `banner_*`) y `BrandsController`
-- [ ] 5.3 Actualizar `Line::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `LineController`
-- [ ] 5.4 Actualizar `SystemProduct::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `SystemProductsController`
-- [ ] 5.5 Actualizar `ProductPlatform::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `ProductPlatformsController`
-- [ ] 5.6 Actualizar `ResourceType::$fillable` (añadir `image`, `banner_*`) y `ResourceTypeController`
-- [ ] 5.7 Actualizar `ResourceSpecialty::$fillable` (añadir `banner_*`) y `ResourceSpecialtyController`
-- [ ] 5.8 Actualizar `Resource::$fillable` (añadir `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results`) y `ResourceController` (gestionar nuevos campos)
-- [ ] 5.9 Actualizar `Settings::$fillable` (añadir `opinion_url`, `offices`) y `SettingsController` (gestionar offices como repeater JSON)
-- [ ] 5.10 Crear modelo `ContactMessage` con `$fillable` y casts
-- [ ] 5.11 Crear modelo `PageSeo` con `$fillable` y casts
-- [ ] 5.12 Crear `PageSeoController` (Livewire) para gestionar SEO de páginas estáticas (CRUD por page_slug)
-- [ ] 5.13 Crear vista CMS `cms/page-seo/index.blade.php`
-- [ ] 5.14 Registrar submódulo Page SEO en `Submodule` y ruta en `routes/web.php` bajo M2
-- [ ] 5.15 Actualizar vistas CMS de categories, brands, lines, system-products, product-platforms, resource-types, resource-specialties, resources, settings para gestionar los nuevos campos
+- [x] 5.1 Actualizar `Category::$fillable` (añadir `seo_keywords`, `image`, `is_featured`, `banner_title`, `banner_description`, `banner_image`) y `CategoriesController` (gestionar imagen, banner, destacado)
+- [x] 5.2 Actualizar `Brand::$fillable` (añadir `seo_keywords`, `banner_*`) y `BrandsController`
+- [x] 5.3 Actualizar `Line::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `LineController`
+- [x] 5.4 Actualizar `SystemProduct::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `SystemProductsController`
+- [x] 5.5 Actualizar `ProductPlatform::$fillable` (añadir `image`, `seo_keywords`, `banner_*`) y `ProductPlatformsController`
+- [x] 5.6 Actualizar `ResourceType::$fillable` (añadir `image`, `banner_*`) y `ResourceTypeController`
+- [x] 5.7 Actualizar `ResourceSpecialty::$fillable` (añadir `banner_*`) y `ResourceSpecialtyController`
+- [x] 5.8 Actualizar `Resource::$fillable` (añadir `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results`) y `ResourceController` (gestionar nuevos campos)
+- [x] 5.9 Actualizar `Settings::$fillable` (añadir `opinion_url`, `offices`) y `SettingsController` (gestionar offices como repeater JSON)
+- [x] 5.10 Crear modelo `ContactMessage` con `$fillable` y casts
+- [x] 5.11 Crear modelo `PageSeo` con `$fillable` y casts
+- [x] 5.12 Crear `PageSeoController` (Livewire) para gestionar SEO de páginas estáticas (CRUD por page_slug)
+- [x] 5.13 Crear vista CMS `cms/page-seo/index.blade.php`
+- [x] 5.14 Registrar submódulo Page SEO en `Submodule` y ruta en `routes/web.php` bajo M2
+- [x] 5.15 Actualizar vistas CMS de categories, brands, lines, system-products, product-platforms, resource-types, resource-specialties, resources, settings para gestionar los nuevos campos
 
 ## 6. Fase 3C — Reemplazo de contenido hardcodeado por BD en vistas
 
-- [ ] 6.1 Reemplazar el array `$categoryBanners` hardcodeado en `catalogo.blade.php` por `$currentCategory->banner_*`
-- [ ] 6.2 Reemplazar el grid de categorías destacadas hardcodeado en `home.blade.php` por `Category::where('is_featured', true)`
-- [ ] 6.3 Reemplazar misión/visión hardcodeada en `nuestra-empresa.blade.php` por `Sections::MISSION_VISION` (incluyendo `items`)
-- [ ] 6.4 Reemplazar About Us hardcodeado en `nuestra-empresa.blade.php` por `Sections::ABOUT_US` (incluyendo `items`)
-- [ ] 6.5 Reemplazar CTAs hardcodeados en `home.blade.php` y `nuestra-empresa.blade.php` por `Sections::CTA_HOME` y `CTA_COMPANY` (incluyendo `buttons`)
-- [ ] 6.6 Reemplazar políticas hardcodeadas en `politicas.blade.php` por `Sections::SHIPPING_POLICIES`, `TERMS_CONDITIONS`, `PRIVACY_POLICIES` (eliminar fallbacks hardcodeados)
-- [ ] 6.7 Reemplazar beneficios hardcodeados en `partials/beneficios.blade.php` por `items` JSON de la sección correspondiente
-- [ ] 6.8 Reemplazar pasos del flow hardcodeados en `home.blade.php` por `items` JSON de la sección `FLOW_HOW_TO`
-- [ ] 6.9 Reemplazar quick cards hardcodeadas por `items` JSON de la sección correspondiente
-- [ ] 6.10 Reemplazar aliados/logos hardcodeados en `nuestra-empresa.blade.php` por `items` JSON de la sección `ALLIES`
-- [ ] 6.11 Reemplazar el enlace de opinión hardcodeado por `Settings::opinion_url` en `partials/opinion.blade.php`
-- [ ] 6.12 Reemplazar "Estamos cerca de ti" hardcodeado en `partials/near.blade.php` (4 sedes con números de WhatsApp distintos: `584242789481`, `584244669150`, `584143805640`, `584242550811`) por `Settings::offices` (JSON con `name`/`url`/`whatsapp`/`active`)
-- [ ] 6.13 Reemplazar materiales y resultados hardcodeados en `caso-clinico.blade.php` por `$resource->materials` y `$resource->results`. Reemplazar también el párrafo de descripción hardcoded (línea 77) por `$resource->content`
-- [ ] 6.14 Eliminar el fallback `match($section->title)` con HTML hardcoded en `politicas.blade.php` (líneas 28-35) y consumir siempre `$section->content` directamente
-- [ ] 6.15 Reemplazar el WhatsApp hardcodeado en `solicitud-enviada.blade.php` (`584244669150`) por `WhatsAppNumber`/`Settings`
-- [ ] 6.16 Eliminar los productos de ejemplo hardcodeados y datos de cliente falsos en `solicitud-enviada.blade.php` (fallbacks); mostrar mensaje apropiado cuando no hay datos
-- [ ] 6.17 Eliminar la tasa de cambio hardcodeada y totales falsos en `solicitud-enviada.blade.php`
-- [ ] 6.18 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', Route::currentRouteName())->first()` con fallback a `Settings` en el layout `app.blade.php`. Para páginas dinámicas (producto, caso clínico) usar el SEO del propio modelo con fallback a `page_seo` por nombre de ruta. Considerar cargar `PageSeo` via `View::share()` o cache para evitar consulta por render.
-- [ ] 6.19 Hacer dinámicas las sedes de `contactanos.blade.php` y `partials/near.blade.php` iterando `Settings::offices` (JSON) en lugar de los bloques hardcodeados con nombres fijos. Incluir Maracay y Maracaibo (que existen en Settings pero no se muestran en la vista de contacto)
+- [x] 6.1 Reemplazar el array `$categoryBanners` hardcodeado en `catalogo.blade.php` por `$currentCategory->banner_*`
+- [x] 6.2 Reemplazar el grid de categorías destacadas hardcodeado en `home.blade.php` por `Category::where('is_featured', true)`
+- [x] 6.3 Reemplazar misión/visión hardcodeada en `nuestra-empresa.blade.php` por `Sections::MISSION_VISION` (incluyendo `items`)
+- [x] 6.4 Reemplazar About Us hardcodeado en `nuestra-empresa.blade.php` por `Sections::ABOUT_US` (incluyendo `items`)
+- [x] 6.5 Reemplazar CTAs hardcodeados en `home.blade.php` y `nuestra-empresa.blade.php` por `Sections::CTA_HOME` y `CTA_COMPANY` (incluyendo `buttons`)
+- [x] 6.6 Reemplazar políticas hardcodeadas en `politicas.blade.php` por `Sections::SHIPPING_POLICIES`, `TERMS_CONDITIONS`, `PRIVACY_POLICIES` (eliminar fallbacks hardcodeados)
+- [x] 6.7 Reemplazar beneficios hardcodeados en `partials/beneficios.blade.php` por `items` JSON de la sección correspondiente
+- [x] 6.8 Reemplazar pasos del flow hardcodeados en `home.blade.php` por `items` JSON de la sección `FLOW_HOW_TO`
+- [x] 6.9 Reemplazar quick cards hardcodeadas por `items` JSON de la sección correspondiente
+- [x] 6.10 Reemplazar aliados/logos hardcodeados en `nuestra-empresa.blade.php` por `items` JSON de la sección `ALLIES`
+- [x] 6.11 Reemplazar el enlace de opinión hardcodeado por `Settings::opinion_url` en `partials/opinion.blade.php`
+- [x] 6.12 Reemplazar "Estamos cerca de ti" hardcodeado en `partials/near.blade.php` (4 sedes con números de WhatsApp distintos: `584242789481`, `584244669150`, `584143805640`, `584242550811`) por `Settings::offices` (JSON con `name`/`url`/`whatsapp`/`active`)
+- [x] 6.13 Reemplazar materiales y resultados hardcodeados en `caso-clinico.blade.php` por `$resource->materials` y `$resource->results`. Reemplazar también el párrafo de descripción hardcoded (línea 77) por `$resource->content`
+- [x] 6.14 Eliminar el fallback `match($section->title)` con HTML hardcoded en `politicas.blade.php` (líneas 28-35) y consumir siempre `$section->content` directamente
+- [x] 6.15 Reemplazar el WhatsApp hardcodeado en `solicitud-enviada.blade.php` (`584244669150`) por `WhatsAppNumber`/`Settings`
+- [x] 6.16 Eliminar los productos de ejemplo hardcodeados y datos de cliente falsos en `solicitud-enviada.blade.php` (fallbacks); mostrar mensaje apropiado cuando no hay datos
+- [x] 6.17 Eliminar la tasa de cambio hardcodeada y totales falsos en `solicitud-enviada.blade.php`
+- [x] 6.18 Reemplazar el SEO hardcodeado (`@section('title')`, `meta-description`, `meta-keywords`) de las páginas estáticas (home, contacto, empresa, políticas, recursos) por `PageSeo::where('page_slug', Route::currentRouteName())->first()` con fallback a `Settings` en el layout `app.blade.php`. Para páginas dinámicas (producto, caso clínico) usar el SEO del propio modelo con fallback a `page_seo` por nombre de ruta. Considerar cargar `PageSeo` via `View::share()` o cache para evitar consulta por render.
+- [x] 6.19 Hacer dinámicas las sedes de `contactanos.blade.php` y `partials/near.blade.php` iterando `Settings::offices` (JSON) en lugar de los bloques hardcodeados con nombres fijos. Incluir Maracay y Maracaibo (que existen en Settings pero no se muestran en la vista de contacto)
 
 ## 7. Fase 3D — Selector de dimensiones dinámico
 
-- [ ] 7.1 Reemplazar el selector de dimensiones JS hardcodeado en `producto.blade.php` (Ø3.3/Ø4.1/Ø4.8 mm) por los `attribute_values` del producto
-- [ ] 7.2 Verificar que el selector muestra las dimensiones dinámicas y actualiza el precio si aplica
+- [x] 7.1 Reemplazar el selector de dimensiones JS hardcodeado en `producto.blade.php` (Ø3.3/Ø4.1/Ø4.8 mm) por los `attribute_values` del producto
+- [x] 7.2 Verificar que el selector muestra las dimensiones dinámicas y actualiza el precio si aplica
 
 ## 8. Fase 3E — Módulo de Mensajes de Contacto
 
