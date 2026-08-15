@@ -140,29 +140,29 @@
 
 ## 9. Fase 3F — Seeders
 
-- [ ] 9.1 Actualizar `SectionSeeder` con los items/buttons/beneficios/pasos/aliados/quick cards actualmente hardcodeados en las vistas
-- [ ] 9.2 Actualizar `CategorySeeder` con `image`, `is_featured`, `banner_*` y `seo_keywords` del contenido hardcodeado actual
-- [ ] 9.3 Actualizar `BrandSeeder`, `LineSeeder`, `SystemProductSeeder`, `ProductPlatformSeeder` con `image`, `seo_keywords`, `banner_*`
-- [ ] 9.4 Actualizar `ResourceTypeSeeder` y `ResourceSpecialtySeeder` con `image`, `banner_*`
-- [ ] 9.5 Actualizar `ResourceSeeder` con `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results` de los casos clínicos hardcodeados
-- [ ] 9.6 Actualizar `SettingsSeeder` con `opinion_url` y `offices` (migrar los datos de `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` al JSON `offices`)
-- [ ] 9.7 Actualizar `TestimonialSeeder` con `specialty` y `content` correctos
-- [ ] 9.8 Crear `ContactMessageSeeder` (vacío)
-- [ ] 9.9 Crear `PageSeoSeeder` con el SEO actualmente hardcodeado en las vistas (home, contacto, empresa, políticas, recursos)
+- [x] 9.1 Actualizar `SectionSeeder` con los items/buttons/beneficios/pasos/aliados/quick cards actualmente hardcodeados en las vistas
+- [x] 9.2 Actualizar `CategorySeeder` con `image`, `is_featured`, `banner_*` y `seo_keywords` del contenido hardcodeado actual
+- [x] 9.3 Actualizar `BrandSeeder`, `LineSeeder`, `SystemProductSeeder`, `ProductPlatformSeeder` con `image`, `seo_keywords`, `banner_*`
+- [x] 9.4 Actualizar `ResourceTypeSeeder` y `ResourceSpecialtySeeder` con `image`, `banner_*`
+- [x] 9.5 Actualizar `ResourceSeeder` con `content`, `diagnosis`, `gallery`, `video_url`, `materials`, `results` de los casos clínicos hardcodeados
+- [x] 9.6 Actualizar `SettingsSeeder` con `opinion_url` y `offices` (migrar los datos de `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` al JSON `offices`)
+- [x] 9.7 Actualizar `TestimonialSeeder` con `specialty` y `content` correctos
+- [x] 9.8 Crear `ContactMessageSeeder` (vacío)
+- [x] 9.9 Crear `PageSeoSeeder` con el SEO actualmente hardcodeado en las vistas (home, contacto, empresa, políticas, recursos)
 - [ ] 9.10 Verificar y completar `WhatsAppNumberSeeder` y crear `AttributeSeeder`/`AttributeValueSeeder` si no existen
 - [ ] 9.11 Ejecutar `php artisan db:seed` y verificar que la web pública no se ve vacía
 - [ ] 9.12 Tras verificar que `offices` JSON funciona correctamente en la web, crear migración que elimine las columnas individuales `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` de `settings` (ya obsoletas)
 
 ## 10. Fase 3G — Correcciones de la auditoría (RBAC, IDs, bugs)
 
-- [ ] 10.1 Fix crash al guardar recursos: eliminar `views` de `Resource::$fillable`, de `edit()` y de `save()` (columna inexistente — probado: crear/editar crashea con `Unknown column 'views'`)
-- [ ] 10.2 Alinear `Submodule` constantes con los IDs reales de BD: PRODUCTS=8, PRODUCT_FAMILIES=9, PRODUCT_BRANDS=10, PRODUCT_LINES=11, SYSTEM_PRODUCTS=12, PRODUCT_PLATFORMS=13, BLOG_CATEGORIES=14, BLOG_ARTICLES=15, TESTIMONIALS=16, CLINICAL_RESOURCES=17, RESOURCE_TYPES=18, RESOURCE_SPECIALTIES=19, CUSTOMER_TYPES=6, DELIVERY_METHODS=7; añadir faltantes: COMMERCIAL_REQUESTS=20, WEBSITE_MENU=27, CONTACT_MESSAGES=21, CONTACT_MANAGEMENT=22, CONTACT_FORM_CONFIG=23
-- [ ] 10.3 Actualizar `ModuleSeeder` para forzar IDs por constantes en todos los submódulos y crear los ausentes en BD: "Menú del Sitio" (WEBSITE_MENU, bajo M2) y módulo "Contacto" (M7) con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG; re-seed y verificar coherencia BD↔constantes↔permisos
-- [ ] 10.4 Fix `PermissionMiddleware`: resolver por ID cuando el argumento es numérico (por nombre si no lo es). Corregir las rutas hardcodeadas para usar constantes: testimonials `5,1`→(CONTENT,TESTIMONIALS), resources `5,2`→(CONTENT,CLINICAL_RESOURCES), resource-types `5,3`→(CONTENT,RESOURCE_TYPES), resource-specialties `5,4`→(CONTENT,RESOURCE_SPECIALTIES), payment-methods `2,3`→(SETTINGS,PAYMENT_METHODS), menu `2,4`→(SETTINGS,WEBSITE_MENU), blog `4,1`/`4,2`→(BLOG,BLOG_CATEGORIES/BLOG_ARTICLES), settings `2,1`→(SETTINGS,GENERAL_SETTINGS), sections `2,2`→(SETTINGS,SECTIONS), commercial-requests `6,1`→(SOLICITUDES,COMMERCIAL_REQUESTS), dashboard `1`→(ADMINISTRATORS)
-- [ ] 10.5 Corregir `<x-cms-breadcrumb>` con IDs obsoletos en las vistas CMS usando constantes: products `(3,5)`→(3,8), categories `(3,6)`→(3,9), brands `(3,7)`→(3,10), lines `(3,8)`→(3,11), system-products `(3,9)`→(3,12), product-platforms `(3,10)`→(3,13), blog_categories `(4,11)`→(4,14), blog_articles `(4,12)`→(4,15), testimonials `(5,13)`→(5,16), resources `(6,14)`→(5,17), resource-types `(6,16)`→(5,18), resource-specialties `(6,17)`→(5,19), commercial_requests `(6,14)`→(6,20), payment-methods `(7,15)`→(2,5), delivery-methods `(2,5)`→(2,7), customer-types `(2,4)`→(2,6), menu `(1,1)`→(2,27)
-- [ ] 10.6 Sembrar permisos de submódulo para el rol Editor (rol 2, level 2) y verificar RBAC real: el editor accede a sus módulos y recibe 403 en los que no tiene; super admin sigue con acceso total
-- [ ] 10.7 Menores: `PaymentMethodController::$paginationTheme` → `'tailwind'`; limpiar fillable muertos (`PaymentMethod`: slug/icon/image/config/is_default/provider/provider_config/fee_*; `BlogCategory`: color/icon/image)
-- [ ] 10.8 Verificar Fase 3G: crear y editar un recurso desde el CMS sin error; breadcrumbs correctos en todos los módulos; rutas con permisos funcionando para admin y editor
+- [x] 10.1 Fix crash al guardar recursos: eliminar `views` de `Resource::$fillable`, de `edit()` y de `save()` (columna inexistente — probado: crear/editar crashea con `Unknown column 'views'`)
+- [x] 10.2 Alinear `Submodule` constantes con los IDs reales de BD: PRODUCTS=8, PRODUCT_FAMILIES=9, PRODUCT_BRANDS=10, PRODUCT_LINES=11, SYSTEM_PRODUCTS=12, PRODUCT_PLATFORMS=13, BLOG_CATEGORIES=14, BLOG_ARTICLES=15, TESTIMONIALS=16, CLINICAL_RESOURCES=17, RESOURCE_TYPES=18, RESOURCE_SPECIALTIES=19, CUSTOMER_TYPES=6, DELIVERY_METHODS=7; añadir faltantes: COMMERCIAL_REQUESTS=20, WEBSITE_MENU=27, CONTACT_MESSAGES=21, CONTACT_MANAGEMENT=22, CONTACT_FORM_CONFIG=23
+- [x] 10.3 Actualizar `ModuleSeeder` para forzar IDs por constantes en todos los submódulos y crear los ausentes en BD: "Menú del Sitio" (WEBSITE_MENU, bajo M2) y módulo "Contacto" (M7) con CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG; re-seed y verificar coherencia BD↔constantes↔permisos
+- [x] 10.4 Fix `PermissionMiddleware`: resolver por ID cuando el argumento es numérico (por nombre si no lo es). Corregir las rutas hardcodeadas para usar constantes: testimonials `5,1`→(CONTENT,TESTIMONIALS), resources `5,2`→(CONTENT,CLINICAL_RESOURCES), resource-types `5,3`→(CONTENT,RESOURCE_TYPES), resource-specialties `5,4`→(CONTENT,RESOURCE_SPECIALTIES), payment-methods `2,3`→(SETTINGS,PAYMENT_METHODS), menu `2,4`→(SETTINGS,WEBSITE_MENU), blog `4,1`/`4,2`→(BLOG,BLOG_CATEGORIES/BLOG_ARTICLES), settings `2,1`→(SETTINGS,GENERAL_SETTINGS), sections `2,2`→(SETTINGS,SECTIONS), commercial-requests `6,1`→(SOLICITUDES,COMMERCIAL_REQUESTS), dashboard `1`→(ADMINISTRATORS)
+- [x] 10.5 Corregir `<x-cms-breadcrumb>` con IDs obsoletos en las vistas CMS usando constantes: products `(3,5)`→(3,8), categories `(3,6)`→(3,9), brands `(3,7)`→(3,10), lines `(3,8)`→(3,11), system-products `(3,9)`→(3,12), product-platforms `(3,10)`→(3,13), blog_categories `(4,11)`→(4,14), blog_articles `(4,12)`→(4,15), testimonials `(5,13)`→(5,16), resources `(6,14)`→(5,17), resource-types `(6,16)`→(5,18), resource-specialties `(6,17)`→(5,19), commercial_requests `(6,14)`→(6,20), payment-methods `(7,15)`→(2,5), delivery-methods `(2,5)`→(2,7), customer-types `(2,4)`→(2,6), menu `(1,1)`→(2,27)
+- [x] 10.6 Sembrar permisos de submódulo para el rol Editor (rol 2, level 2) y verificar RBAC real: el editor accede a sus módulos y recibe 403 en los que no tiene; super admin sigue con acceso total
+- [x] 10.7 Menores: `PaymentMethodController::$paginationTheme` → `'tailwind'`; limpiar fillable muertos (`PaymentMethod`: slug/icon/image/config/is_default/provider/provider_config/fee_*; `BlogCategory`: color/icon/image)
+- [x] 10.8 Verificar Fase 3G: crear y editar un recurso desde el CMS sin error; breadcrumbs correctos en todos los módulos; rutas con permisos funcionando para admin y editor
 
 ## 11. Verificación final
 

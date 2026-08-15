@@ -40,6 +40,8 @@ class SettingsSeeder extends Seeder
                 'copy' => '© ' . date('Y') . ' by helin.',
                 'settings_description' => 'Configuración principal del sistema Helin Medical Solutions',
                 'analytics_code' => null,
+                'opinion_url' => 'https://forms.office.com/Pages/ResponsePage.aspx?id=ExampleSurveyLink',
+                'offices' => '[{"city": "caracas", "zone": 1, "whatsapp": "https://wa.me/584242789481", "location": "Centro Ciudad Comercial Tamanaco, Caracas."}, {"city": "valencia", "zone": 2, "whatsapp": "https://wa.me/584244669150", "location": "Av. Andrés Eloy Blanco, Urb. Prebo, CCP Prebo, Piso 3. Valencia, Carabobo."}, {"city": "barquisimeto", "zone": 3, "whatsapp": "https://wa.me/584143805640", "location": "Barquisimeto."}, {"city": "maracaibo", "zone": 4, "whatsapp": "https://wa.me/584242550811", "location": "Terraza 77, Piso 1, local de helin. Maracaibo."}, {"city": "maracay", "zone": 5, "whatsapp": null, "location": null}]',
                 'caracas_whatsapp' => 'https://wa.me/584242789481',
                 'caracas_location' => 'Centro Ciudad Comercial Tamanaco, Caracas.',
                 'valencia_whatsapp' => 'https://wa.me/584244669150',
@@ -48,6 +50,8 @@ class SettingsSeeder extends Seeder
                 'barquisimeto_location' => 'Barquisimeto.',
                 'maracaibo_whatsapp' => 'https://wa.me/584242550811',
                 'maracaibo_location' => 'Terraza 77, Piso 1, local de helin. Maracaibo.',
+                'maracay_whatsapp' => null,
+                'maracay_location' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

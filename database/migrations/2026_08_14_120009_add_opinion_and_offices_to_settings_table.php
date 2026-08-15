@@ -58,8 +58,9 @@ return new class extends Migration
     public function down(): void
     {
         $row = DB::table('settings')->first();
-        if ($row && !empty($row->offices)) {
-            $offices = json_decode($row->offices, true) ?: [];
+        if ($row && isset($row->offices)) {
+            $offices = json_decode($row->offices, true);
+            $offices = is_array($offices) ? $offices : [];
             $updates = [];
             $cityKeys = [
                 'caracas' => 'caracas',

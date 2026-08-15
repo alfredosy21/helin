@@ -113,15 +113,19 @@ HTML,
                 'url_button' => null,
                 'status' => 1,
                 'status_content' => 1,
-                'content' => <<<HTML
-<span class="hero-badge">Centro de conocimiento clínico</span>
-<h1>Recursos clínicos para decisiones más precisas.</h1>
-<p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
-<div class="hero-buttons">
-    <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
-    <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
-</div>
-HTML,
+                'layout_type' => self::LAYOUT_FEATURE_BOX,
+                'icon_style' => self::ICON_NONE,
+                'items' => json_encode([
+                    'items' => [
+                        ['icon' => 'fa fa-file', 'title' => 'Casos clínicos', 'description' => 'Protocolos, materiales utilizados y resultados.', 'order' => 1],
+                        ['icon' => 'play', 'title' => 'Videos', 'description' => 'Contenido audiovisual para soporte técnico.', 'order' => 2],
+                        ['icon' => 'pdf', 'title' => 'Manuales', 'description' => 'Documentos técnicos y descargables.', 'order' => 3],
+                        ['icon' => 'fa fa-cloud-download', 'title' => 'Fichas técnicas', 'description' => 'Información clave de productos y soluciones.', 'order' => 4],
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => null,
             ],
             Sections::CLINICAL_LIBRARY => [
                 'title' => 'Biblioteca clínica Helin',
@@ -130,6 +134,7 @@ HTML,
                 'url_button' => null,
                 'status' => 1,
                 'status_content' => 1,
+                'subtitle' => 'Busca, filtra y consulta recursos especializados.',
                 'content' => <<<HTML
 <div>
     <small>Biblioteca clínica Helin</small>
@@ -603,7 +608,7 @@ HTML,
             // ==========================================
             // ---------- SECCIONES DE CONTACTO ----------
             // ==========================================
-            Sections::CONTACT_HERO => [
+Sections::CONTACT_HERO => [
                 'title' => '¿Tienes alguna consulta? Estamos para ayudarte.',
                 'image' => null,
                 'name_button' => null,
@@ -616,6 +621,28 @@ HTML,
 </p>
 HTML,
             ],
+
+            // GLOBAL SECTIONS
+            Sections::BENEFITS => [
+                'title' => 'Barra de beneficios',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+                'items' => json_encode([
+                    'items' => [
+                        ['icon' => 'fas fa-truck', 'title' => 'Envíos rápidos y seguros', 'description' => 'A toda Venezuela', 'order' => 1],
+                        ['icon' => 'fas fa-shield-alt', 'title' => 'Garantía Helin', 'description' => 'Calidad y respaldo en cada producto', 'order' => 2],
+                        ['icon' => 'fas fa-headset', 'title' => 'Asesoría especializada', 'description' => 'Soporte técnico y comercial', 'order' => 3],
+                        ['icon' => 'fas fa-box', 'title' => 'Stock disponible', 'description' => 'Productos de las mejores marcas', 'order' => 4],
+                        ['icon' => 'fa-regular fa-square-check', 'title' => 'Productos certificados', 'description' => 'Cumplimos con los más altos estándares', 'order' => 5],
+                    ]
+                ]),
+                'buttons' => json_encode([]),
+            ],
+
         ];
 
         foreach ($sections as $id => $data) {
