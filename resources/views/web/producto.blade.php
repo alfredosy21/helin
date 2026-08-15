@@ -35,11 +35,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         <div class="lg:w-1/2">
             @php
                 $galleryImages = [
-                    asset('images/im3.png'),
-                    asset('images/im4.png'),
-                    asset('images/im5.png'),
-                    asset('images/im6.png'),
+                    asset('images/bluem1.jpg'),
+                    asset('images/bluem2.jpg'),
+                    asset('images/bluem3.jpg'),
+                    asset('images/bluem4.jpeg'),
                 ];
+                shuffle($galleryImages);
             @endphp
             <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4">
                 <div class="w-full" style="aspect-ratio: 1 / 1;">

@@ -19,31 +19,9 @@
       position: relative;
       overflow: hidden;
       ">
-            <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 lg:gap-8 items-center">
-         <!-- Hero Badges -->
-         @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
-             @php
-                 $items = $heroSection->items ? json_decode($heroSection->items, true) : [];
-                 $heroBadges = $items['hero_badges'] ?? [];
-             @endphp
-             @if($heroSection->layout_type === 'hero_badges' && !empty($heroBadges))
-                 <aside class="hero-badges hidden lg:block">
-                     <div class="flex flex-col gap-4">
-                         @foreach($heroBadges as $badge)
-                             <div class="hero-badge flex items-center gap-2 text-[#123F4A] uppercase leading-tight" style="font-size:0.625rem; font-family:'Inter',sans-serif; font-weight:600;">
-                                 <span class="mini-icon w-10 h-10 border border-[#123F4A]/30 rounded-xl flex items-center justify-center bg-[#123F4A]/10 text-lg text-[#123F4A]">{{ $badge['icon'] ?? '✓' }}</span>
-                                 <span>{{ $badge['text'] ?? '' }}</span>
-                             </div>
-                         @endforeach
-                     </div>
-                 </aside>
-             @else
-                 {!! $heroSection->content !!}
-             @endif
-         @endif
+            <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 flex items-center justify-center lg:justify-start">
          <!-- Hero Copy -->
-         <div class="hero-copy text-center lg:text-left">
-            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Precisión para cada procedimiento</small>
+         <div class="hero-copy text-center lg:text-left max-w-3xl">
             <h1 class="text-4xl sm:text-5xl lg:text-7xl leading-tight mb-3 sm:mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
                {!! $heroSection->content !!}
             </h1>
