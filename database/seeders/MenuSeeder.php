@@ -18,234 +18,95 @@ class MenuSeeder extends Seeder
         // Limpiar la tabla antes de sembrar para evitar duplicados
         DB::table('menus')->truncate();
 
-        $menus = [
-            // Header Menu Items
-            [
-                'title' => 'Inicio',
-                'url' => '/',
-                'type' => 1, // Header
-                'position' => 1,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Implantología - Parent (with dropdown)
-            [
-                'title' => 'Implantología',
-                'url' => null,
-                'type' => 1, // Header
-                'position' => 2,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Osteosíntesis - Parent (with dropdown)
-            [
-                'title' => 'Osteosíntesis',
-                'url' => null,
-                'type' => 1, // Header
-                'position' => 3,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Instrumentos - Parent (with dropdown)
-            [
-                'title' => 'Instrumentos',
-                'url' => null,
-                'type' => 1, // Header
-                'position' => 4,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Planificación digital - Parent (with dropdown)
-            [
-                'title' => 'Planificación digital',
-                'url' => null,
-                'type' => 1, // Header
-                'position' => 5,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Ofertas - Parent
-            [
-                'title' => 'Ofertas',
-                'url' => '/catalogo?tag=on_sale',
-                'type' => 1, // Header
-                'position' => 6,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Nuestra Empresa - Parent
-            [
-                'title' => 'Nuestra Empresa',
-                'url' => null,
-                'type' => 2, // Footer
-                'position' => 1,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Quiénes somos - Child of Nuestra Empresa
-            [
-                'title' => 'Quiénes somos',
-                'url' => '/nuestra-empresa#quienes-somos',
-                'type' => 2, // Footer
-                'position' => 1,
-                'parent_id' => 1, // Nuestra Empresa
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Misión y visión - Child of Nuestra Empresa
-            [
-                'title' => 'Misión y visión',
-                'url' => '/nuestra-empresa#mision-vision',
-                'type' => 2, // Footer
-                'position' => 2,
-                'parent_id' => 1, // Nuestra Empresa
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Nuestro Team - Child of Nuestra Empresa
-            [
-                'title' => 'Nuestro Team',
-                'url' => '/nuestra-empresa#nuestro-team',
-                'type' => 2, // Footer
-                'position' => 3,
-                'parent_id' => 1, // Nuestra Empresa
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Nuestro Alianza - Child of Nuestra Empresa
-            [
-                'title' => 'Nuestro Alianza',
-                'url' => '/nuestra-empresa#nuestros-aliados',
-                'type' => 2, // Footer
-                'position' => 4,
-                'parent_id' => 1, // Nuestra Empresa
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Contáctanos - Standalone
-            [
-                'title' => 'Contáctanos',
-                'url' => '/contactanos',
-                'type' => 2, // Footer
-                'position' => 2,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Políticas - Parent
-            [
-                'title' => 'Políticas',
-                'url' => null,
-                'type' => 2, // Footer
-                'position' => 3,
-                'parent_id' => null,
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Políticas de envío y garantías - Child of Políticas
-            [
-                'title' => 'Políticas de envío y garantías',
-                'url' => '/politicas#envio-garantias',
-                'type' => 2, // Footer
-                'position' => 1,
-                'parent_id' => 7, // Políticas
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Términos y condiciones - Child of Políticas
-            [
-                'title' => 'Términos y condiciones',
-                'url' => '/politicas#terminos-condiciones',
-                'type' => 2, // Footer
-                'position' => 2,
-                'parent_id' => 7, // Políticas
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
-
-            // Política de privacidad - Child of Políticas
-            [
-                'title' => 'Política de privacidad',
-                'url' => '/politicas#privacidad',
-                'type' => 2, // Footer
-                'position' => 3,
-                'parent_id' => 7, // Políticas
-                'status' => true,
-                'target_blank' => false,
-                'description' => null,
-                'icon' => null,
-                'image' => null,
-            ],
+        // === HEADER MENU ITEMS ===
+        $headerItems = [
+            ['title' => 'Inicio', 'url' => '/', 'position' => 1],
+            ['title' => 'Implantología', 'url' => null, 'position' => 2],
+            ['title' => 'Osteosíntesis', 'url' => null, 'position' => 3],
+            ['title' => 'Instrumentos', 'url' => null, 'position' => 4],
+            ['title' => 'Planificación digital', 'url' => null, 'position' => 5],
+            ['title' => 'Ofertas', 'url' => '/catalogo?tag=on_sale', 'position' => 6],
         ];
 
-        foreach ($menus as $data) {
-            Menus::create($data);
+        foreach ($headerItems as $item) {
+            Menus::create(array_merge($item, [
+                'type' => 1,
+                'parent_id' => null,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]));
+        }
+
+        // === FOOTER MENU ITEMS ===
+
+        // Nuestra Empresa - Parent
+        $nuestraEmpresa = Menus::create([
+            'title' => 'Nuestra Empresa',
+            'url' => null,
+            'type' => 2,
+            'position' => 1,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => null,
+            'image' => null,
+        ]);
+
+        // Children of Nuestra Empresa
+        $empresaChildren = [
+            ['title' => 'Quiénes somos', 'url' => '/nuestra-empresa#quienes-somos', 'position' => 1],
+            ['title' => 'Aliados comerciales', 'url' => '/nuestra-empresa#nuestros-aliados', 'position' => 2],
+            ['title' => 'Nuestras políticas', 'url' => '/politicas', 'position' => 3],
+            ['title' => 'Contáctanos', 'url' => '/contactanos', 'position' => 4],
+        ];
+
+        foreach ($empresaChildren as $child) {
+            Menus::create(array_merge($child, [
+                'type' => 2,
+                'parent_id' => $nuestraEmpresa->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]));
+        }
+
+        // Políticas - Parent
+        $politicas = Menus::create([
+            'title' => 'Políticas',
+            'url' => null,
+            'type' => 2,
+            'position' => 3,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => null,
+            'image' => null,
+        ]);
+
+        // Children of Políticas
+        $politicasChildren = [
+            ['title' => 'Políticas de envío y garantías', 'url' => '/politicas#envio-garantias', 'position' => 1],
+            ['title' => 'Términos y condiciones', 'url' => '/politicas#terminos-condiciones', 'position' => 2],
+            ['title' => 'Política de privacidad', 'url' => '/politicas#privacidad', 'position' => 3],
+        ];
+
+        foreach ($politicasChildren as $child) {
+            Menus::create(array_merge($child, [
+                'type' => 2,
+                'parent_id' => $politicas->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]));
         }
 
         $this->command->info('Menu seeded successfully!');

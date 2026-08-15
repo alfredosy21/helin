@@ -161,8 +161,11 @@
                         @php
                             $menuUrl = $menuItem->url;
                             if (!$menuUrl && $menuItem->title) {
-                                $menuCategory = \App\Models\Category::where('name', $menuItem->title)->first();
-                                $menuUrl = $menuCategory ? route('catalogo', ['category' => $menuCategory->slug]) : '#';
+                                $menuCategory = \App\Models\Category::where('name', $menuItem->title)
+                                    ->orWhere('name', 'like', '%' . $menuItem->title . '%')
+                                    ->orWhere('slug', 'like', '%' . \Illuminate\Support\Str::slug($menuItem->title) . '%')
+                                    ->first();
+                                $menuUrl = $menuCategory ? route('catalogo', ['category' => $menuCategory->slug]) : route('catalogo');
                             }
                             $menuIsActive = false;
                             $homeUrl = route('home');
@@ -174,9 +177,7 @@
                                 $menuIsActive = true;
                             }
                         @endphp
-                        @if($menuUrl && $menuUrl !== '#')
                         <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $loopIndex === 0 ? 'ml-16' : '' }} {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($menuItem->children->count())<span class="text-xs">+</span>@endif</a>
-                        @endif
                     @endforeach
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
