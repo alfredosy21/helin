@@ -124,7 +124,7 @@
                         </a>
                         <!-- Mega Menú -->
                         @php
-                            $megaCategories = \App\Models\Category::active()->ordered()->with('activeChildren')->get();
+                            $megaCategories = \App\Models\Category::active()->ordered()->with('activeChildren')->take(6)->get();
                         @endphp
                         <div class="absolute top-full left-0 w-[1200px] bg-white shadow-[0_10px_20px_rgba(0,0,0,0.1)] rounded-b-lg py-6 hidden group-hover:block z-50" style="box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                             <div class="grid grid-cols-6 gap-0">

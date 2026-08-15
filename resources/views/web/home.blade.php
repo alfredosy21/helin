@@ -124,6 +124,7 @@
                @php
                    $categoryCards = \App\Models\Category::where('is_active', true)
                        ->whereNull('parent_id')
+                       ->when($featuredCategory, fn($q) => $q->where('id', '!=', $featuredCategory->id))
                        ->orderBy('order')
                        ->take(6)
                        ->get();
