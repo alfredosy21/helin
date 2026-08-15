@@ -19,7 +19,6 @@ class AttributeValueSeeder extends Seeder
             ['attribute_id' => 1, 'value' => '3.3', 'label' => 'Ø3.3 mm'],
             [
                 'is_active' => true,
-                'numeric_value' => 3.3,
             ]
         );
 
@@ -27,7 +26,6 @@ class AttributeValueSeeder extends Seeder
             ['attribute_id' => 1, 'value' => '4.1', 'label' => 'Ø4.1 mm'],
             [
                 'is_active' => true,
-                'numeric_value' => 4.1,
             ]
         );
 
@@ -35,7 +33,6 @@ class AttributeValueSeeder extends Seeder
             ['attribute_id' => 1, 'value' => '4.8', 'label' => 'Ø4.8 mm'],
             [
                 'is_active' => true,
-                'numeric_value' => 4.8,
             ]
         );
     }

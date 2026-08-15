@@ -18,6 +18,7 @@ class AttributeSeeder extends Seeder
         Attribute::updateOrCreate(
             ['name' => 'Dimensión'],
             [
+                'slug' => 'dimension',
                 'description' => 'Dimensión del producto en milímetros',
                 'is_active' => true,
             ]

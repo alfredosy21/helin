@@ -16,13 +16,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->string('opinion_url')->nullable()->after('analytics_code');
-            $table->json('offices')->nullable()->after('opinion_url');
-        });
+        if (!Schema::hasColumn('settings', 'opinion_url')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $table->string('opinion_url')->nullable()->after('analytics_code');
+            });
+        }
+        if (!Schema::hasColumn('settings', 'offices')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $table->json('offices')->nullable()->after('opinion_url');
+            });
+        }
 
         $row = DB::table('settings')->first();
-        if ($row) {
+        if ($row && empty($row->offices)) {
             $offices = [];
             foreach ([
                 'caracas' => 'Caracas',
@@ -82,7 +88,12 @@ return new class extends Migration
         }
 
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn(['opinion_url', 'offices']);
+            if (Schema::hasColumn('settings', 'opinion_url')) {
+                $table->dropColumn('opinion_url');
+            }
+            if (Schema::hasColumn('settings', 'offices')) {
+                $table->dropColumn('offices');
+            }
         });
     }
 };
