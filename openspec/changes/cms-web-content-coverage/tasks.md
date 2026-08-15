@@ -166,9 +166,9 @@
 
 ## 11. Verificación final
 
-- [ ] 11.1 Ejecutar `openspec validate cms-web-content-coverage` y corregir cualquier error
-- [ ] 11.2 Ejecutar `openspec status --change cms-web-content-coverage`
-- [ ] 11.3 Recorrer toda la web pública y confirmar que no queda contenido hardcodeado sin gestionar (excepto `no-results.blade.php` que se deja hardcodeado por ser trivial)
-- [ ] 11.4 Recorrer todo el CMS y confirmar que todos los módulos funcionan y guardan correctamente
-- [ ] 11.5 Verificar permisos: usuario con rol solo accede a sus módulos (403 en el resto); super admin acceso total
+- [x] 11.1 Ejecutar `openspec validate cms-web-content-coverage` y corregir cualquier error
+- [x] 11.2 Ejecutar `openspec status --change cms-web-content-coverage`
+- [x] 11.3 Recorrer toda la web pública y confirmar que no queda contenido hardcodeado sin gestionar (excepto `no-results.blade.php` que se deja hardcodeado por ser trivial)
+- [x] 11.4 Recorrer todo el CMS y confirmar que todos los módulos funcionan y guardan correctamente
+- [x] 11.5 Verificar permisos: usuario con rol solo accede a sus módulos (403 en el resto); super admin acceso total
 - [ ] 11.6 Verificar que las migraciones tienen método `down()` funcional (rollback test)
