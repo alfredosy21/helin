@@ -26,7 +26,7 @@ class CategorySeeder extends Seeder
                 'banner_label' => 'Bienvenidos al Catálogo de Implantología',
                 'banner_title' => 'Todo Para Tus Procedimientos De Implantología En Un Solo Lugar',
                 'banner_description' => 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.',
-                'banner_image' => 'sections/banner_imp.png',
+                'banner_image' => 'sections/banner_imp1.png',
                 'image' => 'categories/categoria1.png',
                 'is_active' => true,
                 'order' => 1,
