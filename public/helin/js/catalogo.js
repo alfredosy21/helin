@@ -180,8 +180,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    async function applyFilters() {
+    async function applyFilters(page) {
         const params = getFilters();
+
+        if (page && page > 1) {
+            params.append('page', page);
+        }
 
         try {
             showLoading();
@@ -219,6 +223,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Re-bind botón limpiar del estado vacío
                 const clearEmpty = document.getElementById('clearFiltersEmpty');
                 if (clearEmpty) clearEmpty.addEventListener('click', clearAll);
+
+                // Re-bind enlaces de paginación
+                productsContent.querySelectorAll('a[href*="page="]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const url = new URL(this.href, window.location.origin);
+                        const page = url.searchParams.get('page');
+                        if (page) applyFilters(parseInt(page));
+                    });
+                });
 
                 // Actualizar URL sin recargar
                 const qs = params.toString();

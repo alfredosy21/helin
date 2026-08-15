@@ -145,6 +145,7 @@
                     @php
                         $currentRoute = request()->route()->getName();
                         $currentCategory = request()->route('category') ?? request('category');
+                        $currentCategory = is_array($currentCategory) ? implode(',', $currentCategory) : $currentCategory;
                         $currentTag = request('tag');
                         $headerMenuItems = \App\Models\Menus::getHeaderItems();
                     @endphp
