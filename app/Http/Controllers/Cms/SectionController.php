@@ -63,6 +63,10 @@ class SectionController extends Component {
     #[Validate('nullable|string|max:500')]
     public ?string $url_button = '';
 
+    /** @var string|null Slug de la categoría asociada (para secciones de productos) */
+    #[Validate('nullable|string|max:255')]
+    public ?string $category_slug = '';
+
     /** @var string Layout de presentación de la sección */
     public string $layout_type = 'text_simple';
 
@@ -151,6 +155,7 @@ class SectionController extends Component {
         $this->description = $section->description;
         $this->name_button = $section->name_button;
         $this->url_button = $section->url_button;
+        $this->category_slug = $section->category_slug;
         $this->layout_type = $section->layout_type ?: 'text_simple';
         $this->icon_style = $section->icon_style ?: 'emoji';
         $this->items = $this->decodeItems($section->items);
@@ -176,6 +181,7 @@ class SectionController extends Component {
             'description' => 'nullable|string',
             'name_button' => 'nullable|string|max:255',
             'url_button' => 'nullable|string|max:500',
+            'category_slug' => 'nullable|string|max:255',
             'layout_type' => 'required|string|in:' . implode(',', self::LAYOUT_TYPES),
             'icon_style' => 'required|string|in:' . implode(',', self::ICON_STYLES),
             'items' => 'nullable|array|max:50',
@@ -221,6 +227,7 @@ class SectionController extends Component {
             'description' => $this->description,
             'name_button' => $this->name_button,
             'url_button' => $this->url_button,
+            'category_slug' => $this->category_slug,
             'layout_type' => $this->layout_type,
             'icon_style' => $this->icon_style,
             'items' => $this->encodeItems(),
@@ -338,6 +345,7 @@ class SectionController extends Component {
             'content' => __('cms.validation_attributes.section_content'),
             'name_button' => __('cms.validation_attributes.button_label'),
             'url_button' => __('cms.validation_attributes.button_url'),
+            'category_slug' => __('cms.sections.category_slug_label'),
             'subtitle' => __('cms.sections.subtitle_label'),
             'description' => __('cms.sections.description_label'),
             'layout_type' => __('cms.sections.layout_type_label'),
@@ -358,7 +366,7 @@ class SectionController extends Component {
 
     private function resetForm(): void {
         $this->reset([
-            'title', 'subtitle', 'content', 'description', 'name_button', 'url_button',
+            'title', 'subtitle', 'content', 'description', 'name_button', 'url_button', 'category_slug',
             'layout_type', 'icon_style', 'items', 'itemsGroup', 'buttons',
             'image', 'imagePaths', 'status', 'status_content', 'editingId',
         ]);

@@ -48,13 +48,6 @@ class WebController extends Controller
             ->orderBy('id')
             ->get();
 
-        // Mapear secciones a categorías
-        $sectionCategories = [
-            Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantologia'],
-            Sections::GBR_PRODUCTS => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
-            Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Tijeras', 'slug' => 'tijeras'],
-        ];
-
         // Testimonials section
         $testimonialsSection = Sections::find(Sections::TESTIMONIALS);
 
@@ -66,7 +59,7 @@ class WebController extends Controller
 
         return view('web.home', compact(
             'heroSection', 'howToSection', 'featuredProducts',
-            'productSections', 'sectionCategories', 'testimonialsSection', 'testimonials'
+            'productSections', 'testimonialsSection', 'testimonials'
         ));
     }
 
@@ -126,6 +119,11 @@ class WebController extends Controller
             }
         }
 
+        // Apply featured filter if passed directly (deep link "Ver todos los productos")
+        if (request('featured') === '1') {
+            $query->where('is_featured', true);
+        }
+
         // Apply material filter if present
         $materials = (array) request('material');
         if (! empty($materials)) {
@@ -142,13 +140,28 @@ class WebController extends Controller
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', '%'.$searchTerm.'%')
                     ->orWhere('description', 'like', '%'.$searchTerm.'%')
-                    ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
-                        $brandQuery->where('name', 'like', '%'.$searchTerm.'%');
-                    });
+                    ->orWhere('sku', 'like', '%'.$searchTerm.'%');
             });
         }
 
-        $products = $query->orderBy('name')->get();
+        // Apply sort (default: recent, same as AJAX endpoint)
+        $sortBy = request('sort', 'recent');
+        switch ($sortBy) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query->orderBy('name', 'asc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(15)->withQueryString();
 
         return view('web.catalogo', compact('products', 'currentCategory'));
     }
@@ -158,7 +171,7 @@ class WebController extends Controller
      */
     public function producto(string $slug)
     {
-        $product = Product::with(['category', 'brand', 'attributeValues', 'images', 'documents'])
+        $product = Product::with(['category', 'brand', 'systemProduct', 'productPlatform', 'attributeValues', 'images', 'documents'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -303,6 +316,9 @@ class WebController extends Controller
         // Library section
         $librarySection = Sections::find(Sections::CLINICAL_LIBRARY);
 
+        // Stats section
+        $statsSection = Sections::find(Sections::CLINICAL_STATS);
+
         // Featured CTA section
         $featuredSection = Sections::find(Sections::CLINICAL_CONTENT_FEATURE);
 
@@ -388,7 +404,7 @@ class WebController extends Controller
 
         return view('web.recursos-clinicos', compact(
             'heroSection', 'totalResources', 'totalSpecialties', 'totalPDFs', 'totalCases',
-            'librarySection', 'featuredSection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
+            'statsSection', 'librarySection', 'featuredSection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
             'resourceSpecialtyCounts', 'formats', 'resources'
         ));
     }
@@ -462,7 +478,9 @@ class WebController extends Controller
         $subtotal = 0;
 
         if ($commercialRequest) {
-            $cartData = json_decode($commercialRequest->cart_data, true) ?? [];
+            $cartData = is_array($commercialRequest->cart_data)
+                ? $commercialRequest->cart_data
+                : json_decode($commercialRequest->cart_data, true) ?? [];
             foreach ($cartData as $item) {
                 $product = Product::find($item['id']);
                 if ($product) {
@@ -490,5 +508,49 @@ class WebController extends Controller
         $total = $subtotal * $tasa;
 
         return view('web.solicitud-enviada', compact('uuid', 'commercialRequest', 'cartItems', 'subtotal', 'tasa', 'total'));
+    }
+
+    /**
+     * Descargar PDF de cotización comercial.
+     */
+    public function downloadCotizacionPdf($uuid)
+    {
+        $commercialRequest = CommercialRequest::with([
+            'customerType',
+            'state',
+            'city',
+            'deliveryMethod',
+            'paymentMethod',
+            'whatsappNumber',
+        ])->where('uuid', $uuid)->firstOrFail();
+
+        $cartItems = [];
+        $subtotal = 0;
+
+        $cartData = is_array($commercialRequest->cart_data)
+            ? $commercialRequest->cart_data
+            : json_decode($commercialRequest->cart_data, true) ?? [];
+
+        foreach ($cartData as $item) {
+            $product = Product::find($item['id'] ?? null);
+            if ($product) {
+                $cartItems[] = (object) [
+                    'product' => $product,
+                    'quantity' => $item['quantity'] ?? 1,
+                ];
+                $subtotal += $product->price * ($item['quantity'] ?? 1);
+            }
+        }
+
+        $settings = Settings::getSettings();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.cotizacion', [
+            'commercialRequest' => $commercialRequest,
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'settings' => $settings,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream("cotizacion-{$commercialRequest->correlative}.pdf");
     }
 }

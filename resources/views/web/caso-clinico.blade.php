@@ -62,9 +62,9 @@
                     <i class="fas fa-play"></i> Ver video completo
                 </a>
                 @endif
-                @if($resource->file_path)
+                @if($resource->file_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($resource->file_path))
                     <a href="{{ asset('storage/' . $resource->file_path) }}" download class="outline-btn">
-                        <i class="fas fa-download"></i> Descargar PDF
+                        <i class="fas fa-download"></i> Descargar {{ $resource->format === 'video' ? 'Video' : 'PDF' }}
                     </a>
                 @endif
             </div>

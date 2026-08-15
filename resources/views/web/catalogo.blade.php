@@ -38,11 +38,6 @@
     if ($initCategory) {
         $currentCategory = \App\Models\Category::where('slug', $initCategory)->first();
     }
-
-    $productsQuery = \App\Models\Product::with(['category', 'brand'])->where('is_active', true);
-    if ($initSearch)   $productsQuery->where(fn($q) => $q->where('name','like',"%$initSearch%")->orWhere('description','like',"%$initSearch%")->orWhere('sku','like',"%$initSearch%"));
-    if ($initCategory) $productsQuery->whereHas('category', fn($q) => $q->where('slug', $initCategory));
-    $products = $productsQuery->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 @endphp
 
 <main class="container mx-auto px-4 py-8">
@@ -199,7 +194,8 @@
             <!-- Banner -->
             @if($currentCategory)
             @php
-                $bannerBg = asset('images/banner_imp1.png');
+                $catalogoSettings = \App\Models\Settings::getSettings();
+                $bannerBg = $catalogoSettings && $catalogoSettings->default_banner_image ? asset('storage/' . $catalogoSettings->default_banner_image) : asset('images/banner_imp1.png');
                 $bannerData = [
                     'label'       => $currentCategory->banner_label ?: ('Bienvenidos al Catálogo de ' . $currentCategory->name),
                     'title'       => $currentCategory->banner_title ?: ('Todo Para Tus Procedimientos De ' . $currentCategory->name . ' En Un Solo Lugar'),

@@ -62,6 +62,9 @@ Route::get('/politicas', [WebController::class, 'politicas'])->name('politicas')
 Route::get('/recursos-clinicos', [WebController::class, 'recursosClinicos'])->name('recursos-clinicos');
 Route::get('/caso-clinico/{slug}', [WebController::class, 'casoClinico'])->name('caso-clinico');
 Route::get('/solicitud-enviada/{uuid}', [WebController::class, 'solicitudEnviada'])->name('solicitud-enviada');
+Route::get('/pdf/cotizacion/{uuid}', [WebController::class, 'downloadCotizacionPdf'])
+    ->name('pdf.cotizacion')
+    ->middleware('signed');
 Route::post('/api/resources/filter', [ResourceFilterController::class, 'filter'])->name('resources.filter');
 Route::post('/api/products/filter', [ProductFilterController::class, 'filter'])->name('products.filter');
 Route::get('/api/search/products', [WebController::class, 'searchProducts'])->name('api.search.products');
@@ -268,5 +271,5 @@ if (app()->environment('local')) {
  */
 
 Route::fallback(function () {
-    return request()->expectsJson() ? response()->json(['message' => 'Resource not found in Helin CMS'], 404) : view('errors.404');
+    return request()->expectsJson() ? response()->json(['message' => 'Resource not found in Helin CMS'], 404) : response()->view('errors.404', [], 404);
 })->name('fallback');

@@ -27,6 +27,8 @@ class Settings extends Model {
         'tagline',
         'email',
         'image',
+        'default_category_image',
+        'default_banner_image',
         'address',
         'contact_address',
         'phone',
@@ -42,10 +44,12 @@ class Settings extends Model {
         'analytics_code',
         'opinion_url',
         'offices',
+        'contact_subjects',
     ];
 
     protected $casts = [
         'offices' => 'array',
+        'contact_subjects' => 'array',
     ];
 
     /**
@@ -54,6 +58,6 @@ class Settings extends Model {
      */
     public static function getSettings() {
         $settings = Settings::query()->where('id', self::DEFAULT_SETTINGS)->first();
-        return !empty($settings) ? $settings : [];
+        return !empty($settings) ? $settings : null;
     }
 }

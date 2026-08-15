@@ -45,6 +45,10 @@ class ResourceTypeController extends Component
 
     public ?string $current_banner_image = null;
 
+    public $icon;
+
+    public $format_label;
+
     // Filters
     public $search = '';
 
@@ -59,6 +63,8 @@ class ResourceTypeController extends Component
         'position' => 'integer|min:0',
         'image' => 'nullable|image|max:2048',
         'banner_image' => 'nullable|image|max:2048',
+        'icon' => 'nullable|string|max:255',
+        'format_label' => 'nullable|string|max:255',
     ];
 
     public function mount()
@@ -104,6 +110,8 @@ class ResourceTypeController extends Component
         $this->position = $resourceType->position;
         $this->banner_title = $resourceType->banner_title;
         $this->banner_description = $resourceType->banner_description;
+        $this->icon = $resourceType->icon;
+        $this->format_label = $resourceType->format_label;
         $this->current_image = $resourceType->image;
         $this->current_banner_image = $resourceType->banner_image;
 
@@ -120,6 +128,8 @@ class ResourceTypeController extends Component
             'is_active' => $this->is_active,
             'banner_title' => $this->banner_title,
             'banner_description' => $this->banner_description,
+            'icon' => $this->icon,
+            'format_label' => $this->format_label,
         ];
 
         if ($this->image) {
@@ -184,6 +194,7 @@ class ResourceTypeController extends Component
             'name', 'description',
             'is_active', 'image', 'current_image',
             'banner_title', 'banner_description', 'banner_image', 'current_banner_image',
+            'icon', 'format_label',
         ]);
 
         $this->is_active = true;

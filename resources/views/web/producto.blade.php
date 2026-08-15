@@ -148,6 +148,20 @@
                     </div>
                 @endif
 
+                @if($product->systemProduct)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Sistema:</span>
+                        <span class="text-helin-heading/90">{{ $product->systemProduct->name }}</span>
+                    </div>
+                @endif
+
+                @if($product->productPlatform)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Plataforma:</span>
+                        <span class="text-helin-heading/90">{{ $product->productPlatform->name }}</span>
+                    </div>
+                @endif
+
                 @php
                     $productTags = [];
 

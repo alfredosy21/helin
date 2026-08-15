@@ -72,6 +72,19 @@
 
         const formData = new FormData(form);
 
+        // Append cart items from localStorage (cart is localStorage-based, not session-based)
+        const cartItems = Cart.getItems();
+        if (cartItems.length > 0) {
+            formData.append('cart_items', JSON.stringify(cartItems.map(item => ({
+                id: item.slug,
+                name: item.name,
+                quantity: item.qty,
+                price: item.price,
+                sku: item.sku || '',
+                dimension: item.dimension || '',
+            }))));
+        }
+
         // Disable button and show loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
@@ -209,12 +222,8 @@
 
     function requiresReceipt(value) {
         if (!value) return false;
-        const lowerValue = value.toLowerCase();
-        const normalized = lowerValue.replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        return normalized.includes('binance') ||
-               normalized.includes('pagomovil') ||
-               normalized.includes('zelle') ||
-               normalized.includes('pagosmultiples');
+        const selectedOption = document.querySelector('#payment-methods-list .custom-select-option[data-value="' + value + '"]');
+        return selectedOption?.dataset?.requiresReceipt === '1';
     }
 
     function updateReceiptField(value) {
@@ -229,37 +238,6 @@
     function showDescription(value) {
         if (!value) {
             panel.classList.add('hidden');
-            return;
-        }
-
-        const lowerValue = value.toLowerCase();
-        if (lowerValue.includes('binance')) {
-            panelText.textContent = 'Paga con USDT a trav\u00e9s de Binance Pay y env\u00edanos el comprobante de la transacci\u00f3n al finalizar.';
-            panel.classList.remove('hidden');
-            return;
-        }
-
-        if (lowerValue.includes('acordar')) {
-            panelText.textContent = 'Coordina la forma de pago con nuestro equipo comercial. Te contactaremos en breve para confirmar los detalles.';
-            panel.classList.remove('hidden');
-            return;
-        }
-
-        if (lowerValue.replace(/\s+/g, '').includes('pagomovil') || lowerValue.includes('pago m\u00f3vil') || lowerValue.includes('pago movil')) {
-            panelText.textContent = 'Realiza tu pago mediante Pago M\u00f3vil desde cualquier banco venezolano y env\u00edanos el comprobante al finalizar.';
-            panel.classList.remove('hidden');
-            return;
-        }
-
-        if (lowerValue.includes('zelle')) {
-            panelText.textContent = 'Realiza tu pago en d\u00f3lares a trav\u00e9s de Zelle desde una cuenta bancaria en Estados Unidos y env\u00edanos el comprobante al finalizar.';
-            panel.classList.remove('hidden');
-            return;
-        }
-
-        if (lowerValue.includes('pagos multiples') || lowerValue.includes('pagos m\u00faltiples')) {
-            panelText.textContent = 'Combina diferentes m\u00e9todos de pago para completar tu compra. Nuestro equipo te contactar\u00e1 en breve para coordinar las transacciones.';
-            panel.classList.remove('hidden');
             return;
         }
 

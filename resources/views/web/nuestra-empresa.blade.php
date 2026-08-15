@@ -87,23 +87,6 @@
                             <h4>{{ $item['title'] ?? $item['text'] ?? '' }}</h4>
                         </div>
                     @endforeach
-                @else
-                    <div class="feature">
-                        <i class="fas fa-shield-halved"></i>
-                        <h4>Calidad comprobada</h4>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-stethoscope"></i>
-                        <h4>Asesoría especializada</h4>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-table-cells-large"></i>
-                        <h4>Portafolio completo</h4>
-                    </div>
-                    <div class="feature">
-                        <i class="far fa-handshake"></i>
-                        <h4>Respaldo y confianza</h4>
-                    </div>
                 @endif
             </div>
         </div>
@@ -129,8 +112,8 @@
     @endphp
     <section id="mision-vision">
         <span class="section-label">{{ $missionSection->title ?? 'Misión y visión' }}</span>
-        <div class="mission-vision">
-            @if(count($missionItems) > 0)
+        @if(count($missionItems) > 0)
+            <div class="mission-vision">
                 @foreach($missionItems as $mv)
                     <article class="mv-card">
                         <div class="mv-icon"><i class="{{ $mv['icon'] ?? 'fas fa-crosshairs' }}"></i></div>
@@ -140,23 +123,10 @@
                         </div>
                     </article>
                 @endforeach
-            @else
-                <article class="mv-card">
-                    <div class="mv-icon"><i class="fas fa-crosshairs"></i></div>
-                    <div>
-                        <h3>Misión</h3>
-                        <p>Acompañar a odontólogos, implantólogos, cirujanos maxilofaciales y especialistas con soluciones integrales para sus procedimientos, combinando productos de alto valor clínico, asesoría técnica y una atención cercana que facilite su trabajo antes, durante y después de cada caso.</p>
-                    </div>
-                </article>
-                <article class="mv-card">
-                    <div class="mv-icon"><i class="fas fa-binoculars"></i></div>
-                    <div>
-                        <h3>Visión</h3>
-                        <p>Convertirnos en el aliado estratégico de referencia para los especialistas en odontología quirúrgica en Venezuela, ayudándolos a resolver sus casos con mayor seguridad, precisión y respaldo técnico.</p>
-                    </div>
-                </article>
-            @endif
-        </div>
+            </div>
+        @elseif($missionSection && $missionSection->content)
+            {!! $missionSection->content !!}
+        @endif
     </section>
 
     <!-- Team Section -->
@@ -189,27 +159,20 @@
                 <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
             @endif
         </div>
+        @if(count($alliesItems) > 0)
         <div class="logos-grid">
-            @if(count($alliesItems) > 0)
-                @foreach($alliesItems as $ally)
-                    <div class="brand-card">
-                        @php $allyImg = $ally['image'] ?? $ally['url'] ?? $ally['icon'] ?? null; @endphp
-                        @if($allyImg)
-                            <img src="{{ str_starts_with($allyImg, ['http://', 'https://']) ? $allyImg : asset('storage/' . $allyImg) }}" alt="{{ $ally['title'] ?? 'Aliado Helin' }}">
-                        @else
-                            <span>{{ $ally['title'] ?? '' }}</span>
-                        @endif
-                    </div>
-                @endforeach
-            @else
-                <div class="brand-card"><img src="{{ asset('images/gdt_logo.jpg') }}" alt="GDT"></div>
-                <div class="brand-card"><img src="{{ asset('images/ab_logo.jpg') }}" alt="AB"></div>
-                <div class="brand-card"><img src="{{ asset('images/bluem_logo.jpg') }}" alt="Bluem"></div>
-                <div class="brand-card"><img src="{{ asset('images/logo_czmedietch.jpg') }}" alt="CZ Medietch"></div>
-                <div class="brand-card"><img src="{{ asset('images/tealth_logo.jpg') }}" alt="Tealth"></div>
-                <div class="brand-card"><img src="{{ asset('images/tissum_logo.jpg') }}" alt="Tissum"></div>
-            @endif
+            @foreach($alliesItems as $ally)
+                <div class="brand-card">
+                    @php $allyImg = $ally['image'] ?? $ally['url'] ?? $ally['icon'] ?? null; @endphp
+                    @if($allyImg)
+                        <img src="{{ str_starts_with($allyImg, ['http://', 'https://']) ? $allyImg : asset('storage/' . $allyImg) }}" alt="{{ $ally['title'] ?? 'Aliado Helin' }}">
+                    @else
+                        <span>{{ $ally['title'] ?? '' }}</span>
+                    @endif
+                </div>
+            @endforeach
         </div>
+        @endif
     </section>
 
     <!-- CTA Section -->

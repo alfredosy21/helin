@@ -103,6 +103,24 @@ class Product extends Model {
     }
 
     /**
+     * Get the system product that owns the product.
+     *
+     * @return BelongsTo<SystemProduct, Product>
+     */
+    public function systemProduct(): BelongsTo {
+        return $this->belongsTo(SystemProduct::class);
+    }
+
+    /**
+     * Get the product platform that owns the product.
+     *
+     * @return BelongsTo<ProductPlatform, Product>
+     */
+    public function productPlatform(): BelongsTo {
+        return $this->belongsTo(ProductPlatform::class);
+    }
+
+    /**
      * Get the media files associated with the product.
      *
      * @return HasMany<ProductMedia, ProductMedia>

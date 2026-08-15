@@ -31,4 +31,16 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'api_version' => env('WHATSAPP_API_VERSION', 'v21.0'),
+        'base_url' => env('WHATSAPP_BASE_URL', 'https://graph.facebook.com'),
+        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
+        'waba_id' => env('WHATSAPP_WABA_ID'),
+        'enabled' => env('WHATSAPP_ENABLED', false),
+        'client_followup_template' => env('WHATSAPP_CLIENT_FOLLOWUP_TEMPLATE', 'order_followup'),
+        'client_followup_language' => env('WHATSAPP_CLIENT_FOLLOWUP_LANGUAGE', 'es'),
+    ],
+
 ];

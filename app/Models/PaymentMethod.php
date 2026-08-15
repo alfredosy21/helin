@@ -18,6 +18,7 @@ class PaymentMethod extends Model
     protected $fillable = [
         'name',
         'description',
+        'requires_receipt',
         'is_active',
         'position',
     ];
@@ -31,6 +32,7 @@ class PaymentMethod extends Model
         'config' => 'array',
         'provider_config' => 'array',
         'is_active' => 'boolean',
+        'requires_receipt' => 'boolean',
         'is_default' => 'boolean',
         'fee_percentage' => 'decimal:2',
         'fee_fixed' => 'decimal:2',

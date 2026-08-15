@@ -140,13 +140,18 @@
                 <div class="p-6 space-y-6">
 
                     {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
                         <label for="is_active" class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
                             <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                             <span class="ml-3 text-sm font-medium text-slate-700">Activo</span>
                         </label>
-                                            </div>
+                        <label for="requires_receipt" class="relative inline-flex items-center cursor-pointer sm:ml-6">
+                            <input type="checkbox" id="requires_receipt" wire:model="requires_receipt" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700">Requiere comprobante</span>
+                        </label>
+                    </div>
 
                     {{-- Información básica --}}
                     <div class="space-y-1.5">

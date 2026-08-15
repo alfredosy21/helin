@@ -17,6 +17,8 @@ class Sections extends Model
 
     const CLINICAL_RESOURCES_HERO = 3; // Centro de conocimiento clínico
 
+    const CLINICAL_STATS = 27; // Estadísticas de recursos clínicos
+
     const CLINICAL_LIBRARY = 4; // Biblioteca clínica Helin
 
     const CLINICAL_CONTENT_FEATURE = 5; // Contenido clínico pensado para acompañar tu práctica.
@@ -91,6 +93,7 @@ class Sections extends Model
         'position',
         'name_button',
         'url_button',
+        'category_slug',
         'buttons',
         'status_content',
     ];

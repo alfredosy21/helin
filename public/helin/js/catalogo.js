@@ -457,6 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
     getParamValues('brand').forEach(v => checkFilter('brand', v));
     getParamValues('material').forEach(v => checkFilter('material', v));
     getParamValues('tag').forEach(v => checkFilter('tag', v));
+    if (urlParams.get('featured') === '1') checkFilter('tag', 'featured');
 
     if (urlParams.has('search') && searchInput) {
         searchInput.value = urlParams.get('search');

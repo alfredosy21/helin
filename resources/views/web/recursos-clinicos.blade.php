@@ -71,34 +71,59 @@
 
     <!-- Estadísticas -->
     <section class="stats">
+        @php
+            $statsItems = [];
+            if ($statsSection && $statsSection->status == 1 && $statsSection->status_content == 1) {
+                $decoded = $statsSection->items ? json_decode($statsSection->items, true) : [];
+                $statsItems = $decoded['items'] ?? $decoded ?? [];
+            }
+            $statsValues = [
+                'total_resources' => $totalResources,
+                'total_specialties' => $totalSpecialties,
+                'total_pdfs' => $totalPDFs,
+                'total_cases' => $totalCases,
+            ];
+        @endphp
+        @if(!empty($statsItems))
+            @foreach($statsItems as $statItem)
                 <article class="stat">
-            <div class="stat-icon"><i class="fas fa-laptop-medical"></i></div>
-            <div>
-                <strong>{{ $totalResources }}</strong>
-                <span>Recursos disponibles</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon"><i class="fas fa-star"></i></div>
-            <div>
-                <strong>{{ $totalSpecialties }}</strong>
-                <span>Especialidades clínicas</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon"><i class="fas fa-download"></i></div>
-            <div>
-                <strong>{{ $totalPDFs }}</strong>
-                <span>Descargables técnicos</span>
-            </div>
-        </article>
-        <article class="stat">
-            <div class="stat-icon"><i class="fas fa-book-open"></i></div>
-            <div>
-                <strong>{{ $totalCases }}</strong>
-                <span>Casos clínicos</span>
-            </div>
-        </article>
+                    <div class="stat-icon">{!! $statItem['icon'] ?? '' !!}</div>
+                    <div>
+                        <strong>{{ $statsValues[$statItem['value_key'] ?? ''] ?? '' }}</strong>
+                        <span>{{ $statItem['label'] ?? '' }}</span>
+                    </div>
+                </article>
+            @endforeach
+        @else
+            <article class="stat">
+                <div class="stat-icon"><i class="fas fa-laptop-medical"></i></div>
+                <div>
+                    <strong>{{ $totalResources }}</strong>
+                    <span>Recursos disponibles</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div>
+                    <strong>{{ $totalSpecialties }}</strong>
+                    <span>Especialidades clínicas</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon"><i class="fas fa-download"></i></div>
+                <div>
+                    <strong>{{ $totalPDFs }}</strong>
+                    <span>Descargables técnicos</span>
+                </div>
+            </article>
+            <article class="stat">
+                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                <div>
+                    <strong>{{ $totalCases }}</strong>
+                    <span>Casos clínicos</span>
+                </div>
+            </article>
+        @endif
     </section>
 
 <main class="container mx-auto px-4 py-8">
@@ -175,12 +200,8 @@
                 <div class="group-title">Formato</div>
                                 @foreach($formats as $format)
                     @php
-                        $formatName = match($format->format) {
-                            'article' => 'Artículo',
-                            'pdf' => 'PDF',
-                            'video' => 'Video',
-                            default => ucfirst($format->format)
-                        };
+                        $formatLabel = collect($resourceTypes)->first(fn($rt) => $rt->format_label && str_contains(strtolower($rt->format_label), strtolower($format->format)));
+                        $formatName = $formatLabel ? trim(str_replace(['▣', '▤', '▶'], '', $formatLabel->format_label)) : ucfirst($format->format);
                     @endphp
                     <label class="filter-check">
                         <span><input type="checkbox" name="format[]" value="{{ $format->format }}" class="filter-checkbox" data-filter-type="format" {{ in_array($format->format, (array) request('format')) ? 'checked' : '' }}> {{ $formatName }}</span>
@@ -202,8 +223,13 @@
             <div id="resourcesContent">
                 @php
                     $sortBy    = request('sort', 'position');
-                    $iconMap   = ['case_study'=>'→','video'=>'▶','manual'=>'↓','technical_sheet'=>'↓','guide'=>'→','downloadable_guide'=>'→'];
-                    $formatMap = ['article'=>'▣ Artículo','pdf'=>'▤ PDF','video'=>'▶ Video'];
+                    $resourceTypes = \App\Models\ResourceType::all()->keyBy('id');
+                    $iconMap = [];
+                    $formatMap = [];
+                    foreach ($resourceTypes as $rt) {
+                        if ($rt->icon) $iconMap[$rt->id] = $rt->icon;
+                        if ($rt->format_label) $formatMap[$rt->id] = $rt->format_label;
+                    }
                 @endphp
                 @include('web.partials.resource-results', compact('resources','sortBy','iconMap','formatMap'))
             </div>

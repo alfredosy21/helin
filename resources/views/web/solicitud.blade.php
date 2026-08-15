@@ -249,7 +249,7 @@
                         <div class="custom-select-trigger" data-placeholder="Selecciona método de pago">Selecciona método de pago</div>
                         <div class="custom-select-options" id="payment-methods-list">
                             @forelse($paymentMethods as $method)
-                                <div class="custom-select-option payment-method-option" data-value="{{ $method->name }}" data-description="{{ $method->description }}">{{ $method->name }}</div>
+                                <div class="custom-select-option payment-method-option" data-value="{{ $method->name }}" data-description="{{ $method->description }}" data-requires-receipt="{{ $method->requires_receipt ? '1' : '0' }}">{{ $method->name }}</div>
                             @empty
                                 <div class="custom-select-option" data-value="">No hay métodos disponibles</div>
                             @endforelse

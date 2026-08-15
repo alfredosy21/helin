@@ -17,11 +17,11 @@
         @endphp
         @include('web.components.resource-card', [
             'resourceType'        => $typeName,
-            'resourcePlay'        => $iconMap[$resource->type] ?? '→',
+            'resourcePlay'        => $iconMap[$resource->resource_type_id] ?? ($resource->resourceType && $resource->resourceType->icon ? $resource->resourceType->icon : '→'),
             'resourceTags'        => $specialtyName ? [$specialtyName] : [],
             'resourceTitle'       => $resource->title,
             'resourceDescription' => $resource->description,
-            'resourceFormat'      => $formatMap[$resource->format] ?? '▣ Artículo',
+            'resourceFormat'      => $formatMap[$resource->resource_type_id] ?? ($resource->resourceType && $resource->resourceType->format_label ? $resource->resourceType->format_label : '▣ Artículo'),
             'resourceLink'        => 'Ver detalle',
             'resourceUrl'         => route('caso-clinico', ['slug' => $resource->slug]),
             'resourceImage'       => $resourceImage,

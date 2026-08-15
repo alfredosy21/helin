@@ -167,6 +167,24 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
+                    {{-- Icono --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.icon_label') }}</label>
+                        <input type="text" wire:model="icon" placeholder="{{ __('cms.resource_types.icon_placeholder') }}"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        <p class="text-[10px] text-slate-400">{{ __('cms.resource_types.icon_hint') }}</p>
+                        @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Etiqueta de formato --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resource_types.format_label_label') }}</label>
+                        <input type="text" wire:model="format_label" placeholder="{{ __('cms.resource_types.format_label_placeholder') }}"
+                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                        <p class="text-[10px] text-slate-400">{{ __('cms.resource_types.format_label_hint') }}</p>
+                        @error('format_label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+
                     {{-- Imagen --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.image_label') }}</label>

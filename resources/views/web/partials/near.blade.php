@@ -27,21 +27,21 @@
       <p class="text-helin-text font-bold mt-1">
          @php
              $nearSettings = \App\Models\Settings::getSettings();
-             $nearCities = [
-                 'Caracas' => 'caracas_whatsapp',
-                 'Valencia' => 'valencia_whatsapp',
-                 'Barquisimeto' => 'barquisimeto_whatsapp',
-                 'Maracaibo' => 'maracaibo_whatsapp',
-             ];
+             $nearOffices = $nearSettings && $nearSettings->offices ? $nearSettings->offices : [];
              $nearMessage = 'Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.';
+             $nearLinks = [];
+             foreach ($nearOffices as $nearOffice) {
+                 $nearWhatsapp = $nearOffice['whatsapp'] ?? null;
+                 if (!$nearWhatsapp) continue;
+                 $nearPhone = preg_replace('/[^0-9]/', '', $nearWhatsapp);
+                 if (!$nearPhone) continue;
+                 $nearCityName = ucfirst($nearOffice['city'] ?? '');
+                 if (!$nearCityName) continue;
+                 $nearLinks[$nearCityName] = 'https://wa.me/' . $nearPhone . '?text=' . urlencode($nearMessage);
+             }
          @endphp
-         @foreach($nearCities as $nearCity => $nearSettingKey)
-             @php
-                 $nearPhone = ($nearSettings && !empty($nearSettings->{$nearSettingKey})) ? preg_replace('/[^0-9]/', '', $nearSettings->{$nearSettingKey}) : null;
-             @endphp
-             @if($nearPhone)
-             <a href="https://wa.me/{{ $nearPhone }}?text={{ urlencode($nearMessage) }}" target="_blank" class="hover:text-turquesa transition-colors">{{ $nearCity }}</a>@if(!$loop->last)<span> · </span>@endif
-             @endif
+         @foreach($nearLinks as $nearCityName => $nearUrl)
+            <a href="{{ $nearUrl }}" target="_blank" class="hover:text-turquesa transition-colors">{{ $nearCityName }}</a>@if(!$loop->last)<span> · </span>@endif
          @endforeach
       </p>
    </div>

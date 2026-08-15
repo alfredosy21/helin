@@ -105,7 +105,8 @@
                @if($featuredCategory->image)
                <img src="{{ asset('storage/' . $featuredCategory->image) }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
                @else
-               <img src="{{ asset('images/categoria1.png') }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
+               @php $homeSettings = \App\Models\Settings::getSettings(); @endphp
+               <img src="{{ $homeSettings && $homeSettings->default_category_image ? asset('storage/' . $homeSettings->default_category_image) : asset('images/categoria1.png') }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
                @endif
                <div class="category-featured-content">
                   <small class="block text-turquesa text-xs font-black mb-2">{{ $featuredCategory->banner_title ?? 'Soluciones especializadas' }}</small>
@@ -129,29 +130,15 @@
                        ->orderBy('order')
                        ->take(6)
                        ->get();
-                   $categoryCardImages = [
-                       asset('images/cat2.png'),
-                       asset('images/cat3.png'),
-                       asset('images/cat4.png'),
-                       asset('images/cat5.png'),
-                       asset('images/cat6.png'),
-                       asset('images/cat7.png'),
-                   ];
-                   $categoryCardSubtitles = [
-                       'regeneracion-guiada-bucal-gbr' => 'Recuperación y soporte',
-                       'placas' => 'Fijación y precisión',
-                       'cuidados-especiales-quirurgicos' => 'Bienestar oral',
-                       'tijeras' => 'Precisión clínica',
-                       'equipos-odontologicos' => 'Tecnología para tu práctica',
-                       'planificacion-digital' => 'Diagnóstico y exactitud',
-                   ];
+                   $homeSettings = \App\Models\Settings::getSettings();
+                   $homeDefaultCategoryImage = $homeSettings && $homeSettings->default_category_image ? asset('storage/' . $homeSettings->default_category_image) : asset('images/cat2.png');
                @endphp
 @forelse($categoryCards as $cardIndex => $categoryCard)
                     @include('web.components.category-card', [
-                        'categorySubtitle' => $categoryCard->banner_title ?? ($categoryCardSubtitles[$categoryCard->slug] ?? 'Productos Helin'),
+                        'categorySubtitle' => $categoryCard->banner_title ?: 'Productos Helin',
                         'categoryTitle' => $categoryCard->name,
                         'categoryLink' => route('catalogo', ['category' => $categoryCard->slug]),
-                        'categoryImage' => $categoryCard->image ? asset('storage/' . $categoryCard->image) : $categoryCardImages[$cardIndex % 6],
+                        'categoryImage' => $categoryCard->image ? asset('storage/' . $categoryCard->image) : $homeDefaultCategoryImage,
                     ])
                @empty
                    <p class="text-sm text-helin-text col-span-full">No hay categorías disponibles.</p>
@@ -241,9 +228,8 @@
    @foreach($productSections as $index => $section)
         @if($section->status == 1 && $section->status_content == 1)
             @php
-                $sectionCat   = $sectionCategories[$section->id] ?? null;
-                $category     = $sectionCat ? (\App\Models\Category::where('slug', $sectionCat['slug'])->first() ?? \App\Models\Category::where('name', $sectionCat['name'])->first()) : null;
-               $categorySlug = $sectionCat['slug'] ?? null;
+                $categorySlug = $section->category_slug;
+                $category     = $categorySlug ? (\App\Models\Category::where('slug', $categorySlug)->where('is_active', true)->first()) : null;
                $products     = $category ? \App\Models\Product::where('category_id', $category->id)
                    ->where('is_active', true)
                    ->with('images')

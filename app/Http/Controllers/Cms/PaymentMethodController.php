@@ -24,6 +24,8 @@ class PaymentMethodController extends Component
 
     public $description;
 
+    public $requires_receipt = false;
+
     public $is_active = true;
 
     // Filters
@@ -38,6 +40,7 @@ class PaymentMethodController extends Component
     protected $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string|max:1000',
+        'requires_receipt' => 'boolean',
         'is_active' => 'boolean',
     ];
 
@@ -85,6 +88,7 @@ class PaymentMethodController extends Component
         $this->editingId = $id;
         $this->name = $method->name;
         $this->description = $method->description;
+        $this->requires_receipt = (bool) $method->requires_receipt;
         $this->is_active = $method->is_active;
 
         $this->showForm = true;
@@ -97,6 +101,7 @@ class PaymentMethodController extends Component
         $data = [
             'name' => $this->name,
             'description' => $this->description,
+            'requires_receipt' => $this->requires_receipt,
             'is_active' => $this->is_active,
         ];
 
@@ -137,10 +142,11 @@ class PaymentMethodController extends Component
     public function resetForm()
     {
         $this->reset([
-            'name', 'description', 'is_active',
+            'name', 'description', 'requires_receipt', 'is_active',
         ]);
 
         $this->is_active = true;
+        $this->requires_receipt = false;
     }
 
     public function resetFilters()

@@ -39,7 +39,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/location.svg') }}" alt="Dirección" width="24" height="24"></div>
                     <div>
                         <h3>Dirección</h3>
-                        <p>{{ $settings->contact_address }}</p>
+                        <p>{{ $settings?->contact_address }}</p>
                     </div>
                 </article>
 
@@ -47,7 +47,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/ws.svg') }}" alt="WhatsApp Comercial" width="24" height="24"></div>
                     <div>
                         <h3>WhatsApp Comercial</h3>
-                        <p>{{ $settings->phone }}</p>
+                        <p>{{ $settings?->phone }}</p>
                     </div>
                 </article>
 
@@ -55,7 +55,7 @@
                     <div class="info-icon"><img src="{{ asset('icons/mail.svg') }}" alt="Correo electrónico" width="24" height="24"></div>
                     <div>
                         <h3>Correo electrónico</h3>
-                        <p>{{ $settings->email }}</p>
+                        <p>{{ $settings?->email }}</p>
                     </div>
                 </article>
             </div>
@@ -106,13 +106,15 @@
                     <div class="select-wrapper">
                         <select name="asunto" required>
                             <option value="" disabled hidden {{ request('asunto') ? '' : 'selected' }}>Selecciona un asunto</option>
-                            <option value="informacion-comercial" {{ request('asunto') == 'informacion-comercial' ? 'selected' : '' }}>Información comercial</option>
-                            <option value="asesoria-productos" {{ request('asunto') == 'asesoria-productos' ? 'selected' : '' }}>Asesoría de productos</option>
-                            <option value="cotizacion" {{ request('asunto') == 'cotizacion' ? 'selected' : '' }}>Cotización</option>
-                            <option value="disponibilidad" {{ request('asunto') == 'disponibilidad' ? 'selected' : '' }}>Disponibilidad de productos</option>
-                            <option value="soporte-orden" {{ request('asunto') == 'soporte-orden' ? 'selected' : '' }}>Soporte de orden</option>
-                            <option value="recursos-clinicos" {{ request('asunto') == 'recursos-clinicos' ? 'selected' : '' }}>Recursos clínicos</option>
-                            <option value="otro" {{ request('asunto') == 'otro' ? 'selected' : '' }}>Otro</option>
+                            @php
+                                $contactSubjects = array_filter(
+                                    is_array($settings->contact_subjects ?? null) ? $settings->contact_subjects : [],
+                                    fn($s) => !empty($s['active'])
+                                );
+                            @endphp
+                            @foreach($contactSubjects as $subject)
+                                <option value="{{ $subject['value'] }}" {{ request('asunto') == $subject['value'] ? 'selected' : '' }}>{{ $subject['label'] }}</option>
+                            @endforeach
                         </select>
                         <span class="select-arrow">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>

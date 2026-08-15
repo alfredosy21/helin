@@ -22,11 +22,44 @@ class HelinHeaderSearch {
         // Buscador Móvil
         this.setupSearch('mobile', '#mobile-search-input', '#mobile-search-dropdown', '#mobile-search-submit');
 
+        // Selector de categoría del buscador: filtrar catálogo al elegir
+        const categorySelect = document.getElementById('header-category-select');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', () => this.executeCategoryNavigation());
+        }
+
         // Cerrar dropdowns al hacer clic fuera
         document.addEventListener('click', this.handleOutsideClick.bind(this));
 
         // Navegación con teclado
         document.addEventListener('keydown', this.handleKeyboardNavigation.bind(this));
+    }
+
+    /**
+     * Construye la URL del catálogo combinando búsqueda y categoría.
+     */
+    buildCatalogUrl(extraQuery) {
+        const params = new URLSearchParams();
+        const query = extraQuery !== undefined ? extraQuery : this.getActiveQuery();
+        if (query) params.set('search', query);
+        const categorySelect = document.getElementById('header-category-select');
+        if (categorySelect && categorySelect.value) params.set('category', categorySelect.value);
+        const qs = params.toString();
+        return '/catalogo' + (qs ? '?' + qs : '');
+    }
+
+    getActiveQuery() {
+        const desktop = document.querySelector('#header-search-input')?.value.trim() || '';
+        const mobile = document.querySelector('#mobile-search-input')?.value.trim() || '';
+        return desktop || mobile;
+    }
+
+    /**
+     * Navega al catálogo filtrado por la categoría seleccionada
+     * (incluye el término de búsqueda si hay uno escrito).
+     */
+    executeCategoryNavigation() {
+        window.location.href = this.buildCatalogUrl();
     }
 
     setupSearch(type, inputSelector, dropdownSelector, submitSelector) {
@@ -74,9 +107,11 @@ class HelinHeaderSearch {
     executeSearch(type) {
         const input = document.querySelector(type === 'mobile' ? '#mobile-search-input' : '#header-search-input');
         const query = input?.value.trim() || '';
+        const categorySelect = document.getElementById('header-category-select');
+        const category = categorySelect?.value || '';
 
-        if (query) {
-            window.location.href = '/catalogo?search=' + encodeURIComponent(query);
+        if (query || category) {
+            window.location.href = this.buildCatalogUrl(query);
         }
     }
 

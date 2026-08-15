@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendCommercialRequestWhatsApp;
 use App\Models\CommercialRequest;
 use App\Models\WhatsAppNumber;
 use Illuminate\Http\Request;
@@ -70,8 +71,19 @@ class CommercialRequestController extends Controller
             // Get WhatsApp number for the state
             $whatsappNumber = WhatsAppNumber::getActiveByState($state->id);
 
-            // Get cart data from session or request
-            $cartData = session('cart', []);
+            // Get cart data from request (sent by JS from localStorage) or session fallback
+            $cartData = [];
+            $cartItemsJson = $request->input('cart_items');
+            if ($cartItemsJson) {
+                $decoded = json_decode($cartItemsJson, true);
+                if (is_array($decoded)) {
+                    $cartData = $decoded;
+                }
+            }
+            // Fallback to session for backward compatibility
+            if (empty($cartData)) {
+                $cartData = session('cart', []);
+            }
             if (empty($cartData)) {
                 return response()->json([
                     'success' => false,
@@ -110,6 +122,9 @@ class CommercialRequestController extends Controller
 
             // Clear cart after successful submission
             session()->forget('cart');
+
+            // Dispatch WhatsApp Business API notification job (executive + client + PDF)
+            SendCommercialRequestWhatsApp::dispatch($commercialRequest->id);
 
             return response()->json([
                 'success' => true,

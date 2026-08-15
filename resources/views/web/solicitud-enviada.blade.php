@@ -139,7 +139,7 @@
         </article>
     </section>
 
-    <a href="#" class="download-btn">
+    <a href="{{ URL::signedRoute('pdf.cotizacion', ['uuid' => $commercialRequest->uuid]) }}" target="_blank" class="download-btn">
         <span class="download-icon"><i class="fas fa-download"></i></span>
         Descargar cotización en PDF
     </a>
