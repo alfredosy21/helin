@@ -279,6 +279,12 @@
                     </label>
                 </div>
 
+                @if(config('services.recaptcha.enabled'))
+                <div class="mb-5">
+                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-callback="onSolicitudRecaptchaSuccess" data-expired-callback="onSolicitudRecaptchaExpired"></div>
+                </div>
+                @endif
+
                 <!-- Botón Enviar -->
                 <button type="submit" id="submit-btn" disabled class="w-full bg-gray-400 text-white font-bold text-sm py-3 rounded-full uppercase transition-colors cursor-not-allowed">
                     Enviar Solicitud Comercial

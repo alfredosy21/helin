@@ -250,7 +250,7 @@ class FileUploadService {
             $fullPath = Storage::disk('public')->path($originalPath);
             $image = $this->imageManager()->read($fullPath);
 
-            $image->fit($thumbnailSize, $thumbnailSize);
+            $image->cover($thumbnailSize, $thumbnailSize);
 
             $pathInfo = pathinfo($filename);
             $thumbnailFilename = $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];

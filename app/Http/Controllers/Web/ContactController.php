@@ -8,6 +8,7 @@ use App\Models\ContactMessage;
 use App\Models\Settings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,6 +22,7 @@ class ContactController extends Controller
             'telefono' => ['nullable', 'string', 'max:30'],
             'asunto' => ['required', 'string', 'max:100'],
             'mensaje' => ['required', 'string', 'min:10', 'max:2000'],
+            'g-recaptcha-response' => [config('services.recaptcha.enabled') ? 'required' : 'nullable'],
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.min' => 'El nombre debe tener al menos 2 caracteres.',
@@ -29,6 +31,7 @@ class ContactController extends Controller
             'asunto.required' => 'Selecciona un asunto.',
             'mensaje.required' => 'El mensaje es obligatorio.',
             'mensaje.min' => 'El mensaje debe tener al menos 10 caracteres.',
+            'g-recaptcha-response.required' => 'Debes completar el reCAPTCHA.',
         ]);
 
         if ($validator->fails()) {
@@ -36,6 +39,21 @@ class ContactController extends Controller
                 'success' => false,
                 'errors' => $validator->errors()->toArray(),
             ], 422);
+        }
+
+        if (config('services.recaptcha.enabled')) {
+            $recaptchaResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$recaptchaResponse->json('success', false)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['g-recaptcha-response' => ['La verificación de reCAPTCHA falló. Inténtalo de nuevo.']],
+                ], 422);
+            }
         }
 
         $settings = Settings::getSettings();

@@ -137,7 +137,13 @@
                     </label>
                 </div>
 
-                <button id="contact-submit" class="submit" type="submit">➤ Contactar a Helin</button>
+                @if(config('services.recaptcha.enabled'))
+                <div class="field-full mb-4">
+                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-callback="onContactRecaptchaSuccess" data-expired-callback="onContactRecaptchaExpired"></div>
+                </div>
+                @endif
+
+                <button id="contact-submit" class="submit" type="submit" @if(config('services.recaptcha.enabled')) disabled @endif>➤ Contactar a Helin</button>
 
                 <div class="secure"><i class="fa fa-lock secure-icon" aria-hidden="true"></i> Tu información está segura con nosotros.</div>
             </form>

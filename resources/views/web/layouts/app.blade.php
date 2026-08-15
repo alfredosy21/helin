@@ -34,6 +34,9 @@
     @endif
 
     <script src="https://cdn.tailwindcss.com"></script>
+    @if(config('services.recaptcha.enabled'))
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="@minAsset('helin/css/fonts.css')">
     <link rel="stylesheet" href="@minAsset('helin/css/variables.css')">

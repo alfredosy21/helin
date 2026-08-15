@@ -31,6 +31,12 @@
             isValid = false;
         }
 
+        // Check reCAPTCHA if present
+        const recaptchaResponse = document.querySelector('[name="g-recaptcha-response"]');
+        if (recaptchaResponse && !recaptchaResponse.value) {
+            isValid = false;
+        }
+
         if (isValid) {
             submitBtn.disabled = false;
             submitBtn.className = 'w-full bg-turquesa hover:bg-turquesa-dark text-white font-bold text-sm py-3 rounded-full uppercase transition-colors';
@@ -39,6 +45,19 @@
             submitBtn.className = 'w-full bg-gray-400 text-white font-bold text-sm py-3 rounded-full uppercase transition-colors cursor-not-allowed';
         }
     }
+
+    // reCAPTCHA callbacks
+    window.onSolicitudRecaptchaSuccess = function() {
+        validateForm();
+    };
+
+    window.onSolicitudRecaptchaExpired = function() {
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.className = 'w-full bg-gray-400 text-white font-bold text-sm py-3 rounded-full uppercase transition-colors cursor-not-allowed';
+        }
+    };
 
     // Initialize validation
     document.addEventListener('DOMContentLoaded', function() {

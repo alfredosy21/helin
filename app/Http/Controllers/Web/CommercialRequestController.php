@@ -7,6 +7,7 @@ use App\Jobs\SendCommercialRequestWhatsApp;
 use App\Models\CommercialRequest;
 use App\Models\WhatsAppNumber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class CommercialRequestController extends Controller
@@ -37,6 +38,9 @@ class CommercialRequestController extends Controller
             'pago' => 'required|exists:payment_methods,name',
             'numero_comprobante' => 'nullable|string|max:100',
             'privacy_accepted' => 'required|accepted',
+            'g-recaptcha-response' => [config('services.recaptcha.enabled') ? 'required' : 'nullable'],
+        ], [
+            'g-recaptcha-response.required' => 'Debes completar el reCAPTCHA.',
         ]);
 
         if ($validator->fails()) {
@@ -44,6 +48,21 @@ class CommercialRequestController extends Controller
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
+        }
+
+        if (config('services.recaptcha.enabled')) {
+            $recaptchaResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$recaptchaResponse->json('success', false)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['g-recaptcha-response' => ['La verificación de reCAPTCHA falló. Inténtalo de nuevo.']],
+                ], 422);
+            }
         }
 
         try {
