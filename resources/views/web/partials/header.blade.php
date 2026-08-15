@@ -57,12 +57,14 @@
                 @endphp
                 <!-- WhatsApp - solo desktop -->
                 @php
-                    $headerWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+                    $headerWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
                 @endphp
+                @if($headerWhatsApp)
                 <a href="https://wa.me/{{ $headerWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-[#123F4A] transition text-sm">
                     <i class="fab fa-whatsapp text-2xl"></i>
                     <span>Escríbenos</span>
                 </a>
+                @endif
                 <!-- Carrito -->
                 <a href="{{ route('carrito') }}" class="flex items-center gap-1 sm:gap-2 text-white hover:text-[#123F4A] transition p-1 sm:p-0">
                     <div class="relative">
@@ -144,15 +146,31 @@
                         $currentRoute = request()->route()->getName();
                         $currentCategory = request()->route('category') ?? request('category');
                         $currentTag = request('tag');
+                        $headerMenuItems = \App\Models\Menus::getHeaderItems();
                     @endphp
                     <!-- Inicio -->
                     <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16 border-b-2 border-transparent pb-1 {{ $currentRoute === 'home' ? 'text-turquesa border-turquesa' : '' }}">Inicio</a>
-                    <!-- Categorías -->
-                    <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'implantologia' ? 'text-turquesa border-turquesa' : '' }}">Implantología <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'osteosintesis' ? 'text-turquesa border-turquesa' : '' }}">Osteosíntesis <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'instrumentos' ? 'text-turquesa border-turquesa' : '' }}">Instrumentos <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentCategory === 'planificacion-digital' ? 'text-turquesa border-turquesa' : '' }}">Planificación digital <span class="text-xs">+</span></a>
-                    <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $currentRoute === 'catalogo' && $currentTag === 'on_sale' ? 'text-turquesa border-turquesa' : '' }}">Ofertas</a>
+                    <!-- Categorías / Menú configurable -->
+                    @foreach($headerMenuItems as $menuItem)
+                        @php
+                            $menuUrl = $menuItem->url;
+                            if (!$menuUrl && $menuItem->title) {
+                                $menuCategory = \App\Models\Category::where('name', $menuItem->title)->first();
+                                $menuUrl = $menuCategory ? route('catalogo', ['category' => $menuCategory->slug]) : '#';
+                            }
+                            $menuIsActive = false;
+                            if ($menuUrl === route('home')) {
+                                $menuIsActive = $currentRoute === 'home';
+                            } elseif (str_contains($menuUrl, 'tag=on_sale')) {
+                                $menuIsActive = $currentTag === 'on_sale';
+                            } elseif ($currentCategory && str_contains($menuUrl, $currentCategory)) {
+                                $menuIsActive = true;
+                            }
+                        @endphp
+                        @if($menuUrl && $menuUrl !== '#')
+                        <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($menuItem->children->count())<span class="text-xs">+</span>@endif</a>
+                        @endif
+                    @endforeach
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
                     <a href="{{ route('recursos-clinicos') }}" class="bg-turquesa hover:bg-turquesa-dark text-white text-sm px-5 py-2.5 rounded-full flex items-center gap-2 transition-colors mr-12">

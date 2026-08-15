@@ -5,7 +5,7 @@
 @section('content')
 @php
     $settings = \App\Models\Settings::getSettings();
-    $whatsappNumber = preg_replace('/[^0-9]/', '', $settings->phone ?? '584244669150');
+    $whatsappNumber = $settings && $settings->phone ? preg_replace('/[^0-9]/', '', $settings->phone) : null;
     $whatsappUrl = $whatsappNumber ? 'https://wa.me/' . $whatsappNumber . '?text=' . urlencode('Hola, estoy en el sitio de Helin y necesito ayuda.') : route('contactanos');
 @endphp
 

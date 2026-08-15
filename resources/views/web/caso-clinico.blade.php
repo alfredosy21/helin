@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 
-@section('title', 'Detalle Caso Clínico - Helin')
+@section('title', $resource->title . ' - Helin')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/caso-clinico.css') }}">
@@ -43,15 +43,17 @@
                     <div class="meta-icon"><i class="fas fa-calendar"></i></div>
                     <div>
                         <small>Fecha</small>
-                        <strong style="color:#172b49">{{ $resource->created_at->format('d M, Y') ?? '15 mayo, 2024' }}</strong>
+                        <strong style="color:#172b49">{{ $resource->created_at->format('d M, Y') }}</strong>
                     </div>
                 </div>
             </div>
 
             <div class="hero-actions">
-                <a href="{{ $resource->video_url ?? '#' }}" target="_blank" class="primary-btn">
+                @if($resource->video_url)
+                <a href="{{ $resource->video_url }}" target="_blank" class="primary-btn">
                     <i class="fas fa-play"></i> Ver video completo
                 </a>
+                @endif
                 @if($resource->file_path)
                     <a href="{{ asset('storage/' . $resource->file_path) }}" download class="outline-btn">
                         <i class="fas fa-download"></i> Descargar PDF
@@ -60,7 +62,7 @@
             </div>
         </div>
 
-        <div class="clinical-photo" style="background-image: url('{{ $resource->image_url ?: asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
+        <div class="clinical-photo" @if($resource->image_url) style="background-image: url('{{ $resource->image_url }}'); background-size: cover; background-position: center;" @endif></div>
     </section>
 
     <nav class="tabs">
@@ -74,7 +76,6 @@
             <section id="descripcion" class="tab-panel active">
                 <article class="case-card">
                     <h2>Descripción del caso</h2>
-                    <p>Caso clínico de regeneración ósea guiada (ROG) en la zona posterior, realizado para recuperar el volumen óseo perdido y crear las condiciones ideales para una rehabilitación implantológica predecible. El tratamiento se planificó mediante evaluación clínica y radiográfica, priorizando la estabilidad del injerto y la regeneración de tejido óseo de calidad.</p>
                     <p>{!! $resource->content !!}</p>
 
                     @if($resource->image_url)
@@ -105,20 +106,29 @@
             <section id="materiales" class="tab-panel">
                 <article class="case-card">
                     <h2>Materiales utilizados</h2>
-                    <ul>
-                        <li>Biomaterial de injerto óseo.</li>
-                        <li>Membrana para regeneración ósea guiada.</li>
-                        <li>Instrumental de cirugía oral e implantología.</li>
-                        <li>Material de sutura.</li>
-                        <li>Soluciones de irrigación y desinfección.</li>
-                    </ul>
+                    @if($resource->materials)
+                        @php $materialsList = explode("\n", $resource->materials); @endphp
+                        <ul>
+                            @foreach($materialsList as $material)
+                                @if(trim($material))
+                                    <li>{{ trim($material) }}</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>Información de materiales próximamente.</p>
+                    @endif
                 </article>
             </section>
 
             <section id="resultados" class="tab-panel">
                 <article class="case-card">
                     <h2>Resultados</h2>
-                    <p>Se evidenció una adecuada regeneración del volumen óseo, con una cicatrización favorable y una integración estable del injerto. El seguimiento confirmó condiciones óptimas para la futura colocación de implantes y una rehabilitación funcional con un pronóstico favorable.</p>
+                    @if($resource->results)
+                        <p>{!! nl2br(e($resource->results)) !!}</p>
+                    @else
+                        <p>Información de resultados próximamente.</p>
+                    @endif
                 </article>
             </section>
         </div>
@@ -144,11 +154,13 @@
                 </div>
                 @php
                     $settings = \App\Models\Settings::getSettings();
-                    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+                    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
                 @endphp
+                @if($caseWhatsApp)
                 <a href="https://wa.me/{{ $caseWhatsApp }}?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
                     <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
                 </a>
+                @endif
             </section>
         </aside>
     </section>

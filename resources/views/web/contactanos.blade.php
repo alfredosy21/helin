@@ -1,10 +1,10 @@
 @extends('web.layouts.app')
 
-@section('title', 'Contáctanos - Helin')
-@section('meta-description', 'Contacta a Helin para asesoría especializada en productos odontológicos. Atención personalizada para implantes, instrumentos y biomateriales. Envíos a todo Venezuela.')
-@section('meta-keywords', 'contacto helin, asesoría odontológica, productos dentales, implantes Venezuela, soporte técnico, material dental')
+@section('title', $pageSeo?->seo_title ?? 'Contáctanos - Helin')
+@section('meta-description', $pageSeo?->seo_description ?? 'Contacta a Helin para asesoría especializada en productos odontológicos. Atención personalizada para implantes, instrumentos y biomateriales. Envíos a todo Venezuela.')
+@section('meta-keywords', $pageSeo?->seo_keywords ?? 'contacto helin, asesoría odontológica, productos dentales, implantes Venezuela, soporte técnico, material dental')
 @section('og-type', 'website')
-@section('og-image', asset('images/helin-contact-og.jpg'))
+@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : asset('images/helin-contact-og.jpg'))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/contactanos.css') }}">
@@ -63,29 +63,22 @@
             <div class="sedes">
                 <h3>Nuestras sedes</h3>
                 <div class="sede-pills">
-                    @if($settings && $settings->caracas_location)
-                        <a href="{{ $settings->caracas_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Caracas" width="10" height="10">Caracas</a>
-                    @else
-                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Caracas" width="10" height="10">Caracas</span>
-                    @endif
-
-                    @if($settings && $settings->valencia_location)
-                        <a href="{{ $settings->valencia_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Valencia" width="10" height="10">Valencia</a>
-                    @else
-                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Valencia" width="10" height="10">Valencia</span>
-                    @endif
-
-                    @if($settings && $settings->barquisimeto_location)
-                        <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Barquisimeto" width="10" height="10">Barquisimeto</a>
-                    @else
-                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Barquisimeto" width="10" height="10">Barquisimeto</span>
-                    @endif
-
-                    @if($settings && $settings->maracaibo_location)
-                        <a href="{{ $settings->maracaibo_location }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Maracaibo" width="10" height="10">Maracaibo</a>
-                    @else
-                        <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="Maracaibo" width="10" height="10">Maracaibo</span>
-                    @endif
+                    @php
+                        $sedeCities = [
+                            'Caracas'      => $settings->caracas_location ?? null,
+                            'Valencia'     => $settings->valencia_location ?? null,
+                            'Barquisimeto' => $settings->barquisimeto_location ?? null,
+                            'Maracaibo'    => $settings->maracaibo_location ?? null,
+                            'Maracay'      => $settings->maracay_location ?? null,
+                        ];
+                    @endphp
+                    @foreach($sedeCities as $sedeCity => $sedeLocation)
+                        @if($sedeLocation)
+                            <a href="{{ $sedeLocation }}" target="_blank" class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ $sedeCity }}" width="10" height="10">{{ $sedeCity }}</a>
+                        @else
+                            <span class="sede-pill"><img src="{{ asset('icons/ubicaciones.svg') }}" alt="{{ $sedeCity }}" width="10" height="10">{{ $sedeCity }}</span>
+                        @endif
+                    @endforeach
                 </div>
             </div>
         </aside>

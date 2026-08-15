@@ -1,10 +1,10 @@
 @extends('web.layouts.app')
 
-@section('title', 'Helin - Material Dental de Calidad')
-@section('meta-description', 'Helin - Soluciones odontológicas especializadas en implantes, instrumentos y biomateriales. Calidad garantizada para profesionales de la salud bucal en Venezuela.')
-@section('meta-keywords', 'implantes dentales, material dental, instrumentos odontológicos, biomateriales, cirugía guiada, helin, productos odontológicos Venezuela')
+@section('title', $pageSeo?->seo_title ?? 'Helin - Material Dental de Calidad')
+@section('meta-description', $pageSeo?->seo_description ?? 'Helin - Soluciones odontológicas especializadas en implantes, instrumentos y biomateriales. Calidad garantizada para profesionales de la salud bucal en Venezuela.')
+@section('meta-keywords', $pageSeo?->seo_keywords ?? 'implantes dentales, material dental, instrumentos odontológicos, biomateriales, cirugía guiada, helin, productos odontológicos Venezuela')
 @section('og-type', 'website')
-@section('og-image', asset('images/helin-home-og.jpg'))
+@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : asset('images/helin-home-og.jpg'))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/home.css') }}">
@@ -102,9 +102,13 @@
             @endphp
             @if($featuredCategory)
             <article class="category-featured relative min-h-[200px] rounded-2xl mb-4 border border-helin-border overflow-hidden">
+               @if($featuredCategory->image)
+               <img src="{{ asset('storage/' . $featuredCategory->image) }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
+               @else
                <img src="{{ asset('images/categoria1.png') }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
+               @endif
                <div class="category-featured-content">
-                  <small class="block text-turquesa text-xs font-black mb-2">Soluciones especializadas</small>
+                  <small class="block text-turquesa text-xs font-black mb-2">{{ $featuredCategory->banner_title ?? 'Soluciones especializadas' }}</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">{{ $featuredCategory->name }}</h2>
                   <a href="{{ route('catalogo', ['category' => $featuredCategory->slug]) }}" class="text-link">Ver categoría →</a>
                </div>
@@ -142,13 +146,13 @@
                        'planificacion-digital' => 'Diagnóstico y exactitud',
                    ];
                @endphp
-               @forelse($categoryCards as $cardIndex => $categoryCard)
-                   @include('web.components.category-card', [
-                       'categorySubtitle' => $categoryCardSubtitles[$categoryCard->slug] ?? 'Productos Helin',
-                       'categoryTitle' => $categoryCard->name,
-                       'categoryLink' => route('catalogo', ['category' => $categoryCard->slug]),
-                       'categoryImage' => $categoryCardImages[$cardIndex % 6],
-                   ])
+@forelse($categoryCards as $cardIndex => $categoryCard)
+                    @include('web.components.category-card', [
+                        'categorySubtitle' => $categoryCard->banner_title ?? ($categoryCardSubtitles[$categoryCard->slug] ?? 'Productos Helin'),
+                        'categoryTitle' => $categoryCard->name,
+                        'categoryLink' => route('catalogo', ['category' => $categoryCard->slug]),
+                        'categoryImage' => $categoryCard->image ? asset('storage/' . $categoryCard->image) : $categoryCardImages[$cardIndex % 6],
+                    ])
                @empty
                    <p class="text-sm text-helin-text col-span-full">No hay categorías disponibles.</p>
                @endforelse
@@ -167,10 +171,28 @@
       <section class="flow-highlight">
                 @php
                     $flowSettings = \App\Models\Settings::getSettings();
-                    $flowWhatsApp = ($flowSettings && !empty($flowSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $flowSettings->valencia_whatsapp) : '584244669150';
+                    $flowWhatsApp = ($flowSettings && !empty($flowSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $flowSettings->valencia_whatsapp) : null;
+                    $flowJson = $howToSection ? (json_decode($howToSection->items, true) ?: []) : [];
+                    $flowSteps = $flowJson['steps'] ?? $flowJson['items'] ?? $flowJson;
+                    $stepThreeUrl = $flowWhatsApp
+                        ? 'https://api.whatsapp.com/send/?phone=' . $flowWhatsApp . '&text=' . urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.')
+                        : route('contactanos');
                 @endphp
                 <aside class="how-card">
-                   <h3>¿Cómo solicitar productos Helin?</h3>
+                   <h3>{{ $howToSection->title ?? '¿Cómo solicitar productos Helin?' }}</h3>
+                   @if(count($flowSteps) > 0)
+                       @foreach($flowSteps as $stepIndex => $step)
+                           @php
+                               $stepNum = $step['number'] ?? ($stepIndex + 1);
+                               $stepUrl = $step['url'] ?? (($stepNum == 1) ? route('catalogo') : (($stepNum == 2) ? route('carrito') : $stepThreeUrl));
+                           @endphp
+                           <div class="step">
+                              <a href="{{ $stepUrl }}" target="{{ ($stepNum == 3) ? '_blank' : '_self' }}" rel="{{ ($stepNum == 3) ? 'noopener noreferrer' : '' }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                              <div><strong>{{ $step['title'] ?? '' }}</strong><span>{{ $step['description'] ?? '' }}</span></div>
+                              <div class="number">{{ $stepNum }}</div>
+                           </div>
+                       @endforeach
+                   @else
                    <div class="step">
                       <a href="{{ route('catalogo') }}" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
                       <div><strong>Selecciona tus productos</strong><span>Explora el catálogo Helin y elige los productos que necesitas.</span></div>
@@ -182,10 +204,11 @@
                       <div class="number">2</div>
                    </div>
                    <div class="step">
-                      <a href="https://api.whatsapp.com/send/?phone={{ $flowWhatsApp }}&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
+                      <a href="{{ $stepThreeUrl }}" target="_blank" rel="noopener noreferrer" class="hover:text-[#123F4A] transition-colors"><b>✓</b></a>
                       <div><strong>Contacta a tu ejecutivo</strong><span>Envía la solicitud por WhatsApp al ejecutivo asignado según tu zona.</span></div>
                       <div class="number">3</div>
                    </div>
+                   @endif
                  </aside>
 
          <div class="featured-products">
@@ -219,7 +242,7 @@
         @if($section->status == 1 && $section->status_content == 1)
             @php
                 $sectionCat   = $sectionCategories[$section->id] ?? null;
-                $category     = $sectionCat ? \App\Models\Category::where('name', $sectionCat['name'])->first() : null;
+                $category     = $sectionCat ? (\App\Models\Category::where('slug', $sectionCat['slug'])->first() ?? \App\Models\Category::where('name', $sectionCat['name'])->first()) : null;
                $categorySlug = $sectionCat['slug'] ?? null;
                $products     = $category ? \App\Models\Product::where('category_id', $category->id)
                    ->where('is_active', true)
@@ -230,39 +253,17 @@
            @endphp
            <section class="py-8 sm:py-16 {{ $index % 2 == 0 ? 'bg-helin-soft' : '' }}">
                <div class="container mx-auto px-4">
-                   <div class="section-title flex items-end justify-between gap-5 mb-5">
-                       <div>
-                           @php
-                               $isImplantologia = str_contains(strtolower($section->title), 'implantología');
-                               $isRegeneracion = str_contains(strtolower($section->title), 'regeneración') || str_contains(strtolower($section->title), 'osea') || str_contains(strtolower($section->title), 'guía');
-                               $isInstrumentos = str_contains(strtolower($section->title), 'instrumentos') || str_contains(strtolower($section->title), 'equipos');
-                               $sectionTitle = $section->title;
-                               if ($isImplantologia) {
-                                   $sectionTitle = 'Destacados en Implantología';
-                               } elseif ($isRegeneracion) {
-                                   $sectionTitle = 'Destacados en Regeneración Ósea Guíada';
-                               } elseif ($isInstrumentos) {
-                                   $sectionTitle = 'Destacados en Instrumentos y Equipos';
-                               } else {
-                                   $sectionTitle = str_ireplace('más vendido', 'Destacados', $sectionTitle);
-                                   $sectionTitle = str_ireplace('más vendidos', 'Destacados', $sectionTitle);
-                               }
-                           @endphp
-                           <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $sectionTitle }}</h2>
-                           @if($isImplantologia)
-                               <p class="text-helin-text text-sm mt-1">Explora productos especializados para procedimientos implantológicos.</p>
-                           @elseif($isRegeneracion)
-                               <p class="text-helin-text text-sm mt-1">Explora biomateriales y soluciones especializadas para procedimientos regenerativos.</p>
-                           @elseif($isInstrumentos)
-                               <p class="text-helin-text text-sm mt-1">Explora instrumentos y equipos diseñados para aportar precisión y eficiencia a la práctica odontológica.</p>
-                           @else
-                               @php
-                                   $description = trim(strip_tags($section->content));
-                                   $firstLine = explode("\n", $description)[0];
-                               @endphp
-                               <p class="text-helin-text text-sm mt-1">{{ $firstLine }}</p>
-                           @endif
-                       </div>
+<div class="section-title flex items-end justify-between gap-5 mb-5">
+                        <div>
+                            @php
+                                $sectionDescription = trim(strip_tags($section->content));
+                                $sectionFirstLine = explode("\n", $sectionDescription)[0];
+                            @endphp
+                            <h2 class="text-2xl lg:text-3xl leading-none mb-1" style="letter-spacing: 0;">{{ $section->title }}</h2>
+                            @if($sectionFirstLine)
+                                <p class="text-helin-text text-sm mt-1">{{ $sectionFirstLine }}</p>
+                            @endif
+                        </div>
                        <a href="{{ $categorySlug ? route('catalogo', ['category' => $categorySlug]) : ($section->url_button ?: route('catalogo')) }}" class="text-turquesa text-xs font-black uppercase whitespace-nowrap">{{ $section->name_button ?: 'Ver todos los productos →' }}</a>
                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

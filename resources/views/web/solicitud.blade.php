@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 
-@section('title', 'Detalle de la Solicitud - Helin')
+@section('title', $pageSeo?->seo_title ?? 'Detalle de la Solicitud - Helin')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/solicitud.css') }}">
@@ -156,7 +156,7 @@
                         <div class="custom-select-trigger" data-placeholder="Selecciona método de entrega">Selecciona método de entrega</div>
                         <div class="custom-select-options">
                             @forelse($deliveryMethods->where('slug', '!=', 'zoom') as $method)
-                                <div class="custom-select-option" data-value="{{ $method->slug }}">{{ $method->slug === 'tealca' ? 'Zoom (Cobro destino)' : $method->name }}</div>
+                                <div class="custom-select-option" data-value="{{ $method->slug }}">{{ $method->name }}</div>
                             @empty
                                 <div class="custom-select-option" data-value="">No hay métodos disponibles</div>
                             @endforelse

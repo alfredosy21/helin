@@ -9,7 +9,7 @@
     @php
         $settings = \App\Models\Settings::getSettings();
     @endphp
-    <title>@yield('title', $settings->name ?? 'Helin - Material Dental')</title>
+    <title>@yield('title', $pageSeo?->seo_title ?? $settings->name ?? 'Helin - Material Dental')</title>
     <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
 
     {{-- SEO Meta Tags --}}

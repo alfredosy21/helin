@@ -14,8 +14,15 @@
       <i class="fa fa-location-arrow" aria-hidden="true"></i>
    </div>
    <div>
+      @php
+          $nearSection = \App\Models\Sections::find(\App\Models\Sections::NEAR_YOU);
+      @endphp
       <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">
-         <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
+         @if($nearSection && $nearSection->status == 1 && $nearSection->status_content == 1)
+            <span class="text-turquesa">{{ $nearSection->title }}</span>
+         @else
+            <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
+         @endif
       </h2>
       <p class="text-helin-text font-bold mt-1">
          @php
@@ -26,19 +33,15 @@
                  'Barquisimeto' => 'barquisimeto_whatsapp',
                  'Maracaibo' => 'maracaibo_whatsapp',
              ];
-             $nearWhatsApps = [
-                 'Caracas' => '584242789481',
-                 'Valencia' => '584244669150',
-                 'Barquisimeto' => '584143805640',
-                 'Maracaibo' => '584242550811',
-             ];
              $nearMessage = 'Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.';
          @endphp
          @foreach($nearCities as $nearCity => $nearSettingKey)
              @php
-                 $nearPhone = ($nearSettings && !empty($nearSettings->{$nearSettingKey})) ? preg_replace('/[^0-9]/', '', $nearSettings->{$nearSettingKey}) : $nearWhatsApps[$nearCity];
+                 $nearPhone = ($nearSettings && !empty($nearSettings->{$nearSettingKey})) ? preg_replace('/[^0-9]/', '', $nearSettings->{$nearSettingKey}) : null;
              @endphp
+             @if($nearPhone)
              <a href="https://wa.me/{{ $nearPhone }}?text={{ urlencode($nearMessage) }}" target="_blank" class="hover:text-turquesa transition-colors">{{ $nearCity }}</a>@if(!$loop->last)<span> · </span>@endif
+             @endif
          @endforeach
       </p>
    </div>

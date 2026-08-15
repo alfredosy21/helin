@@ -43,116 +43,63 @@
             <!-- Columna 2: Nuestra Empresa + Políticas -->
             <div>
                 <h4 class="text-base md:text-lg mb-2.5 md:mb-4"><a href="{{ route('nuestra-empresa') }}" class="hover:text-white/80 transition-colors">Nuestra Empresa</a></h4>
+                @php
+                    $footerMenus = \App\Models\Menus::getFooterItems();
+                    $empresaRoot = $footerMenus->firstWhere('title', 'Nuestra Empresa');
+                @endphp
                 <ul class="space-y-1.5 md:space-y-2 text-white/80 text-xs md:text-sm leading-snug">
+                    @if($empresaRoot && $empresaRoot->children->count())
+                        @foreach($empresaRoot->children as $footerLink)
+                            <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ $footerLink->url ?: '#' }}" class="hover:text-white transition-colors">{{ $footerLink->title }}</a></li>
+                        @endforeach
+                    @else
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#quienes-somos" class="hover:text-white transition-colors">Quiénes somos</a></li>
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('nuestra-empresa') }}#nuestros-aliados" class="hover:text-white transition-colors">Aliados comerciales</a></li>
                     <li class="flex items-center gap-1.5 md:gap-2"><span class="w-1 h-1 md:w-1.5 md:h-1.5 bg-white rounded-full flex-shrink-0"></span><a href="{{ route('politicas') }}" class="hover:text-white transition-colors">Nuestras políticas</a></li>
+                    @endif
                 </ul>
             </div>
 
             <!-- Columna 3: Nuestras Sedes -->
             <div>
                 <h4 class="text-base md:text-lg mb-2.5 md:mb-4">Nuestras sedes</h4>
+                @php
+                    $footerCities = [
+                        'Caracas'      => ['whatsapp' => $settings->caracas_whatsapp ?? null,      'location' => $settings->caracas_location ?? null],
+                        'Valencia'     => ['whatsapp' => $settings->valencia_whatsapp ?? null,     'location' => $settings->valencia_location ?? null],
+                        'Barquisimeto' => ['whatsapp' => $settings->barquisimeto_whatsapp ?? null, 'location' => $settings->barquisimeto_location ?? null],
+                        'Maracaibo'    => ['whatsapp' => $settings->maracaibo_whatsapp ?? null,    'location' => $settings->maracaibo_location ?? null],
+                        'Maracay'      => ['whatsapp' => $settings->maracay_whatsapp ?? null,      'location' => $settings->maracay_location ?? null],
+                    ];
+                @endphp
                 <ul class="space-y-1.5 md:space-y-2 text-white/80 text-xs md:text-sm">
-                    {{-- Caracas --}}
-                    <li class="flex items-center gap-1.5 md:gap-2">
-                        <div class="flex items-center gap-1 md:gap-1.5">
-                            @if($settings && $settings->caracas_location)
-                                <a href="{{ $settings->caracas_location }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                            @endif
-                            @if($settings && $settings->caracas_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->caracas_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <span class="font-medium">Caracas</span>
-                    </li>
-
-                    {{-- Valencia --}}
-                    <li class="flex items-center gap-1.5 md:gap-2">
-                        <div class="flex items-center gap-1 md:gap-1.5">
-                            @if($settings && $settings->valencia_location)
-                                <a href="{{ $settings->valencia_location }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                            @endif
-                            @if($settings && $settings->valencia_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <span class="font-medium">Valencia</span>
-                    </li>
-
-                    {{-- Barquisimeto --}}
-                    <li class="flex items-center gap-1.5 md:gap-2">
-                        <div class="flex items-center gap-1 md:gap-1.5">
-                            @if($settings && $settings->barquisimeto_location)
-                                <a href="{{ $settings->barquisimeto_location }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                            @endif
-                            @if($settings && $settings->barquisimeto_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->barquisimeto_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <span class="font-medium">Barquisimeto</span>
-                    </li>
-
-                    {{-- Maracaibo --}}
-                    <li class="flex items-center gap-1.5 md:gap-2">
-                        <div class="flex items-center gap-1 md:gap-1.5">
-                            @if($settings && $settings->maracaibo_location)
-                                <a href="{{ $settings->maracaibo_location }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                            @endif
-                            @if($settings && $settings->maracaibo_whatsapp)
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->maracaibo_whatsapp) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                            @else
-                                <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                            @endif
-                        </div>
-                        <span class="font-medium">Maracaibo</span>
-                    </li>
+                    @foreach($footerCities as $footerCity => $footerCityData)
+                        @if($footerCityData['whatsapp'] || $footerCityData['location'])
+                        <li class="flex items-center gap-1.5 md:gap-2">
+                            <div class="flex items-center gap-1 md:gap-1.5">
+                                @if($footerCityData['location'])
+                                    <a href="{{ $footerCityData['location'] }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </a>
+                                @else
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                @endif
+                                @if($footerCityData['whatsapp'])
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $footerCityData['whatsapp']) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                @else
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <span class="font-medium">{{ $footerCity }}</span>
+                        </li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
 
@@ -160,21 +107,25 @@
             <div>
                 <h4 class="text-base md:text-lg mb-2.5 md:mb-4">Contáctanos</h4>
                 <div class="space-y-2 md:space-y-3 text-white/80 text-xs md:text-sm">
-                    <a href="mailto:{{ $settings->email ?? 'hola@helin.company' }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
+                    @if($settings && $settings->email)
+                    <a href="mailto:{{ $settings->email }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-7 h-7 md:w-8 md:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300 text-xs md:text-sm">
                             <i class="fas fa-envelope"></i>
                         </div>
-                        <span>{{ $settings->email ?? 'hola@helin.company' }}</span>
+                        <span>{{ $settings->email }}</span>
                     </a>
-                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone ?? '+58 424 466 9150') }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
+                    @endif
+                    @if($settings && $settings->phone)
+                    <a href="tel:{{ preg_replace('/[^0-9]/', '', $settings->phone) }}" class="flex items-center gap-2 md:gap-3 hover:text-white transition-colors duration-300">
                         <div class="w-7 h-7 md:w-8 md:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-white hover:text-turquesa transition-all duration-300 text-xs md:text-sm">
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="flex flex-col">
                             <span class="text-[11px] md:text-xs">Central telefónica</span>
-                            <span>{{ $settings->phone ?? '+58 424 466 9150' }}</span>
+                            <span>{{ $settings->phone }}</span>
                         </div>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -188,7 +139,7 @@
     <!-- Franja de Cierre -->
     <div class="bg-turquesa-dark border-t border-white/20">
         <div class="container mx-auto px-4 py-1.5 md:py-2">
-            <p class="text-center text-white/80 text-xs footer-copy">© <span id="year"></span> Helin. Desarrollado por <a href="https://syevolution.com" target="_blank" rel="noopener noreferrer" class="hover:text-white underline transition-colors">SY Evolution</a>.</p>
+            <p class="text-center text-white/80 text-xs footer-copy">© <span id="year"></span> Helin. {{ $settings->copy ?? 'Desarrollado por <a href="https://syevolution.com" target="_blank" rel="noopener noreferrer" class="hover:text-white underline transition-colors">SY Evolution</a>.' }}</p>
             <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
         </div>
     </div>

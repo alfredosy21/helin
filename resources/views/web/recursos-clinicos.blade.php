@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 
-@section('title', 'Recursos Clínicos - Helin')
+@section('title', $pageSeo?->seo_title ?? 'Recursos Clínicos - Helin')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/recursos-clinicos.css') }}">
@@ -29,7 +29,20 @@
                     <h3>Encuentra contenido por tipo</h3>
 
                 </div>
+                @php
+                    $heroJson = $heroSection ? (json_decode($heroSection->items, true) ?: []) : [];
+                    $quickCards = $heroJson['items'] ?? [];
+                @endphp
                 <div class="quick-cards">
+                    @if(count($quickCards) > 0)
+                        @foreach($quickCards as $quickCard)
+                        <article class="quick-card">
+                            <div class="quick-icon">{!! $quickCard['icon'] ?? '' !!}</div>
+                            <h4>{{ $quickCard['title'] ?? '' }}</h4>
+                            <p>{{ $quickCard['description'] ?? '' }}</p>
+                        </article>
+                        @endforeach
+                    @else
                     <article class="quick-card">
                         <div class="quick-icon"><i class="fa fa-file" aria-hidden="true"></i></div>
                         <h4>Casos clínicos</h4>
@@ -50,6 +63,7 @@
                         <h4>Fichas técnicas</h4>
                         <p>Información clave de productos y soluciones.</p>
                     </article>
+                    @endif
                 </div>
             </div>
         </div>
@@ -97,8 +111,8 @@
                     $searchFeatures = $items['search_features'] ?? [];
                 @endphp
                 <div>
-                    <small>Biblioteca clínica Helin</small>
-                    <h2>Busca, filtra y consulta recursos especializados.</h2>
+                    <small>{{ $librarySection->title ?? 'Biblioteca clínica Helin' }}</small>
+                    <h2>{{ $librarySection->subtitle ?? 'Busca, filtra y consulta recursos especializados.' }}</h2>
                 </div>
                 <p>Una experiencia organizada para acceder rápidamente a contenido clínico por especialidad, formato y tipo de recurso.</p>
             @else
@@ -199,12 +213,24 @@
     <!-- Sección Destacada -->
     <section class="featured-section">
         <div class="featured-content">
-            <h2>¿Necesitas apoyo para tu próximo procedimiento?</h2>
-            <p class="featured-lead">Nuestro equipo comercial puede orientarte en la selección de productos y soluciones según las necesidades de tu práctica clínica.</p>
-            <p class="featured-text">Contacta a nuestro equipo y recibe asesoría personalizada.</p>
-            <a href="{{ route('contactanos') }}" class="featured-cta">
-                Hablar con un asesor
-            </a>
+            @if($featuredSection && $featuredSection->status == 1 && $featuredSection->status_content == 1)
+                <h2>{{ $featuredSection->title }}</h2>
+                @if($featuredSection->content)
+                    {!! $featuredSection->content !!}
+                @else
+                    <p class="featured-lead">Nuestro equipo comercial puede orientarte en la selección de productos y soluciones según las necesidades de tu práctica clínica.</p>
+                @endif
+                <a href="{{ route('contactanos') }}" class="featured-cta">
+                    {{ $featuredSection->name_button ?: 'Hablar con un asesor' }}
+                </a>
+            @else
+                <h2>¿Necesitas apoyo para tu próximo procedimiento?</h2>
+                <p class="featured-lead">Nuestro equipo comercial puede orientarte en la selección de productos y soluciones según las necesidades de tu práctica clínica.</p>
+                <p class="featured-text">Contacta a nuestro equipo y recibe asesoría personalizada.</p>
+                <a href="{{ route('contactanos') }}" class="featured-cta">
+                    Hablar con un asesor
+                </a>
+            @endif
         </div>
     </section>
 </main>

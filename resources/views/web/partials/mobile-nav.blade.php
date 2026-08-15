@@ -26,11 +26,13 @@
             <div class="border-t border-helin-border my-3"></div>
             @php
                 $settings = \App\Models\Settings::getSettings();
-                $mobileWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : '584244669150';
+                $mobileWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
             @endphp
+            @if($mobileWhatsApp)
             <a href="https://wa.me/{{ $mobileWhatsApp }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fab fa-whatsapp text-green-500"></i> Escríbenos por WhatsApp
             </a>
+            @endif
             <a href="{{ route('solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-file-contract text-turquesa"></i> Solicitud Comercial
             </a>

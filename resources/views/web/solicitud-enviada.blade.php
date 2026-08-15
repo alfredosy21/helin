@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 
-@section('title', 'Solicitud Comercial Enviada - Helin')
+@section('title', $pageSeo?->seo_title ?? 'Solicitud Comercial Enviada - Helin')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/solicitud-enviada.css') }}">
@@ -20,20 +20,22 @@
     <section class="success-card">
         <div class="success-icon"><i class="fas fa-check"></i></div>
         <h1>¡Hemos recibido tu solicitud!</h1>
-        <p>Número de solicitud: <span class="request-number">{{ $commercialRequest->correlative ?? '#HELIN-Z1-01' }}</span></p>
+        <p>Número de solicitud: <span class="request-number">{{ $commercialRequest->correlative }}</span></p>
         <p>Nuestro equipo comercial revisará tu pedido<br>y te contactará para continuar con la atención.</p>
         @php
             $orderWhatsApp = $commercialRequest->whatsappNumber->phone_number ?? null;
             if (!$orderWhatsApp) {
                 $orderSettings = \App\Models\Settings::getSettings();
-                $orderWhatsApp = ($orderSettings && !empty($orderSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $orderSettings->valencia_whatsapp) : '584244669150';
+                $orderWhatsApp = ($orderSettings && !empty($orderSettings->valencia_whatsapp)) ? preg_replace('/[^0-9]/', '', $orderSettings->valencia_whatsapp) : null;
             }
-            $orderWhatsAppMessage = 'Hola, he enviado una solicitud comercial ' . ($commercialRequest->correlative ?? '#HELIN-Z1-01') . ' y me gustaría seguir con el proceso.';
+            $orderWhatsAppMessage = 'Hola, he enviado una solicitud comercial ' . $commercialRequest->correlative . ' y me gustaría seguir con el proceso.';
         @endphp
+        @if($orderWhatsApp)
         <a href="https://wa.me/{{ $orderWhatsApp }}?text={{ urlencode($orderWhatsAppMessage) }}" target="_blank" class="whatsapp-btn">
             <span class="whatsapp-mark"><i class="fab fa-whatsapp"></i></span>
             Enviar orden al WhatsApp de Helin
         </a>
+        @endif
     </section>
 
     <section class="summary-layout">
@@ -65,35 +67,13 @@
                             <div class="price">${{ number_format($item->product->price, 2) }}</div>
                         </div>
                     @endforeach
-                @else
-                    <div class="order-row">
-                        <div class="order-product">
-                            <div class="mini-thumb"><div class="implant"></div></div>
-                            <div class="product-name">Implante Dental Cónico<br>x 1</div>
-                        </div>
-                        <div class="price">$195.00</div>
-                    </div>
-                    <div class="order-row">
-                        <div class="order-product">
-                            <div class="mini-thumb"><div class="pilar"></div></div>
-                            <div class="product-name">Pilar Protésico de Titanio<br>x 1</div>
-                        </div>
-                        <div class="price">$85.00</div>
-                    </div>
-                    <div class="order-row">
-                        <div class="order-product">
-                            <div class="mini-thumb"><div class="kit"></div></div>
-                            <div class="product-name">Kit Quirúrgico de Implantes<br>x 1</div>
-                        </div>
-                        <div class="price">$1,250.00</div>
-                    </div>
                 @endif
             </div>
 
             <div class="totals">
-                <div class="total-line"><span>Subtotal:</span><strong>${{ number_format($subtotal ?? 1530, 2) }}</strong></div>
-                <div class="total-line"><span>Tasa en Bs:</span><strong>Bs. {{ number_format($tasa ?? 567.68, 2) }}</strong></div>
-                <div class="total-line final"><span>Total a pagar en Bs:</span><strong>Bs. {{ number_format($total ?? 868550.4, 1) }}</strong></div>
+                <div class="total-line"><span>Subtotal:</span><strong>${{ number_format($subtotal, 2) }}</strong></div>
+                <div class="total-line"><span>Tasa en Bs:</span><strong>Bs. {{ number_format($tasa ?? 0, 2) }}</strong></div>
+                <div class="total-line final"><span>Total a pagar en Bs:</span><strong>Bs. {{ number_format($total ?? 0, 1) }}</strong></div>
             </div>
         </article>
 
@@ -133,19 +113,19 @@
                 <div class="client-row">
                     <div class="client-icon"><i class="fas fa-truck"></i></div>
                     <div class="client-label">Método de entrega:</div>
-                    <div class="client-value">{{ $commercialRequest->deliveryMethod->name ?? 'Zoom (Cobro destino)' }}</div>
+                    <div class="client-value">{{ $commercialRequest->deliveryMethod->name ?? $commercialRequest->delivery_method }}</div>
                 </div>
 
                 <div class="client-row">
                     <div class="client-icon"><i class="fas fa-map-marker-alt"></i></div>
                     <div class="client-label">Dirección de entrega:</div>
-                    <div class="client-value">{{ $commercialRequest->address ?? 'Los Teques, Miranda, Venezuela' }}</div>
+                    <div class="client-value">{{ $commercialRequest->address }}</div>
                 </div>
 
                 <div class="client-row">
                     <div class="client-icon"><i class="fas fa-credit-card"></i></div>
                     <div class="client-label">Método de pago:</div>
-                    <div class="client-value">{{ $commercialRequest->paymentMethod->name ?? 'Zelle' }}</div>
+                    <div class="client-value">{{ $commercialRequest->paymentMethod->name ?? $commercialRequest->payment_method }}</div>
                 </div>
 
                 @if($commercialRequest->payment_receipt_number)
@@ -155,47 +135,6 @@
                         <div class="client-value">{{ $commercialRequest->payment_receipt_number }}</div>
                     </div>
                 @endif
-            @else
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-user"></i></div>
-                    <div class="client-label">Cliente:</div>
-                    <div class="client-value">Gabriel Montes</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-building"></i></div>
-                    <div class="client-label">Nombre de empresa:</div>
-                    <div class="client-value">SY Evolution</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-phone"></i></div>
-                    <div class="client-label">Teléfono:</div>
-                    <div class="client-value">+58 424-323-12-04</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="client-label">Email:</div>
-                    <div class="client-value">gabriel@syevolution.com</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-truck"></i></div>
-                    <div class="client-label">Método de entrega:</div>
-                    <div class="client-value">Zoom (Cobro destino)</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="client-label">Dirección de entrega:</div>
-                    <div class="client-value">Los Teques, Miranda, Venezuela</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-credit-card"></i></div>
-                    <div class="client-label">Método de pago:</div>
-                    <div class="client-value">Zelle</div>
-                </div>
-                <div class="client-row">
-                    <div class="client-icon"><i class="fas fa-receipt"></i></div>
-                    <div class="client-label">Nro. de comprobante:</div>
-                    <div class="client-value">00255221144</div>
-                </div>
             @endif
         </article>
     </section>

@@ -11,9 +11,9 @@
     }
 @endphp
 
-@section('title', $currentCategory ? ($currentCategory->name . ' - Catálogo - Helin') : 'Catálogo de Productos - Helin')
-@section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.')
-@section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela')
+@section('title', $currentCategory ? ($currentCategory->name . ' - Catálogo - Helin') : ($pageSeo?->seo_title ?? 'Catálogo de Productos - Helin'))
+@section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : ($pageSeo?->seo_description ?? 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.'))
+@section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : ($pageSeo?->seo_keywords ?? 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela'))
 @section('og-type', 'website')
 @section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : asset('images/helin-catalog-og.jpg'))
 
@@ -310,7 +310,12 @@
                         'bg'          => $bannerBg,
                     ],
                 ];
-                $bannerData = $categoryBanners[$currentCategory->slug] ?? null;
+                $bannerData = [
+                    'label'       => $currentCategory->banner_title ?? ($categoryBanners[$currentCategory->slug]['label'] ?? null),
+                    'title'       => $currentCategory->banner_title ?? ($categoryBanners[$currentCategory->slug]['title'] ?? null),
+                    'description' => $currentCategory->banner_description ?? ($categoryBanners[$currentCategory->slug]['description'] ?? null),
+                    'bg'          => $currentCategory->banner_image ? asset('storage/' . $currentCategory->banner_image) : ($categoryBanners[$currentCategory->slug]['bg'] ?? null),
+                ];
             @endphp
             @php
                 $bannerStyle = ($bannerData && isset($bannerData['bg']))

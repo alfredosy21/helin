@@ -7,21 +7,13 @@
 </div>
 
 @if($resources->count() > 0)
-@php
-    $fallbackImages = [
-        'images/regeneracion-osea-guiada-recursos1.jpg',
-        'images/PLCAS_RCURSOS.jpg',
-        'images/IMPL_REC.jpg',
-    ];
-@endphp
 <div class="resource-grid" id="casos">
     @foreach($resources as $resource)
         @php
             $typeName     = $resource->resourceType     ? $resource->resourceType->name     : 'Desconocido';
             $specialtyName = $resource->resourceSpecialty ? $resource->resourceSpecialty->name : '';
             $tags         = [];
-            $fallbackImage = $fallbackImages[$loop->index % 3];
-            $resourceImage = $resource->image_url ?? asset($fallbackImage);
+            $resourceImage = $resource->image_url ?? ($resource->resourceType && $resource->resourceType->image ? asset('storage/' . $resource->resourceType->image) : null);
         @endphp
         @include('web.components.resource-card', [
             'resourceType'        => $typeName,

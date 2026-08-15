@@ -2,7 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\City;
+use App\Models\CommercialRequest;
+use App\Models\CustomerType;
+use App\Models\DeliveryMethod;
+use App\Models\PaymentMethod;
+use App\Models\Product;
+use App\Models\ResourceSpecialty;
+use App\Models\ResourceType;
+use App\Models\Sections;
+use App\Models\Settings;
+use App\Models\State;
+use App\Models\Testimonial;
+use App\Models\WhatsAppNumber;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Http;
 
 class WebController extends Controller
 {
@@ -12,13 +29,13 @@ class WebController extends Controller
     public function home()
     {
         // Hero section
-        $heroSection = \App\Models\Sections::find(\App\Models\Sections::HERO_HOME);
+        $heroSection = Sections::find(Sections::HERO_HOME);
 
         // Flow how-to section
-        $howToSection = \App\Models\Sections::find(\App\Models\Sections::FLOW_HOW_TO);
+        $howToSection = Sections::find(Sections::FLOW_HOW_TO);
 
         // Featured products
-        $featuredProducts = \App\Models\Product::where('is_active', true)
+        $featuredProducts = Product::where('is_active', true)
             ->where('is_featured', true)
             ->with('images')
             ->inRandomOrder()
@@ -26,23 +43,23 @@ class WebController extends Controller
             ->get();
 
         // Product sections
-        $productSections = \App\Models\Sections::where('status', 1)
-            ->whereIn('id', [\App\Models\Sections::IMPLANTOLOGY_PRODUCTS, \App\Models\Sections::GBR_PRODUCTS, \App\Models\Sections::INSTRUMENTS_PRODUCTS])
+        $productSections = Sections::where('status', 1)
+            ->whereIn('id', [Sections::IMPLANTOLOGY_PRODUCTS, Sections::GBR_PRODUCTS, Sections::INSTRUMENTS_PRODUCTS])
             ->orderBy('id')
             ->get();
 
         // Mapear secciones a categorías
         $sectionCategories = [
-            \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantes'],
-            \App\Models\Sections::GBR_PRODUCTS         => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
-            \App\Models\Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Instrumentos', 'slug' => 'tijeras'],
+            Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantologia'],
+            Sections::GBR_PRODUCTS => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
+            Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Tijeras', 'slug' => 'tijeras'],
         ];
 
         // Testimonials section
-        $testimonialsSection = \App\Models\Sections::find(\App\Models\Sections::TESTIMONIALS);
+        $testimonialsSection = Sections::find(Sections::TESTIMONIALS);
 
         // Testimonials data
-        $testimonials = \App\Models\Testimonial::where('is_active', true)
+        $testimonials = Testimonial::where('is_active', true)
             ->orderBy('position', 'asc')
             ->take(4)
             ->get();
@@ -63,13 +80,13 @@ class WebController extends Controller
         $categorySlug = request('category');
 
         if ($categorySlug) {
-            $currentCategory = \App\Models\Category::where('slug', $categorySlug)
+            $currentCategory = Category::where('slug', $categorySlug)
                 ->where('is_active', true)
                 ->first();
         }
 
         // Get products with filters
-        $query = \App\Models\Product::with(['category', 'brand', 'images'])
+        $query = Product::with(['category', 'brand', 'images'])
             ->where('is_active', true);
 
         // Apply category filter if present
@@ -79,8 +96,8 @@ class WebController extends Controller
 
         // Apply brand filter if present
         $brandSlugs = (array) request('brand');
-        if (!empty($brandSlugs)) {
-            $brandIds = \App\Models\Brand::whereIn('slug', $brandSlugs)->where('is_active', true)->pluck('id');
+        if (! empty($brandSlugs)) {
+            $brandIds = Brand::whereIn('slug', $brandSlugs)->where('is_active', true)->pluck('id');
             if ($brandIds->isNotEmpty()) {
                 $query->whereIn('brand_id', $brandIds);
             }
@@ -88,7 +105,7 @@ class WebController extends Controller
 
         // Apply tag filter if present
         $tags = (array) request('tag');
-        if (!empty($tags)) {
+        if (! empty($tags)) {
             foreach ($tags as $tag) {
                 if ($tag === 'new') {
                     $query->where('is_new', true);
@@ -103,7 +120,7 @@ class WebController extends Controller
                     [$tagType, $tagValue] = explode(':', $tag, 2);
 
                     if ($tagType === 'material') {
-                        $query->where('material', 'like', '%' . $tagValue . '%');
+                        $query->where('material', 'like', '%'.$tagValue.'%');
                     }
                 }
             }
@@ -111,24 +128,23 @@ class WebController extends Controller
 
         // Apply material filter if present
         $materials = (array) request('material');
-        if (!empty($materials)) {
+        if (! empty($materials)) {
             $query->where(function ($q) use ($materials) {
                 foreach ($materials as $m) {
-                    $q->orWhere('material', 'like', '%' . $m . '%');
+                    $q->orWhere('material', 'like', '%'.$m.'%');
                 }
             });
         }
 
-
         // Apply search filter if present
         $searchTerm = request('search');
         if ($searchTerm) {
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                  ->orWhereHas('brand', function($brandQuery) use ($searchTerm) {
-                      $brandQuery->where('name', 'like', '%' . $searchTerm . '%');
-                  });
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('description', 'like', '%'.$searchTerm.'%')
+                    ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
+                        $brandQuery->where('name', 'like', '%'.$searchTerm.'%');
+                    });
             });
         }
 
@@ -142,13 +158,13 @@ class WebController extends Controller
      */
     public function producto(string $slug)
     {
-        $product = \App\Models\Product::with(['category', 'brand', 'attributeValues', 'images', 'documents'])
+        $product = Product::with(['category', 'brand', 'attributeValues', 'images', 'documents'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
 
         // Obtener productos relacionados
-        $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
+        $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
             ->with('images')
@@ -172,16 +188,27 @@ class WebController extends Controller
      */
     public function solicitud()
     {
-        $customerTypes   = \App\Models\CustomerType::active()->ordered()->get();
-        $deliveryMethods = \App\Models\DeliveryMethod::active()->ordered()->get();
-        $paymentMethods  = \App\Models\PaymentMethod::active()->ordered()->get();
-        $states          = \App\Models\State::ordered()->get();
-        $cities          = \App\Models\City::all(); // all for JS filter
-        $settings        = \App\Models\Settings::getSettings();
+        $customerTypes = CustomerType::active()->ordered()->get();
+        $deliveryMethods = DeliveryMethod::active()->ordered()->get();
+        $paymentMethods = PaymentMethod::active()->ordered()->get();
+        $states = State::ordered()->get();
+        $cities = City::all(); // all for JS filter
+        $settings = Settings::getSettings();
 
         $pickups = [];
-        $offices = ['caracas' => 1, 'valencia' => 2, 'barquisimeto' => 3, 'maracaibo' => 4];
         $settings = is_object($settings) ? $settings : null;
+
+        // Zonas por ciudad: desde Settings->offices (JSON) o fallback por convención
+        $defaultOffices = ['caracas' => 1, 'valencia' => 2, 'barquisimeto' => 3, 'maracaibo' => 4, 'maracay' => 5];
+        $settingsOffices = $settings ? (json_decode($settings->offices, true) ?? []) : [];
+        $offices = [];
+        foreach ($settingsOffices as $office) {
+            $cityKey = strtolower(trim((string) ($office['city'] ?? '')));
+            if ($cityKey !== '') {
+                $offices[$cityKey] = (int) ($office['zone'] ?? $defaultOffices[$cityKey] ?? 0);
+            }
+        }
+        $offices = $offices ?: $defaultOffices;
 
         $officeByPhone = [];
         foreach ($offices as $city => $zone) {
@@ -191,10 +218,10 @@ class WebController extends Controller
             }
         }
 
-        $activeNumbers = \App\Models\WhatsAppNumber::with('state')->where('is_active', true)->get();
+        $activeNumbers = WhatsAppNumber::with('state')->where('is_active', true)->get();
         foreach ($activeNumbers as $number) {
             $state = $number->state;
-            if (!$state) {
+            if (! $state) {
                 continue;
             }
 
@@ -203,9 +230,9 @@ class WebController extends Controller
             $city = $office['city'];
 
             $pickups[$state->code] = [
-                'label'    => $city ? ucfirst($city) : ($number->executive_name ?? $state->name),
-                'zone'     => $office['zone'],
-                'phone'    => $number->formatted_number,
+                'label' => $city ? ucfirst($city) : ($number->executive_name ?? $state->name),
+                'zone' => $office['zone'],
+                'phone' => $number->formatted_number,
                 'whatsapp' => $city ? ($settings?->{"{$city}_whatsapp"} ?? null) : null,
                 'location' => $city ? ($settings?->{"{$city}_location"} ?? null) : null,
             ];
@@ -219,8 +246,8 @@ class WebController extends Controller
      */
     public function contactanos()
     {
-        $settings = \App\Models\Settings::getSettings();
-        $contactSection = \App\Models\Sections::find(\App\Models\Sections::CONTACT_HERO);
+        $settings = Settings::getSettings();
+        $contactSection = Sections::find(Sections::CONTACT_HERO);
 
         return view('web.contactanos', compact('settings', 'contactSection'));
     }
@@ -230,12 +257,12 @@ class WebController extends Controller
      */
     public function nuestraEmpresa()
     {
-        $companyHeroSection = \App\Models\Sections::find(\App\Models\Sections::COMPANY_HERO);
-        $aboutSection   = \App\Models\Sections::find(\App\Models\Sections::ABOUT_US);
-        $missionSection = \App\Models\Sections::find(\App\Models\Sections::MISSION_VISION);
-        $teamSection    = \App\Models\Sections::find(\App\Models\Sections::TEAM);
-        $alliesSection  = \App\Models\Sections::find(\App\Models\Sections::ALLIES);
-        $ctaSection     = \App\Models\Sections::find(\App\Models\Sections::CTA_COMPANY);
+        $companyHeroSection = Sections::find(Sections::COMPANY_HERO);
+        $aboutSection = Sections::find(Sections::ABOUT_US);
+        $missionSection = Sections::find(Sections::MISSION_VISION);
+        $teamSection = Sections::find(Sections::TEAM);
+        $alliesSection = Sections::find(Sections::ALLIES);
+        $ctaSection = Sections::find(Sections::CTA_COMPANY);
 
         return view('web.nuestra-empresa', compact('companyHeroSection', 'aboutSection', 'missionSection', 'teamSection', 'alliesSection', 'ctaSection'));
     }
@@ -245,8 +272,8 @@ class WebController extends Controller
      */
     public function politicas()
     {
-        $sections = \App\Models\Sections::where('status', 1)
-            ->whereIn('id', [\App\Models\Sections::SHIPPING_POLICIES, \App\Models\Sections::TERMS_CONDITIONS, \App\Models\Sections::PRIVACY_POLICIES])
+        $sections = Sections::where('status', 1)
+            ->whereIn('id', [Sections::SHIPPING_POLICIES, Sections::TERMS_CONDITIONS, Sections::PRIVACY_POLICIES])
             ->orderBy('id')
             ->get();
 
@@ -259,11 +286,11 @@ class WebController extends Controller
     public function recursosClinicos()
     {
         // Hero section
-        $heroSection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_RESOURCES_HERO);
+        $heroSection = Sections::find(Sections::CLINICAL_RESOURCES_HERO);
 
         // Estadísticas
         $totalResources = \App\Models\Resource::where('is_active', true)->count();
-        $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)
+        $totalSpecialties = ResourceSpecialty::where('is_active', true)
             ->whereHas('resources', function ($query) {
                 $query->where('is_active', true);
             })
@@ -272,22 +299,25 @@ class WebController extends Controller
         $totalCases = \App\Models\Resource::where('is_active', true)->where('type', 'case_study')->count();
 
         // Library section
-        $librarySection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_LIBRARY);
+        $librarySection = Sections::find(Sections::CLINICAL_LIBRARY);
+
+        // Featured CTA section
+        $featuredSection = Sections::find(Sections::CLINICAL_CONTENT_FEATURE);
 
         // Filtros
-        $resourceSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
-        $resourceTypes = \App\Models\ResourceType::where('is_active', true)->orderBy('name')->get();
+        $resourceSpecialties = ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
+        $resourceTypes = ResourceType::where('is_active', true)->orderBy('name')->get();
 
         // Contadores para filtros
-        $resourceTypeCounts = \App\Models\ResourceType::where('is_active', true)
-            ->withCount(['resources' => function($query) {
+        $resourceTypeCounts = ResourceType::where('is_active', true)
+            ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
             ->orderBy('name')
             ->get();
 
-        $resourceSpecialtyCounts = \App\Models\ResourceSpecialty::where('is_active', true)
-            ->withCount(['resources' => function($query) {
+        $resourceSpecialtyCounts = ResourceSpecialty::where('is_active', true)
+            ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
             ->orderBy('name')
@@ -302,20 +332,20 @@ class WebController extends Controller
             ->get();
 
         // Recursos con filtros
-        $search          = request('search', '');
-        $typeId          = request('type', '');
-        $specialtyId     = request('specialty', '');
-        $format          = request('format', []);
-        $resourceType    = request('resource_type', []);
+        $search = request('search', '');
+        $typeId = request('type', '');
+        $specialtyId = request('specialty', '');
+        $format = request('format', []);
+        $resourceType = request('resource_type', []);
         $resourceSpecialty = request('resource_specialty', []);
-        $sortBy          = request('sort', 'position');
+        $sortBy = request('sort', 'position');
 
         $resourcesQuery = \App\Models\Resource::where('is_active', true);
 
         if ($search) {
             $resourcesQuery->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
+                $q->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
             });
         }
 
@@ -327,26 +357,26 @@ class WebController extends Controller
             $resourcesQuery->where('resource_specialty_id', $specialtyId);
         }
 
-        if (!empty($resourceType)) {
+        if (! empty($resourceType)) {
             $resourcesQuery->whereIn('resource_type_id', (array) $resourceType);
         }
 
-        if (!empty($resourceSpecialty)) {
+        if (! empty($resourceSpecialty)) {
             $resourcesQuery->whereIn('resource_specialty_id', (array) $resourceSpecialty);
         }
 
-        if (!empty($format)) {
+        if (! empty($format)) {
             $resourcesQuery->whereIn('format', (array) $format);
         }
 
         $baseResources = $resourcesQuery
-            ->with(['resourceType','resourceSpecialty'])
+            ->with(['resourceType', 'resourceSpecialty'])
             ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
             ->get();
 
         $perPage = 12;
         $currentPage = (int) request('page', 1);
-        $resources = new \Illuminate\Pagination\LengthAwarePaginator(
+        $resources = new LengthAwarePaginator(
             $baseResources->forPage($currentPage, $perPage)->values(),
             $baseResources->count(),
             $perPage,
@@ -356,7 +386,7 @@ class WebController extends Controller
 
         return view('web.recursos-clinicos', compact(
             'heroSection', 'totalResources', 'totalSpecialties', 'totalPDFs', 'totalCases',
-            'librarySection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
+            'librarySection', 'featuredSection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
             'resourceSpecialtyCounts', 'formats', 'resources'
         ));
     }
@@ -373,18 +403,18 @@ class WebController extends Controller
             return response()->json([]);
         }
 
-        $products = \App\Models\Product::with(['category', 'brand', 'images'])
+        $products = Product::with(['category', 'brand', 'images'])
             ->where('is_active', true)
-            ->where(function($q) use ($query) {
-                $q->where('name', 'like', '%' . $query . '%')
-                  ->orWhere('description', 'like', '%' . $query . '%')
-                  ->orWhere('sku', 'like', '%' . $query . '%');
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('description', 'like', '%'.$query.'%')
+                    ->orWhere('sku', 'like', '%'.$query.'%');
             })
             ->orderBy('name')
             ->limit($limit)
             ->get();
 
-        $results = $products->map(function($product) {
+        $results = $products->map(function ($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->name,
@@ -422,7 +452,7 @@ class WebController extends Controller
      */
     public function solicitudEnviada($uuid)
     {
-        $commercialRequest = \App\Models\CommercialRequest::with(['deliveryMethod', 'paymentMethod', 'whatsappNumber'])
+        $commercialRequest = CommercialRequest::with(['deliveryMethod', 'paymentMethod', 'whatsappNumber'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
@@ -432,11 +462,11 @@ class WebController extends Controller
         if ($commercialRequest) {
             $cartData = json_decode($commercialRequest->cart_data, true) ?? [];
             foreach ($cartData as $item) {
-                $product = \App\Models\Product::find($item['id']);
+                $product = Product::find($item['id']);
                 if ($product) {
-                    $cartItems[] = (object)[
+                    $cartItems[] = (object) [
                         'product' => $product,
-                        'quantity' => $item['quantity']
+                        'quantity' => $item['quantity'],
                     ];
                     $subtotal += $product->price * $item['quantity'];
                 }
@@ -446,7 +476,7 @@ class WebController extends Controller
         // Obtener tasa de conversión a Bs. desde la API CV (DolarAPI Venezuela)
         $tasa = 0;
         try {
-            $response = \Illuminate\Support\Facades\Http::timeout(10)
+            $response = Http::timeout(10)
                 ->get('https://ve.dolarapi.com/v1/dolares/oficial');
             if ($response->successful()) {
                 $tasa = (float) ($response->json('promedio') ?? 0);

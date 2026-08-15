@@ -74,40 +74,54 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             <p class="text-helin-text mb-6">{{ $product->description }}</p>
 
             <!-- Selector de Dimensiones -->
+            @php
+                $dimensionOptions = $product->attributeValues->map(function ($av) {
+                    $rawValue = $av->label ?? $av->value;
+                    $numPart = preg_replace('/[^0-9.]/', '', (string) $rawValue);
+                    $skuSuffix = $numPart !== '' ? str_replace('.', '', $numPart) : '';
+                    return [
+                        'label' => $rawValue,
+                        'suffix' => $skuSuffix,
+                    ];
+                })->filter(function ($opt) {
+                    return $opt['label'] !== '';
+                })->values()->all();
+
+                if (empty($dimensionOptions)) {
+                    $dimensionOptions = [
+                        ['label' => 'Ø3.3 mm', 'suffix' => '33'],
+                        ['label' => 'Ø4.1 mm', 'suffix' => '41'],
+                        ['label' => 'Ø4.8 mm', 'suffix' => '48'],
+                    ];
+                }
+                $defaultDimension = $dimensionOptions[0];
+                $dimensionPrices = collect($dimensionOptions)->mapWithKeys(function ($opt) use ($product) {
+                    return [$opt['label'] => [
+                        'base' => (float) $product->price,
+                        'sale' => $product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null,
+                        'sku' => $product->sku ? $product->sku . '-' . $opt['suffix'] : '',
+                    ]];
+                })->all();
+            @endphp
+            @if(count($dimensionOptions) > 0)
             <div class="mb-6">
                 <h3 class="font-semibold text-helin-heading mb-1">Dimensiones</h3>
                 <p class="text-[13px] font-normal mb-1" style="color: #626772;">Seleccione una dimensión</p>
                 <select id="sizeSelector" aria-label="Dimensiones" onchange="updatePriceBySize(this.value)"
                     class="w-full sm:w-56 h-9 pl-3 pr-9 rounded-lg border border-gray-300 bg-white text-sm text-helin-heading outline-none cursor-pointer focus:ring-1 focus:ring-turquesa/30 focus:border-turquesa appearance-none"
                     style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23123F4A%22><path fill-rule=%22evenodd%22 d=%22M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z%22 clip-rule=%22evenodd%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 14px;"
-                    @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
-                        <option value="{{ $size }}" {{ $si === 0 ? 'selected' : '' }}>{{ $size }}</option>
+                    @foreach($dimensionOptions as $di => $dimension)
+                        <option value="{{ $dimension['label'] }}" {{ $di === 0 ? 'selected' : '' }}>{{ $dimension['label'] }}</option>
                     @endforeach
                 </select>
             </div>
             <script>
             function updatePriceBySize(size) {
-                // Precios y SKU por dimensión (ajustar según tus datos reales)
+                // Precios y SKU por dimensión (desde attribute_values del producto)
                 const baseSku = @json($product->sku ?? '');
-                const sizePrices = {
-                    'Ø3.3 mm': {
-                        base: @json($product->price),
-                        sale: @json($product->sale_price ?? null),
-                        sku: baseSku ? baseSku + '-33' : ''
-                    },
-                    'Ø4.1 mm': {
-                        base: @json($product->price * 1.15), // 15% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.15),
-                        sku: baseSku ? baseSku + '-41' : ''
-                    },
-                    'Ø4.8 mm': {
-                        base: @json($product->price * 1.25), // 25% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.25),
-                        sku: baseSku ? baseSku + '-48' : ''
-                    }
-                };
+                const sizePrices = @json($dimensionPrices);
 
-                const priceInfo = sizePrices[size] || sizePrices['Ø3.3 mm'];
+                const priceInfo = sizePrices[size] || Object.values(sizePrices)[0];
                 const displayPrice = priceInfo.sale ?? priceInfo.base;
                 const currentPriceEl = document.getElementById('currentPrice');
                 const oldPriceEl = document.getElementById('oldPrice');
@@ -123,7 +137,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     currentPriceEl.textContent = '$' + displayPrice.toFixed(2);
 
                     // Actualizar precio anterior si hay oferta
-                    if (priceInfo.sale < priceInfo.base) {
+                    if (priceInfo.sale && priceInfo.sale < priceInfo.base) {
                         if (!oldPriceEl) {
                             // Crear elemento de precio anterior si no existe
                             const priceDisplay = document.getElementById('priceDisplay');
@@ -158,6 +172,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 }, 200);
             }
             </script>
+            @endif
 
             <!-- Cantidad y Botón -->
             <div class="flex flex-col sm:flex-row items-center gap-4 mb-6" data-cart-context>
@@ -173,8 +188,8 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
                     data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
-                    data-sku="{{ $product->sku ? $product->sku . '-33' : '' }}"
-                    data-dimension="Ø3.3 mm"
+                    data-sku="{{ $product->sku ? $product->sku . '-' . $defaultDimension['suffix'] : '' }}"
+                    data-dimension="{{ $defaultDimension['label'] }}"
                     data-image="{{ $product->main_image_url }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
@@ -185,7 +200,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 @if($product->sku)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">SKU:</span>
-                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}-33</span>
+                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}-{{ $defaultDimension['suffix'] }}</span>
                     </div>
                 @endif
 

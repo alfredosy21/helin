@@ -197,6 +197,24 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 
 ---
 
+## Estado general del change
+
+| Fase | Estado | Nota |
+|---|---|---|
+| F0 — Auditoría integral | ✅ Completada | Resultados consolidados en Fase 3F |
+| F1 — Bugs críticos | ✅ Completada | `dd()` eliminado, fillables corregidos, ResourceController, permisos en mounts, paginación |
+| F2 — Infraestructura sin usar | ✅ Completada | WhatsAppNumbers, Attributes/Values, Menú del Sitio, productos/images y repeater de `items`/`buttons` en SectionController (2B) resueltos (cubiertos por tests) |
+| F3A — Migraciones de campos | ✅ Completada | brands.image, resources (file_path/format/materials), settings.opinion_url + offices, tablas `contact_messages` y `page_seo` |
+| F3B — Reemplazo de contenido hardcodeado | ✅ Completada | Detalle abajo; smoke de las 10 páginas públicas verde |
+| F3C — Selector de dimensiones | ✅ Completada | Desde `attributeValues` con fallback |
+| F3D — Mensajes de Contacto (M7) | ✅ Completada | CRUD + persistencia en `ContactController::send` |
+| F3E — Seeders | ⬜ Pendiente | Único pendiente del change: sembrar BD de producción con los campos nuevos (banner_*, items, opinion_url, offices, attributes, materiales/results) |
+| F3F — Correcciones de la auditoría | ✅ Completada | RBAC, IDs, breadcrumbs, menores (ver sección RBAC) |
+
+**Suite actual**: 65 passed, 2 risky (cosméticos, output buffering del seed de los smoke tests). `php artisan view:cache` verificado; pint aplicado.
+
+---
+
 ## Estado de implementación — Infraestructura de tests y sistema de permisos (RBAC)
 
 > Sección de seguimiento que documenta el trabajo ya ejecutado y su cobertura de tests. Se actualiza conforme avanzan las fases.
@@ -219,7 +237,7 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 
 ### Suite de tests actual
 
-**61 passed, 1 risky** (el risky es `ExampleTest` por output buffering, cosmético):
+**65 passed, 2 risky** (los risky son por output buffering del seed de los smoke tests, cosmético):
 
 | Archivo | Tests | Cobertura |
 |---|---|---|
@@ -238,6 +256,8 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 | `tests/Feature/Cms/TestimonialsCrudTest.php` | 2 | CRUD testimonios (campos requeridos) |
 | `tests/Feature/Cms/CommercialRequestsTest.php` | 3 | cambio de status, delete (soft delete), abrir/cerrar detalles |
 | `tests/Feature/Cms/DashboardProfileTest.php` | 4 | dashboard refreshStats, perfil (update usuario, cambio de password con validación de password actual) |
+| `tests/Feature/Cms/ContactMessagesTest.php` | 4 | contact-messages: listar/ver, toggle leído, eliminar; `ContactController::send` persiste el mensaje en BD además del email |
+| `tests/Feature/Web/WebSmokeTest.php` | 1 | smoke de las 10 páginas públicas → 200 (lento ~130s, seed completo) |
 
 ### Bug real corregido al testear el dashboard
 
@@ -247,10 +267,50 @@ Derivadas de la Fase 0 (auditoría integral del CMS):
 
 Corresponde al fix RBAC previsto en la Fase 3F. Estado final:
 
-- **`ModuleSeeder`**: módulos con IDs fijos según constantes (`ADMINISTRATORS=1`, `SETTINGS=2`, `CATALOG=3`, `BLOG=4`, `CONTENT=5`, `CONTACT=6` — el antiguo "Solicitudes" pasa a "Contacto"). Submódulos registrados por nombre con ID explícito (`updateOrCreate`), incluido el faltante **`WEBSITE_MENU=6`** (Menú del Sitio, `MenuController` existía sin registro). Seeder idempotente: 6 módulos + 25 submódulos sin duplicados en corridas repetidas. Los submódulos CONTACT_MESSAGES/CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG (19/20/21) se dejan sin registrar hasta tener rutas/controladores (Fase 3D).
-- **`Permission::createPermissions` idempotente**: por módulo usa `whereNull('submodule_id')` + update/insert; por submódulo usa `updateOrCreate`. Resultado: 31 permisos por rol (6 de módulo + 25 de submódulo), sin duplicados al re-ejecutar.
+- **`ModuleSeeder`**: módulos con IDs fijos según constantes (`ADMINISTRATORS=1`, `SETTINGS=2`, `CATALOG=3`, `BLOG=4`, `CONTENT=5`, `CONTACT=6` — el antiguo "Solicitudes" pasa a "Contacto"). Submódulos registrados por nombre con ID explícito (`updateOrCreate`), incluido el faltante **`WEBSITE_MENU=6`** (Menú del Sitio, `MenuController` existía sin registro) y el **`CONTACT_MESSAGES=19`** de la Fase 3D (bajo módulo Contacto, `url /cms/contact-messages`, icon `mail`). Seeder idempotente: 6 módulos + 26 submódulos sin duplicados en corridas repetidas. Los submódulos CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG (20/21) se dejan sin registrar hasta tener rutas/controladores.
+- **`Permission::createPermissions` idempotente**: por módulo usa `whereNull('submodule_id')` + update/insert; por submódulo usa `updateOrCreate`. Resultado: 32 permisos por rol (6 de módulo + 26 de submódulo), sin duplicados al re-ejecutar.
 - **`PermissionMiddleware`**: resuelve el módulo/submódulo por **ID numérico o por nombre** (`is_numeric`), con `status` activo requerido.
 - **`routes/web.php`**: eliminados todos los parámetros hardcodeados obsoletos (`permission:5,1`, `2,3`, `2,4`, `4,1`, `4,2`, `6,1`, `2,1`, `2,2`, `Administradores,Permisos`) → todas las rutas usan constantes `Module::*` / `Submodule::*`; la ruta de permisos detallados usa solo el módulo (no existe submódulo "Permisos").
 - **`app/Utils/CmsAccess.php`** (nuevo): helper de autorización para la capa `mount()` de los componentes Livewire — super-admin (level 1) pasa, resto valida permiso activo módulo+submódulo del rol. Aplicado en los mounts de **11 controladores** (Categories, Brands, Line, SystemProducts, ProductPlatforms, ResourceType, ResourceSpecialty, Resource, Settings, PageSeo, WhatsAppNumbers) que antes bloqueaban con 403 a cualquier editor.
 - **Comportamiento verificado por tests** (`PermissionSystemTest`): editor con permisos → 200 solo en sus módulos y 403 en el resto; editor sin permisos → 403; middleware resuelve IDs numéricos; seeder y `createPermissions` idempotentes.
-- Reseed aplicado en `helin`: módulos 1–6, 25 submódulos, 31 permisos por rol (Administrador y Editores), sin duplicados.
+- Reseed aplicado en `helin`: módulos 1–6, 26 submódulos, 32 permisos por rol (Administrador y Editores), sin duplicados.
+
+---
+
+## Estado de implementación — Fases 3D, 3B y 3C (web binding)
+
+> Fase 3D (Contacto) completada; Fases 3B y 3C (binding del contenido web) completadas. Suite verde tras cada fase (65 passed + 2 risky cosméticos) y `php artisan view:cache` verificado.
+
+### Fase 3D — Módulo de Mensajes de Contacto (M7, completada)
+
+- **`ContactMessage`** (modelo + fillable `name/email/phone/subject/message/is_read`) y **`ContactMessagesController`** (Livewire: listar, ver, toggle leído, eliminar) con rutas CMS bajo módulo Contacto y permiso `Submodule::CONTACT_MESSAGES` — verificado por `CmsAccessTest` (200 admin).
+- **`ContactController::send`** ahora persiste el mensaje en BD además de enviar el email. Fix colateral del bug de `ContactFormMail::$subject` → `emailSubject` (la propiedad `$subject` no existe en `Mailable`).
+- **`ModuleSeeder`**: registrado `CONTACT_MESSAGES=19` (url `/cms/contact-messages`, icon `mail`) bajo el módulo Contacto (6). CONTACT_MANAGEMENT/CONTACT_FORM_CONFIG (20/21) quedan sin registrar (sin controladores).
+- Tests: `ContactMessagesTest` (4 tests, incluye persistencia vía `ContactController::send`).
+
+### Fase 3B — Reemplazo de contenido hardcodeado por BD (completada)
+
+Patrón aplicado en todas las vistas: **dato CMS + fallback al contenido hardcodeado actual** (BD con datos NULL/parciales hasta re-seedear). Los números de WhatsApp duros (584244669150, 584242789481, 584143805640, 584242550811) se eliminaron de todas las vistas (verificado con grep); donde no hay valor en `Settings` el bloque se oculta.
+
+- **SEO por página**: nueva tabla `page_seo` ya existente (Fase 3A). **Decisión técnica**: los `@section('title'|'meta-description'|'meta-keywords')` de las vistas hijas se evalúan antes del `@php` del layout, por lo que `$pageSeo` se resuelve con un **view composer `web.*`** en `AppServiceProvider` (mapea el nombre de ruta → `page_slug` → `PageSeo::where('page_slug', ...)`). El layout usa `$pageSeo?->seo_title ?? Settings` como fallback. Aplicado en las 9 vistas estáticas (home, contactanos, nuestra-empresa, politicas, recursos-clinicos, solicitud, solicitud-enviada, catalogo, caso-clinico).
+- **Solicitud enviada**: eliminados todos los datos demo (productos falsos $195/$85/$1250, cliente Gabriel Montes/SY Evolution, tasa 567.68, totales falsos, correlativo, entrega/pago falsos); el controlador siempre pasa `subtotal/tasa/total` reales; WhatsApp solo si `Settings->whatsapp` o sedes.
+- **Caso clínico**: título desde `$resource->title`; video solo si `video_url`; PDF si `file_path`; hero desde `image_url` sin fallback duro; párrafo de descripción hardcodeado eliminado (`$resource->content`); materiales desde `$resource->materials` (explode `\n`); resultados con `nl2br(e())`; sidebar WhatsApp oculto si no hay valor.
+- **Nuestra empresa**: About (`content` + `items` con fallback a 4 features), Misión/Visión (`items` con fallback), Team (imagen solo si existe), Aliados (`items` image/url/icon con fallback a 6 logos), CTA (`title`/`content` + WhatsApp oculto si no hay).
+- **Home**: categoría destacada desde `Category::is_featured` (imagen + `banner_title`, fallback `categoria1.png`); grid de categorías con imagen/banner; pasos del flow desde items JSON de la sección FLOW_HOW_TO (grupo `steps`, 3 pasos con icon/title/description/number; paso 3 → contacto si no hay WhatsApp); títulos de secciones de productos desde `$section->title` (sin heurística) + primera línea de `content`.
+- **Catálogo**: banner desde `$currentCategory->banner_*` con fallback al array `$categoryBanners` existente (~15 entradas, BD banner_* NULL por ahora).
+- **Opinión**: `Settings->opinion_url` + título de sección FEEDBACK_BANNER; sección oculta si `opinion_url` NULL.
+- **Beneficios**: nueva constante `Sections::BENEFITS = 23`; items desde BD con fallback a los 5 hardcodeados; `md:grid-cols-5` fijo (Tailwind CDN no compila clases dinámicas).
+- **Estamos cerca de ti**: título desde sección NEAR_YOU (si activa); números solo desde Settings (sin fallback duro).
+- **Políticas**: eliminado el `match()` muerto de contenido (la BD ya tiene content poblado); se conservan el parse DOM y el match de policyId/icono.
+- **Recursos clínicos**: quick cards desde items de la sección hero (BD actualizada: sección 3 `layout_type='feature_box'` con 4 items JSON); título/subtítulo de library desde sección 4 (subtitle seteado en BD); CTA final desde sección 5 (`featuredSection` nuevo en el controlador, `name_button` "Contactar asesor").
+- **Header**: nav desktop desde `Menus::getHeaderItems()` (Inicio fijo + resolución de `url` vacío por `Category` + estados activos); WhatsApp oculto si no hay valor. **Footer**: columna "Nuestra Empresa" desde `Menus::getFooterItems()->firstWhere('title','Nuestra Empresa')` con fallback; sedes en loop de 5 ciudades (incluye Maracay); email/tel solo si existen; copy desde `Settings->copy`.
+- **Mobile nav y 404**: WhatsApp sin fallback duro. **Contáctanos**: pills de sedes en loop de 5 ciudades.
+- **Solicitud**: label de entrega desde `$method->name` (eliminado hardcode `'tealca'`); **Resource results**: eliminado pool `$fallbackImages` → `resource->image_url ?? resourceType->image`.
+- **`WebController::sectionCategories`** corregido a slugs reales (`implantologia`, `regeneracion-guiada-bucal-gbr`, `tijeras`); home resuelve categoría por slug primero, luego nombre.
+- **`WebController::solicitud()` offices**: derivados de `Settings->offices` (JSON, con `city`/`zone`) con fallback al mapa de 5 ciudades (Maracay añadido); `zone` no se consume en la vista.
+- **Smoke test**: `WebSmokeTest` renderiza las 10 páginas públicas → 200 (falló en el primer intento por `$pageSeo` sin definir en vistas sin composer, y por `@json` con closure multilínea que el compilador Blade trunca — corregido moviendo el cálculo a `@php`).
+
+### Fase 3C — Selector de dimensiones dinámico (completada)
+
+- `WebController::producto()` ya hace eager load de `attributeValues`; la vista construye `$dimensionOptions` desde `attributeValues` (`label ?? value` + sufijo numérico para el SKU) con fallback a Ø3.3/Ø4.1/Ø4.8 mm.
+- JS `updatePriceBySize` reconstruido desde `@json($dimensionPrices)` (base/sale/sku por dimensión) — **sin multiplicadores falsos ×1.15/×1.25**; el precio mostrado, `data-cart-add` y el SKU usan la primera dimensión por defecto. La tabla `attributes` está vacía en BD (los options usan el fallback hasta sembrar atributos).
