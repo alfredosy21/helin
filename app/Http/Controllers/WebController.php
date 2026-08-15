@@ -198,21 +198,23 @@ class WebController extends Controller
         $pickups = [];
         $settings = is_object($settings) ? $settings : null;
 
-        // Zonas por ciudad: desde Settings->offices (JSON) o fallback por convención
+        // Zonas por ciudad: desde Settings->offices (cast array) o fallback por convención
         $defaultOffices = ['caracas' => 1, 'valencia' => 2, 'barquisimeto' => 3, 'maracaibo' => 4, 'maracay' => 5];
-        $settingsOffices = $settings ? (json_decode($settings->offices, true) ?? []) : [];
+        $settingsOffices = $settings && is_array($settings->offices) ? $settings->offices : [];
         $offices = [];
+        $officeData = [];
         foreach ($settingsOffices as $office) {
             $cityKey = strtolower(trim((string) ($office['city'] ?? '')));
             if ($cityKey !== '') {
                 $offices[$cityKey] = (int) ($office['zone'] ?? $defaultOffices[$cityKey] ?? 0);
+                $officeData[$cityKey] = $office;
             }
         }
         $offices = $offices ?: $defaultOffices;
 
         $officeByPhone = [];
         foreach ($offices as $city => $zone) {
-            $whatsapp = $settings?->{"{$city}_whatsapp"} ?? null;
+            $whatsapp = $officeData[$city]['whatsapp'] ?? null;
             if ($whatsapp) {
                 $officeByPhone[preg_replace('/[^0-9]/', '', $whatsapp)] = ['city' => $city, 'zone' => $zone];
             }
@@ -233,8 +235,8 @@ class WebController extends Controller
                 'label' => $city ? ucfirst($city) : ($number->executive_name ?? $state->name),
                 'zone' => $office['zone'],
                 'phone' => $number->formatted_number,
-                'whatsapp' => $city ? ($settings?->{"{$city}_whatsapp"} ?? null) : null,
-                'location' => $city ? ($settings?->{"{$city}_location"} ?? null) : null,
+                'whatsapp' => $city ? ($officeData[$city]['whatsapp'] ?? null) : null,
+                'location' => $city ? ($officeData[$city]['location'] ?? null) : null,
             ];
         }
 

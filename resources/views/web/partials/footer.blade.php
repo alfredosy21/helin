@@ -64,21 +64,20 @@
             <div>
                 <h4 class="text-base md:text-lg mb-2.5 md:mb-4">Nuestras sedes</h4>
                 @php
-                    $footerCities = [
-                        'Caracas'      => ['whatsapp' => $settings->caracas_whatsapp ?? null,      'location' => $settings->caracas_location ?? null],
-                        'Valencia'     => ['whatsapp' => $settings->valencia_whatsapp ?? null,     'location' => $settings->valencia_location ?? null],
-                        'Barquisimeto' => ['whatsapp' => $settings->barquisimeto_whatsapp ?? null, 'location' => $settings->barquisimeto_location ?? null],
-                        'Maracaibo'    => ['whatsapp' => $settings->maracaibo_whatsapp ?? null,    'location' => $settings->maracaibo_location ?? null],
-                        'Maracay'      => ['whatsapp' => $settings->maracay_whatsapp ?? null,      'location' => $settings->maracay_location ?? null],
-                    ];
+                    $offices = $settings && $settings->offices ? $settings->offices : [];
                 @endphp
                 <ul class="space-y-1.5 md:space-y-2 text-white/80 text-xs md:text-sm">
-                    @foreach($footerCities as $footerCity => $footerCityData)
-                        @if($footerCityData['whatsapp'] || $footerCityData['location'])
+                    @foreach($offices as $office)
+                        @php
+                            $cityName = ucfirst($office['city'] ?? '');
+                            $whatsapp = $office['whatsapp'] ?? null;
+                            $location = $office['location'] ?? null;
+                        @endphp
+                        @if($whatsapp || $location)
                         <li class="flex items-center gap-1.5 md:gap-2">
                             <div class="flex items-center gap-1 md:gap-1.5">
-                                @if($footerCityData['location'])
-                                    <a href="{{ $footerCityData['location'] }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                @if($location)
+                                    <a href="{{ $location }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
                                         <i class="fas fa-map-marker-alt"></i>
                                     </a>
                                 @else
@@ -86,8 +85,8 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                     </div>
                                 @endif
-                                @if($footerCityData['whatsapp'])
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $footerCityData['whatsapp']) }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
+                                @if($whatsapp)
+                                    <a href="{{ $whatsapp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-turquesa transition-all duration-300 text-[11px] md:text-sm">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                 @else
@@ -96,7 +95,7 @@
                                     </div>
                                 @endif
                             </div>
-                            <span class="font-medium">{{ $footerCity }}</span>
+                            <span class="font-medium">{{ $cityName }}</span>
                         </li>
                         @endif
                     @endforeach
