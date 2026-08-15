@@ -57,7 +57,14 @@
                 @endphp
                 <!-- WhatsApp - solo desktop -->
                 @php
-                    $headerWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
+                    $headerOffices = $settings && is_array($settings->offices) ? $settings->offices : [];
+                    $headerWhatsApp = null;
+                    foreach ($headerOffices as $office) {
+                        if (!empty($office['whatsapp'])) {
+                            $headerWhatsApp = preg_replace('/[^0-9]/', '', $office['whatsapp']);
+                            break;
+                        }
+                    }
                 @endphp
                 @if($headerWhatsApp)
                 <a href="https://wa.me/{{ $headerWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hidden lg:flex items-center gap-2 bg-turquesa/60 text-white px-4 h-11 rounded-full hover:bg-[#123F4A] transition text-sm">
@@ -149,10 +156,8 @@
                         $currentTag = request('tag');
                         $headerMenuItems = \App\Models\Menus::getHeaderItems();
                     @endphp
-                    <!-- Inicio -->
-                    <a href="{{ route('home') }}" class="text-helin-heading hover:text-turquesa font-bold whitespace-nowrap ml-16 border-b-2 border-transparent pb-1 {{ $currentRoute === 'home' ? 'text-turquesa border-turquesa' : '' }}">Inicio</a>
                     <!-- Categorías / Menú configurable -->
-                    @foreach($headerMenuItems as $menuItem)
+                    @foreach($headerMenuItems as $loopIndex => $menuItem)
                         @php
                             $menuUrl = $menuItem->url;
                             if (!$menuUrl && $menuItem->title) {
@@ -160,7 +165,8 @@
                                 $menuUrl = $menuCategory ? route('catalogo', ['category' => $menuCategory->slug]) : '#';
                             }
                             $menuIsActive = false;
-                            if ($menuUrl === route('home')) {
+                            $homeUrl = route('home');
+                            if ($menuUrl === $homeUrl || $menuUrl === '/' || rtrim($menuUrl, '/') === rtrim($homeUrl, '/')) {
                                 $menuIsActive = $currentRoute === 'home';
                             } elseif (str_contains($menuUrl, 'tag=on_sale')) {
                                 $menuIsActive = $currentTag === 'on_sale';
@@ -169,7 +175,7 @@
                             }
                         @endphp
                         @if($menuUrl && $menuUrl !== '#')
-                        <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($menuItem->children->count())<span class="text-xs">+</span>@endif</a>
+                        <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $loopIndex === 0 ? 'ml-16' : '' }} {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($menuItem->children->count())<span class="text-xs">+</span>@endif</a>
                         @endif
                     @endforeach
                 </nav>

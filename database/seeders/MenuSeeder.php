@@ -33,9 +33,9 @@ class MenuSeeder extends Seeder
                 'image' => null,
             ],
 
-            // Cirugía Bucal - Parent (with dropdown)
+            // Implantología - Parent (with dropdown)
             [
-                'title' => 'Cirugía Bucal',
+                'title' => 'Implantología',
                 'url' => null,
                 'type' => 1, // Header
                 'position' => 2,
@@ -47,9 +47,9 @@ class MenuSeeder extends Seeder
                 'image' => null,
             ],
 
-            // Maxilofacial - Parent (with dropdown)
+            // Osteosíntesis - Parent (with dropdown)
             [
-                'title' => 'Maxilofacial',
+                'title' => 'Osteosíntesis',
                 'url' => null,
                 'type' => 1, // Header
                 'position' => 3,
@@ -61,9 +61,9 @@ class MenuSeeder extends Seeder
                 'image' => null,
             ],
 
-            // Periodoncia - Parent (with dropdown)
+            // Instrumentos - Parent (with dropdown)
             [
-                'title' => 'Periodoncia',
+                'title' => 'Instrumentos',
                 'url' => null,
                 'type' => 1, // Header
                 'position' => 4,
@@ -75,9 +75,9 @@ class MenuSeeder extends Seeder
                 'image' => null,
             ],
 
-            // Ortodoncia - Parent (with dropdown)
+            // Planificación digital - Parent (with dropdown)
             [
-                'title' => 'Ortodoncia',
+                'title' => 'Planificación digital',
                 'url' => null,
                 'type' => 1, // Header
                 'position' => 5,
@@ -89,10 +89,10 @@ class MenuSeeder extends Seeder
                 'image' => null,
             ],
 
-            // Endodoncia - Parent (with dropdown)
+            // Ofertas - Parent
             [
-                'title' => 'Endodoncia',
-                'url' => null,
+                'title' => 'Ofertas',
+                'url' => '/catalogo?tag=on_sale',
                 'type' => 1, // Header
                 'position' => 6,
                 'parent_id' => null,
