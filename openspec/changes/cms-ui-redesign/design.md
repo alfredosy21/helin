@@ -156,9 +156,25 @@ Update existing components:
 3. **New components** — `empty-state`, `toggle`, `badge-status`, `section-header`, `file-upload`, `stat-card`, pagination view
 4. **Dashboard + Auth** — `dashboard/index.blade.php`, auth layout, `auth/login.blade.php`, `auth/lock.blade.php`, `auth/forgot-password.blade.php`
 5. **CRUD views** — All remaining views, batch by module (catalog, content, settings, users, requests, attributes)
-6. **Verification** — Build, visual QA, functional check
+6. **Verification & Testing** — Build, visual QA, run full test suite
 
 **Rationale:** Each phase is independently testable. Foundation must come first because everything depends on the color tokens. Components (phase 3) must exist before views can adopt them (phase 5).
+
+### 10. Full test suite execution
+
+**Decision:** After all visual changes are complete, run the existing test suite with `php artisan test` (or `php artisan test --parallel` for speed). The project has 20+ test files covering:
+
+- **CMS CRUD tests** (`tests/Feature/Cms/`): `AdminCrudTest`, `AttributesCrudTest`, `BlogCrudTest`, `CatalogCrudTest`, `ConfigCrudTest`, `ProductsCrudTest`, `ResourcesCrudTest`, `SettingsPageSeoCrudTest`, `TestimonialsCrudTest` — each injects data via `Livewire::test(Controller::class)->set('field', 'value')->call('save')` and validates create, edit, delete flows
+- **CMS access tests**: `CmsAccessTest` — verifies auth and route protection
+- **CMS feature tests**: `CommercialRequestsTest`, `ContactMessagesTest`, `DashboardProfileTest`, `PermissionSystemTest`
+- **Unit tests**: `CmsModelsTest`, `SubmoduleTest`
+- **Web tests**: `WebFunctionalTest`, `WebSmokeTest`
+
+All tests use `RefreshDatabase` and `Livewire::test()` to simulate real form submissions with injected data. Since the redesign only touches Blade views and CSS (no PHP logic changes), all tests MUST pass without modification. Any test failure after the redesign indicates an accidental functional change that must be reverted.
+
+**Rationale:** The existing test suite provides comprehensive coverage of all controllers and Livewire components. Running it after the redesign validates that no `wire:model` bindings, form submissions, pagination, or CRUD operations were broken by the visual changes. This is the definitive proof that the redesign is purely cosmetic.
+
+**Alternative considered:** Manual click-through testing. Rejected — the automated test suite is faster, more thorough, and covers edge cases that manual testing misses.
 
 ## Risks / Trade-offs
 

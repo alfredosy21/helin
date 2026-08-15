@@ -181,3 +181,22 @@ SweetAlert2 confirm buttons and Toastify toast notifications SHALL use turquesa 
 
 - **WHEN** a toast notification appears
 - **THEN** the toast background SHALL use turquesa tones for success/info types instead of default blue
+
+### Requirement: Full test suite validation
+
+After all visual changes are complete, the existing test suite SHALL be executed with `php artisan test` to verify that no functional behavior was broken. All tests in `tests/Feature/Cms/` (CRUD tests, access tests, feature tests), `tests/Unit/`, and `tests/Feature/Web/` MUST pass without modification. These tests inject data via `Livewire::test(Controller::class)->set('field', 'value')->call('save')` to simulate real form submissions across all CMS modules. Any test failure indicates an accidental functional change that must be reverted.
+
+#### Scenario: All CMS CRUD tests pass
+
+- **WHEN** the test suite is executed after the redesign
+- **THEN** all CRUD tests (`AdminCrudTest`, `CatalogCrudTest`, `ProductsCrudTest`, `AttributesCrudTest`, `BlogCrudTest`, `ConfigCrudTest`, `ResourcesCrudTest`, `SettingsPageSeoCrudTest`, `TestimonialsCrudTest`) SHALL pass without modification
+
+#### Scenario: All CMS access and feature tests pass
+
+- **WHEN** the test suite is executed after the redesign
+- **THEN** access tests (`CmsAccessTest`), feature tests (`CommercialRequestsTest`, `ContactMessagesTest`, `DashboardProfileTest`, `PermissionSystemTest`), unit tests (`CmsModelsTest`, `SubmoduleTest`), and web tests (`WebFunctionalTest`, `WebSmokeTest`) SHALL pass without modification
+
+#### Scenario: No test files modified
+
+- **WHEN** a developer checks git status after the redesign
+- **THEN** no files under `tests/` SHALL appear as modified — the redesign touches only Blade views and CSS, not test logic

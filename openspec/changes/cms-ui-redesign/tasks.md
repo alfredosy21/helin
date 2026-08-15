@@ -88,7 +88,9 @@
 - [ ] 11.1 Restyle `resources/views/cms/attributes/index.blade.php`: adopt standardized table pattern, use `ui/section-header`, `ui/badge-status`, `ui/empty-state`, custom pagination, remove `dark:` classes
 - [ ] 11.2 Restyle `resources/views/cms/attribute-values/index.blade.php`: same standardized treatment
 
-## 12. Final verification
+## 12. Final verification & testing
+
+### Build & visual verification
 
 - [ ] 12.1 Run `npm run build` to verify production CSS/JS compiles without errors
 - [ ] 12.2 Search for `dark:` in `resources/views/cms/` — confirm zero results
@@ -99,3 +101,14 @@
 - [ ] 12.7 Verify mobile sidebar slide-in works on small screens
 - [ ] 12.8 Verify SweetAlert2 confirm dialogs and Toastify toasts use turquesa colors
 - [ ] 12.9 Verify Livewire custom pagination renders with turquesa active state and result count text
+
+### Full test suite execution
+
+- [ ] 12.10 Run `php artisan test` (or `php artisan test --parallel`) and confirm ALL tests pass
+- [ ] 12.11 Verify CMS CRUD tests pass: `AdminCrudTest`, `AttributesCrudTest`, `BlogCrudTest`, `CatalogCrudTest`, `ConfigCrudTest`, `ProductsCrudTest`, `ResourcesCrudTest`, `SettingsPageSeoCrudTest`, `TestimonialsCrudTest` — these inject data via `Livewire::test(Controller::class)->set('field', 'value')->call('save')` testing create, edit, delete flows
+- [ ] 12.12 Verify CMS access tests pass: `CmsAccessTest` — tests auth and route protection
+- [ ] 12.13 Verify CMS feature tests pass: `CommercialRequestsTest`, `ContactMessagesTest`, `DashboardProfileTest`, `PermissionSystemTest`
+- [ ] 12.14 Verify Unit tests pass: `CmsModelsTest`, `SubmoduleTest`
+- [ ] 12.15 Verify Web tests pass: `WebFunctionalTest`, `WebSmokeTest`
+- [ ] 12.16 Confirm no files under `tests/` were modified — run `git diff --name-only tests/` and verify empty output
+- [ ] 12.17 If any test fails, identify the accidental functional change, revert it, and re-run tests until all pass
