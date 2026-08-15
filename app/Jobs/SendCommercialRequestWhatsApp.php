@@ -251,7 +251,8 @@ class SendCommercialRequestWhatsApp implements ShouldQueue
         $cartData = is_array($request->cart_data) ? $request->cart_data : json_decode($request->cart_data, true) ?? [];
 
         foreach ($cartData as $item) {
-            $product = Product::find($item['id'] ?? null);
+            $slug = explode('::', $item['id'] ?? '')[0];
+            $product = $slug ? Product::where('slug', $slug)->first() : null;
             if ($product) {
                 $cartItems[] = (object) [
                     'product' => $product,

@@ -62,7 +62,7 @@ class ContactController extends Controller
                 senderEmail: $request->input('email'),
                 phone: $request->input('telefono', ''),
                 emailSubject: $request->input('asunto'),
-                message: $request->input('mensaje'),
+                bodyMessage: $request->input('mensaje'),
             ));
 
             return response()->json([

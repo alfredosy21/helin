@@ -17,7 +17,7 @@ class ContactFormMail extends Mailable
         public readonly string $senderEmail,
         public readonly string $phone,
         public readonly string $emailSubject,
-        public readonly string $message,
+        public readonly string $bodyMessage,
     ) {}
 
     public function envelope(): Envelope

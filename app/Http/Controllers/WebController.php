@@ -482,7 +482,8 @@ class WebController extends Controller
                 ? $commercialRequest->cart_data
                 : json_decode($commercialRequest->cart_data, true) ?? [];
             foreach ($cartData as $item) {
-                $product = Product::find($item['id']);
+                $slug = explode('::', $item['id'] ?? '')[0];
+                $product = $slug ? Product::where('slug', $slug)->first() : null;
                 if ($product) {
                     $cartItems[] = (object) [
                         'product' => $product,
@@ -532,7 +533,8 @@ class WebController extends Controller
             : json_decode($commercialRequest->cart_data, true) ?? [];
 
         foreach ($cartData as $item) {
-            $product = Product::find($item['id'] ?? null);
+            $slug = explode('::', $item['id'] ?? '')[0];
+            $product = $slug ? Product::where('slug', $slug)->first() : null;
             if ($product) {
                 $cartItems[] = (object) [
                     'product' => $product,

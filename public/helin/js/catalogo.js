@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             console.log('[Autocompletado] Buscando:', term);
-            const response = await fetch('/api/products/autocomplete?q=' + encodeURIComponent(term), {
+            const response = await fetch('/api/search/products?q=' + encodeURIComponent(term), {
                 method: 'GET',
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 signal: abortController.signal
@@ -338,15 +338,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let html = '';
         products.forEach(product => {
+            const price = product.is_on_sale && product.sale_price ? product.sale_price : product.price;
+            const formattedPrice = '$' + parseFloat(price || 0).toFixed(2);
+            const productImage = product.image || '/images/placeholder-product.webp';
             html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-turquesa/10 cursor-pointer transition-colors border-b border-helin-border last:border-0">' +
                 '<div class="w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-helin-border">' +
-                    '<img src="' + product.image + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
+                    '<img src="' + productImage + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
                 '</div>' +
                 '<div class="flex-1 min-w-0">' +
                     '<div class="text-sm font-semibold text-helin-heading truncate">' + highlightMatch(product.name, term) + '</div>' +
                     '<div class="text-xs text-helin-text truncate">' + escapeHtml(product.category || 'Helin') + '</div>' +
                 '</div>' +
-                '<div class="text-sm font-bold text-turquesa flex-shrink-0">' + product.formatted_price + '</div>' +
+                '<div class="text-sm font-bold text-turquesa flex-shrink-0">' + formattedPrice + '</div>' +
             '</a>';
         });
 

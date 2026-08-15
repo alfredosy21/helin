@@ -71,6 +71,9 @@
                             $sedeCity = $office['city'] ?? $office['name'] ?? null;
                             $sedeLocation = $office['location'] ?? $office['url'] ?? null;
                             $sedeActive = isset($office['active']) ? (bool) $office['active'] : true;
+                            if ($sedeLocation && !preg_match('~^https?://~', $sedeLocation)) {
+                                $sedeLocation = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($sedeLocation);
+                            }
                         @endphp
                         @if($sedeCity && $sedeActive)
                             @if($sedeLocation)
