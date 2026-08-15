@@ -28,7 +28,7 @@ class WhatsAppNumbersController extends Component
 
     public $executive_name;
 
-    public $state_id;
+    public $state_ids = [];
 
     public $is_active = true;
 
@@ -46,7 +46,8 @@ class WhatsAppNumbersController extends Component
     protected $rules = [
         'phone_number' => 'required|digits_between:10,15',
         'executive_name' => 'nullable|string|max:255',
-        'state_id' => 'required|exists:states,id',
+        'state_ids' => 'required|array|min:1',
+        'state_ids.*' => 'exists:states,id',
         'is_active' => 'boolean',
         'description' => 'nullable|string|max:1000',
     ];
@@ -60,7 +61,7 @@ class WhatsAppNumbersController extends Component
     public function render()
     {
         $query = WhatsAppNumber::query()
-            ->with(['state'])
+            ->with(['states'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('phone_number', 'like', '%'.$this->search.'%')
@@ -69,7 +70,7 @@ class WhatsAppNumbersController extends Component
                 });
             })
             ->when($this->stateFilter !== 'all', function ($query) {
-                $query->where('state_id', $this->stateFilter);
+                $query->whereHas('states', fn($q) => $q->where('states.id', $this->stateFilter));
             });
 
         $whatsappNumbers = $query->orderBy('updated_at', 'desc')
@@ -95,7 +96,7 @@ class WhatsAppNumbersController extends Component
         $this->editingId = $id;
         $this->phone_number = $whatsappNumber->phone_number;
         $this->executive_name = $whatsappNumber->executive_name;
-        $this->state_id = $whatsappNumber->state_id;
+        $this->state_ids = $whatsappNumber->states()->pluck('states.id')->toArray();
         $this->is_active = $whatsappNumber->is_active;
         $this->description = $whatsappNumber->description;
 
@@ -109,7 +110,6 @@ class WhatsAppNumbersController extends Component
         $data = [
             'phone_number' => $this->phone_number,
             'executive_name' => $this->executive_name,
-            'state_id' => $this->state_id,
             'is_active' => $this->is_active,
             'description' => $this->description,
         ];
@@ -118,12 +118,14 @@ class WhatsAppNumbersController extends Component
             if ($this->editingId) {
                 $whatsappNumber = WhatsAppNumber::findOrFail($this->editingId);
                 $whatsappNumber->update($data);
+                $whatsappNumber->states()->sync($this->state_ids);
                 Activities::saveActivity(__('cms.controllers.whatsapp_numbers.activity_updated', [
                     'id' => $whatsappNumber->id,
                 ]));
                 $this->dispatch('toast', message: __('cms.controllers.whatsapp_numbers.updated'), type: 'success');
             } else {
-                WhatsAppNumber::create($data);
+                $whatsappNumber = WhatsAppNumber::create($data);
+                $whatsappNumber->states()->sync($this->state_ids);
                 Activities::saveActivity(__('cms.controllers.whatsapp_numbers.activity_created'));
                 $this->dispatch('toast', message: __('cms.controllers.whatsapp_numbers.created'), type: 'success');
             }
@@ -179,7 +181,7 @@ class WhatsAppNumbersController extends Component
     public function resetForm()
     {
         $this->reset([
-            'phone_number', 'executive_name', 'state_id',
+            'phone_number', 'executive_name', 'state_ids',
             'description',
         ]);
 

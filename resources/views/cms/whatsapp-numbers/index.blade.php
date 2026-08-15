@@ -80,7 +80,13 @@
                                 <span class="text-sm text-slate-600">{{ $whatsappNumber->executive_name ?? '—' }}</span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-sm text-slate-600">{{ $whatsappNumber->state->name ?? '—' }}</span>
+                                <div class="flex flex-wrap gap-1">
+                                    @forelse($whatsappNumber->states as $state)
+                                        <span class="inline-block px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-600">{{ $state->name }}</span>
+                                    @empty
+                                        <span class="text-sm text-slate-400">—</span>
+                                    @endforelse
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <button wire:click="toggle({{ $whatsappNumber->id }})" class="inline-flex items-center gap-2 cursor-pointer border-none bg-transparent">
@@ -171,17 +177,20 @@
                         @error('executive_name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Estado --}}
+                    {{-- Estados (multi-select) --}}
                     <div class="space-y-1.5">
                         <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.whatsapp_numbers.state_label') }} <span class="text-red-500">*</span></label>
-                        <select wire:model="state_id"
-                                class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
-                            <option value="">{{ __('cms.whatsapp_numbers.state_placeholder') }}</option>
+                        <div class="max-h-48 overflow-y-auto bg-slate-50 border border-slate-100 rounded-lg p-3 space-y-2">
                             @foreach($states as $state)
-                                <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-slate-100 rounded px-2 py-1 transition-colors">
+                                    <input type="checkbox" value="{{ $state->id }}" wire:model="state_ids"
+                                           class="rounded border-slate-300 text-primary focus:border-primary focus:ring-primary">
+                                    <span class="text-sm text-slate-700">{{ $state->name }}</span>
+                                </label>
                             @endforeach
-                        </select>
-                        @error('state_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                        <p class="text-xs text-slate-400">Selecciona los estados que cubre este número.</p>
+                        @error('state_ids') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Descripción --}}

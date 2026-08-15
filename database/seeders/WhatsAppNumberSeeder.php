@@ -42,25 +42,31 @@ class WhatsAppNumberSeeder extends Seeder
             'Zona 4' => ['ZU', 'FA'],
         ];
 
-        foreach ($zones as $zoneName => $stateCodes) {
-            foreach ($stateCodes as $code) {
+        foreach ($zoneNumbers as $zoneName => $zoneData) {
+            $stateIds = [];
+            foreach ($zones[$zoneName] as $code) {
                 $state = State::where('code', $code)->first();
-
-                if (! $state) {
-                    $this->command->warn("Estado con código {$code} no encontrado; se omite asignación de WhatsApp.");
-                    continue;
+                if ($state) {
+                    $stateIds[] = $state->id;
+                } else {
+                    $this->command->warn("Estado con código {$code} no encontrado; se omite.");
                 }
-
-                WhatsAppNumber::updateOrCreate(
-                    ['state_id' => $state->id],
-                    [
-                        'phone_number' => $zoneNumbers[$zoneName]['phone'],
-                        'executive_name' => $zoneNumbers[$zoneName]['executive'],
-                        'description' => "{$zoneName} - {$zoneNumbers[$zoneName]['executive']}",
-                        'is_active' => true,
-                    ]
-                );
             }
+
+            if (empty($stateIds)) {
+                continue;
+            }
+
+            $whatsappNumber = WhatsAppNumber::updateOrCreate(
+                ['phone_number' => $zoneData['phone']],
+                [
+                    'executive_name' => $zoneData['executive'],
+                    'description' => "{$zoneName} - {$zoneData['executive']}",
+                    'is_active' => true,
+                ]
+            );
+
+            $whatsappNumber->states()->sync($stateIds);
         }
 
         $this->command->info('WhatsApp numbers seeded successfully by commercial zone.');
