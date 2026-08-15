@@ -4,7 +4,7 @@
 @section('meta-description', $pageSeo?->seo_description ?? 'Contacta a Helin para asesoría especializada en productos odontológicos. Atención personalizada para implantes, instrumentos y biomateriales. Envíos a todo Venezuela.')
 @section('meta-keywords', $pageSeo?->seo_keywords ?? 'contacto helin, asesoría odontológica, productos dentales, implantes Venezuela, soporte técnico, material dental')
 @section('og-type', 'website')
-@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : asset('images/helin-contact-og.jpg'))
+@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : (\App\Models\Settings::getSettings()?->image ? asset('storage/' . \App\Models\Settings::getSettings()->image) : null))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/contactanos.css') }}">

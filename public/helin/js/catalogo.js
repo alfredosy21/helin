@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
         products.forEach(product => {
             const price = product.is_on_sale && product.sale_price ? product.sale_price : product.price;
             const formattedPrice = '$' + parseFloat(price || 0).toFixed(2);
-            const productImage = product.image || '/images/placeholder-product.webp';
+            const productImage = product.image || '';
             html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-turquesa/10 cursor-pointer transition-colors border-b border-helin-border last:border-0">' +
                 '<div class="w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-helin-border">' +
                     '<img src="' + productImage + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +

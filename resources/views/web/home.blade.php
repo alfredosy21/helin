@@ -4,7 +4,7 @@
 @section('meta-description', $pageSeo?->seo_description ?? 'Helin - Soluciones odontológicas especializadas en implantes, instrumentos y biomateriales. Calidad garantizada para profesionales de la salud bucal en Venezuela.')
 @section('meta-keywords', $pageSeo?->seo_keywords ?? 'implantes dentales, material dental, instrumentos odontológicos, biomateriales, cirugía guiada, helin, productos odontológicos Venezuela')
 @section('og-type', 'website')
-@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : asset('images/helin-home-og.jpg'))
+@section('og-image', $pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : (\App\Models\Settings::getSettings()?->image ? asset('storage/' . \App\Models\Settings::getSettings()->image) : null))
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/home.css') }}">
@@ -13,12 +13,12 @@
 @section('content')
 <main>
    <!-- Hero Section -->
-   <section class="hero relative overflow-hidden" style="
-      background: url('{{ asset('images/banner.png') }}') center top / cover no-repeat;
+   <section class="hero relative overflow-hidden" @if($heroSection && $heroSection->image) style="
+      background: url('{{ asset('storage/' . $heroSection->image) }}') center top / cover no-repeat;
       color: #fff;
       position: relative;
       overflow: hidden;
-      ">
+      " @endif>
             <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 lg:gap-8 items-center">
          <!-- Hero Badges -->
          @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
@@ -104,9 +104,6 @@
             <article class="category-featured relative min-h-[200px] rounded-2xl mb-4 border border-helin-border overflow-hidden">
                @if($featuredCategory->image)
                <img src="{{ asset('storage/' . $featuredCategory->image) }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
-               @else
-               @php $homeSettings = \App\Models\Settings::getSettings(); @endphp
-               <img src="{{ $homeSettings && $homeSettings->default_category_image ? asset('storage/' . $homeSettings->default_category_image) : asset('images/categoria1.png') }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
                @endif
                <div class="category-featured-content">
                   <small class="block text-turquesa text-xs font-black mb-2">{{ $featuredCategory->banner_title ?? 'Soluciones especializadas' }}</small>
@@ -131,7 +128,7 @@
                        ->take(6)
                        ->get();
                    $homeSettings = \App\Models\Settings::getSettings();
-                   $homeDefaultCategoryImage = $homeSettings && $homeSettings->default_category_image ? asset('storage/' . $homeSettings->default_category_image) : asset('images/cat2.png');
+                   $homeDefaultCategoryImage = $homeSettings && $homeSettings->default_category_image ? asset('storage/' . $homeSettings->default_category_image) : null;
                @endphp
 @forelse($categoryCards as $cardIndex => $categoryCard)
                     @include('web.components.category-card', [

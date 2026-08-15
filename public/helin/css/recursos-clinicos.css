@@ -131,7 +131,6 @@ header .lg\:hidden {
 .hero {
     position: relative;
     overflow: hidden;
-    background: url('/images/recursos_clinicos_banner_helin.png') center/cover no-repeat;
     color: var(--white);
     border-top: 1px solid rgba(255,255,255,0.15);
     z-index: 0;
@@ -631,7 +630,6 @@ header .lg\:hidden {
 .featured-section {
     margin-top: 42px;
     border-radius: 32px;
-    background: url('/images/banner_rc_clinic.png') center/cover no-repeat;
     color: var(--white);
     overflow: hidden;
     box-shadow: 0 24px 58px rgba(18, 63, 74, 0.22);

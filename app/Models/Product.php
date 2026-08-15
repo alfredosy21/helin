@@ -259,11 +259,11 @@ class Product extends Model {
     }
 
     /**
-     * Get the main image URL with fallback.
+     * Get the main image URL.
      *
-     * @return string
+     * @return string|null
      */
-    public function getMainImageUrlAttribute(): string {
+    public function getMainImageUrlAttribute(): ?string {
         $mainImage = null;
 
         if ($this->relationLoaded('images')) {
@@ -278,7 +278,7 @@ class Product extends Model {
             return asset('storage/' . $mainImage->file_path);
         }
 
-        return asset('images/default-product.png');
+        return null;
     }
 
     /**

@@ -190,7 +190,7 @@ class HelinHeaderSearch {
         }
 
         const safeName = product.name || '';
-        const safeImage = product.image || '/images/placeholder-product.webp';
+        const safeImage = product.image || '';
         const safeCategory = product.category || 'Sin categoría';
         const safeBrand = product.brand || 'Helin';
         const safeUrl = product.url || '#';

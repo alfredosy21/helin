@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\ProductMedia;
 use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Database\Seeder;
@@ -17,6 +18,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         DB::table('products')->delete();
+        DB::table('product_media')->delete();
 
         // Obtener categorías y marcas
         $categories = Category::all();
@@ -73,6 +75,9 @@ class ProductSeeder extends Seeder
             'Planificación Digital'               => 20,
         ];
 
+        // Imágenes disponibles en storage/products/
+        $productImages = ['products/im1.png', 'products/im2.png', 'products/im3.png', 'products/im4.png', 'products/im5.png', 'products/im6.png'];
+
         $skuCounter = 1;
         foreach ($categories as $category) {
             $categoryName = $category->name;
@@ -126,7 +131,21 @@ class ProductSeeder extends Seeder
                     'updated_at' => now(),
                 ];
 
-                Product::create($product);
+                $createdProduct = Product::create($product);
+
+                // Crear registro de media para el producto
+                $imagePath = $productImages[array_rand($productImages)];
+                ProductMedia::create([
+                    'product_id' => $createdProduct->id,
+                    'file_path' => $imagePath,
+                    'file_name' => basename($imagePath),
+                    'mime_type' => 'image/png',
+                    'type' => 'image',
+                    'alt_text' => $product['name'],
+                    'title' => $product['name'],
+                    'is_main' => true,
+                    'position' => 0,
+                ]);
             }
         }
     }

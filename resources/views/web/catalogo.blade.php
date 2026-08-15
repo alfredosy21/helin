@@ -15,7 +15,7 @@
 @section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : ($pageSeo?->seo_description ?? 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.'))
 @section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : ($pageSeo?->seo_keywords ?? 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela'))
 @section('og-type', 'website')
-@section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : asset('images/helin-catalog-og.jpg'))
+@section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : ($pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : null))
 
 @section('content')
 @php
@@ -195,7 +195,7 @@
             @if($currentCategory)
             @php
                 $catalogoSettings = \App\Models\Settings::getSettings();
-                $bannerBg = $catalogoSettings && $catalogoSettings->default_banner_image ? asset('storage/' . $catalogoSettings->default_banner_image) : asset('images/banner_imp1.png');
+                $bannerBg = $catalogoSettings && $catalogoSettings->default_banner_image ? asset('storage/' . $catalogoSettings->default_banner_image) : null;
                 $bannerData = [
                     'label'       => $currentCategory->banner_label ?: ('Bienvenidos al Catálogo de ' . $currentCategory->name),
                     'title'       => $currentCategory->banner_title ?: ('Todo Para Tus Procedimientos De ' . $currentCategory->name . ' En Un Solo Lugar'),

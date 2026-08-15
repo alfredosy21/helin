@@ -16,7 +16,7 @@
     ])
 
     <!-- Hero Section -->
-    <section class="about-hero">
+    <section class="about-hero" @if($companyHeroSection && $companyHeroSection->image) style="background: url('{{ asset('storage/' . $companyHeroSection->image) }}') right center/cover no-repeat;" @endif>
         <div class="about-hero-copy">
             @if($companyHeroSection && $companyHeroSection->status == 1 && $companyHeroSection->status_content == 1)
                 @if($companyHeroSection->layout_type === 'hero_buttons')
@@ -90,7 +90,7 @@
                 @endif
             </div>
         </div>
-        <div class="about-visual">
+        <div class="about-visual" @if($aboutSection && $aboutSection->image) style="background: url('{{ asset('storage/' . $aboutSection->image) }}') center/cover no-repeat;" @endif>
             @if($aboutSection && $aboutSection->image)
                 <img src="{{ asset('storage/' . $aboutSection->image) }}" alt="{{ $aboutSection->title }}" class="about-visual-img">
             @else
@@ -176,7 +176,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta">
+    <section class="cta" @if($ctaSection && $ctaSection->image) style="background: url('{{ asset('storage/' . $ctaSection->image) }}') center/cover no-repeat;" @endif>
         <div>
             <h2>{{ $ctaSection->title ?? '¿Listo para transformar tu práctica clínica?' }}</h2>
             @if($ctaSection && $ctaSection->content)

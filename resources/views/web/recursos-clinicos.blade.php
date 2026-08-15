@@ -8,7 +8,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" @if($heroSection && $heroSection->image) style="background: url('{{ asset('storage/' . $heroSection->image) }}') center/cover no-repeat;" @endif>
         <div class="hero-inner">
             <div class="hero-copy">
                                 @if($heroSection && $heroSection->status == 1 && $heroSection->status_content == 1)
@@ -237,7 +237,7 @@
     </section>
 
     <!-- Sección Destacada -->
-    <section class="featured-section">
+    <section class="featured-section" @if($featuredSection && $featuredSection->image) style="background: url('{{ asset('storage/' . $featuredSection->image) }}') center/cover no-repeat;" @endif>
         <div class="featured-content">
             @if($featuredSection && $featuredSection->status == 1 && $featuredSection->status_content == 1)
                 <h2>{{ $featuredSection->title }}</h2>
