@@ -160,13 +160,15 @@
                     @foreach($headerMenuItems as $loopIndex => $menuItem)
                         @php
                             $menuUrl = $menuItem->url;
+                            $menuCategory = null;
                             if (!$menuUrl && $menuItem->title) {
-                                $menuCategory = \App\Models\Category::where('name', $menuItem->title)
+                                $menuCategory = \App\Models\Category::with('activeChildren')->where('name', $menuItem->title)
                                     ->orWhere('name', 'like', '%' . $menuItem->title . '%')
                                     ->orWhere('slug', 'like', '%' . \Illuminate\Support\Str::slug($menuItem->title) . '%')
                                     ->first();
                                 $menuUrl = $menuCategory ? route('catalogo', ['category' => $menuCategory->slug]) : route('catalogo');
                             }
+                            $hasDropdown = $menuItem->children->count() > 0 || ($menuCategory && $menuCategory->activeChildren && $menuCategory->activeChildren->count() > 0);
                             $menuIsActive = false;
                             $homeUrl = route('home');
                             if ($menuUrl === $homeUrl || $menuUrl === '/' || rtrim($menuUrl, '/') === rtrim($homeUrl, '/')) {
@@ -177,7 +179,7 @@
                                 $menuIsActive = true;
                             }
                         @endphp
-                        <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $loopIndex === 0 ? 'ml-16' : '' }} {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($menuItem->children->count())<span class="text-xs">+</span>@endif</a>
+                        <a href="{{ $menuUrl }}" class="text-helin-heading hover:text-turquesa flex items-center gap-1 font-bold whitespace-nowrap border-b-2 border-transparent pb-1 {{ $loopIndex === 0 ? 'ml-16' : '' }} {{ $menuIsActive ? 'text-turquesa border-turquesa' : '' }}">{{ $menuItem->title }} @if($hasDropdown)<span class="text-xs">+</span>@endif</a>
                     @endforeach
                 </nav>
                 <div class="flex items-center gap-4 ml-auto">
