@@ -782,7 +782,12 @@ header .lg\:hidden {
     100% { transform: rotate(360deg); }
 }
 
-.hidden {
+/* Solo ocultar elementos .hidden dentro del contenido de recursos clínicos,
+   sin afectar el header compartido (botón "Escríbenos" usa hidden lg:flex) */
+main .hidden,
+.resource-search .hidden,
+.quick-cards .hidden,
+#resourcesContent .hidden {
     display: none !important;
 }
 
