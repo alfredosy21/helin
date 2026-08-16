@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -37,7 +37,7 @@
                         </svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.blog_articles.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="10">{{ __('cms.tables.per_page_10') }}</option>
@@ -50,7 +50,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.article') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.author') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.category') }}</th>
@@ -68,7 +68,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="font-medium text-[#222]">{{ $article->title }}</span>
+                                        <span class="font-medium text-heading">{{ $article->title }}</span>
                                         <div class="flex gap-1 mt-1">
                                             @if($article->is_featured)
                                             <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-50 text-yellow-600 border border-yellow-100">{{ __('cms.blog_articles.featured_badge') }}</span>
@@ -132,7 +132,7 @@
                         @empty
                         <tr>
                             <td colspan="6" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">{{ __('cms.general.no_records') }}</p>
                                 </div>
@@ -144,11 +144,7 @@
             </div>
 
             {{-- Paginación --}}
-            @if($articles->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $articles->links() }}
-            </div>
-            @endif
+            {{ $articles->links() }}
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
@@ -156,8 +152,8 @@
 
             {{-- Cabecera limpia sin botón X --}}
             <div class="p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-[#222]">{{ $editingId ? __('cms.blog_articles.edit_title') : __('cms.blog_articles.new_title') }}</h2>
-                <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.blog_articles.subtitle') }}</p>
+                <h2 class="text-lg font-bold text-heading">{{ $editingId ? __('cms.blog_articles.edit_title') : __('cms.blog_articles.new_title') }}</h2>
+                <p class="text-xs text-slate-400 mt-1">{{ __('cms.blog_articles.subtitle') }}</p>
             </div>
 
             <div class="p-6 space-y-6">
@@ -189,13 +185,13 @@
                 {{-- Título y Autor en Grid --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.title_label') }} <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" required placeholder="{{ __('cms.blog_articles.title_placeholder') }}"
                                class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors placeholder-slate-300" />
                         @error('title') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.author_label') }}</label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.author_label') }}</label>
                         <input type="text" wire:model="author" placeholder="{{ __('cms.blog_articles.author_placeholder') }}"
                                class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors placeholder-slate-300" />
                         @error('author') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
@@ -205,14 +201,14 @@
                 {{-- Slug y Categoría en Grid --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.slug_label') }}</label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.slug_label') }}</label>
                         <input type="text" wire:model="slug" placeholder="{{ __('cms.blog_articles.slug_placeholder') }}"
                                class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors placeholder-slate-300" />
                         <p class="mt-1 text-[10px] text-slate-400">{{ __('cms.categories.slug_helper') }}</p>
                         @error('slug') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.category_label') }}</label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.category_label') }}</label>
                         <select wire:model="blog_category_id"
                                 class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors">
                             <option value="">{{ __('cms.blog_articles.no_category') }}</option>
@@ -226,7 +222,7 @@
 
                 {{-- Extracto --}}
                 <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.excerpt_label') }}</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.excerpt_label') }}</label>
                     <textarea wire:model="excerpt" rows="2" placeholder="{{ __('cms.blog_articles.excerpt_placeholder') }}"
                               class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors resize-none placeholder-slate-300"></textarea>
                     @error('excerpt') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
@@ -234,7 +230,7 @@
 
                 {{-- Quill Editor Ampliado --}}
                 <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.content_label') }} <span class="text-red-500">*</span></label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.content_label') }} <span class="text-red-500">*</span></label>
                     <div x-data = "{ quill: null }"
                          x-init = "
                          quill = new Quill($refs.editor, {
@@ -253,7 +249,7 @@
 
                 {{-- Sección de Imagen adaptada exactamente al estilo Testimonios --}}
                 <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.featured_image_label') }}</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.featured_image_label') }}</label>
                     <div class="relative">
                         @if($featured_image)
                         <div class="mb-3 relative group max-w-xs">
@@ -290,19 +286,19 @@
                     <h4 class="text-sm font-bold text-slate-700 mb-4">{{ __('cms.blog_articles.seo_section') }}</h4>
                     <div class="space-y-4">
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.meta_title_label') }}</label>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.meta_title_label') }}</label>
                             <input type="text" wire:model="meta_title" placeholder="{{ __('cms.blog_articles.meta_title_placeholder') }}"
                                    class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors placeholder-slate-300" />
                             @error('meta_title') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.meta_description_label') }}</label>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.meta_description_label') }}</label>
                             <textarea wire:model="meta_description" rows="2" placeholder="{{ __('cms.blog_articles.meta_description_placeholder') }}"
                                       class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors resize-none placeholder-slate-300"></textarea>
                             @error('meta_description') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.blog_articles.meta_keywords_label') }}</label>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.blog_articles.meta_keywords_label') }}</label>
                             <input type="text" wire:model="meta_keywords" placeholder="{{ __('cms.blog_articles.meta_keywords_placeholder') }}"
                                    class="w-full rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 focus:border-primary focus:outline-none transition-colors placeholder-slate-300" />
                             @error('meta_keywords') <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $message }}</p> @enderror

@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -27,7 +27,7 @@
                         </svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.sections.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="10">{{ __('cms.tables.per_page_10') }}</option>
@@ -40,7 +40,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.section_title') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.visibility_status') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.content') }}</th>
@@ -53,16 +53,11 @@
                         <tr wire:key="section-{{ $section->id }}" class="hover:bg-slate-50/50 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
-                                    <span class="font-medium text-[#222]">{{ $section->title }}</span>
+                                    <span class="font-medium text-heading">{{ $section->title }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $section->status ? 'bg-primary' : 'bg-slate-300' }}"></span>
-                                    <span class="text-xs font-medium {{ $section->status ? 'text-slate-700' : 'text-slate-400' }}">
-                                        {{ $section->status ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
-                                    </span>
-                                </div>
+                                <x-ui-badge-status :active="$section->status" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                             </td>
                             <td class="px-6 py-4">
                                 <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
@@ -89,7 +84,7 @@
                         @empty
                         <tr>
                             <td colspan="5" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/>
                                     </svg>
@@ -103,10 +98,8 @@
             </div>
 
             {{-- Paginación --}}
-            @if($sections && method_exists($sections, 'hasPages') && $sections->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $sections->links() }}
-            </div>
+            @if($sections && method_exists($sections, 'hasPages'))
+            {{ $sections->links() }}
             @endif
         </div>
         @else
@@ -115,8 +108,8 @@
 
             {{-- Cabecera limpia sin botón X --}}
             <div class="p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-[#222]">{{ __('cms.sections.edit_title') }}</h2>
-                <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.sections.title') }}</p>
+                <h2 class="text-lg font-bold text-heading">{{ __('cms.sections.edit_title') }}</h2>
+                <p class="text-xs text-slate-400 mt-1">{{ __('cms.sections.title') }}</p>
             </div>
 
             {{-- Formulario --}}
@@ -144,25 +137,25 @@
 
                     {{-- Título a ancho completo --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" placeholder="{{ __('cms.sections.title_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         @error('title') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Subtítulo --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
                         <input type="text" wire:model="subtitle" placeholder="{{ __('cms.sections.subtitle_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         @error('subtitle') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Tipo de layout e iconos --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
-                            <select wire:model="layout_type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
+                            <select wire:model="layout_type" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 @foreach($this->layoutOptions() as $value => $label)
                                 <option value="{{ $value }}" @selected($layout_type === $value)>{{ $label }}</option>
                                 @endforeach
@@ -170,8 +163,8 @@
                             @error('layout_type') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.icon_style_label') }}</label>
-                            <select wire:model="icon_style" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.icon_style_label') }}</label>
+                            <select wire:model="icon_style" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 @foreach($this->iconStyleOptions() as $value => $label)
                                 <option value="{{ $value }}" @selected($icon_style === $value)>{{ $label }}</option>
                                 @endforeach
@@ -182,7 +175,7 @@
 
                     {{-- Contenido con Quill Editor --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
                         <div wire:ignore class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
                             <div id="quill-editor" class="min-h-[250px] max-h-[400px] overflow-y-auto"></div>
                             <textarea wire:model="content" id="content-textarea" class="hidden">{{ $content }}</textarea>
@@ -192,28 +185,28 @@
 
                     {{-- Descripción --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
                         <textarea wire:model="description" rows="3" placeholder="{{ __('cms.sections.description_placeholder') }}"
-                                  class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Botón CTA e URL en grid de dos columnas --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.button_label') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.button_label') }}</label>
                             <input type="text" wire:model="name_button" placeholder="{{ __('cms.sections.button_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.url_label') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.url_label') }}</label>
                             <input type="text" wire:model="url_button" placeholder="{{ __('cms.sections.url_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.category_slug_label') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.category_slug_label') }}</label>
                             <input type="text" wire:model="category_slug" placeholder="{{ __('cms.sections.category_slug_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             <p class="text-[10px] text-slate-400">{{ __('cms.sections.category_slug_hint') }}</p>
                         </div>
                     </div>
@@ -227,7 +220,7 @@
                     <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
+                                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
                                 <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.items_hint') }} <code class="text-primary font-mono">{{ $itemsGroup }}</code></p>
                             </div>
                             @if(count($itemFields) > 0)
@@ -284,7 +277,7 @@
                     <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
+                                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
                                 <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.buttons_hint') }}</p>
                             </div>
                             <button type="button" wire:click="addButton" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-white hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
@@ -341,7 +334,7 @@
                     {{-- Galería de imágenes múltiples --}}
                     <div class="space-y-4">
                         <div class="flex items-center justify-between">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
                             <span class="text-xs text-slate-500">{{ count($photos) }} {{ __('cms.sections.images_count') }}</span>
                         </div>
 

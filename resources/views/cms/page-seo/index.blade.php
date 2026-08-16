@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -35,7 +35,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.page_seo.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="10">10 por página</option>
@@ -48,7 +48,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.page_seo.page_slug') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.page_seo.seo_title') }}</th>
                             <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
@@ -59,7 +59,7 @@
                         @forelse($pageSeos as $pageSeo)
                         <tr wire:key="page-seo-{{ $pageSeo->id }}" class="hover:bg-slate-50/50 transition-colors">
                             <td class="px-6 py-4">
-                                <span class="font-semibold text-[#222]">{{ $pageSeo->page_slug }}</span>
+                                <span class="font-semibold text-heading">{{ $pageSeo->page_slug }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="text-sm text-slate-600">{{ $pageSeo->seo_title ?? '—' }}</span>
@@ -91,7 +91,7 @@
                         @empty
                         <tr>
                             <td colspan="4" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">{{ __('cms.page_seo.no_records') }}</p>
                                 </div>
@@ -103,11 +103,7 @@
             </div>
 
             {{-- Paginación --}}
-            @if($pageSeos->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $pageSeos->links() }}
-            </div>
-            @endif
+            {{ $pageSeos->links() }}
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
@@ -115,10 +111,10 @@
 
             {{-- Cabecera limpia --}}
             <div class="p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-[#222]">
+                <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.page_seo.edit_title') : __('cms.page_seo.new_title') }}
                 </h2>
-                <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.page_seo.subtitle') }}</p>
+                <p class="text-xs text-slate-400 mt-1">{{ __('cms.page_seo.subtitle') }}</p>
             </div>
 
             {{-- Formulario --}}
@@ -126,36 +122,36 @@
                 <div class="p-6 space-y-6">
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.page_seo.page_slug') }} <span class="text-red-500">*</span></label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.page_seo.page_slug') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="page_slug" placeholder="{{ __('cms.page_seo.page_slug_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         @error('page_slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.page_seo.seo_title') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.page_seo.seo_title') }}</label>
                         <input type="text" wire:model="seo_title" placeholder="{{ __('cms.page_seo.seo_title_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         @error('seo_title') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.general.seo_description_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.general.seo_description_label') }}</label>
                         <textarea wire:model="seo_description" rows="3"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('seo_description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.page_seo.seo_keywords') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.page_seo.seo_keywords') }}</label>
                         <textarea wire:model="seo_keywords" rows="2"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('seo_keywords') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Imagen OG --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.page_seo.og_image') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.page_seo.og_image') }}</label>
                         <div class="relative">
                             @if($og_image)
                             <div class="mb-3 relative">

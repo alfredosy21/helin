@@ -4,16 +4,22 @@
 
 /* Design Tokens */
 :root {
-  /* Brand Colors */
-  --color-primary: 9 182 162;          /* rgb(9, 182, 162) - Helin Latam brand color */
-  --color-primary-light: 9 182 162;    /* Unificado al color primario #09b6a2 */
-  --color-primary-dark: 9 182 162;     /* Unificado al color primario #09b6a2 */
+  /* Brand Colors - Unificado con el frontend público (turquesa Helin) */
+  --color-primary: 107 194 195;        /* rgb(107, 194, 195) = #6BC2C3 */
+  --color-primary-light: 176 230 230;  /* #B0E6E6 */
+  --color-primary-dark: 74 168 169;    /* #4AA8A9 */
 
   /* Semantic Colors */
   --color-success: 34 197 94;          /* green-500 */
   --color-warning: 245 158 11;        /* amber-500 */
   --color-danger: 239 68 68;          /* red-500 */
-  --color-info: 9 182 162;            /* Unificado con la marca corporativa */
+  --color-info: 107 194 195;          /* Unificado con la marca corporativa */
+
+  /* Semantic Text/Background (frontend-aligned) */
+  --color-heading: 18 63 74;           /* #123F4A */
+  --color-body: 45 55 64;              /* #2D3740 */
+  --color-soft: 244 247 248;           /* #f4f7f8 */
+  --color-line: 216 227 229;           /* #D8E3E5 */
 
   /* Neutral Palette */
   --color-gray-50: 249 250 251;
@@ -61,8 +67,12 @@
   --radius-lg: 0.5rem;    /* 8px - rounded-lg */
   --radius-xl: 0.75rem;   /* 12px - rounded-xl */
   --radius-2xl: 1rem;     /* 16px - rounded-2xl */
-  --radius-3xl: 1.5rem;   /* 24px - rounded-3xl */
+  --radius-3xl: 1.5rem;   /* 24px - rounded-3xl (legado, ya no usado en cards/modales) */
   --radius-full: 9999px;
+
+  /* Card/Modal radius tokens (softened per design system) */
+  --radius-card: 0.75rem;   /* 12px - rounded-xl */
+  --radius-modal: 1rem;     /* 16px - rounded-2xl */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -161,7 +171,7 @@
   }
 
   .btn-primary {
-    @apply bg-[rgb(9,182,162)] text-white hover:bg-[rgb(9,182,162)] focus:ring-[rgb(9,182,162)] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
@@ -186,7 +196,7 @@
 
   /* Corregido link con el color primario de marca */
   .btn-link {
-    @apply text-[rgb(9,182,162)] hover:text-[rgb(9,182,162)] focus:ring-[rgb(9,182,162)] p-0 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply text-primary-600 hover:text-primary-700 focus:ring-primary-500 p-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Button Sizes */
@@ -198,7 +208,7 @@
 
   /* Input Base */
   .input {
-    @apply block w-full rounded-xl border-gray-300 focus:border-[rgb(9,182,162)] focus:border transition-colors duration-200 placeholder:text-gray-400;
+    @apply block w-full rounded-xl bg-white border-line focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-colors duration-200 placeholder:text-gray-400;
   }
 
   .input-error {
@@ -207,7 +217,7 @@
 
   /* Card Base */
   .card {
-    @apply bg-white rounded-3xl shadow-lg shadow-black/5;
+    @apply bg-white rounded-xl shadow-md shadow-black/5;
   }
 
   .card-hover {
@@ -220,11 +230,11 @@
   }
 
   .badge-default { @apply bg-gray-100 text-gray-800; }
-  .badge-primary { @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)]; }
+  .badge-primary { @apply bg-primary-500/10 text-primary-700; }
   .badge-success { @apply bg-green-100 text-green-800; }
   .badge-warning { @apply bg-amber-100 text-amber-800; }
   .badge-danger { @apply bg-red-100 text-red-800; }
-  .badge-info { @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)]; }
+  .badge-info { @apply bg-primary-500/10 text-primary-700; }
 
   /* Modal Base */
   .modal-backdrop {
@@ -232,7 +242,7 @@
   }
 
   .modal-content {
-    @apply bg-white rounded-3xl shadow-2xl shadow-black/10 max-w-md w-full mx-auto;
+    @apply bg-white rounded-2xl shadow-2xl shadow-black/10 max-w-md w-full mx-auto;
   }
 
   /* Toast Base */
@@ -253,7 +263,7 @@
   }
 
   .toast-info {
-    @apply bg-[rgb(9,182,162)]/10 border border-[rgb(9,182,162)]/30 text-[rgb(9,182,162)];
+    @apply bg-primary-500/10 border border-primary-500/30 text-primary-700;
   }
 
   /* Loading States */
@@ -314,26 +324,26 @@
 
   /* Navigation - Ajustado para que marque con el color suave corporativo */
   .nav-link {
-    @apply flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-700 rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-colors;
+    @apply flex items-center space-x-3 px-3 py-2 text-sm font-medium text-body rounded-xl hover:bg-slate-50 hover:text-heading transition-colors;
   }
 
   .nav-link-active {
-    @apply bg-[rgb(9,182,162)]/10 text-[rgb(9,182,162)];
+    @apply bg-primary-500/10 text-primary-600 border-l-2 border-primary-500;
   }
 
   /* Sidebar */
   .sidebar {
-    @apply bg-white rounded-r-3xl shadow-lg shadow-black/5 overflow-hidden;
+    @apply bg-white border-r border-line overflow-hidden;
   }
 
   /* Header */
   .header {
-    @apply bg-white border-b border-gray-200 shadow-sm;
+    @apply bg-white border-b border-line shadow-sm;
   }
 
   /* Footer */
   .footer {
-    @apply bg-gray-50 border-t border-gray-200;
+    @apply bg-soft border-t border-line;
   }
 }
 
@@ -345,7 +355,7 @@
   }
 
   .hover-glow {
-    @apply hover:shadow-lg hover:shadow-[rgb(9,182,162)]/20 transition-shadow duration-200;
+    @apply hover:shadow-lg hover:shadow-primary-500/20 transition-shadow duration-200;
   }
 
   /* Animations */
@@ -367,7 +377,7 @@
 
   /* Text Utilities - Gradiente corporativo unificado al primario */
   .text-gradient {
-    @apply bg-gradient-to-r from-[rgb(9,182,162)] to-[rgb(9,182,162)] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent;
   }
 
   .text-shadow {
@@ -518,6 +528,52 @@
     --color-gray-800: 51 51 51;
     --color-gray-900: 0 0 0;
   }
+}
+
+/* Third-Party Overrides — SweetAlert2 (turquesa brand accents) */
+.swal2-popup {
+  border-radius: var(--radius-modal) !important;
+}
+
+.swal2-confirm {
+  background-color: rgb(var(--color-primary)) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: none !important;
+}
+
+.swal2-confirm:focus {
+  box-shadow: 0 0 0 3px rgb(var(--color-primary) / 0.3) !important;
+}
+
+.swal2-cancel {
+  background-color: rgb(var(--color-gray-200)) !important;
+  color: rgb(var(--color-gray-800)) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: rgb(var(--color-warning)) !important;
+  color: rgb(var(--color-warning)) !important;
+}
+
+.swal2-icon.swal2-question,
+.swal2-icon.swal2-info {
+  border-color: rgb(var(--color-primary)) !important;
+  color: rgb(var(--color-primary)) !important;
+}
+
+/* Third-Party Overrides — Toastify (turquesa brand accents) */
+.toastify {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.toastify.toastify-success {
+  background: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-primary-dark))) !important;
+}
+
+.toastify.toastify-info {
+  background: rgb(var(--color-primary)) !important;
 }
 
 /* Reduced Motion */

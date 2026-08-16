@@ -1,5 +1,5 @@
 {{-- Root Container --}}
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -24,7 +24,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="Buscar por nombre, email o teléfono..."
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="statusFilter" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="all">Todos los estados</option>
@@ -44,7 +44,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-4 py-3.5">ID</th>
                             <th class="px-4 py-3.5">Cliente</th>
                             <th class="px-4 py-3.5">Contacto</th>
@@ -61,7 +61,7 @@
                         <tr wire:key="request-{{ $request->id }}" class="hover:bg-slate-50/50 transition-colors">
                             <td class="px-4 py-3">
                                 <div class="flex flex-col">
-                                    <span class="font-medium text-[#222]">{{ $request->correlative }}</span>
+                                    <span class="font-medium text-heading">{{ $request->correlative }}</span>
                                     @if($request->uuid)
                                     <span class="text-xs text-slate-400 font-mono">{{ substr($request->uuid, 0, 8) }}...</span>
                                     @endif
@@ -69,8 +69,8 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex flex-col">
-                                    <span class="font-medium text-[#222]">{{ $request->full_name }}</span>
-                                    <span class="text-xs text-[#c0c1c6]">{{ $request->customerType->name ?? 'N/A' }}</span>
+                                    <span class="font-medium text-heading">{{ $request->full_name }}</span>
+                                    <span class="text-xs text-slate-400">{{ $request->customerType->name ?? 'N/A' }}</span>
                                     @if($request->company_name)
                                     <span class="text-xs text-slate-500">{{ $request->company_name }}</span>
                                     @endif
@@ -88,7 +88,7 @@
                             <td class="px-4 py-3">
                                 <div class="flex flex-col text-xs">
                                     <span class="text-slate-600">{{ $request->city->name ?? 'N/A' }}</span>
-                                    <span class="text-[#c0c1c6]">{{ $request->state->name ?? 'N/A' }}</span>
+                                    <span class="text-slate-400">{{ $request->state->name ?? 'N/A' }}</span>
                                 </div>
                             </td>
                             <td class="px-4 py-3">
@@ -146,7 +146,7 @@
                         @empty
                         <tr>
                             <td colspan="9" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">No hay solicitudes registradas</p>
                                 </div>
@@ -158,11 +158,7 @@
             </div>
 
             {{-- Paginación --}}
-            @if($requests->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $requests->links() }}
-            </div>
-            @endif
+            {{ $requests->links() }}
         </div>
     </div>
 
@@ -171,7 +167,7 @@
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" wire:click="closeDetails">
         <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
             <div class="p-6 border-b border-slate-50 flex justify-between items-center">
-                <h2 class="text-lg font-bold text-[#222]">Detalles de la Solicitud #{{ $selectedRequest->id }}</h2>
+                <h2 class="text-lg font-bold text-heading">Detalles de la Solicitud #{{ $selectedRequest->id }}</h2>
                 <button wire:click="closeDetails" class="text-slate-400 hover:text-slate-600 border-none bg-transparent cursor-pointer">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
@@ -179,60 +175,60 @@
             <div class="p-6 space-y-6">
                 {{-- Información del Cliente --}}
                 <div class="bg-slate-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-[#222] mb-3">Información del Cliente</h3>
+                    <h3 class="font-semibold text-heading mb-3">Información del Cliente</h3>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Nombre:</span>
+                            <span class="text-slate-400">Nombre:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->full_name }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Tipo:</span>
+                            <span class="text-slate-400">Tipo:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->customerType->name ?? 'N/A' }}</span>
                         </div>
                         @if($selectedRequest->cedula)
                         <div>
-                            <span class="text-[#c0c1c6]">Cédula:</span>
+                            <span class="text-slate-400">Cédula:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->cedula }}</span>
                         </div>
                         @endif
                         @if($selectedRequest->company_name)
                         <div>
-                            <span class="text-[#c0c1c6]">Empresa:</span>
+                            <span class="text-slate-400">Empresa:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->company_name }}</span>
                         </div>
                         @endif
                         @if($selectedRequest->rif)
                         <div>
-                            <span class="text-[#c0c1c6]">RIF:</span>
+                            <span class="text-slate-400">RIF:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->rif }}</span>
                         </div>
                         @endif
                         <div>
-                            <span class="text-[#c0c1c6]">Teléfono:</span>
+                            <span class="text-slate-400">Teléfono:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->phone }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Email:</span>
+                            <span class="text-slate-400">Email:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->email }}</span>
                         </div>
                         @if($selectedRequest->whatsappNumber)
                         <div>
-                            <span class="text-[#c0c1c6]">WhatsApp:</span>
+                            <span class="text-slate-400">WhatsApp:</span>
                             <span class="text-turquesa ml-2">{{ $selectedRequest->whatsappNumber->phone_number }}</span>
                         </div>
                         @endif
                     </div>
                     <div class="mt-3">
-                        <span class="text-[#c0c1c6] text-sm">Dirección:</span>
+                        <span class="text-slate-400 text-sm">Dirección:</span>
                         <p class="text-slate-700 text-sm mt-1">{{ $selectedRequest->address }}</p>
                     </div>
                     <div class="mt-3 grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Estado:</span>
+                            <span class="text-slate-400">Estado:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->state->name ?? 'N/A' }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Ciudad:</span>
+                            <span class="text-slate-400">Ciudad:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->city->name ?? 'N/A' }}</span>
                         </div>
                     </div>
@@ -240,15 +236,15 @@
 
                 {{-- Información de Envío --}}
                 <div class="bg-slate-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-[#222] mb-3">Información de Envío</h3>
+                    <h3 class="font-semibold text-heading mb-3">Información de Envío</h3>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Método:</span>
+                            <span class="text-slate-400">Método:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->deliveryMethod->name ?? 'N/A' }}</span>
                         </div>
                         @if($selectedRequest->other_delivery_company)
                         <div>
-                            <span class="text-[#c0c1c6]">Otra Empresa:</span>
+                            <span class="text-slate-400">Otra Empresa:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->other_delivery_company }}</span>
                         </div>
                         @endif
@@ -256,15 +252,15 @@
                     @if($selectedRequest->recipient_name)
                     <div class="mt-3 grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Destinatario:</span>
+                            <span class="text-slate-400">Destinatario:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->recipient_name }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Documento:</span>
+                            <span class="text-slate-400">Documento:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->recipient_document }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Teléfono:</span>
+                            <span class="text-slate-400">Teléfono:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->recipient_phone }}</span>
                         </div>
                     </div>
@@ -272,15 +268,15 @@
                     @if($selectedRequest->shipping_state_id)
                     <div class="mt-3 grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Estado Envío:</span>
+                            <span class="text-slate-400">Estado Envío:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->shippingState->name ?? 'N/A' }}</span>
                         </div>
                         <div>
-                            <span class="text-[#c0c1c6]">Ciudad Envío:</span>
+                            <span class="text-slate-400">Ciudad Envío:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->shippingCity->name ?? 'N/A' }}</span>
                         </div>
                         <div class="col-span-2">
-                            <span class="text-[#c0c1c6]">Agencia Destino:</span>
+                            <span class="text-slate-400">Agencia Destino:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->destination_agency }}</span>
                         </div>
                     </div>
@@ -289,15 +285,15 @@
 
                 {{-- Información de Pago --}}
                 <div class="bg-slate-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-[#222] mb-3">Información de Pago</h3>
+                    <h3 class="font-semibold text-heading mb-3">Información de Pago</h3>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[#c0c1c6]">Método:</span>
+                            <span class="text-slate-400">Método:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->paymentMethod->name ?? 'N/A' }}</span>
                         </div>
                         @if($selectedRequest->payment_receipt_number)
                         <div>
-                            <span class="text-[#c0c1c6]">Comprobante:</span>
+                            <span class="text-slate-400">Comprobante:</span>
                             <span class="text-slate-700 ml-2">{{ $selectedRequest->payment_receipt_number }}</span>
                         </div>
                         @endif
@@ -307,14 +303,14 @@
                 {{-- Observaciones --}}
                 @if($selectedRequest->observations)
                 <div class="bg-slate-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-[#222] mb-3">Observaciones</h3>
+                    <h3 class="font-semibold text-heading mb-3">Observaciones</h3>
                     <p class="text-slate-700 text-sm">{{ $selectedRequest->observations }}</p>
                 </div>
                 @endif
 
                 {{-- Carrito --}}
                 <div class="bg-slate-50 rounded-lg p-4">
-                    <h3 class="font-semibold text-[#222] mb-3">Productos Solicitados</h3>
+                    <h3 class="font-semibold text-heading mb-3">Productos Solicitados</h3>
                     <div class="text-sm">
                         @if($selectedRequest->cart_data)
                             @foreach($selectedRequest->cart_data as $item)

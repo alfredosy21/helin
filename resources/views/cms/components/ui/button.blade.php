@@ -10,13 +10,13 @@
 
     // Definir arrays de clases
     $variantClasses = [
-        'primary' => 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed',
+        'primary' => 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'secondary' => 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'success' => 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'warning' => 'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:red-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'ghost' => 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed',
-        'link' => 'text-primary-600 hover:text-primary-700 focus:ring-blue-500 p-0 disabled:opacity-50 disabled:cursor-not-allowed'
+        'link' => 'text-primary-600 hover:text-primary-700 focus:ring-primary-500 p-0 disabled:opacity-50 disabled:cursor-not-allowed'
     ];
 
     $sizeClasses = [
@@ -28,7 +28,7 @@
     ];
 
     // Construir clases finales
-    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
     $variantClass = $variantClasses[$variant] ?? $variantClasses['primary'];
     $sizeClass = $sizeClasses[$size] ?? $sizeClasses['md'];
     $stateClass = $loading || $disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]';

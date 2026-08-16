@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[#f8fafc] pb-12">
+<div class="min-h-screen bg-soft pb-12">
 
     <!-- Header -->
     <div class="p-6">
@@ -93,7 +93,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {{-- Imagen por defecto de categoría --}}
                         <div class="relative">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block mb-2">{{ __('cms.settings.default_category_image') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">{{ __('cms.settings.default_category_image') }}</label>
                             @if($default_category_image)
                             <div class="mb-3 relative">
                                 <img src="{{ $default_category_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
@@ -117,7 +117,7 @@
 
                         {{-- Imagen por defecto de banner --}}
                         <div class="relative">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block mb-2">{{ __('cms.settings.default_banner_image') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">{{ __('cms.settings.default_banner_image') }}</label>
                             @if($default_banner_image)
                             <div class="mb-3 relative">
                                 <img src="{{ $default_banner_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
@@ -200,19 +200,19 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Nombre de la sede</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nombre de la sede</label>
                             <input type="text" wire:model="offices.{{ $index }}.name" placeholder="ej: Caracas"
                                    class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                             @error('offices.' . $index . '.name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">WhatsApp (URL)</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">WhatsApp (URL)</label>
                             <input type="text" wire:model="offices.{{ $index }}.whatsapp" placeholder="https://wa.me/58424..."
                                    class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                             @error('offices.' . $index . '.whatsapp') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5 md:col-span-2">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Dirección punto de retiro</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Dirección punto de retiro</label>
                             <textarea wire:model="offices.{{ $index }}.url" rows="2"
                                       class="w-full px-3 py-2 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
                                       placeholder="Dirección del punto de retiro"></textarea>
@@ -257,13 +257,13 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Valor (slug)</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Valor (slug)</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.value" placeholder="ej: informacion-comercial"
                                    class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                             @error('contact_subjects.' . $index . '.value') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Etiqueta visible</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Etiqueta visible</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.label" placeholder="ej: Información comercial"
                                    class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
                             @error('contact_subjects.' . $index . '.label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror

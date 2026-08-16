@@ -13,7 +13,7 @@
         'default' => 'bg-white',
         'elevated' => 'bg-white',
         'flat' => 'bg-gray-50',
-        'bordered' => 'bg-white border border-gray-200',
+        'bordered' => 'bg-white border border-line',
         'gradient' => 'bg-gradient-to-br from-blue-50 to-indigo-50'
     ];
     
@@ -36,7 +36,7 @@
     
     $currentVariant = $variantClasses[$variant] ?? $variantClasses['default'];
     $currentPadding = $paddingClasses[$padding] ?? $paddingClasses['normal'];
-    $currentShadow = $shadow ? ($shadowClasses[$shadow] ?? 'shadow-lg') : '';
+    $currentShadow = $shadow ? ($shadowClasses[$shadow] ?? 'shadow-md') : '';
     $hoverClass = $hover ? 'hover:shadow-xl hover:scale-[1.02] transition-all duration-300' : '';
 @endphp
 --}}
@@ -47,8 +47,8 @@
         {$currentPadding}
         {$currentShadow}
         {$hoverClass}
-        rounded-3xl
-        {$bordered ? 'border-gray-200' : ''}
+        rounded-xl
+        {$bordered ? 'border border-line' : ''}
         shadow-black/5
     "])}}
 >

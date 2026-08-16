@@ -28,7 +28,7 @@ $isSubmoduleActive = $submodule && !$section;
     {{-- Module Rendering --}}
     @if($module)
     <span class="text-slate-300">/</span>
-    <span class="flex items-center gap-1 {{ $isModuleActive ? 'text-primary-600 font-semibold' : 'text-slate-500' }}">
+    <span class="flex items-center gap-1 {{ $isModuleActive ? 'text-primary-600 font-semibold' : 'text-body' }}">
         @if($module->class)
         {{-- Fixed: Using your layout's custom icon component --}}
         <x-ui-icon name="{{ $module->class }}" class="w-3.5 h-3.5" />
@@ -40,7 +40,7 @@ $isSubmoduleActive = $submodule && !$section;
     {{-- Submodule Rendering --}}
     @if($submodule)
     <span class="text-slate-300">/</span>
-    <span class="flex items-center gap-1 {{ $isSubmoduleActive ? 'text-primary-600 font-semibold' : 'text-slate-500' }}">
+    <span class="flex items-center gap-1 {{ $isSubmoduleActive ? 'text-primary-600 font-semibold' : 'text-body' }}">
         @if($submodule->icon)
         {{-- Fixed: Using your layout's custom icon component --}}
         <x-ui-icon name="{{ $submodule->icon }}" class="w-3.5 h-3.5" />

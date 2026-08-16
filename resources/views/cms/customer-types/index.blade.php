@@ -1,4 +1,4 @@
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     <div class="relative z-10 p-6 space-y-6">
 
@@ -33,7 +33,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.customer_types.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="10">{{ __('cms.tables.per_page_10') }}</option>
@@ -46,7 +46,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.tables.name') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.tables.description') }}</th>
                             <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
@@ -62,7 +62,7 @@
                                     <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <span class="font-bold text-[#222] uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
+                                    <span class="font-bold text-heading uppercase tracking-wide text-xs bg-slate-50 border border-slate-100 px-2.5 py-1 rounded">
                                         {{ $type->name }}
                                     </span>
                                 </div>
@@ -74,12 +74,7 @@
                                 <span class="text-xs text-slate-500">{{ $type->updated_at->format('d/m/Y H:i') }}</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $type->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
-                                    <span class="text-xs font-medium {{ $type->is_active ? 'text-slate-700' : 'text-slate-400' }}">
-                                        {{ $type->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
-                                    </span>
-                                </div>
+                                <x-ui-badge-status :active="$type->is_active" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-1">
@@ -99,7 +94,7 @@
                         @empty
                         <tr>
                             <td colspan="5" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
                                     <p class="text-xs font-medium">{{ __('cms.customer_types.empty') }}</p>
                                 </div>
@@ -110,11 +105,7 @@
                 </table>
             </div>
 
-            @if($customerTypes->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $customerTypes->links() }}
-            </div>
-            @endif
+            {{ $customerTypes->links() }}
         </div>
 
         @else
@@ -123,10 +114,10 @@
         <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
 
             <div class="p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-[#222]">
+                <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.customer_types.edit_title') : __('cms.customer_types.new_title') }}
                 </h2>
-                <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.customer_types.subtitle') }}</p>
+                <p class="text-xs text-slate-400 mt-1">{{ __('cms.customer_types.subtitle') }}</p>
             </div>
 
             <form wire:submit.prevent="save" class="w-full">
@@ -143,25 +134,25 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.customer_types.name_label') }} <span class="text-red-500">*</span></label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.customer_types.name_label') }} <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="name" placeholder="{{ __('cms.customer_types.name_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.customer_types.slug_label') }}</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.customer_types.slug_label') }}</label>
                             <input type="text" wire:model="slug" placeholder="{{ __('cms.customer_types.slug_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                            <p class="text-xs text-[#c0c1c6] italic mt-1">{{ __('cms.customer_types.slug_helper') }}</p>
+                            <p class="text-xs text-slate-400 italic mt-1">{{ __('cms.customer_types.slug_helper') }}</p>
                         </div>
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.customer_types.description_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.customer_types.description_label') }}</label>
                         <textarea wire:model="description" rows="3"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 

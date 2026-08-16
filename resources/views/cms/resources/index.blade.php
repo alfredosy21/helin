@@ -1,5 +1,5 @@
 {{-- Root Container --}}
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -36,7 +36,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.resources.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="filterType" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="">{{ __('cms.resources.all_types') }}</option>
@@ -67,7 +67,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-6 py-3.5">{{ __('cms.resources.resource') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.resources.type') }}</th>
                             <th class="px-6 py-3.5">{{ __('cms.resources.specialty') }}</th>
@@ -86,7 +86,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
                                     <div class="flex-1">
-                                        <div class="font-medium text-[#222] mb-1">{{ $resource->title }}</div>
+                                        <div class="font-medium text-heading mb-1">{{ $resource->title }}</div>
                                         <div class="text-xs text-slate-500 line-clamp-2">{{ Str::limit($resource->description, 80) }}</div>
                                     </div>
                                 </div>
@@ -108,12 +108,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full {{ $resource->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
-                                    <span class="text-xs font-medium {{ $resource->is_active ? 'text-slate-700' : 'text-slate-400' }}">
-                                        {{ $resource->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
-                                    </span>
-                                </div>
+                                <x-ui-badge-status :active="$resource->is_active" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-1">
@@ -137,7 +132,7 @@
                         @empty
                         <tr>
                             <td colspan="7" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-[#c0c1c6]">
+                                <div class="flex flex-col items-center text-slate-400">
                                     <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                     <p class="text-xs font-medium">{{ __('cms.resources.no_resources') }}</p>
                                 </div>
@@ -149,11 +144,7 @@
             </div>
 
             {{-- Paginación --}}
-            @if($resources->hasPages())
-            <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                {{ $resources->links() }}
-            </div>
-            @endif
+            {{ $resources->links() }}
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
@@ -161,10 +152,10 @@
 
             {{-- Cabecera limpia --}}
             <div class="p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-[#222]">
+                <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.resources.edit_title') : __('cms.resources.new_title') }}
                 </h2>
-                <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.resources.subtitle') }}</p>
+                <p class="text-xs text-slate-400 mt-1">{{ __('cms.resources.subtitle') }}</p>
             </div>
 
             {{-- Formulario --}}
@@ -189,23 +180,23 @@
                     {{-- Inputs principales --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.title_label') }} <span class="text-red-500">*</span></label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.title_label') }} <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="title" placeholder="{{ __('cms.resources.title_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('title') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Slug (URL amigable) <span class="text-red-500">*</span></label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Slug (URL amigable) <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="slug" placeholder="ejemplo: regeneracion-osea-guiada"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('slug') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.type_label') }} <span class="text-red-500">*</span></label>
-                            <select wire:model="type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.type_label') }} <span class="text-red-500">*</span></label>
+                            <select wire:model="type" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 <option value="">Seleccionar tipo</option>
                                 <option value="case_study">Caso clínico</option>
                                 <option value="video">Video</option>
@@ -220,8 +211,8 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.format_label') }}</label>
-                            <select wire:model="format" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.format_label') }}</label>
+                            <select wire:model="format" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 <option value="">Seleccionar formato</option>
                                 <option value="article">Artículo</option>
                                 <option value="pdf">PDF</option>
@@ -233,9 +224,9 @@
 
                     {{-- Descripción --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.description_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.description_label') }} <span class="text-red-500">*</span></label>
                         <textarea wire:model="description" rows="4"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"
                                   placeholder="{{ __('cms.resources.description_placeholder') }}"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
@@ -243,8 +234,8 @@
                     {{-- Tipo de Recurso y Especialidad --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
-                            <select wire:model="resource_type_id" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
+                            <select wire:model="resource_type_id" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 <option value="">Seleccionar tipo</option>
                                 <option value="1">Caso Clínico</option>
                                 <option value="2">Video</option>
@@ -256,8 +247,8 @@
                             @error('resource_type_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">Especialidad</label>
-                            <select wire:model="resource_specialty_id" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Especialidad</label>
+                            <select wire:model="resource_specialty_id" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 <option value="">Seleccionar especialidad</option>
                                 <option value="1">Cirugía Bucal</option>
                                 <option value="2">Maxilofacial</option>
@@ -276,21 +267,21 @@
                     {{-- Archivo/URL --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.file_label') }} (opcional)</label>
-                            <input type="file" wire:model="file_path" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.file_label') }} (opcional)</label>
+                            <input type="file" wire:model="file_path" class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             @error('file_path') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.url_label') }} (opcional)</label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.url_label') }} (opcional)</label>
                             <input type="url" wire:model="url" placeholder="{{ __('cms.resources.url_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     {{-- Imagen miniatura --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.thumbnail_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.thumbnail_label') }}</label>
                         <div class="relative">
                             @if($thumbnail)
                             <div class="mb-3 relative group max-w-xs">
@@ -324,45 +315,45 @@
 
                     {{-- Video URL --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.video_url_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.video_url_label') }}</label>
                         <input type="url" wire:model="video_url" placeholder="https://www.youtube.com/embed/..."
-                               class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                         @error('video_url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Contenido --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.content_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.content_label') }}</label>
                         <textarea wire:model="content" rows="6"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"
                                   placeholder="{{ __('cms.resources.content_placeholder') }}"></textarea>
                         @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.diagnosis_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.diagnosis_label') }}</label>
                         <textarea wire:model="diagnosis" rows="3"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('diagnosis') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.materials_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.materials_label') }}</label>
                         <textarea wire:model="materials" rows="3"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('materials') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.results_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.results_label') }}</label>
                         <textarea wire:model="results" rows="3"
-                                  class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
                         @error('results') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Galería --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider">{{ __('cms.resources.gallery_label') }}</label>
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.resources.gallery_label') }}</label>
                         <div class="relative">
                             @if($gallery)
                             <div class="mb-3 flex flex-wrap gap-3">
@@ -388,7 +379,7 @@
                                 @endforeach
                             </div>
                             @endif
-                            <input type="file" wire:model="gallery" multiple class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            <input type="file" wire:model="gallery" multiple class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             @error('gallery.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>

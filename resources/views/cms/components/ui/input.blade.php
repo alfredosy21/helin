@@ -43,8 +43,8 @@
             {{ $readonly ? 'readonly' : '' }}
             {{ $attributes->merge([
                 'class' => trim("
-                block w-full rounded-xl border-gray-300
-                focus:outline-none focus:ring-0 focus:border-gray-300
+                block w-full rounded-xl border-line bg-white
+                focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
                 shadow-none
                 {$error ? 'border-red-500' : ''}
                 {$disabled ? 'bg-gray-100 cursor-not-allowed' : ''}

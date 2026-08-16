@@ -12,10 +12,10 @@
         'success' => 'bg-green-100 text-green-800',
         'warning' => 'bg-amber-100 text-amber-800',
         'danger' => 'bg-red-100 text-red-800',
-        'info' => 'bg-cyan-100 text-cyan-800',
+        'info' => 'bg-primary-100 text-primary-700',
         'purple' => 'bg-purple-100 text-purple-800',
         'outline' => 'border border-gray-300 text-gray-700 bg-transparent',
-        'outline-primary' => 'border border-blue-300 text-primary-700 bg-transparent',
+        'outline-primary' => 'border border-primary-300 text-primary-700 bg-transparent',
         'outline-success' => 'border border-green-300 text-green-700 bg-transparent',
         'outline-warning' => 'border border-amber-300 text-amber-700 bg-transparent',
         'outline-danger' => 'border border-red-300 text-red-700 bg-transparent'

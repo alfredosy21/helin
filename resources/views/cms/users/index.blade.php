@@ -1,5 +1,5 @@
 {{-- Root Container --}}
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -35,7 +35,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                         </span>
                         <input type="text" wire:model.live="search" placeholder="{{ __('cms.users.search_placeholder') }}"
-                            class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                            class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                     </div>
                     <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                         <option value="10">{{ __('cms.tables.per_page_10') }}</option>
@@ -48,7 +48,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                            <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                                 <th class="px-6 py-3.5 text-center w-20">{{ __('cms.tables.admin') }}</th>
                                 <th class="px-6 py-3.5">{{ __('cms.tables.information') }}</th>
                                 <th class="px-6 py-3.5">{{ __('cms.tables.role_security') }}</th>
@@ -72,8 +72,8 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex flex-col">
-                                            <span class="font-medium text-[#222]">{{ $user->name }}</span>
-                                            <span class="text-xs text-[#c0c1c6]">{{ $user->email }}</span>
+                                            <span class="font-medium text-heading">{{ $user->name }}</span>
+                                            <span class="text-xs text-slate-400">{{ $user->email }}</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
@@ -82,12 +82,7 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full {{ $user->is_active ? 'bg-primary' : 'bg-slate-300' }}"></span>
-                                            <span class="text-xs font-medium {{ $user->is_active ? 'text-slate-700' : 'text-slate-400' }}">
-                                                {{ $user->is_active ? __('cms.general.status_active') : __('cms.general.status_inactive') }}
-                                            </span>
-                                        </div>
+                                        <x-ui-badge-status :active="$user->is_active" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                                     </td>
                                     <td class="px-6 py-4 text-right">
                                         <div class="flex justify-end gap-1">
@@ -113,7 +108,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-6 py-16 text-center">
-                                        <div class="flex flex-col items-center text-[#c0c1c6]">
+                                        <div class="flex flex-col items-center text-slate-400">
                                             <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
                                             <p class="text-xs font-medium">{{ __('cms.general.no_records') }}</p>
                                         </div>
@@ -125,11 +120,7 @@
                 </div>
 
                 {{-- Paginación --}}
-                @if($users->hasPages())
-                    <div class="p-4 bg-slate-50/50 border-t border-slate-100 text-xs text-slate-500">
-                        {{ $users->links() }}
-                    </div>
-                @endif
+                {{ $users->links() }}
             </div>
         @else
             {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
@@ -137,10 +128,10 @@
 
                 {{-- Cabecera limpia sin botón X --}}
                 <div class="p-6 border-b border-slate-50">
-                    <h2 class="text-lg font-bold text-[#222]">
+                    <h2 class="text-lg font-bold text-heading">
                         {{ $editingId ? __('cms.users.edit_title') : __('cms.users.new_title') }}
                     </h2>
-                    <p class="text-xs text-[#c0c1c6] mt-1">{{ __('cms.users.subtitle') }}</p>
+                    <p class="text-xs text-slate-400 mt-1">{{ __('cms.users.subtitle') }}</p>
                 </div>
 
                 <div class="p-6 space-y-5">
@@ -156,22 +147,22 @@
                     {{-- Nombre y Correo en Grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.users.name_label') }} <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="name" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.users.name_label') }} <span class="text-red-500">*</span></label>
+                            <input type="text" wire:model="name" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             @error('name') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.users.email_label') }} <span class="text-red-500">*</span></label>
-                            <input type="email" wire:model="email" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.users.email_label') }} <span class="text-red-500">*</span></label>
+                            <input type="email" wire:model="email" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             @error('email') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     {{-- Selección de Rol --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.users.role_label') }} <span class="text-red-500">*</span></label>
-                        <select wire:model="rol_id" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.users.role_label') }} <span class="text-red-500">*</span></label>
+                        <select wire:model="rol_id" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                             <option value="">{{ __('cms.users.role_placeholder') }}</option>
                             @foreach($roles as $id => $name)
                                 <option value="{{ $id }}">{{ $name }}</option>
@@ -183,21 +174,21 @@
                     {{-- Bloque de Credenciales --}}
                     <div class="pt-4 border-t border-slate-100 space-y-4">
                         <div class="flex items-center justify-between">
-                            <label class="text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider block">{{ __('cms.users.credentials') }} <span class="text-red-500">*</span></label>
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.users.credentials') }} <span class="text-red-500">*</span></label>
                             <button type="button" wire:click="generatePassword" class="text-xs font-medium text-primary hover:underline bg-transparent border-none p-0 cursor-pointer">
                                 {{ __('cms.users.generate_password') }}
                             </button>
                         </div>
 
                         <div class="space-y-1.5">
-                            <input type="text" placeholder="{{ __('cms.users.password_placeholder') }}" wire:model="password" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                            <input type="text" placeholder="{{ __('cms.users.password_placeholder') }}" wire:model="password" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
 
                             @if($suggestedPassword && !$password)
                                 <div class="p-3 bg-slate-50 border border-slate-100 rounded-lg mt-2 animate-in fade-in duration-150">
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <p class="text-xs font-medium text-primary">{{ __('cms.users.password_suggestion') }}</p>
-                                            <code class="text-xs font-mono text-[#222] mt-1 block">{{ $suggestedPassword }}</code>
+                                            <code class="text-xs font-mono text-heading mt-1 block">{{ $suggestedPassword }}</code>
                                         </div>
                                         <button type="button" onclick="copySuggestedPassword('{{ $suggestedPassword }}')" class="ml-3 p-2 text-slate-400 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors border-none bg-transparent cursor-pointer" title="Copiar contraseña">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -209,7 +200,7 @@
                             @endif
                         </div>
                         @error('password') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                        <p class="text-xs text-[#c0c1c6] italic">
+                        <p class="text-xs text-slate-400 italic">
                             {{ $editingId ? __('cms.users.password_hint_edit') : __('cms.users.password_hint_new') }}
                         </p>
                     </div>

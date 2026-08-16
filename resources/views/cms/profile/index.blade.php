@@ -1,5 +1,5 @@
 {{-- SINGLE ROOT ELEMENT --}}
-<div class="min-h-screen pb-12 bg-[#f8fafc]">
+<div class="min-h-screen pb-12 bg-soft">
 
     <!-- Header Section -->
     <div class="p-6">
@@ -103,8 +103,8 @@
                             @error('phone') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="md:col-span-2 space-y-1.5">
-                            <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider mb-1">{{ __('cms.profile.biography') }}</label>
-                            <textarea wire:model="biography" rows="3" placeholder="{{ __('cms.profile.biography_placeholder') }}" class="w-full px-3 py-2 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{{ __('cms.profile.biography') }}</label>
+                            <textarea wire:model="biography" rows="3" placeholder="{{ __('cms.profile.biography_placeholder') }}" class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
                             @error('biography') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -123,10 +123,10 @@
                 <!-- Password Fields -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider mb-1">{{ __('cms.profile.current_password') }} <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{{ __('cms.profile.current_password') }} <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <input type="password" id="current_password" wire:model="current_password" required
-                                   class="w-full px-3 py-2 pr-10 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                   class="w-full px-3 py-2 pr-10 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             <button type="button" onclick="togglePassword('current_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                                 <svg id="current_password_icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -137,10 +137,10 @@
                         @error('current_password') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider mb-1">{{ __('cms.profile.new_password') }} <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{{ __('cms.profile.new_password') }} <span class="text-red-500">*</span></label>
                         <div class="relative">
                             <input type="password" id="new_password" wire:model="new_password" required
-                                   class="w-full px-3 py-2 pr-10 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                   class="w-full px-3 py-2 pr-10 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             <button type="button" onclick="togglePassword('new_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                                 <svg id="new_password_icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -151,10 +151,10 @@
                         @error('new_password') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-xs font-semibold text-[#c0c1c6] uppercase tracking-wider mb-1">{{ __('cms.profile.confirm_password') }}</label>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{{ __('cms.profile.confirm_password') }}</label>
                         <div class="relative">
                             <input type="password" id="new_password_confirmation" wire:model="new_password_confirmation"
-                                   class="w-full px-3 py-2 pr-10 bg-slate-50 border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                   class="w-full px-3 py-2 pr-10 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                             <button type="button" onclick="togglePassword('new_password_confirmation')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                                 <svg id="new_password_confirmation_icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

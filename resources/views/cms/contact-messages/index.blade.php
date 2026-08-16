@@ -1,5 +1,5 @@
 {{-- Root Container --}}
-<div class="min-h-screen pb-12 bg-[#f8fafc] relative">
+<div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
     <div class="relative z-10 p-6 space-y-6">
@@ -24,7 +24,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="Buscar por nombre, email o asunto..."
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-[#222] placeholder-[#c0c1c6]" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
                 <select wire:model.live="readFilter" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
                     <option value="all">Todos</option>
@@ -42,7 +42,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-[#c0c1c6] text-xs font-semibold">
+                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
                             <th class="px-4 py-3.5">ID</th>
                             <th class="px-4 py-3.5">Nombre</th>
                             <th class="px-4 py-3.5">Contacto</th>
@@ -54,7 +54,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-50 text-sm">
                         @forelse($messages as $message)
-                            <tr class="hover:bg-slate-50/60 transition-colors {{ $message->is_read ? 'text-slate-500' : 'font-medium text-[#222]' }}">
+                            <tr class="hover:bg-slate-50/60 transition-colors {{ $message->is_read ? 'text-slate-500' : 'font-medium text-heading' }}">
                                 <td class="px-4 py-3.5">#{{ $message->id }}</td>
                                 <td class="px-4 py-3.5">{{ $message->nombre }}</td>
                                 <td class="px-4 py-3.5">
@@ -121,7 +121,7 @@
                 <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
                     <div class="flex items-start justify-between gap-4 p-6 border-b border-slate-100">
                         <div>
-                            <h3 class="text-lg font-semibold text-[#222]">{{ $selectedMessage->asunto }}</h3>
+                            <h3 class="text-lg font-semibold text-heading">{{ $selectedMessage->asunto }}</h3>
                             <p class="text-sm text-slate-500 mt-1">{{ $selectedMessage->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                         <button wire:click="closeDetails" class="p-2 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors">
@@ -132,20 +132,20 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <p class="text-xs text-slate-400 uppercase tracking-wide">Nombre</p>
-                                <p class="text-[#222] mt-0.5">{{ $selectedMessage->nombre }}</p>
+                                <p class="text-heading mt-0.5">{{ $selectedMessage->nombre }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-slate-400 uppercase tracking-wide">Teléfono</p>
-                                <p class="text-[#222] mt-0.5">{{ $selectedMessage->telefono ?? '—' }}</p>
+                                <p class="text-heading mt-0.5">{{ $selectedMessage->telefono ?? '—' }}</p>
                             </div>
                         </div>
                         <div>
                             <p class="text-xs text-slate-400 uppercase tracking-wide">Email</p>
-                            <p class="text-[#222] mt-0.5">{{ $selectedMessage->email }}</p>
+                            <p class="text-heading mt-0.5">{{ $selectedMessage->email }}</p>
                         </div>
                         <div>
                             <p class="text-xs text-slate-400 uppercase tracking-wide">Mensaje</p>
-                            <p class="text-[#222] mt-0.5 leading-relaxed whitespace-pre-line">{{ $selectedMessage->mensaje }}</p>
+                            <p class="text-heading mt-0.5 leading-relaxed whitespace-pre-line">{{ $selectedMessage->mensaje }}</p>
                         </div>
                     </div>
                 </div>
