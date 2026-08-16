@@ -343,7 +343,7 @@ HTML,
             ],
             Sections::CTA_HOME => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
-                'image' => 'sections/banner3.png',
+                'image' => 'sections/banner_footer_empresa.png',
                 'name_button' => '☏ Háblale con WhatsApp',
                 'url_button' => 'https://wa.me/584241232025',
                 'status' => 1,
