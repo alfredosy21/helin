@@ -117,10 +117,10 @@ HTML,
                 'icon_style' => self::ICON_NONE,
                 'items' => json_encode([
                     'items' => [
-                        ['icon' => 'fa fa-file', 'title' => 'Casos clínicos', 'description' => 'Protocolos, materiales utilizados y resultados.', 'order' => 1],
-                        ['icon' => 'play', 'title' => 'Videos', 'description' => 'Contenido audiovisual para soporte técnico.', 'order' => 2],
-                        ['icon' => 'pdf', 'title' => 'Manuales', 'description' => 'Documentos técnicos y descargables.', 'order' => 3],
-                        ['icon' => 'fa fa-cloud-download', 'title' => 'Fichas técnicas', 'description' => 'Información clave de productos y soluciones.', 'order' => 4],
+                        ['icon' => '<i class="fas fa-file-medical"></i>', 'title' => 'Casos clínicos', 'description' => 'Protocolos, materiales utilizados y resultados.', 'order' => 1],
+                        ['icon' => '<i class="fas fa-play-circle"></i>', 'title' => 'Videos', 'description' => 'Contenido audiovisual para soporte técnico.', 'order' => 2],
+                        ['icon' => '<i class="fas fa-file-pdf"></i>', 'title' => 'Manuales', 'description' => 'Documentos técnicos y descargables.', 'order' => 3],
+                        ['icon' => '<i class="fas fa-cloud-arrow-down"></i>', 'title' => 'Fichas técnicas', 'description' => 'Información clave de productos y soluciones.', 'order' => 4],
                     ]
                 ]),
                 'content' => null,
