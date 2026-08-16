@@ -165,7 +165,8 @@
                 <div class="brand-card">
                     @php $allyImg = $ally['image'] ?? $ally['url'] ?? $ally['icon'] ?? null; @endphp
                     @if($allyImg)
-                        <img src="{{ str_starts_with($allyImg, ['http://', 'https://']) ? $allyImg : asset('storage/' . $allyImg) }}" alt="{{ $ally['title'] ?? 'Aliado Helin' }}">
+                        @php $isAbsolute = str_starts_with($allyImg, 'http://') || str_starts_with($allyImg, 'https://'); @endphp
+                        <img src="{{ $isAbsolute ? $allyImg : asset('storage/' . $allyImg) }}" alt="{{ $ally['title'] ?? 'Aliado Helin' }}">
                     @else
                         <span>{{ $ally['title'] ?? '' }}</span>
                     @endif
