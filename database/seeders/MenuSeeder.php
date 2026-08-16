@@ -21,10 +21,10 @@ class MenuSeeder extends Seeder
         // === HEADER MENU ITEMS ===
         $headerItems = [
             ['title' => 'Inicio', 'url' => '/', 'position' => 1],
-            ['title' => 'Implantología', 'url' => null, 'position' => 2],
-            ['title' => 'Osteosíntesis', 'url' => null, 'position' => 3],
-            ['title' => 'Instrumentos', 'url' => null, 'position' => 4],
-            ['title' => 'Planificación digital', 'url' => null, 'position' => 5],
+            ['title' => 'Implantología', 'url' => '/catalogo?category=implantologia', 'position' => 2],
+            ['title' => 'Osteosíntesis', 'url' => '/catalogo?category=osteosintesis', 'position' => 3],
+            ['title' => 'Instrumentos', 'url' => '/catalogo?category=instrumentos', 'position' => 4],
+            ['title' => 'Planificación digital', 'url' => '/catalogo?category=planificacion-digital', 'position' => 5],
             ['title' => 'Ofertas', 'url' => '/catalogo?tag=on_sale', 'position' => 6],
         ];
 
@@ -116,6 +116,243 @@ class MenuSeeder extends Seeder
                 'icon' => null,
                 'image' => null,
             ]));
+        }
+
+        // === MEGA MENU ITEMS ===
+
+        // Columna 1: Implantología
+        $megaImplantologia = Menus::create([
+            'title' => 'Implantología',
+            'url' => '/catalogo?category[]=implantologia',
+            'type' => 4,
+            'position' => 1,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-tooth',
+            'image' => null,
+        ]);
+
+        $megaImplantologiaAb = Menus::create([
+            'title' => 'AB',
+            'url' => null,
+            'type' => 4,
+            'position' => 1,
+            'parent_id' => $megaImplantologia->id,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => null,
+            'image' => null,
+        ]);
+        foreach (['Implantes' => 'implantologia', 'Aditamentos' => 'aditamentos', 'Kits' => 'kits-quirurgicos'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaImplantologiaAb->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        $megaImplantologiaGdt = Menus::create([
+            'title' => 'GDT',
+            'url' => null,
+            'type' => 4,
+            'position' => 2,
+            'parent_id' => $megaImplantologia->id,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => null,
+            'image' => null,
+        ]);
+        foreach (['Implantes' => 'implantologia', 'Aditamentos' => 'aditamentos', 'Kits' => 'kits-quirurgicos'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaImplantologiaGdt->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        // Columna 2: Regeneración Ósea Guiada
+        $megaRegeneracion = Menus::create([
+            'title' => 'Regeneración Ósea Guiada',
+            'url' => '/catalogo?category[]=regeneracion',
+            'type' => 4,
+            'position' => 2,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-bone',
+            'image' => null,
+        ]);
+        foreach (['Biomateriales' => 'tag=biomaterial', 'Regeneración Guiada Bucal' => 'category[]=regeneracion-guiada-bucal', 'Suturas' => 'category[]=suturas'] as $title => $query) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?{$query}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaRegeneracion->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        // Columna 3: Osteosíntesis
+        $megaOsteosintesis = Menus::create([
+            'title' => 'Osteosíntesis',
+            'url' => '/catalogo?category[]=osteosintesis',
+            'type' => 4,
+            'position' => 3,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-toolbox',
+            'image' => null,
+        ]);
+        foreach (['Placas' => 'placas-osteosintesis', 'Tornillos' => 'tornillos-osteosintesis', 'Cajetín' => 'cajetin-osteosintesis'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaOsteosintesis->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        // Columna 4: Cuidado Bucal
+        $megaCuidado = Menus::create([
+            'title' => 'Cuidado Bucal',
+            'url' => '/catalogo?category[]=cuidado-bucal',
+            'type' => 4,
+            'position' => 4,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-face-smile',
+            'image' => null,
+        ]);
+        foreach (['Cuidados Especiales' => 'cuidados-especiales', 'Cuidados Diarios' => 'cuidados-diarios'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaCuidado->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        // Columna 5: Instrumentos y Equipos
+        $megaInstrumentos = Menus::create([
+            'title' => 'Instrumentos',
+            'url' => '/catalogo?category[]=instrumentos',
+            'type' => 4,
+            'position' => 5,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-tools',
+            'image' => null,
+        ]);
+        foreach (['Tijeras' => 'tijeras', 'Pinzas' => 'pinzas', 'Separadores' => 'separadores', 'Cinceles' => 'cinceles', 'Periostótomos' => 'periostotomos'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaInstrumentos->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        $megaEquiposGroup = Menus::create([
+            'title' => 'Equipos',
+            'url' => null,
+            'type' => 4,
+            'position' => 6,
+            'parent_id' => $megaInstrumentos->id,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-gears',
+            'image' => null,
+        ]);
+        foreach (['Equipos odontológicos' => 'equipos-odontologicos', 'Piezas de mano' => 'piezas-de-mano', 'Motores' => 'motores-odontologicos'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaEquiposGroup->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
+        }
+
+        // Columna 6: Planificación Digital
+        $megaPlanificacion = Menus::create([
+            'title' => 'Planificación Digital',
+            'url' => '/catalogo?category[]=planificacion-digital',
+            'type' => 4,
+            'position' => 6,
+            'parent_id' => null,
+            'status' => true,
+            'target_blank' => false,
+            'description' => null,
+            'icon' => 'fa-cube',
+            'image' => null,
+        ]);
+        foreach (['Planificación Digital' => 'planificacion-digital', 'Impresión 3D' => 'impresion-3d', 'Escaneo Intraoral' => 'escaneo-intraoral', 'PD Completa' => 'pd-completa'] as $title => $slug) {
+            Menus::create([
+                'title' => $title,
+                'url' => "/catalogo?category[]={$slug}",
+                'type' => 4,
+                'position' => 1,
+                'parent_id' => $megaPlanificacion->id,
+                'status' => true,
+                'target_blank' => false,
+                'description' => null,
+                'icon' => null,
+                'image' => null,
+            ]);
         }
 
         // === FOOTER MENU ITEMS ===
