@@ -589,26 +589,27 @@ HTML,
             ],
             Sections::ALLIES => [
                 'title' => 'Trabajamos junto a marcas líderes',
+                'subtitle' => 'Nuestros aliados',
+                'description' => 'Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.',
                 'image' => 'sections/banner_footer_empresa.png',
+                'layout_type' => self::LAYOUT_BRAND_GRID,
+                'icon_style' => self::ICON_NONE,
+                'items' => json_encode([
+                    'items' => [
+                        ['image' => 'sections/gdt_logo.jpg', 'title' => 'GDT', 'order' => 1],
+                        ['image' => 'sections/ab_logo.jpg', 'title' => 'AB', 'order' => 2],
+                        ['image' => 'sections/bluem_logo.jpg', 'title' => 'Bluem', 'order' => 3],
+                        ['image' => 'sections/logo_czmedietch.jpg', 'title' => 'CZ Medietch', 'order' => 4],
+                        ['image' => 'sections/tealth_logo.jpg', 'title' => 'Tealth', 'order' => 5],
+                        ['image' => 'sections/tissum_logo.jpg', 'title' => 'Tissum', 'order' => 6],
+                    ]
+                ]),
                 'name_button' => null,
                 'url_button' => '#nuestros-aliados',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
 <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
-<div>
-    <div class="logos-grid">
-        <div class="brand-card">GDT</div>
-        <div class="brand-card">AB</div>
-        <div class="brand-card">b:u</div>
-        <div class="brand-card">NSK</div>
-        <div class="brand-card">WOODPECKER</div>
-        <div class="brand-card">Dentistry<br>Sironа</div>
-        <div class="brand-card">Bio-Oss®</div>
-        <div class="brand-card">Geistlich</div>
-    </div>
-    <div class="slider-dot"></div>
-</div>
 HTML,
             ],
             Sections::NEAR_YOU => [
