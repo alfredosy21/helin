@@ -341,21 +341,6 @@ HTML,
                 'status' => 1,
                 'status_content' => 1,
             ],
-            Sections::CTA_HOME => [
-                'title' => '¿Listo para transformar tu práctica clínica?',
-                'image' => 'sections/banner_footer_empresa.png',
-                'name_button' => '☏ Háblale con WhatsApp',
-                'url_button' => 'https://wa.me/584241232025',
-                'status' => 1,
-                'status_content' => 1,
-                'content' => <<<HTML
-<p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
-<div class="cta-actions">
-    <a href="https://wa.me/584241232025" target="_blank" class="btn-primary">☏ Háblale con WhatsApp</a>
-    <a href="{{ route('contactanos') }}" class="btn-outline">✉ Permítenos por correo</a>
-</div>
-HTML,
-            ],
             // ==========================================
             // ---------- SECCIONES DE TESTIMONIOS --------
             // ==========================================
@@ -632,7 +617,7 @@ HTML,
             ],
             Sections::CTA_COMPANY => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
-                'image' => 'sections/banner3.png',
+                'image' => 'sections/banner_footer_empresa.png',
                 'name_button' => 'Acciones',
                 'url_button' => '#',
                 'status' => 1,
