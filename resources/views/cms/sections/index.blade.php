@@ -15,15 +15,15 @@
             {{-- Search & Filter Section --}}
             <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
                 <div class="relative flex-1">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-body">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/>
                         </svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.sections.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
+                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-body" />
                 </div>
-                <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                <select wire:model.live="perPage" class="cms-perpage-select bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                     <option value="10">{{ __('cms.tables.per_page_10') }}</option>
                     <option value="20">{{ __('cms.tables.per_page_20') }}</option>
                     <option value="50">{{ __('cms.tables.per_page_50') }}</option>
@@ -34,39 +34,39 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
-                            <th class="px-6 py-3.5">{{ __('cms.tables.section_title') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.tables.visibility_status') }}</th>
-                            <th class="px-6 py-3.5">{{ __('cms.tables.content') }}</th>
-                            <th class="px-6 py-3.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
-                            <th class="px-6 py-3.5 text-right w-32">{{ __('cms.tables.actions') }}</th>
+                        <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
+                            <th class="px-4 py-2.5">{{ __('cms.tables.section_title') }}</th>
+                            <th class="px-4 py-2.5">{{ __('cms.tables.visibility_status') }}</th>
+                            <th class="px-4 py-2.5">{{ __('cms.tables.content') }}</th>
+                            <th class="px-4 py-2.5 text-center w-40">{{ __('cms.tables.updated_at') }}</th>
+                            <th class="px-4 py-2.5 text-right w-32">{{ __('cms.tables.actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50 text-sm">
+                    <tbody class="divide-y divide-slate-100 text-[13px]">
                         @forelse($sections as $section)
-                        <tr wire:key="section-{{ $section->id }}" class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4">
+                        <tr wire:key="section-{{ $section->id }}" class="hover:bg-slate-50/70 transition-colors duration-150">
+                            <td class="px-4 py-2.5">
                                 <div class="flex flex-col">
-                                    <span class="font-medium text-heading">{{ $section->title }}</span>
+                                    <span class="text-body">{{ $section->title }}</span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-4 py-2.5">
                                 <x-ui-badge-status :active="$section->status" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600 font-medium">
+                            <td class="px-4 py-2.5">
+                                <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-body font-medium">
                                     {{ $section->status_content ? __('cms.sections.visible') : __('cms.sections.hidden') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-xs text-slate-500">
+                            <td class="px-4 py-2.5 text-center">
+                                <span class="text-[13px] text-body">
                                     {{ $section->updated_at->format('d/m/Y H:i') }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-right">
+                            <td class="px-4 py-2.5 text-right">
                                 <div class="flex justify-end gap-1">
                                     <x-cms-tooltip text="{{ __('cms.general.edit') }}">
-                                        <button type="button" wire:click="edit({{ $section->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                        <button type="button" wire:click="edit({{ $section->id }})" class="p-2 text-body hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                                             </svg>
@@ -77,8 +77,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5">
-                                <x-ui-empty-state icon="folder" :title="__('cms.sections.no_sections')" />
+                            <td colspan="5" class="px-4 py-8 text-center"><x-ui-empty-state icon="folder" :title="__('cms.sections.no_sections')" />
                             </td>
                         </tr>
                         @endforelse
@@ -98,7 +97,7 @@
             {{-- Cabecera limpia sin botón X --}}
             <div class="p-6 border-b border-slate-50">
                 <h2 class="text-lg font-bold text-heading">{{ __('cms.sections.edit_title') }}</h2>
-                <p class="text-xs text-slate-400 mt-1">{{ __('cms.sections.title') }}</p>
+                <p class="text-[13px] text-body mt-1">{{ __('cms.sections.title') }}</p>
             </div>
 
             {{-- Formulario --}}
@@ -114,25 +113,25 @@
 
                     {{-- Título a ancho completo --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" placeholder="{{ __('cms.sections.title_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                         @error('title') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Subtítulo --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
                         <input type="text" wire:model="subtitle" placeholder="{{ __('cms.sections.subtitle_placeholder') }}"
-                               class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                         @error('subtitle') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Tipo de layout e iconos --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
-                            <select wire:model="layout_type" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
+                            <select wire:model="layout_type" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 @foreach($this->layoutOptions() as $value => $label)
                                 <option value="{{ $value }}" @selected($layout_type === $value)>{{ $label }}</option>
                                 @endforeach
@@ -140,8 +139,8 @@
                             @error('layout_type') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.icon_style_label') }}</label>
-                            <select wire:model="icon_style" class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.icon_style_label') }}</label>
+                            <select wire:model="icon_style" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                                 @foreach($this->iconStyleOptions() as $value => $label)
                                 <option value="{{ $value }}" @selected($icon_style === $value)>{{ $label }}</option>
                                 @endforeach
@@ -152,7 +151,7 @@
 
                     {{-- Contenido con Quill Editor --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
                         <div wire:ignore class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
                             <div id="quill-editor" class="min-h-[250px] max-h-[400px] overflow-y-auto"></div>
                             <textarea wire:model="content" id="content-textarea" class="hidden">{{ $content }}</textarea>
@@ -162,29 +161,29 @@
 
                     {{-- Descripción --}}
                     <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
                         <textarea wire:model="description" rows="3" placeholder="{{ __('cms.sections.description_placeholder') }}"
-                                  class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"></textarea>
+                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Botón CTA e URL en grid de dos columnas --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.button_label') }}</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.button_label') }}</label>
                             <input type="text" wire:model="name_button" placeholder="{{ __('cms.sections.button_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.url_label') }}</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.url_label') }}</label>
                             <input type="text" wire:model="url_button" placeholder="{{ __('cms.sections.url_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.category_slug_label') }}</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.category_slug_label') }}</label>
                             <input type="text" wire:model="category_slug" placeholder="{{ __('cms.sections.category_slug_placeholder') }}"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
-                            <p class="text-[10px] text-slate-400">{{ __('cms.sections.category_slug_hint') }}</p>
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            <p class="text-[10px] text-body">{{ __('cms.sections.category_slug_hint') }}</p>
                         </div>
                     </div>
 
@@ -197,8 +196,8 @@
                     <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
-                                <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.items_hint') }} <code class="text-primary font-mono">{{ $itemsGroup }}</code></p>
+                                <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
+                                <p class="text-[11px] text-body mt-0.5">{{ __('cms.sections.items_hint') }} <code class="text-primary font-mono">{{ $itemsGroup }}</code></p>
                             </div>
                             @if(count($itemFields) > 0)
                             <button type="button" wire:click="addItem" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-white hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
@@ -208,19 +207,19 @@
                         </div>
 
                         @if(count($repeaterItems) === 0)
-                        <p class="text-xs text-slate-400 italic py-2">{{ __('cms.sections.no_items') }}</p>
+                        <p class="text-[13px] text-body italic py-2">{{ __('cms.sections.no_items') }}</p>
                         @endif
 
                         <div class="space-y-3">
                             @foreach($repeaterItems as $index => $item)
                             <div wire:key="item-{{ $index }}" class="border border-slate-200 rounded-lg p-4 bg-slate-50/40">
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ __('cms.sections.item_label') }} #{{ $index + 1 }}</span>
+                                    <span class="text-xs font-semibold text-body uppercase tracking-wide">{{ __('cms.sections.item_label') }} #{{ $index + 1 }}</span>
                                     <div class="flex items-center gap-1">
-                                        <button type="button" wire:click="moveItem({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                        <button type="button" wire:click="moveItem({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-body hover:text-body transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
                                         </button>
-                                        <button type="button" wire:click="moveItem({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterItems) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                        <button type="button" wire:click="moveItem({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterItems) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-body hover:text-body transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                         </button>
                                         <button type="button" wire:click="removeItem({{ $index }})" title="{{ __('cms.sections.remove_item') }}" class="p-1.5 rounded-md border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 transition-colors cursor-pointer">
@@ -232,11 +231,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @foreach($itemFields as $field)
                                     <div class="space-y-1">
-                                        <label class="text-[11px] font-medium text-slate-400 block">{{ $itemFieldLabels[$field] ?? $field }}</label>
+                                        <label class="text-[11px] font-medium text-body block">{{ $itemFieldLabels[$field] ?? $field }}</label>
                                         @if($field === 'description')
-                                        <textarea wire:model="items.{{ $index }}.{{ $field }}" rows="2" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+                                        <textarea wire:model="items.{{ $index }}.{{ $field }}" rows="2" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 text-sm text-body rounded-lg focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
                                         @else
-                                        <input type="text" wire:model="items.{{ $index }}.{{ $field }}" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                        <input type="text" wire:model="items.{{ $index }}.{{ $field }}" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 text-sm text-body rounded-lg focus:outline-none focus:border-primary transition-colors" />
                                         @endif
                                     </div>
                                     @endforeach
@@ -254,8 +253,8 @@
                     <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
-                                <p class="text-[11px] text-slate-400 mt-0.5">{{ __('cms.sections.buttons_hint') }}</p>
+                                <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
+                                <p class="text-[11px] text-body mt-0.5">{{ __('cms.sections.buttons_hint') }}</p>
                             </div>
                             <button type="button" wire:click="addButton" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary text-white hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
                                 + {{ __('cms.sections.add_button') }}
@@ -263,19 +262,19 @@
                         </div>
 
                         @if(count($repeaterButtons) === 0)
-                        <p class="text-xs text-slate-400 italic py-2">{{ __('cms.sections.no_buttons') }}</p>
+                        <p class="text-[13px] text-body italic py-2">{{ __('cms.sections.no_buttons') }}</p>
                         @endif
 
                         <div class="space-y-3">
                             @foreach($repeaterButtons as $index => $button)
                             <div wire:key="button-{{ $index }}" class="border border-slate-200 rounded-lg p-4 bg-slate-50/40">
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ __('cms.sections.button_entry_label') }} #{{ $index + 1 }}</span>
+                                    <span class="text-xs font-semibold text-body uppercase tracking-wide">{{ __('cms.sections.button_entry_label') }} #{{ $index + 1 }}</span>
                                     <div class="flex items-center gap-1">
-                                        <button type="button" wire:click="moveButton({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                        <button type="button" wire:click="moveButton({{ $index }}, -1)" title="{{ __('cms.sections.move_up') }}" {{ $index === 0 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-body hover:text-body transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
                                         </button>
-                                        <button type="button" wire:click="moveButton({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterButtons) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-500 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                        <button type="button" wire:click="moveButton({{ $index }}, 1)" title="{{ __('cms.sections.move_down') }}" {{ $index === count($repeaterButtons) - 1 ? 'disabled' : '' }} class="p-1.5 rounded-md border border-slate-200 bg-white text-body hover:text-body transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                                         </button>
                                         <button type="button" wire:click="removeButton({{ $index }})" title="{{ __('cms.sections.remove_button') }}" class="p-1.5 rounded-md border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 transition-colors cursor-pointer">
@@ -286,16 +285,16 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                     <div class="space-y-1">
-                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_text_label') }}</label>
-                                        <input type="text" wire:model="buttons.{{ $index }}.text" placeholder="{{ __('cms.sections.button_placeholder') }}" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                        <label class="text-[11px] font-medium text-body block">{{ __('cms.sections.button_text_label') }}</label>
+                                        <input type="text" wire:model="buttons.{{ $index }}.text" placeholder="{{ __('cms.sections.button_placeholder') }}" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 text-sm text-body rounded-lg focus:outline-none focus:border-primary transition-colors" />
                                     </div>
                                     <div class="space-y-1">
-                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_url_label') }}</label>
-                                        <input type="text" wire:model="buttons.{{ $index }}.url" placeholder="catalogo" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors" />
+                                        <label class="text-[11px] font-medium text-body block">{{ __('cms.sections.button_url_label') }}</label>
+                                        <input type="text" wire:model="buttons.{{ $index }}.url" placeholder="catalogo" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 text-sm text-body rounded-lg focus:outline-none focus:border-primary transition-colors" />
                                     </div>
                                     <div class="space-y-1">
-                                        <label class="text-[11px] font-medium text-slate-400 block">{{ __('cms.sections.button_style_label') }}</label>
-                                        <select wire:model="buttons.{{ $index }}.style" class="w-full px-3 py-2 bg-white border border-slate-200 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors">
+                                        <label class="text-[11px] font-medium text-body block">{{ __('cms.sections.button_style_label') }}</label>
+                                        <select wire:model="buttons.{{ $index }}.style" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 text-sm text-body rounded-lg focus:outline-none focus:border-primary transition-colors">
                                             <option value="primary" @selected(($button['style'] ?? '') === 'primary')>{{ __('cms.sections.button_style_primary') }}</option>
                                             <option value="secondary" @selected(($button['style'] ?? '') === 'secondary')>{{ __('cms.sections.button_style_secondary') }}</option>
                                             <option value="outline" @selected(($button['style'] ?? '') === 'outline')>{{ __('cms.sections.button_style_outline') }}</option>
@@ -311,8 +310,8 @@
                     {{-- Galería de imágenes múltiples --}}
                     <div class="space-y-4">
                         <div class="flex items-center justify-between">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
-                            <span class="text-xs text-slate-500">{{ count($photos) }} {{ __('cms.sections.images_count') }}</span>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
+                            <span class="text-[13px] text-body">{{ count($photos) }} {{ __('cms.sections.images_count') }}</span>
                         </div>
 
                         {{-- Imágenes existentes --}}
@@ -334,13 +333,13 @@
                         @endif
 
                         {{-- Cargador de nuevas imágenes --}}
-                        <div class="border-2 border-dashed border-slate-200 rounded-lg p-6 hover:border-primary hover:bg-slate-50/50 transition-colors bg-slate-50/30">
+                        <div class="border-2 border-dashed border-slate-200 rounded-lg p-6 hover:border-primary hover:bg-slate-50/70 transition-colors duration-150 bg-slate-50/30">
                             <div class="flex flex-col items-center justify-center">
-                                <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-body mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
                                 </svg>
-                                <p class="text-sm text-slate-600 font-medium mb-1">{{ __('cms.sections.upload_images') }}</p>
-                                <p class="text-xs text-slate-400 mb-3">{{ __('cms.sections.upload_images_hint') }}</p>
+                                <p class="text-[13px] text-body font-medium mb-1">{{ __('cms.sections.upload_images') }}</p>
+                                <p class="text-[13px] text-body mb-3">{{ __('cms.sections.upload_images_hint') }}</p>
                                 <input type="file" wire:model="image" id="image-upload" class="hidden" accept="image/*" multiple />
                                 <button type="button" onclick="document.getElementById('image-upload').click()" class="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-[#079d8b] transition-colors border-none cursor-pointer">
                                     {{ __('cms.sections.select_images') }}
@@ -353,10 +352,10 @@
 
                 {{-- Acciones alineadas a la derecha en la base del formulario --}}
                 <div class="p-6 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-3">
-                    <button type="button" wire:click="cancelEdit" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    <button type="button" wire:click="cancelEdit" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
                         <span wire:loading wire:target="update">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

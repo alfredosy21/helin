@@ -1,5 +1,5 @@
 <div class="w-full max-w-md">
-    <div class="bg-white rounded-2xl shadow-md shadow-primary-500/10 border border-line p-8">
+    <div class="bg-white rounded-xl p-8">
 
             <!-- Title Section -->
             <div class="text-center mb-8">
@@ -20,8 +20,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-slate-800">{{ __('cms.forgot_password.success_title') }}</h3>
-                    <p class="mt-2 text-sm text-slate-500">
+                    <h3 class="text-lg font-semibold text-heading">{{ __('cms.forgot_password.success_title') }}</h3>
+                    <p class="mt-2 text-sm text-body">
                         {{ __('cms.forgot_password.success_message') }}
                     </p>
                 </div>
@@ -37,19 +37,19 @@
             {{-- Form --}}
             <form wire:submit.prevent="sendResetLink" class="space-y-6">
                 <div class="group">
-                    <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+                    <label for="email" class="block text-sm font-semibold text-body mb-2">
                         {{ __('cms.forgot_password.email_label') }}
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <x-ui-icon name="mail" class="h-5 w-5 text-slate-400" />
+                            <x-ui-icon name="mail" class="h-5 w-5 text-body" />
                         </div>
                         <input
                             wire:model.live="email"
                             id="email"
                             type="email"
                             required
-                            class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-slate-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
+                            class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
                             placeholder="{{ __('cms.forgot_password.email_placeholder') }}"
                             >
                     </div>

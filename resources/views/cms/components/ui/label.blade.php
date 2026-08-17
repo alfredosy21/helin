@@ -2,7 +2,7 @@
 $attributes->merge([
     'for' => $for ?? null,
     'class' => trim("
-        block text-sm font-medium text-gray-700
+        block text-sm font-medium text-body
         " . ($required ? 'text-red-500' : '') . "
         " . ($attributes->get('class') ?? '')
     ")

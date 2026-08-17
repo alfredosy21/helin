@@ -18,8 +18,8 @@
   /* Semantic Text/Background (frontend-aligned) */
   --color-heading: 18 63 74;           /* #123F4A */
   --color-body: 45 55 64;              /* #2D3740 */
-  --color-soft: 244 247 248;           /* #f4f7f8 */
-  --color-line: 216 227 229;           /* #D8E3E5 */
+  --color-soft: 242 242 244;           /* #f2f2f4 */
+  --color-line: 229 231 235;           /* #E5E7EB */
 
   /* Neutral Palette */
   --color-gray-50: 249 250 251;
@@ -215,6 +215,14 @@
     @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
   }
 
+  /* Select perPage - flecha personalizada para evitar overlap */
+  .cms-perpage-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232D3740' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-size: 12px;
+    background-repeat: no-repeat;
+  }
+
   /* Card Base */
   .card {
     @apply bg-white rounded-xl shadow-md shadow-black/5;
@@ -305,21 +313,62 @@
     @apply mt-1 text-sm text-red-600;
   }
 
-  /* Table Styles */
+  /* Table Styles - Modernizado estilo Aquiry */
   .table {
-    @apply w-full text-sm text-left text-gray-500;
+    @apply w-full text-[13px] text-left;
+  }
+
+  .table thead tr {
+    @apply bg-slate-50/60 border-b border-slate-100;
   }
 
   .table th {
-    @apply px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 border-b border-gray-200;
+    @apply px-4 py-2.5 text-[10px] font-semibold text-body uppercase tracking-wider whitespace-nowrap;
+  }
+
+  .table tbody {
+    @apply divide-y divide-slate-100;
   }
 
   .table td {
-    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200;
+    @apply px-4 py-2.5 text-[13px] text-body border-0;
+  }
+
+  .table tbody tr {
+    @apply transition-colors duration-150;
   }
 
   .table-hover tbody tr:hover {
-    @apply bg-gray-50;
+    @apply bg-slate-50/70;
+  }
+
+  /* Estilo base para todas las tablas CMS - estructura real usada en vistas */
+  .overflow-x-auto > table {
+    @apply w-full text-[13px] text-left;
+  }
+  .overflow-x-auto > table > thead > tr {
+    @apply bg-slate-50/60 border-b border-slate-100;
+  }
+  .overflow-x-auto > table > thead > tr > th {
+    @apply px-4 py-2.5 text-[10px] font-semibold text-body uppercase tracking-wider whitespace-nowrap;
+  }
+  .overflow-x-auto > table > tbody {
+    @apply divide-y divide-slate-100;
+  }
+  .overflow-x-auto > table > tbody > tr {
+    @apply transition-colors duration-150 hover:bg-slate-50/70;
+  }
+  .overflow-x-auto > table > tbody > tr > td {
+    @apply px-4 py-2.5 text-[13px] text-body align-middle;
+  }
+
+  /* Ellipsis solo en elementos con clase cms-truncate */
+  .cms-truncate {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
   }
 
   /* Navigation - Ajustado para que marque con el color suave corporativo */
@@ -533,12 +582,32 @@
 /* Third-Party Overrides — SweetAlert2 (turquesa brand accents) */
 .swal2-popup {
   border-radius: var(--radius-modal) !important;
+  font-family: inherit !important;
+}
+
+.swal2-title {
+  color: rgb(var(--color-heading)) !important;
+  font-family: inherit !important;
+  font-weight: 600 !important;
+  font-size: 1.125rem !important;
+}
+
+.swal2-html-container,
+.swal2-html-container p {
+  color: rgb(var(--color-body)) !important;
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
 }
 
 .swal2-confirm {
   background-color: rgb(var(--color-primary)) !important;
+  color: #fff !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: none !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  padding: 0.5rem 1.25rem !important;
 }
 
 .swal2-confirm:focus {
@@ -546,9 +615,34 @@
 }
 
 .swal2-cancel {
-  background-color: rgb(var(--color-gray-200)) !important;
-  color: rgb(var(--color-gray-800)) !important;
+  background-color: rgb(var(--color-gray-100)) !important;
+  color: rgb(var(--color-body)) !important;
+  border: 1px solid rgb(var(--color-line)) !important;
   border-radius: var(--radius-lg) !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  padding: 0.5rem 1.25rem !important;
+}
+
+.swal2-cancel:focus {
+  box-shadow: 0 0 0 3px rgb(var(--color-gray-300) / 0.3) !important;
+}
+
+/* Botón confirmar en diálogos de eliminación - rojo peligro */
+.swal2-confirm.swal2-styled,
+.swal2-popup.swal2-toast .swal2-confirm {
+  background-color: rgb(var(--color-primary)) !important;
+}
+
+/* Cuando el icono es warning/error, el confirm puede ser rojo */
+.swal2-icon.swal2-warning ~ .swal2-actions .swal2-confirm,
+.swal2-icon.swal2-error ~ .swal2-actions .swal2-confirm {
+  background-color: rgb(var(--color-danger)) !important;
+}
+
+.swal2-icon.swal2-warning ~ .swal2-actions .swal2-confirm:focus {
+  box-shadow: 0 0 0 3px rgb(var(--color-danger) / 0.3) !important;
 }
 
 .swal2-icon.swal2-warning {

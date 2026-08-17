@@ -32,7 +32,7 @@
 <div class="space-y-1">
     {{-- Label --}}
     @if($label)
-        <label for="{{ $name }}" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <label for="{{ $name }}" class="block text-xs font-semibold text-body uppercase tracking-wider">
             {{ $label }}
             @if($required) <span class="text-red-500">*</span> @endif
         </label>
@@ -51,7 +51,7 @@
             {{ $readonly ? 'readonly' : '' }}
             {{ $maxlength ? "maxlength=\"{$maxlength}\"" : '' }}
             @php
-            $textareaClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-slate-400';
+            $textareaClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-body';
             if ($error) {
                 $textareaClasses .= ' border-red-500 focus:border-red-500 focus:ring-red-500/20';
             }
@@ -80,7 +80,7 @@
 
         {{-- Character Count --}}
         @if($showCount && $maxlength)
-            <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-white px-1 rounded">
+            <div class="absolute bottom-2 right-2 text-xs text-body bg-white px-1 rounded">
                 <span id="{{ $name }}-count">{{ strlen($value) }}</span>/{{ $maxlength }}
             </div>
         @endif
@@ -105,16 +105,16 @@
                         // Change color when approaching limit
                         if (textarea.value.length > {{ $maxlength * 0.9 }}) {
                             counter.classList.add('text-orange-500');
-                            counter.classList.remove('text-gray-500');
+                            counter.classList.remove('text-body');
                         } else {
                             counter.classList.remove('text-orange-500');
-                            counter.classList.add('text-gray-500');
+                            counter.classList.add('text-body');
                         }
 
                         // Change color when at limit
                         if (textarea.value.length >= {{ $maxlength }}) {
                             counter.classList.add('text-red-500');
-                            counter.classList.remove('text-orange-500', 'text-gray-500');
+                            counter.classList.remove('text-orange-500', 'text-body');
                         }
                     }
 

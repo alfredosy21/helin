@@ -16,13 +16,13 @@
     ];
     
     $variantClasses = [
-        'default' => 'text-gray-600',
+        'default' => 'text-body',
         'primary' => 'text-primary-600',
         'success' => 'text-green-600',
         'warning' => 'text-amber-600',
         'danger' => 'text-red-600',
         'info' => 'text-cyan-600',
-        'muted' => 'text-gray-400',
+        'muted' => 'text-body',
         'white' => 'text-white',
         'inherit' => 'text-inherit'
     ];

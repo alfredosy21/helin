@@ -4,7 +4,7 @@
    <x-ui-section-header :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::PRODUCTS" :subtitle="__('cms.products.title')">
       @if(!$showForm)
       <x-slot:action>
-         <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+         <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-3 py-1.5 text-[13px] font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
@@ -21,19 +21,19 @@
          <div class="flex flex-col lg:flex-row gap-4">
             <!-- Search Input -->
             <div class="relative flex-1 lg:max-w-xl">
-               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-body">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/>
                   </svg>
                </span>
                <input type="text" wire:model.live="search" placeholder="{{ __('cms.products.search_placeholder') }}"
-                  class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
+                  class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-body" />
             </div>
             <!-- Filters Row -->
             <div class="flex flex-wrap items-center gap-3">
                <!-- Family Filter -->
                <div class="w-32">
-                  <select wire:model.live="filterCategory" class="w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                  <select wire:model.live="filterCategory" class="cms-perpage-select w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                      <option value="">{{ __('cms.products.all_families') }}</option>
                      @foreach($categories as $category)
                      <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -42,7 +42,7 @@
                </div>
                <!-- Brand Filter -->
                <div class="min-w-[140px]">
-                  <select wire:model.live="filterBrand" class="w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                  <select wire:model.live="filterBrand" class="cms-perpage-select w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                      <option value="">{{ __('cms.products.all_brands') }}</option>
                      @foreach($brands as $brand)
                      <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -51,7 +51,7 @@
                </div>
                <!-- Status Filter -->
                <div class="min-w-[120px]">
-                  <select wire:model.live="filterStatus" class="w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                  <select wire:model.live="filterStatus" class="cms-perpage-select w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                      <option value="all">{{ __('cms.products.filter_all') }}</option>
                      <option value="active">{{ __('cms.products.filter_active') }}</option>
                      <option value="inactive">{{ __('cms.products.filter_inactive') }}</option>
@@ -60,7 +60,7 @@
                </div>
                <!-- Per Page -->
                <div class="min-w-[80px]">
-                  <select wire:model.live="perPage" class="w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-2.5 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                  <select wire:model.live="perPage" class="cms-perpage-select w-full bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                      <option value="10">{{ __('cms.tables.per_page_10') }}</option>
                      <option value="20">{{ __('cms.tables.per_page_20') }}</option>
                      <option value="50">{{ __('cms.tables.per_page_50') }}</option>
@@ -73,28 +73,28 @@
       <div class="overflow-x-auto">
          <table class="w-full text-left border-collapse">
             <thead>
-               <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
-                  <th class="px-6 py-3.5">{{ __('cms.tables.product') }}</th>
-                  <th class="px-6 py-3.5">{{ __('cms.tables.family') }}</th>
-                  <th class="px-6 py-3.5">{{ __('cms.tables.brand') }}</th>
-                  <th class="px-6 py-3.5 text-center w-32">{{ __('cms.tables.updated') }}</th>
-                  <th class="px-6 py-3.5 text-center w-24">{{ __('cms.tables.status') }}</th>
-                  <th class="px-6 py-3.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
+               <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
+                  <th class="px-4 py-2.5">{{ __('cms.tables.product') }}</th>
+                  <th class="px-4 py-2.5">{{ __('cms.tables.family') }}</th>
+                  <th class="px-4 py-2.5">{{ __('cms.tables.brand') }}</th>
+                  <th class="px-4 py-2.5 text-center w-32">{{ __('cms.tables.updated') }}</th>
+                  <th class="px-4 py-2.5 text-center w-24">{{ __('cms.tables.status') }}</th>
+                  <th class="px-4 py-2.5 text-right w-40">{{ __('cms.tables.actions') }}</th>
                </tr>
             </thead>
-            <tbody id="products-table-body" class="divide-y divide-slate-50 text-sm">
+            <tbody id="products-table-body" class="divide-y divide-slate-100 text-[13px]">
                @forelse($products as $product)
-               <tr wire:key="product-{{ $product->id }}" data-id="{{ $product->id }}" class="hover:bg-slate-50/50 transition-colors">
-                  <td class="px-6 py-4">
+               <tr wire:key="product-{{ $product->id }}" data-id="{{ $product->id }}" class="hover:bg-slate-50/70 transition-colors duration-150">
+                  <td class="px-4 py-2.5">
                      <div class="flex items-start gap-2">
-                        <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1">
+                        <div class="drag-handle cursor-move text-body hover:text-body mt-1">
                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
                            </svg>
                         </div>
                         <div class="flex flex-col">
                            <div class="flex items-center gap-2">
-                              <span class="font-medium text-heading">{{ $product->name }}</span>
+                              <span class="text-body">{{ $product->name }}</span>
                               @if($product->is_featured)
                               <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-50 text-yellow-600 border border-yellow-100">{{ __('cms.products.featured_badge') }}</span>
                               @endif
@@ -102,52 +102,52 @@
                         </div>
                      </div>
                   </td>
-                  <td class="px-6 py-4">
+                  <td class="px-4 py-2.5">
                      @if($product->category)
-                     <span class="text-xs text-slate-600">{{ $product->category->name }}</span>
+                     <span class="text-[13px] text-body">{{ $product->category->name }}</span>
                      @else
-                     <span class="text-xs text-slate-400">-</span>
+                     <span class="text-[13px] text-body">-</span>
                      @endif
                   </td>
-                  <td class="px-6 py-4">
+                  <td class="px-4 py-2.5">
                      @if($product->brand)
-                     <span class="text-xs text-slate-600">{{ $product->brand->name }}</span>
+                     <span class="text-[13px] text-body">{{ $product->brand->name }}</span>
                      @else
-                     <span class="text-xs text-slate-400">-</span>
+                     <span class="text-[13px] text-body">-</span>
                      @endif
                   </td>
-                  <td class="px-6 py-4 text-center text-xs text-slate-600">
+                  <td class="px-4 py-2.5 text-center text-[13px] text-body">
                      {{ $product->updated_at ? $product->updated_at->format('d/m/Y') : '-' }}
                   </td>
-                  <td class="px-6 py-4 text-center">
+                  <td class="px-4 py-2.5 text-center">
                      <x-ui-badge-status :active="$product->is_active" :active-label="__('cms.general.status_active')" :inactive-label="__('cms.general.status_inactive')" />
                   </td>
-                  <td class="px-6 py-4 text-right">
+                  <td class="px-4 py-2.5 text-right">
                      <div class="flex justify-end gap-1">
                         <x-cms-tooltip text="{{ $product->is_featured ? __('cms.products.remove_featured') : __('cms.products.mark_featured') }}">
                            <button wire:click="toggleFeatured({{ $product->id }})"
-                                   class="p-2 {{ $product->is_featured ? 'text-yellow-500 bg-yellow-50' : 'text-slate-400 hover:text-yellow-500 hover:bg-yellow-50' }} rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                                   class="p-2 {{ $product->is_featured ? 'text-yellow-500 bg-yellow-50' : 'text-body hover:text-yellow-500 hover:bg-yellow-50' }} rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                               </svg>
                            </button>
                         </x-cms-tooltip>
                         <x-cms-tooltip text="{{ __('cms.general.edit') }}">
-                           <button wire:click="edit({{ $product->id }})" class="p-2 text-slate-400 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                           <button wire:click="edit({{ $product->id }})" class="p-2 text-body hover:text-primary hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"/>
                               </svg>
                            </button>
                         </x-cms-tooltip>
                         <x-cms-tooltip text="{{ __('cms.general.duplicate') }}">
-                           <button wire:click="duplicate({{ $product->id }})" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                           <button wire:click="duplicate({{ $product->id }})" class="p-2 text-body hover:text-blue-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 012-2v-8a2 2 0 01-2-2h-8a2 2 0 01-2 2v8a2 2 0 012 2z"/>
                               </svg>
                            </button>
                         </x-cms-tooltip>
                         <x-cms-tooltip text="{{ __('cms.general.delete') }}">
-                           <button onclick="deleteProduct({{ $product->id }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                           <button onclick="deleteProduct({{ $product->id }})" class="p-2 text-body hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                               </svg>
@@ -158,8 +158,7 @@
                </tr>
                @empty
                <tr>
-                  <td colspan="6">
-                     <x-ui-empty-state icon="folder" :title="__('cms.products.no_products')" />
+                  <td colspan="6" class="px-4 py-8 text-center"><x-ui-empty-state icon="folder" :title="__('cms.products.no_products')" />
                   </td>
                </tr>
                @endforelse
@@ -181,23 +180,23 @@
          {{-- Básico --}}
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
                <input type="text" wire:model="name" required
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.sku_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sku_label') }} <span class="text-red-500">*</span></label>
                <input type="text" wire:model="sku" required
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                @error('sku') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
          </div>
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
                <select wire:model="category_id" required
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                   <option value="">Seleccionar</option>
                   @foreach($categories as $category)
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -206,9 +205,9 @@
                @error('category_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.brand_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.brand_label') }} <span class="text-red-500">*</span></label>
                <select wire:model="brand_id" required
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                   <option value="">{{ __('cms.products.select_option') }}</option>
                   @foreach($brands as $brand)
                   <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -219,9 +218,9 @@
          </div>
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
                <select wire:model="system_product_id"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                   <option value="">{{ __('cms.products.select_system_option') }}</option>
                   @foreach($systemProducts as $systemProduct)
                   <option value="{{ $systemProduct->id }}">{{ $systemProduct->name }}</option>
@@ -230,9 +229,9 @@
                @error('system_product_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.product_platform_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.product_platform_label') }}</label>
                <select wire:model="product_platform_id"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                   <option value="">{{ __('cms.products.select_platform_option') }}</option>
                   @foreach($productPlatforms as $productPlatform)
                   <option value="{{ $productPlatform->id }}">{{ $productPlatform->name }}</option>
@@ -243,15 +242,15 @@
          </div>
          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.price_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.price_label') }} <span class="text-red-500">*</span></label>
                <input type="number" step="0.01" wire:model="price" required
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                @error('price') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.currency_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.currency_label') }}</label>
                <select wire:model="currency"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="COP">COP</option>
@@ -259,22 +258,22 @@
                </select>
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.stock_label') }} <span class="text-red-500">*</span></label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.stock_label') }} <span class="text-red-500">*</span></label>
                <input type="number" wire:model="stock"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                @error('stock') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.unit_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.unit_label') }}</label>
                <input type="text" wire:model="unit" placeholder="{{ __('cms.products.unit_placeholder') }}"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
          </div>
          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Material</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Material</label>
                <input type="text" wire:model="material" placeholder="ej: Titanio Grado 5, Cerámica, Acero"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
             <div class="space-y-1.5 flex items-center pt-5">
                <x-ui-toggle wire:model="is_biomaterial" label="Es Biomaterial" />
@@ -282,32 +281,32 @@
          </div>
          {{-- Descripción --}}
          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.description_label') }}</label>
+            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.description_label') }}</label>
             <textarea wire:model="description" rows="3"
-               class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
+               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
          </div>
          {{-- Especificaciones Clínicas --}}
          <div class="space-y-1.5">
-            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.clinical_specs_label') }}</label>
+            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.clinical_specs_label') }}</label>
             <textarea wire:model="clinical_specs" rows="3" placeholder="{{ __('cms.products.clinical_specs_placeholder') }}"
-               class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-slate-300"></textarea>
+               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-body"></textarea>
          </div>
          {{-- Atributos del Producto --}}
          @if($attributeGroups->isNotEmpty())
          <div class="space-y-4">
-            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Atributos del Producto</h4>
+            <h4 class="text-xs font-bold text-body uppercase tracking-wider">Atributos del Producto</h4>
             @foreach($attributeGroups as $attribute)
                @if($attribute->activeValues->isNotEmpty())
                <div class="rounded-lg border border-slate-100 bg-slate-50/50 p-4 space-y-2">
                   <div class="flex items-center justify-between">
-                     <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">{{ $attribute->name }}</span>
+                     <span class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ $attribute->name }}</span>
                      @if($attribute->unit)
-                        <span class="text-xs text-slate-400">{{ $attribute->unit }}</span>
+                        <span class="text-[13px] text-body">{{ $attribute->unit }}</span>
                      @endif
                   </div>
                   <div class="flex flex-wrap gap-3">
                      @foreach($attribute->activeValues as $value)
-                     <label class="inline-flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                     <label class="inline-flex items-center gap-2 text-sm text-body cursor-pointer">
                         <input type="checkbox" value="{{ $value->id }}" wire:model="attribute_value_ids"
                                class="rounded border-slate-300 text-primary focus:ring-primary">
                         {{ $value->display_label }}
@@ -322,14 +321,14 @@
          @endif
          {{-- Imágenes y Documentos --}}
          <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.media_section') }}</h4>
+            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.media_section') }}</h4>
             <div class="space-y-1.5">
                <x-ui-file-upload model="featured_image" :preview="$featured_image" :label="__('cms.products.featured_image_label')">
                   {{ __('cms.products.featured_image_placeholder') }}
                </x-ui-file-upload>
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.gallery_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.gallery_label') }}</label>
                @if(!empty($gallery))
                <div class="grid grid-cols-4 gap-2 mb-2">
                   @foreach($gallery as $index => $img)
@@ -346,32 +345,32 @@
                @endif
                <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
                   <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                     <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                     <svg class="w-6 h-6 text-body mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
                      </svg>
-                     <p class="text-xs text-slate-500">{{ __('cms.products.gallery_placeholder') }}</p>
-                     <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB c/u)</p>
+                     <p class="text-[13px] text-body">{{ __('cms.products.gallery_placeholder') }}</p>
+                     <p class="text-[10px] text-body mt-0.5">JPG, PNG (Máx. 2MB c/u)</p>
                   </div>
                   <input type="file" wire:model="gallery" class="hidden" accept="image/*" multiple />
                </label>
                @error('gallery.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.documents_label') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.documents_label') }}</label>
                @if(!empty($documents))
                <div class="flex flex-wrap gap-2 mb-2">
                   @foreach($documents as $doc)
-                  <span class="inline-flex items-center px-2 py-1 bg-slate-50 border border-slate-100 rounded text-xs text-slate-600">{{ $doc->getClientOriginalName() }}</span>
+                  <span class="inline-flex items-center px-2 py-1 bg-slate-50 border border-slate-100 rounded text-xs text-body">{{ $doc->getClientOriginalName() }}</span>
                   @endforeach
                </div>
                @endif
                <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
                   <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                     <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                     <svg class="w-6 h-6 text-body mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                      </svg>
-                     <p class="text-xs text-slate-500">{{ __('cms.products.documents_placeholder') }}</p>
-                     <p class="text-[10px] text-slate-400 mt-0.5">PDF, DOC (Máx. 5MB c/u)</p>
+                     <p class="text-[13px] text-body">{{ __('cms.products.documents_placeholder') }}</p>
+                     <p class="text-[10px] text-body mt-0.5">PDF, DOC (Máx. 5MB c/u)</p>
                   </div>
                   <input type="file" wire:model="documents" class="hidden" accept=".pdf,.doc,.docx" multiple />
                </label>
@@ -380,53 +379,53 @@
          </div>
          {{-- SEO --}}
          <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.seo_section') }}</h4>
+            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.seo_section') }}</h4>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.meta_title') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.meta_title') }}</label>
                <input type="text" wire:model="meta_title" placeholder="{{ __('cms.products.meta_title_placeholder') }}"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.meta_description') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.meta_description') }}</label>
                <textarea wire:model="meta_description" rows="2" placeholder="{{ __('cms.products.meta_description_placeholder') }}"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-slate-300"></textarea>
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-body"></textarea>
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.meta_keywords') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.meta_keywords') }}</label>
                <input type="text" wire:model="meta_keywords" placeholder="{{ __('cms.products.meta_keywords_placeholder') }}"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">SEO Description (Web)</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">SEO Description (Web)</label>
                <textarea wire:model="seo_description" rows="2" placeholder="Descripción para meta tags de la web"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-slate-300"></textarea>
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-body"></textarea>
             </div>
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">SEO Keywords (Web)</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">SEO Keywords (Web)</label>
                <input type="text" wire:model="seo_keywords" placeholder="ej: implantes, titanio, odontología"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
-               <p class="text-xs text-slate-400 italic mt-1">Separadas por comas</p>
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+               <p class="text-[13px] text-body italic mt-1">Separadas por comas</p>
             </div>
          </div>
          {{-- Promociones --}}
          <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">{{ __('cms.products.promotions_section') }}</h4>
+            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.promotions_section') }}</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                <div class="space-y-1.5">
-                  <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.sale_price') }}</label>
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sale_price') }}</label>
                   <input type="number" step="0.01" wire:model="sale_price" placeholder="0.00"
-                     class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                </div>
                <div class="grid grid-cols-2 gap-3">
                   <div class="space-y-1.5">
-                     <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.sale_start') }}</label>
+                     <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sale_start') }}</label>
                      <input type="date" wire:model="sale_start_date"
-                        class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                        class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                   </div>
                   <div class="space-y-1.5">
-                     <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.sale_end') }}</label>
+                     <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sale_end') }}</label>
                      <input type="date" wire:model="sale_end_date"
-                        class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                        class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
                   </div>
                </div>
             </div>
@@ -434,9 +433,9 @@
          {{-- Publicación --}}
          <div class="border-t border-slate-100 pt-5">
             <div class="space-y-1.5">
-               <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.products.publish_date') }}</label>
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.publish_date') }}</label>
                <input type="datetime-local" wire:model="published_at"
-                  class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
             </div>
          </div>
          {{-- Toggles de estado --}}
@@ -447,9 +446,9 @@
             <x-ui-toggle wire:model="is_on_sale" :label="__('cms.products.on_sale')" />
          </div>
          {{-- Acciones alineadas en la base del formulario --}}
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
+            <div class="px-4 py-2.5 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
                 <button type="button" wire:click="cancel"
-                        class="px-5 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer bg-white">
+                        class="px-5 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-body hover:bg-slate-50 transition-colors cursor-pointer bg-white">
                     {{ __('cms.general.cancel') }}
                 </button>
                 <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed"

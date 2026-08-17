@@ -58,7 +58,7 @@
                     </div>
                     <h2 class="text-2xl font-bold">Helin CMS</h2>
                     <p class="mt-3 text-sm text-white/80 leading-relaxed">
-                        Gestión médica integral, clara y moderna. Todo lo que necesitas para administrar tu catálogo y solicitudes en un solo lugar.
+                        Administra tu catálogo y solicitudes en un solo lugar.
                     </p>
                 </div>
             </div>
@@ -86,7 +86,7 @@
         </div>
 
         @if (Route::is(['login', 'register']))
-        <footer class="text-center py-4 text-sm text-slate-400">
+        <footer class="text-center py-4 text-sm text-body">
             <p>&copy; {{ date('Y') }} Helin Latam. Todos los derechos reservados.</p>
         </footer>
         @endif

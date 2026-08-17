@@ -16,7 +16,7 @@
 <div class="space-y-1">
     {{-- Label --}}
     @if($label)
-        <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 {{ $required ? 'text-red-500' : '' }}">
+        <label for="{{ $name }}" class="block text-sm font-medium text-body {{ $required ? 'text-red-500' : '' }}">
             {{ $label }}
             @if($required) <span class="text-red-500">*</span> @endif
         </label>
@@ -26,7 +26,7 @@
     <div class="relative">
         {{-- Prefix --}}
         @if($prefix)
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-body">
                 {{ $prefix }}
             </div>
         @endif
@@ -50,13 +50,13 @@
                 {$disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
                 {$readonly ? 'bg-gray-50 cursor-not-allowed' : ''}
                 transition-colors duration-200
-                placeholder:text-gray-400
+                placeholder:text-body
             "])}}
         >
         
         {{-- Suffix --}}
         @if($suffix)
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-body">
                 {{ $suffix }}
             </div>
         @endif

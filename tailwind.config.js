@@ -25,8 +25,8 @@ export default {
         },
         heading: '#123F4A',
         body: '#2D3740',
-        soft: '#f4f7f8',
-        line: '#D8E3E5',
+        soft: '#f2f2f4',
+        line: '#E5E7EB',
         // Sidebar claro, alineado con la estética del frontend
         sidebar: {
           light: '#ffffff',

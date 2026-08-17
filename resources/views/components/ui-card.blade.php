@@ -54,13 +54,13 @@
     @if($title || $subtitle)
         <div class="mb-4 {{ $padding === 'none' ? '' : 'space-y-2' }}">
             @if($title)
-                <h3 class="text-lg font-semibold text-gray-900 {{ $subtitle ? 'text-base' : 'text-lg' }}">
+                <h3 class="text-lg font-semibold text-heading {{ $subtitle ? 'text-base' : 'text-lg' }}">
                     {{ $title }}
                 </h3>
             @endif
 
             @if($subtitle)
-                <p class="text-sm text-gray-600 {{ $title ? '' : 'text-base font-medium' }}">
+                <p class="text-sm text-body {{ $title ? '' : 'text-base font-medium' }}">
                     {{ $subtitle }}
                 </p>
             @endif

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="w-full max-w-md">
-    <div class="bg-white rounded-2xl shadow-md shadow-primary-500/10 border border-line p-8">
+    <div class="bg-white rounded-xl p-8">
 
             <!-- Lock Icon & User Info -->
             <div class="text-center mb-8">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="text-left">
                         <p class="text-sm font-medium text-heading">{{ $user->name }}</p>
-                        <p class="text-xs text-slate-400">{{ $user->email }}</p>
+                        <p class="text-[13px] text-body">{{ $user->email }}</p>
                     </div>
                 </div>
                 @endif
@@ -37,12 +37,12 @@
                 <div class="space-y-5">
                     <!-- Email Field (pre-filled) -->
                     <div class="group">
-                        <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+                        <label for="email" class="block text-sm font-semibold text-body mb-2">
                             {{ __('cms.lock.email') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
+                                <x-ui-icon name="mail" class="h-5 w-5 text-body group-focus-within:text-primary-500 transition-colors" />
                             </div>
                             <input
                                 id="email"
@@ -50,7 +50,7 @@
                                 type="email"
                                 required
                                 value="{{ $user ? $user->email : old('email') }}"
-                                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-line rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary transition-all duration-200"
+                                class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-line rounded-xl text-heading placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary transition-all duration-200"
                                 placeholder="{{ __('cms.lock.email_placeholder') }}"
                                 autocomplete="email"
                                 readonly
@@ -60,12 +60,12 @@
 
                     <!-- Password Field -->
                     <div class="group">
-                        <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">
+                        <label for="password" class="block text-sm font-semibold text-body mb-2">
                             {{ __('cms.general.password') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="key" class="h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
+                                <x-ui-icon name="key" class="h-5 w-5 text-body group-focus-within:text-primary-500 transition-colors" />
                             </div>
                             <input
                                 wire:model="password"
@@ -73,7 +73,7 @@
                                 name="password"
                                 type="password"
                                 required
-                                class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-line rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary transition-all duration-200 {{ $errors->get('password') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-12 py-3 bg-slate-50 border border-line rounded-xl text-heading placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary transition-all duration-200 {{ $errors->get('password') ? 'border-red-500' : '' }}"
                                 placeholder="••••••••"
                                 autocomplete="current-password"
                                 autofocus
@@ -87,7 +87,7 @@
                                 onclick="this.parentElement.querySelector('input').type = this.parentElement.querySelector('input').type === 'password' ? 'text' : 'password'"
                                 >
                                 <div>
-                                    <svg class="w-4 h-4 text-slate-400 hover:text-slate-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-body hover:text-body transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
@@ -132,7 +132,7 @@
 
                     <!-- Logout Button -->
                     <button wire:click="logout"
-                            class="w-full flex justify-center items-center py-3 px-4 border border-slate-200 text-sm font-semibold rounded-xl text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-all duration-200"
+                            class="w-full flex justify-center items-center py-3 px-4 border border-slate-200 text-sm font-semibold rounded-xl text-body bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-all duration-200"
                             >
                         <span class="mr-2">{{ __('cms.lock.close_session') }}</span>
                         <x-ui-icon name="log-out" class="w-4 h-4" />

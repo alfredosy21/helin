@@ -14,6 +14,6 @@
         <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-5"></span>
     </span>
     @if($label)
-        <span class="text-sm text-body">{{ $label }}</span>
+        <span class="text-[13px] text-body">{{ $label }}</span>
     @endif
 </label>

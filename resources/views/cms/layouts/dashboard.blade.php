@@ -43,17 +43,16 @@
             {{-- Ultra Clean & Modern Sidebar --}}
             <aside class="fixed inset-y-0 left-0 z-50 w-64 lg:static lg:z-40 lg:inset-0 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:translate-x-0"
                    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-                <div class="flex flex-col flex-grow h-full bg-white overflow-hidden border-r border-line">
+                <div class="flex flex-col flex-grow h-full bg-white overflow-hidden">
 
                     {{-- Logo Area - Identical to your exact brand header --}}
                     <div class="flex items-center h-16 px-6 bg-primary-500 text-white flex-shrink-0">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                            <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                                 <span class="text-primary-500 font-bold text-lg">H</span>
                             </div>
                             <div>
                                 <h1 class="text-base font-bold tracking-tight leading-none">Helin CMS</h1>
-                                <p class="text-[10px] uppercase tracking-widest text-white/90 mt-1">Gestión Médica</p>
                             </div>
                         </div>
                     </div>
@@ -66,8 +65,8 @@
                         $isDashboard = Request::is('cms/dashboard') || Request::is('dashboard');
                         @endphp
                         <a href="{{ route('dashboard') }}" wire:navigate
-                           class="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-primary-500/10 text-primary-600 font-semibold border-l-2 border-primary-500' : 'text-slate-500 hover:bg-slate-50 hover:text-heading' }}">
-                            <x-ui-icon name="home" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-primary-600' : 'text-slate-400 group-hover:text-slate-600' }}" />
+                           class="flex items-center space-x-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-primary-500/10 text-primary-600 font-semibold border-l-2 border-primary-500' : 'text-body hover:bg-slate-50 hover:text-heading' }}">
+                            <x-ui-icon name="home" class="w-4 h-4 transition-transform group-hover:scale-105 {{ $isDashboard ? 'text-primary-600' : 'text-body group-hover:text-body' }}" />
                             <span>{{ __('cms.general.desktop') }}</span>
                         </a>
 
@@ -91,17 +90,17 @@
                         <div class="space-y-0.5" x-data="{ open: {{ $hasActiveSubmodule ? 'true' : 'false' }} }">
                             {{-- Main Module Action Row --}}
                             <button @click="open = !open"
-                                     class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $hasActiveSubmodule ? 'text-primary-600 bg-primary-500/5' : 'text-slate-500 hover:bg-slate-50 hover:text-heading' }}">
+                                     class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group {{ $hasActiveSubmodule ? 'text-primary-600 bg-primary-500/5' : 'text-body hover:bg-slate-50 hover:text-heading' }}">
 
                                 <div class="flex items-center space-x-3">
                                     {{-- Dynamic Module Category Custom Icon Class --}}
-                                    <x-ui-icon name="{{ $module['class'] }}" class="w-4 h-4 {{ $hasActiveSubmodule ? 'text-primary-600' : 'text-slate-400 group-hover:text-slate-600' }}" />
+                                    <x-ui-icon name="{{ $module['class'] }}" class="w-4 h-4 {{ $hasActiveSubmodule ? 'text-primary-600' : 'text-body group-hover:text-body' }}" />
                                     <span>{{ $module['name'] }}</span>
                                 </div>
 
                                 {{-- Sleek Expandable Angle Dropdown Arrow --}}
                                 @if(isset($module['submodules']) && count($module['submodules']) > 0)
-                                <svg class="w-3.5 h-3.5 transform transition-transform duration-200 text-slate-400 group-hover:text-slate-600"
+                                <svg class="w-3.5 h-3.5 transform transition-transform duration-200 text-body group-hover:text-body"
                                      :class="{ 'rotate-180 text-primary-600': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
@@ -126,11 +125,11 @@
                                 $isSubActive = Request::is(trim($submodule['url'], '/')) || Request::is(trim($submodule['url'], '/') . '/*');
                                 @endphp
                                 <a href="{{ url($submodule['url']) }}" wire:navigate
-                                   class="flex items-center space-x-2.5 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-150 {{ $isSubActive ? 'text-primary-600 bg-primary-500/10 font-semibold border-l-2 border-primary-500' : 'text-slate-500 hover:text-heading hover:bg-slate-50' }}">
+                                   class="flex items-center space-x-2.5 py-2 px-3 text-xs font-medium rounded-lg transition-all duration-150 {{ $isSubActive ? 'text-primary-600 bg-primary-500/10 font-semibold border-l-2 border-primary-500' : 'text-body hover:text-heading hover:bg-slate-50' }}">
 
                                     {{-- Dynamic Submodule Custom Icon Class from Database Attributes --}}
                                     @if(!empty($submodule['icon']))
-                                    <x-ui-icon name="{{ $submodule['icon'] }}" class="w-3.5 h-3.5 {{ $isSubActive ? 'text-primary-600' : 'text-slate-400 group-hover:text-slate-500' }}" />
+                                    <x-ui-icon name="{{ $submodule['icon'] }}" class="w-3.5 h-3.5 {{ $isSubActive ? 'text-primary-600' : 'text-body group-hover:text-body' }}" />
                                     @else
                                     {{-- Fallback indicator element when icon structural context is null --}}
                                     <span class="w-1.5 h-1.5 rounded-full {{ $isSubActive ? 'bg-primary-500' : 'bg-slate-300' }}"></span>
@@ -150,17 +149,17 @@
             {{-- Main Content Window Area --}}
             <div class="flex-1 flex flex-col min-h-0">
                 {{-- Header Global Element --}}
-                <header class="bg-white border-b border-line shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] z-30">
-                    <div class="flex items-center justify-between h-16 px-6">
+                <header class="bg-white z-30 sticky top-0">
+                    <div class="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-6">
                         {{-- Mobile View Menu Open Button --}}
-                        <button @click="sidebarOpen = true" class="lg:hidden p-2 text-gray-600 hover:text-gray-900">
+                        <button @click="sidebarOpen = true" class="lg:hidden p-2 text-body hover:text-heading">
                             <x-ui-icon name="menu" class="w-6 h-6" />
                         </button>
 
                         {{-- Actions Container Panel --}}
-                        <div class="flex items-center space-x-4 ml-auto">
+                        <div class="flex items-center space-x-2 sm:space-x-4 ml-auto">
                             {{-- Fullscreen Utility Screen Toggle --}}
-                            <button onclick="toggleFullscreen()" id="fullscreen-toggle" class="p-2 text-gray-600 hover:text-primary-600">
+                            <button onclick="toggleFullscreen()" id="fullscreen-toggle" class="hidden sm:block p-2 text-body hover:text-primary-600">
                                 <x-ui-icon name="maximize" class="w-5 h-5 block" />
                                 <x-ui-icon name="minimize" class="w-5 h-5 hidden" />
                             </button>
@@ -169,15 +168,15 @@
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open" class="flex items-center space-x-2 p-1.5 rounded-xl hover:bg-gray-100 transition-all border border-transparent hover:border-gray-200">
                                     @if(auth()->user()->image)
-                                    <div class="w-8 h-8 rounded-lg overflow-hidden shadow-sm ring-2 ring-primary-500/20">
+                                    <div class="w-8 h-8 rounded-lg overflow-hidden ring-2 ring-primary-500/20">
                                         <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
                                     </div>
                                     @else
-                                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center shadow-md shadow-primary-500/10 ring-2 ring-primary-500/20">
+                                    <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center ring-2 ring-primary-500/20">
                                         <span class="text-white text-sm font-bold uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
                                     </div>
                                     @endif
-                                    <span class="hidden md:block text-sm font-medium text-gray-700">{{ auth()->user()->name }}</span>
+                                    <span class="hidden md:block text-sm font-medium text-body">{{ auth()->user()->name }}</span>
                                 </button>
 
                                 <div
@@ -187,12 +186,12 @@
                                     x-transition:enter-start="opacity-0 transform scale-95"
                                     x-transition:enter-end="opacity-100 transform scale-100"
                                     @click.away="open = false"
-                                    class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50"
+                                    class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-md border border-line py-2 z-50"
                                     >
                                     <div class="px-4 py-2 border-b border-gray-50 mb-1">
-                                        <p class="text-xs text-gray-400 uppercase font-bold tracking-tighter">{{ __('cms.general.my_account') }}</p>
+                                        <p class="text-[13px] text-body uppercase font-bold tracking-tighter">{{ __('cms.general.my_account') }}</p>
                                     </div>
-                                    <a href="{{ route('profile.show') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-primary-500/10 hover:text-primary-600">
+                                    <a href="{{ route('profile.show') }}" wire:navigate class="flex items-center space-x-3 px-4 py-2 text-sm text-body hover:bg-primary-500/10 hover:text-primary-600">
                                         <x-ui-icon name="user" class="w-4 h-4" />
                                         <span>{{ __('cms.general.my_profile') }}</span>
                                     </a>
@@ -208,7 +207,7 @@
 
                 {{-- Main Application Render Slot View Engine --}}
                 <main class="flex-1 flex flex-col min-h-0">
-                    <div class="flex-1 overflow-auto p-6 bg-soft">
+                    <div class="flex-1 overflow-auto py-2 sm:py-3 px-1 sm:px-2 lg:px-3 bg-soft">
                         @isset($slot)
                         {{ $slot }}
                         @else
@@ -218,13 +217,13 @@
 
                     {{-- Footer Section Details --}}
                     <footer class="bg-soft border-t border-line">
-                        <div class="px-6 py-4">
-                            <div class="flex items-center justify-between">
-                                <div class="text-sm text-slate-500">
+                        <div class="px-3 sm:px-4 py-2.5">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-0">
+                                <div class="text-[11px] sm:text-[13px] text-body">
                                     © {{ date('Y') }} Helin CMS. Todos los derechos reservados.
                                 </div>
-                                <div class="text-sm text-slate-500">
-                                    Desarrollado por <span class="font-semibold text-slate-700">SyEvolution</span>
+                                <div class="text-[11px] sm:text-[13px] text-body">
+                                    Desarrollado por <span class="font-semibold text-body">SyEvolution</span>
                                 </div>
                             </div>
                         </div>
@@ -253,9 +252,9 @@
             };
             @endphp
             <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" class="flash-message">
-                <div class="bg-white border-l-4 {{ $flashBorder }} rounded-xl p-4 shadow-2xl flex items-center space-x-4 min-w-[300px]">
+                <div class="bg-white border-l-4 {{ $flashBorder }} rounded-xl p-4 shadow-md flex items-center space-x-4 min-w-[300px]">
                     <x-ui-icon name="{{ $type == 'success' ? 'check-circle' : 'alert-circle' }}" class="w-6 h-6 {{ $flashIcon }}" />
-                    <p class="text-sm font-semibold text-gray-700">{{ session($type) }}</p>
+                    <p class="text-sm font-semibold text-body">{{ session($type) }}</p>
                 </div>
             </div>
             @endif

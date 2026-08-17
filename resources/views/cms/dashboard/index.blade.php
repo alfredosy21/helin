@@ -25,7 +25,7 @@
                         <h1 class="text-xl font-bold text-heading">
                             {{ auth()->user()->name }}
                         </h1>
-                        <p class="text-xs text-slate-400">
+                        <p class="text-[13px] text-body">
                             {{ now()->format('d M Y') }} • {{ now()->format('H:i') }}
                         </p>
                     </div>
@@ -87,7 +87,7 @@
                                 </div>
                                 <div>
                                     <h3 class="text-base font-bold text-heading">{{ __('cms.dashboard.live_feed') }}</h3>
-                                    <p class="text-xs text-slate-400">{{ __('cms.dashboard.real_time') }}</p>
+                                    <p class="text-[13px] text-body">{{ __('cms.dashboard.real_time') }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2">
@@ -115,9 +115,9 @@
                                         <div class="space-y-1">
                                             <div class="flex items-center gap-2">
                                                 <span class="font-semibold text-sm text-heading">{{ $activity['user'] }}</span>
-                                                <span class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
+                                                <span class="text-[10px] text-body font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
                                             </div>
-                                            <p class="text-xs text-body leading-relaxed">
+                                            <p class="text-[13px] text-body leading-relaxed">
                                                 {{ $activity['description'] }}
                                             </p>
                                         </div>
@@ -145,7 +145,7 @@
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-heading">{{ __('cms.general.quick_actions') }}</h3>
-                                <p class="text-xs text-slate-400">{{ __('cms.dashboard.quick_actions_subtitle') }}</p>
+                                <p class="text-[13px] text-body">{{ __('cms.dashboard.quick_actions_subtitle') }}</p>
                             </div>
                         </div>
 

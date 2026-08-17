@@ -1,5 +1,5 @@
 <div class="w-full max-w-md">
-    <div class="bg-white rounded-2xl shadow-md shadow-primary-500/10 border border-line p-8">
+    <div class="bg-white rounded-xl p-8">
 
             <!-- Title Section -->
             <div class="text-center mb-8">
@@ -16,12 +16,12 @@
                 <div class="space-y-5">
                     <!-- Email Field -->
                     <div class="group">
-                        <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
+                        <label for="email" class="block text-sm font-semibold text-body mb-2">
                             {{ __('cms.login.email') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="mail" class="h-5 w-5 text-slate-400" />
+                                <x-ui-icon name="mail" class="h-5 w-5 text-body" />
                             </div>
                             <input
                                 wire:model="email"
@@ -29,7 +29,7 @@
                                 type="email"
                                 required
                                 @if($isLocked) readonly @endif
-                                class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-slate-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
                                 placeholder="{{ __('cms.login.email') }}"
                                 >
                         </div>
@@ -38,23 +38,23 @@
 
                     <!-- Password Field -->
                     <div class="group">
-                        <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">
+                        <label for="password" class="block text-sm font-semibold text-body mb-2">
                             {{ __('cms.login.password') }}
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <x-ui-icon name="lock" class="h-5 w-5 text-slate-400" />
+                                <x-ui-icon name="lock" class="h-5 w-5 text-body" />
                             </div>
                             <input
                                 wire:model="password"
                                 id="password"
                                 type="password"
                                 required
-                                class="w-full pl-10 pr-12 py-3 bg-white border border-line rounded-xl text-slate-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-12 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
                                 placeholder="••••••••"
                                 >
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePassword('password')">
-                                <x-ui-icon name="eye" class="h-5 w-5 text-slate-400 hover:text-slate-600" />
+                                <x-ui-icon name="eye" class="h-5 w-5 text-body hover:text-body" />
                             </button>
                         </div>
                         @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -62,19 +62,7 @@
                 </div>
 
                 @if(!$isLocked)
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input
-                            wire:model="remember"
-                            id="remember"
-                            type="checkbox"
-                            class="h-4 w-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
-                            onchange="console.log('Remember checkbox changed:', this.checked)"
-                            >
-                        <label for="remember" class="ml-2 block text-sm text-slate-700 cursor-pointer hover:text-primary-600 transition-colors">
-                            {{ __('cms.login.remember_me') }}
-                        </label>
-                    </div>
+                <div class="flex justify-end">
                     <div class="text-sm">
                         <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500">{{ __('cms.login.forgot_password') }}</a>
                     </div>

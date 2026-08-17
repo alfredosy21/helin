@@ -30,7 +30,7 @@
 <div class="space-y-1">
     {{-- Label --}}
     @if($label)
-        <label for="{{ $name }}" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+        <label for="{{ $name }}" class="block text-xs font-semibold text-body uppercase tracking-wider">
             {{ $label }}
             @if($required) <span class="text-red-500">*</span> @endif
         </label>
@@ -40,7 +40,7 @@
     <div class="relative">
         {{-- Prefix --}}
         @if($prefix)
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-body">
                 {{ $prefix }}
             </div>
         @endif
@@ -56,7 +56,7 @@
             {{ $disabled ? 'disabled' : '' }}
             {{ $readonly ? 'readonly' : '' }}
             @php
-    $inputClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-slate-400';
+    $inputClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-body';
     if ($error) {
         $inputClasses .= ' border-red-500 focus:border-red-500 focus:ring-red-500/20';
     }
@@ -74,7 +74,7 @@
 
         {{-- Suffix --}}
         @if($suffix)
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-body">
                 {{ $suffix }}
             </div>
         @endif

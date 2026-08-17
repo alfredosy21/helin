@@ -15,7 +15,7 @@
         'success' => 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'warning' => 'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:red-500 disabled:opacity-50 disabled:cursor-not-allowed',
-        'ghost' => 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed',
+        'ghost' => 'bg-transparent text-body hover:bg-gray-100 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed',
         'link' => 'text-primary-600 hover:text-primary-700 focus:ring-primary/20 p-0 disabled:opacity-50 disabled:cursor-not-allowed'
     ];
 

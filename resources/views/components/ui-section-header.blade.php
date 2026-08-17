@@ -7,14 +7,14 @@
     'subtitle' => null,
 ])
 
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
     <div>
         <x-cms-breadcrumb :module-id="$moduleId" :submodule-id="$submoduleId" :section="$section" :section-icon="$sectionIcon" />
         @if($title)
-            <h1 class="text-xl font-bold text-heading mt-1">{{ $title }}</h1>
+            <h1 class="text-lg font-semibold text-heading">{{ $title }}</h1>
         @endif
         @if($subtitle)
-            <p class="text-sm text-body mt-1">{{ $subtitle }}</p>
+            <p class="text-sm text-body mt-0.5">{{ $subtitle }}</p>
         @endif
     </div>
 

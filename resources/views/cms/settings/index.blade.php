@@ -29,7 +29,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <!-- Corporate Information Card -->
                 <div class="bg-white p-6 rounded-xl border border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-heading mb-6 flex items-center gap-2">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.corporate_info') }}
                     </h2>
@@ -49,7 +49,7 @@
 
                 <!-- Corporate Image Card -->
                 <div class="bg-white p-6 rounded-xl border border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-heading mb-4 flex items-center gap-2">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.corporate_image') }}
                     </h2>
@@ -60,7 +60,7 @@
 
                 <!-- Default Images Card -->
                 <div class="bg-white p-6 rounded-xl border border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-heading mb-4 flex items-center gap-2">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.default_images') }}
                     </h2>
@@ -80,7 +80,7 @@
 
             <!-- Second Row: Social Media & SEO -->
             <div class="bg-white p-6 rounded-xl border border-slate-100">
-                <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <h2 class="text-lg font-bold text-heading mb-6 flex items-center gap-2">
                     <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                     {{ __('cms.settings.social_seo') }}
                 </h2>
@@ -101,13 +101,13 @@
 
             <!-- Third Row: Footer Card - Full Width -->
             <div class="bg-white p-6 rounded-xl border border-slate-100">
-                <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <h2 class="text-lg font-bold text-heading mb-6 flex items-center gap-2">
                     <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                     {{ __('cms.settings.footer') }}
                 </h2>
                 <div class="max-w-2xl">
                     <x-ui-input label="{{ __('cms.settings.copyright_text') }}" wire:model="copy" placeholder="2026 Helin CMS - Todos los derechos reservados" />
-                    <p class="text-sm text-slate-500 mt-2">
+                    <p class="text-[13px] text-body mt-2">
                         {{ __('cms.settings.copyright_help') }}
                     </p>
                 </div>
@@ -116,7 +116,7 @@
             <!-- Fourth Row: Offices Configuration - Full Width -->
             <div class="bg-white p-6 rounded-xl border border-slate-100">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-heading flex items-center gap-2">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         Nuestras Sedes
                     </h2>
@@ -129,28 +129,28 @@
                 @forelse($offices as $index => $office)
                 <div class="border border-slate-100 rounded-xl p-5 mb-5 bg-slate-50/40" wire:key="office-{{ $index }}">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-slate-800">Sede #{{ $index + 1 }}</h3>
-                        <button type="button" wire:click="removeOffice({{ $index }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                        <h3 class="font-semibold text-heading">Sede #{{ $index + 1 }}</h3>
+                        <button type="button" wire:click="removeOffice({{ $index }})" class="p-2 text-body hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nombre de la sede</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Nombre de la sede</label>
                             <input type="text" wire:model="offices.{{ $index }}.name" placeholder="ej: Caracas"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                             @error('offices.' . $index . '.name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">WhatsApp (URL)</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">WhatsApp (URL)</label>
                             <input type="text" wire:model="offices.{{ $index }}.whatsapp" placeholder="https://wa.me/58424..."
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                             @error('offices.' . $index . '.whatsapp') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5 md:col-span-2">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Dirección punto de retiro</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Dirección punto de retiro</label>
                             <textarea wire:model="offices.{{ $index }}.url" rows="2"
-                                      class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"
+                                      class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"
                                       placeholder="Dirección del punto de retiro"></textarea>
                             @error('offices.' . $index . '.url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="text-center py-10 text-slate-400">
+                <div class="text-center py-10 text-body">
                     <p class="text-sm">No hay sedes configuradas. Presiona "Agregar sede" para crear una.</p>
                 </div>
                 @endforelse
@@ -169,7 +169,7 @@
             <!-- Fifth Row: Contact Subjects Configuration - Full Width -->
             <div class="bg-white p-6 rounded-xl border border-slate-100">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-heading flex items-center gap-2">
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         Asuntos del formulario de contacto
                     </h2>
@@ -182,22 +182,22 @@
                 @forelse($contact_subjects as $index => $subject)
                 <div class="border border-slate-100 rounded-xl p-5 mb-5 bg-slate-50/40" wire:key="subject-{{ $index }}">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-slate-800">Asunto #{{ $index + 1 }}</h3>
-                        <button type="button" wire:click="removeContactSubject({{ $index }})" class="p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
+                        <h3 class="font-semibold text-heading">Asunto #{{ $index + 1 }}</h3>
+                        <button type="button" wire:click="removeContactSubject({{ $index }})" class="p-2 text-body hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Valor (slug)</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Valor (slug)</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.value" placeholder="ej: informacion-comercial"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                             @error('contact_subjects.' . $index . '.value') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Etiqueta visible</label>
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Etiqueta visible</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.label" placeholder="ej: Información comercial"
-                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
                             @error('contact_subjects.' . $index . '.label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="flex items-center gap-3 md:col-span-2">
@@ -206,7 +206,7 @@
                     </div>
                 </div>
                 @empty
-                <div class="text-center py-10 text-slate-400">
+                <div class="text-center py-10 text-body">
                     <p class="text-sm">No hay asuntos configurados. Presiona "Agregar asunto" para crear uno.</p>
                 </div>
                 @endforelse
