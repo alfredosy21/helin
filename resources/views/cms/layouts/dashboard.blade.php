@@ -266,7 +266,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        {{-- Alpine.js is bundled with Livewire v4, no need to load separately --}}
 
         @vite(['resources/cms/js/dashboard.js'])
 
