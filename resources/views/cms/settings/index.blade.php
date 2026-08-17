@@ -10,7 +10,7 @@
 
             <!-- Corporate Information -->
             <x-ui-form-card title="{{ __('cms.settings.corporate_info') }}" description="Datos principales de la empresa" icon="building">
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                     <x-ui-input label="{{ __('cms.settings.company_name') }}" wire:model="name" required />
                     <x-ui-input label="{{ __('cms.settings.contact_email') }}" wire:model="email" required />
                     <x-ui-input label="{{ __('cms.settings.main_phone') }}" wire:model="phone" />

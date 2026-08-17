@@ -165,9 +165,10 @@
             </tbody>
          </table>
       </div>
+
+      {{-- Paginación --}}
+      {{ $products->links() }}
    </div>
-   {{-- Paginación --}}
-   {{ $products->links() }}
    @else
    {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
    <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">

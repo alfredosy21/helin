@@ -176,6 +176,12 @@
                 <td class="label">Nombre:</td>
                 <td class="value">{{ $commercialRequest->full_name }}</td>
             </tr>
+            @if($commercialRequest->customerType)
+            <tr>
+                <td class="label">Tipo de cliente:</td>
+                <td class="value">{{ $commercialRequest->customerType->name }}</td>
+            </tr>
+            @endif
             @if($commercialRequest->company_name)
             <tr>
                 <td class="label">Empresa:</td>
@@ -268,6 +274,36 @@
             <tr>
                 <td class="label">Otra empresa:</td>
                 <td class="value">{{ $commercialRequest->other_delivery_company }}</td>
+            </tr>
+            @endif
+            @if($commercialRequest->recipient_name)
+            <tr>
+                <td class="label">Destinatario:</td>
+                <td class="value">{{ $commercialRequest->recipient_name }}</td>
+            </tr>
+            @endif
+            @if($commercialRequest->recipient_document)
+            <tr>
+                <td class="label">Doc. destinatario:</td>
+                <td class="value">{{ $commercialRequest->recipient_document }}</td>
+            </tr>
+            @endif
+            @if($commercialRequest->recipient_phone)
+            <tr>
+                <td class="label">Tel. destinatario:</td>
+                <td class="value">{{ $commercialRequest->recipient_phone }}</td>
+            </tr>
+            @endif
+            @if($commercialRequest->shippingState)
+            <tr>
+                <td class="label">Estado de envío:</td>
+                <td class="value">{{ $commercialRequest->shippingState->name }}</td>
+            </tr>
+            @endif
+            @if($commercialRequest->shippingCity)
+            <tr>
+                <td class="label">Ciudad de envío:</td>
+                <td class="value">{{ $commercialRequest->shippingCity->name }}</td>
             </tr>
             @endif
             @if($commercialRequest->destination_agency)

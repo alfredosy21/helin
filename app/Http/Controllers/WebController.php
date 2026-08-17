@@ -358,22 +358,22 @@ class WebController extends Controller
         $featuredSection = Sections::find(Sections::CLINICAL_CONTENT_FEATURE);
 
         // Filtros
-        $resourceSpecialties = ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
-        $resourceTypes = ResourceType::where('is_active', true)->orderBy('name')->get();
+        $resourceSpecialties = ResourceSpecialty::where('is_active', true)->orderBy('position')->get();
+        $resourceTypes = ResourceType::where('is_active', true)->orderBy('position')->get();
 
         // Contadores para filtros
         $resourceTypeCounts = ResourceType::where('is_active', true)
             ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
-            ->orderBy('name')
+            ->orderBy('position')
             ->get();
 
         $resourceSpecialtyCounts = ResourceSpecialty::where('is_active', true)
             ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
-            ->orderBy('name')
+            ->orderBy('position')
             ->get();
 
         // Formatos
