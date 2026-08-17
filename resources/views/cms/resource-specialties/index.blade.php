@@ -6,7 +6,7 @@
         {{-- SECCIÓN DE LA TABLA --}}
 
         {{-- Header Section & Breadcrumb --}}
-        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::RESOURCE_SPECIALTIES" :subtitle="__('cms.resource_specialties.breadcrumb')">
+        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::RESOURCE_SPECIALTIES" :subtitle="__('cms.resource_specialties.title')">
             @if(!$showForm)
             <x-slot:action>
                 {{-- Botón Principal --}}

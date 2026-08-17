@@ -167,12 +167,6 @@
                                 </div>
                                 <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Línea</span>
                             </a>
-                            <a href="{{ route('blog.articles.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
-                                    <x-ui-icon name="file-text" class="w-4 h-4 text-primary-600" />
-                                </div>
-                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Artículo</span>
-                            </a>
                             <a href="{{ route('testimonials.index') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
                                 <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
                                     <x-ui-icon name="message-circle" class="w-4 h-4 text-primary-600" />

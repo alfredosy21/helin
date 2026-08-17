@@ -4,7 +4,7 @@
     <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::WHATSAPP_NUMBERS" :subtitle="__('cms.whatsapp_numbers.breadcrumb')">
+        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::WHATSAPP_NUMBERS" :subtitle="__('cms.whatsapp_numbers.title')">
             @if(!$showForm)
             <x-slot:action>
                 <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-3 py-1.5 text-[13px] font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">

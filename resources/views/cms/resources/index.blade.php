@@ -7,7 +7,7 @@
         {{-- SECCIÓN DE LA TABLA (Se muestra solo si showForm es falso) --}}
 
         {{-- Header Section & Breadcrumb --}}
-        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::CLINICAL_RESOURCES" :subtitle="__('cms.resources.breadcrumb')">
+        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::CLINICAL_RESOURCES" :subtitle="__('cms.resources.title')">
             @if(!$showForm)
             <x-slot:action>
                 {{-- Botón Principal --}}

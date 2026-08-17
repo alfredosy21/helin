@@ -6,8 +6,6 @@ use App\Http\Controllers\Cms\AttributesController;
 // Importación de Componentes Livewire (Controladores de Nueva Generación)
 use App\Http\Controllers\Cms\AttributeValuesController;
 use App\Http\Controllers\Cms\AuthenticatedSessionController;
-use App\Http\Controllers\Cms\BlogArticlesController;
-use App\Http\Controllers\Cms\BlogCategoriesController;
 use App\Http\Controllers\Cms\BrandsController;
 use App\Http\Controllers\Cms\CategoriesController;
 use App\Http\Controllers\Cms\CommercialRequestsController;
@@ -181,18 +179,6 @@ Route::prefix('cms')->group(function () {
         /* 3.10. Website Menu Management */
         Route::get('/menu', MenuController::class)->name('menu.index')
             ->middleware('permission:'.Module::SETTINGS.','.Submodule::WEBSITE_MENU);
-
-        /* 3.6. Blog Management */
-        Route::prefix('blog')->name('blog.')->group(function () {
-            Route::get('/categories', BlogCategoriesController::class)->name('categories.index')
-                ->middleware('permission:'.Module::BLOG.','.Submodule::BLOG_CATEGORIES);
-            Route::get('/categories/create', BlogCategoriesController::class)->name('categories.create')
-                ->middleware('permission:'.Module::BLOG.','.Submodule::BLOG_CATEGORIES);
-            Route::get('/articles', BlogArticlesController::class)->name('articles.index')
-                ->middleware('permission:'.Module::BLOG.','.Submodule::BLOG_ARTICLES);
-            Route::get('/articles/create', BlogArticlesController::class)->name('articles.create')
-                ->middleware('permission:'.Module::BLOG.','.Submodule::BLOG_ARTICLES);
-        });
 
         /* 4. Global System Settings */
         Route::get('/settings', SettingsController::class)->name('settings.index')

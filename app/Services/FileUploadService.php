@@ -161,7 +161,6 @@ class FileUploadService {
         $prefix = match($directory) {
             'products' => 'product',
             'testimonials' => 'testimonial',
-            'blog' => 'blog',
             'sections' => 'section',
             'settings' => 'setting',
             default => 'file'

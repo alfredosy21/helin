@@ -5,7 +5,7 @@
     <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <x-ui-section-header :module-id="\App\Models\Module::CONTACT" :submodule-id="\App\Models\Submodule::COMMERCIAL_REQUESTS" subtitle="Gestión de Solicitudes Comerciales" />
+        <x-ui-section-header :module-id="\App\Models\Module::CONTACT" :submodule-id="\App\Models\Submodule::COMMERCIAL_REQUESTS" :subtitle="__('cms.commercial_requests.title')" />
 
         {{-- Main Unified Card: Filtros y Tabla --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">

@@ -59,7 +59,6 @@ class PermissionSystemTest extends TestCase
         $this->assertDatabaseHas('modules', ['id' => Module::ADMINISTRATORS, 'name' => 'Administradores']);
         $this->assertDatabaseHas('modules', ['id' => Module::SETTINGS, 'name' => 'Configuración']);
         $this->assertDatabaseHas('modules', ['id' => Module::CATALOG, 'name' => 'Catálogo']);
-        $this->assertDatabaseHas('modules', ['id' => Module::BLOG, 'name' => 'Blog']);
         $this->assertDatabaseHas('modules', ['id' => Module::CONTENT, 'name' => 'Contenido']);
         $this->assertDatabaseHas('modules', ['id' => Module::CONTACT, 'name' => 'Contacto']);
 
@@ -70,8 +69,8 @@ class PermissionSystemTest extends TestCase
         // Running the seeder again must not duplicate rows
         $this->seed(ModuleSeeder::class);
 
-        $this->assertEquals(6, Module::count());
-        $this->assertEquals(26, Submodule::count());
+        $this->assertEquals(5, Module::count());
+        $this->assertEquals(24, Submodule::count());
     }
 
     public function test_create_permissions_is_idempotent(): void

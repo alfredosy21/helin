@@ -28,10 +28,6 @@ class Submodule extends Model {
     const SYSTEM_PRODUCTS = 11; // Sistema de Productos
     const PRODUCT_PLATFORMS = 12; // Plataforma de Productos
 
-    // BLOG (MODULE 4)
-    const BLOG_CATEGORIES = 13; // Categorías del Blog
-    const BLOG_ARTICLES = 14; // Artículos
-
     // CONTENT (MODULE 5)
     const TESTIMONIALS = 15; // Testimonios
     const CLINICAL_RESOURCES = 16; // Recursos Clínicos

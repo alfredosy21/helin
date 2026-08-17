@@ -79,7 +79,7 @@ return [
 
     // Familias de Productos
     'categories' => [
-        'title' => 'Organiza tus productos por familias para facilitar la navegación y mejorar la experiencia de compra',
+        'title' => 'Agrupa tus productos para que tus clientes encuentren rápido lo que buscan y compren con confianza',
         'breadcrumb' => 'Familias de Productos',
         'new_button' => 'Nueva familia',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -100,7 +100,7 @@ return [
 
     // Tipos de Cliente
     'customer_types' => [
-        'title'              => 'Clasifica a tus clientes para personalizar el proceso de solicitud y atención comercial',
+        'title'              => 'Segmenta tus clientes para ofrecerles una atención personalizada que acelere el cierre de ventas',
         'breadcrumb'         => 'Tipos de Cliente',
         'new_button'         => 'Nuevo tipo',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -120,7 +120,7 @@ return [
 
     // Métodos de Entrega
     'delivery_methods' => [
-        'title'              => 'Gestiona los métodos de envío y entrega disponibles para las solicitudes comerciales',
+        'title'              => 'Ofrece opciones de entrega claras que eliminen fricciones y conviertan más solicitudes en ventas',
         'breadcrumb'         => 'Métodos de Entrega',
         'new_button'         => 'Nuevo método',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -140,7 +140,7 @@ return [
 
     // Números de WhatsApp
     'whatsapp_numbers' => [
-        'title' => 'Gestiona los números de WhatsApp por estado para la atención comercial',
+        'title' => 'Conecta al instante con cada cliente en su región y acelera el cierre de ventas por WhatsApp',
         'breadcrumb' => 'Números de WhatsApp',
         'new_button' => 'Nuevo número',
         'search_placeholder' => 'Buscar por número, ejecutivo o descripción...',
@@ -166,7 +166,7 @@ return [
 
     // SEO de Páginas
     'page_seo' => [
-        'title' => 'Configura los metadatos SEO de las páginas públicas del sitio',
+        'title' => 'Posiciona tus páginas en Google y atrae más clientes orgánicos sin pagar publicidad',
         'breadcrumb' => 'SEO de Páginas',
         'new_button' => 'Nuevo registro SEO',
         'search_placeholder' => 'Buscar por slug o título SEO...',
@@ -187,7 +187,7 @@ return [
 
     // Atributos de Productos
     'attributes' => [
-        'title' => 'Gestiona los atributos dinámicos del catálogo de productos',
+        'title' => 'Destaca las características que diferencian tus productos y ayuda a tus clientes a decidir más rápido',
         'breadcrumb' => 'Atributos de Productos',
         'new_button' => 'Nuevo atributo',
         'search_placeholder' => 'Buscar por nombre, slug o descripción...',
@@ -224,7 +224,7 @@ return [
 
     // Valores de Atributos
     'attribute_values' => [
-        'title' => 'Gestiona los valores de cada atributo del catálogo',
+        'title' => 'Define las variantes que tus clientes buscan para filtrar y comprar sin dudas',
         'breadcrumb' => 'Valores de Atributos',
         'new_button' => 'Nuevo valor',
         'search_placeholder' => 'Buscar por valor, etiqueta o descripción...',
@@ -252,36 +252,9 @@ return [
         'color' => 'Color',
     ],
 
-    // Blog Categorías
-    'blog_categories' => [
-        'title' => 'Agrupa tus artículos por temas para que los visitantes encuentren fácilmente el contenido que les interesa',
-        'breadcrumb' => 'Categorías de blog',
-        'new_button' => 'Nueva categoría',
-        'name_label' => 'Nombre de la categoría',
-        'name_placeholder' => 'ej. Tecnología, Noticias, Tutoriales...',
-        'description_label' => 'Descripción',
-        'seo_description_label' => 'SEO Descripción',
-        'slug_label' => 'Slug',
-        'slug_placeholder' => 'ej. tecnologia',
-        'slug_helper' => 'Si se deja vacío, se generará automáticamente.',
-        'color_label' => 'Color tema',
-        'color_placeholder' => '#3B82F6',
-        'color_helper' => 'Color para la interfaz',
-        'icon_label' => 'Icono',
-        'icon_placeholder' => 'ej. book, news, tech',
-        'image_label' => 'Imagen',
-        'image_placeholder' => 'URL o ruta',
-        'search_placeholder' => 'Buscar por nombre, slug o descripción...',
-        'edit_title' => 'Editar categoría',
-        'new_title' => 'Crear nueva categoría',
-        'subtitle' => 'Taxonomía del blog',
-        'delete_title' => '¿Eliminar esta categoría?',
-        'delete_button' => 'Eliminar categoría',
-    ],
-
     // Sistema de Productos
     'system_products' => [
-        'title' => 'Gestiona los sistemas de productos del catálogo médico',
+        'title' => 'Organiza tus sistemas de productos para que los profesionales encuentren soluciones completas',
         'breadcrumb' => 'Sistema de Productos',
         'new_button' => 'Nuevo sistema',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -306,7 +279,7 @@ return [
 
     // Plataforma de Productos
     'product_platforms' => [
-        'title' => 'Gestiona las plataformas de productos del catálogo médico',
+        'title' => 'Estructura tus plataformas para presentar soluciones integradas que aumenten el ticket promedio',
         'breadcrumb' => 'Plataforma de Productos',
         'new_button' => 'Nueva plataforma',
         'search_placeholder' => 'Buscar por nombre o slug...',
@@ -331,7 +304,7 @@ return [
 
     // Marcas
     'brands' => [
-        'title' => 'Muestra las marcas que representas para generar confianza y reconocer a los fabricantes',
+        'title' => 'Respalda tus productos con marcas reconocidas que inspiren confianza y aceleren la decisión de compra',
         'breadcrumb' => 'Marcas de Productos',
         'new_button' => 'Nueva marca',
         'search_placeholder' => 'Buscar por nombre o imagen...',
@@ -351,7 +324,7 @@ return [
 
     // Líneas
     'lines' => [
-        'title' => 'Agrupa tus productos por especialidades para organizar mejor tu catálogo',
+        'title' => 'Organiza tu catálogo por especialidades para que cada profesional encuentre su solución ideal',
         'breadcrumb' => 'Líneas de Productos',
         'new_button' => 'Nueva línea',
         'name_label' => 'Nombre de la línea',
@@ -372,7 +345,7 @@ return [
 
     // Testimonios
     'testimonials' => [
-        'title' => 'Comparte las experiencias de tus clientes para construir confianza y credibilidad',
+        'title' => 'Convierte la voz de tus clientes satisfechos en tu mejor herramienta de ventas',
         'breadcrumb' => 'Testimonios',
         'new_button' => 'Nuevo testimonio',
         'name_label' => 'Nombre completo',
@@ -397,7 +370,7 @@ return [
 
     // Recursos Clínicos
     'resources' => [
-        'title' => 'Gestiona los recursos clínicos disponibles para profesionales odontológicos',
+        'title' => 'Posiciona tu marca como referente clínico y fideliza profesionales con contenido de valor',
         'breadcrumb' => 'Recursos Clínicos',
         'new_button' => 'Nuevo Recurso',
         'search_placeholder' => 'Buscar por título, descripción o especialidad...',
@@ -445,7 +418,7 @@ return [
 
     // Tipos de Recursos
     'resource_types' => [
-        'title' => 'Gestiona los tipos de recursos clínicos disponibles',
+        'title' => 'Categoriza tu contenido clínico para que los profesionales encuentren rápido lo que necesitan',
         'breadcrumb' => 'Tipos de Recursos',
         'new_button' => 'Nuevo Tipo de Recurso',
         'search_placeholder' => 'Buscar por nombre o descripción...',
@@ -484,7 +457,7 @@ return [
 
     // Especialidades de Recursos
     'resource_specialties' => [
-        'title' => 'Gestiona las especialidades odontológicas disponibles',
+        'title' => 'Especializa tu contenido para conectar con cada perfil profesional y generar más oportunidades',
         'breadcrumb' => 'Especialidades de Recursos',
         'new_button' => 'Nueva Especialidad',
         'search_placeholder' => 'Buscar por nombre o descripción...',
@@ -519,7 +492,7 @@ return [
 
     // Métodos de Pago
     'payment_methods' => [
-        'title' => 'Gestiona los métodos de pago disponibles para tus clientes',
+        'title' => 'Facilita el pago con opciones flexibles que eliminen barreras y cierren más ventas',
         'breadcrumb' => 'Métodos de Pago',
         'new_button' => 'Nuevo Método de Pago',
         'search_placeholder' => 'Buscar por nombre, descripción o proveedor...',
@@ -566,48 +539,9 @@ return [
         'delete_tooltip' => 'Eliminar método',
     ],
 
-    // Artículos de blog
-    'blog_articles' => [
-        'title' => 'Publica artículos útiles para informar a tus clientes y mejorar tu posicionamiento en buscadores',
-        'breadcrumb' => 'Blog',
-        'parent_breadcrumb' => 'Contenido',
-        'new_button' => 'Nuevo artículo',
-        'no_category' => 'Sin categoría',
-        'no_author' => 'Sin autor',
-        'remove_featured' => 'Quitar destacado',
-        'mark_featured' => 'Marcar como destacado',
-        'featured_badge' => 'Destacado',
-        'pinned_badge' => 'Fijado',
-        'search_placeholder' => 'Buscar por título, autor o contenido...',
-        'edit_title' => 'Editar Artículo',
-        'new_title' => 'Nuevo Artículo',
-        'subtitle' => 'Completa los datos del artículo',
-        'title_label' => 'Título del Artículo',
-        'title_placeholder' => 'Título del artículo',
-        'author_label' => 'Autor',
-        'author_placeholder' => 'Nombre del autor',
-        'slug_label' => 'Slug (URL)',
-        'slug_placeholder' => 'url-del-articulo',
-        'category_label' => 'Categoría',
-        'excerpt_label' => 'Extracto (Resumen)',
-        'excerpt_placeholder' => 'Breve resumen del artículo',
-        'content_label' => 'Contenido del Artículo',
-        'content_placeholder' => 'Escribe aquí el contenido completo del artículo...',
-        'featured_image_label' => 'Imagen Destacada',
-        'featured_image_placeholder' => 'Seleccionar imagen destacada',
-        'seo_section' => 'SEO y Metaetiquetas',
-        'meta_title_label' => 'Meta Título',
-        'meta_title_placeholder' => 'Título para SEO',
-        'meta_description_label' => 'Meta Descripción',
-        'meta_description_placeholder' => 'Descripción para SEO',
-        'meta_keywords_label' => 'Meta Keywords',
-        'meta_keywords_placeholder' => 'palabra1, palabra2, palabra3',
-        'delete_title' => '¿Eliminar artículo?',
-    ],
-
     // Productos
     'products' => [
-        'title' => 'Presenta tus productos médicos con información clara y completa para profesionales de la salud',
+        'title' => 'Vende más con fichas de producto que informan, persuaden y aceleran la decisión de compra',
         'breadcrumb' => 'Productos',
         'parent_breadcrumb' => 'Catálogo',
         'new_button' => 'Nuevo Producto',
@@ -676,7 +610,7 @@ return [
 
     // Usuarios
     'users' => [
-        'title' => 'Administra los usuarios de tu equipo y define sus roles y permisos de acceso',
+        'title' => 'Empodera a tu equipo con los accesos correctos para que operen con autonomía y seguridad',
         'breadcrumb' => 'Usuarios',
         'new_button' => 'Nuevo usuario',
         'role' => 'Rol',
@@ -701,7 +635,7 @@ return [
 
     // Roles
     'roles' => [
-        'title' => 'Define los roles y niveles de acceso para proteger la información de tu sistema',
+        'title' => 'Estructura los roles de tu equipo para proteger tu negocio y operar con control total',
         'breadcrumb' => 'Roles',
         'new_button' => 'Nuevo rol',
         'search_placeholder' => 'Buscar roles por nombre...',
@@ -718,7 +652,7 @@ return [
 
     // Permisos
     'permissions' => [
-        'title' => 'Configura los permisos específicos para cada usuario y mantener el control del sistema',
+        'title' => 'Controla cada acceso del sistema para proteger tu información y reducir riesgos operativos',
         'breadcrumb' => 'Permisos',
         'parent_breadcrumb' => 'Administración',
         'roles_breadcrumb' => 'Roles',
@@ -738,7 +672,7 @@ return [
 
     // Secciones
     'sections' => [
-        'title' => 'Crea y edita las secciones de tu sitio web para organizar el contenido y guiar a los visitantes',
+        'title' => 'Diseña la ruta que tus clientes siguen para descubrir tus productos y convertir visitantes en ventas',
         'breadcrumb' => 'Secciones',
         'parent_breadcrumb' => 'Contenido',
         'edit_title' => 'Editar sección',
@@ -825,7 +759,7 @@ return [
 
     // Perfil
     'profile' => [
-        'title' => 'Mantén tu perfil actualizado y seguro para proteger tu acceso al sistema',
+        'title' => 'Mantén tu perfil seguro y actualizado para operar con confianza en el sistema',
         'breadcrumb' => 'Mi Perfil',
         'my_profile' => 'Mi Perfil',
         'cms_breadcrumb' => 'CMS',
@@ -879,6 +813,24 @@ return [
         'unlock_session' => 'Desbloquear Sesión',
         'close_session' => 'Cerrar sesión',
         'unlock_notice' => 'Ingresa tu contraseña para desbloquear la sesión.',
+    ],
+
+    // Menú del Sitio
+    'menu' => [
+        'title' => 'Guía a tus clientes hacia la compra con un menú claro y estratégico',
+        'breadcrumb' => 'Menú del Sitio',
+    ],
+
+    // Mensajes de Contacto
+    'contact_messages' => [
+        'title' => 'Convierte cada mensaje en una oportunidad de venta respondiendo a tiempo',
+        'breadcrumb' => 'Mensajes de Contacto',
+    ],
+
+    // Solicitudes Comerciales
+    'commercial_requests' => [
+        'title' => 'Transforma las solicitudes comerciales en ventas con un seguimiento eficiente',
+        'breadcrumb' => 'Solicitudes Comerciales',
     ],
 
     // Dashboard
@@ -940,10 +892,10 @@ return [
 
     // Configuraciones
     'settings' => [
-        'title' => 'Ajusta los parámetros maestros del negocio para consolidar la identidad digital de tu marca corporativa',
+        'title' => 'Configura la identidad de tu marca para proyectar una imagen profesional en cada punto de contacto',
         'editing' => 'Editando',
         'edit_params' => 'Editar parámetros',
-        'edit_subtitle' => 'Modifica los parámetros globales del sistema',
+        'edit_subtitle' => 'Configura la identidad de tu marca para proyectar una imagen profesional en cada punto de contacto',
         'view_subtitle' => 'Administra la configuración global de la aplicación',
         'cancel' => 'Cancelar',
         'save' => 'Guardar cambios',
@@ -1038,8 +990,6 @@ return [
 
     // Mensajes de abort (403)
     'abort' => [
-        'blog_articles' => 'Acceso no autorizado al módulo de artículos.',
-        'blog_categories' => 'Acceso no autorizado al módulo de categorías de blog.',
         'brands' => 'Acceso no autorizado al módulo de marcas.',
         'categories' => 'Acceso no autorizado al módulo de categorías.',
         'lines' => 'Acceso no autorizado al módulo de líneas.',
@@ -1072,40 +1022,6 @@ return [
         'auth' => [
             'login_system_error' => 'Error del sistema durante la autenticación.',
             'activity_login' => 'Usuario inició sesión',
-        ],
-        'blog_articles' => [
-            'updated' => 'Artículo actualizado correctamente.',
-            'created' => 'Artículo creado correctamente.',
-            'process_error' => 'Error al procesar el artículo.',
-            'deleted' => 'Artículo eliminado correctamente.',
-            'delete_error' => 'No se puede eliminar el artículo. Verifique datos asociados.',
-            'activated' => 'Artículo activado correctamente.',
-            'deactivated' => 'Artículo desactivado correctamente.',
-            'status_error' => 'Error al cambiar el estado del artículo.',
-            'featured_on' => 'Artículo marcado como destacado.',
-            'featured_off' => 'Artículo desmarcado como destacado.',
-            'featured_error' => 'Error al cambiar el estado destacado.',
-            'order_updated' => 'Orden actualizado correctamente.',
-            'order_error' => 'Error al reordenar los artículos.',
-            'activity_updated' => 'Artículo de blog actualizado: ID #:id',
-            'activity_created' => 'Artículo de blog creado: ID #:id',
-            'activity_deleted' => 'Artículo de blog eliminado: :title',
-            'activity_status' => 'Artículo de blog :status: ID #:id',
-            'activity_featured' => 'Artículo de blog :status: ID #:id',
-            'activity_reordered' => 'Artículos de blog reordenados por Usuario ID #:user_id',
-        ],
-        'blog_categories' => [
-            'updated' => 'Categoría de blog actualizada correctamente.',
-            'created' => 'Categoría de blog creada correctamente.',
-            'process_error' => 'Error al procesar la categoría de blog.',
-            'deleted' => 'Categoría de blog eliminada correctamente.',
-            'delete_error' => 'No se puede eliminar la categoría. Verifique blogs asociados.',
-            'order_updated' => 'Orden de categorías actualizado correctamente.',
-            'order_error' => 'Error al reordenar las categorías de blog.',
-            'activity_updated' => 'Categoría de blog actualizada: ID #:id',
-            'activity_created' => 'Categoría de blog creada: ID #:id',
-            'activity_deleted' => 'Categoría de blog eliminada: :name',
-            'activity_reordered' => 'Categorías de blog reordenadas por Usuario ID #:user_id',
         ],
         'brands' => [
             'updated' => 'Marca actualizada correctamente.',

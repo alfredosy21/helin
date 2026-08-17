@@ -459,8 +459,8 @@
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                         </svg>
                     </span>
-                    <span wire:loading.remove wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.blog_articles.new_button') }}</span>
-                    <span wire:loading wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.blog_articles.new_button') }}</span>
+                    <span wire:loading.remove wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
+                    <span wire:loading wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
                 </button>
             </div>
       </form>

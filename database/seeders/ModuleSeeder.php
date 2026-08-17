@@ -64,16 +64,6 @@ class ModuleSeeder extends Seeder
                 ],
             ],
             [
-                'id' => Module::BLOG,
-                'name' => 'Blog',
-                'class' => 'folder',
-                'order' => 4,
-                'submodules' => [
-                    ['id' => Submodule::BLOG_CATEGORIES, 'name' => 'Categorías del Blog', 'url' => '/cms/blog/categories', 'icon' => 'folder'],
-                    ['id' => Submodule::BLOG_ARTICLES, 'name' => 'Artículos', 'url' => '/cms/blog/articles', 'icon' => 'edit'],
-                ],
-            ],
-            [
                 'id' => Module::CONTENT,
                 'name' => 'Contenido',
                 'class' => 'file',

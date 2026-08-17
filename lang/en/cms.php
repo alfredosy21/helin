@@ -70,7 +70,7 @@ return [
 
     // Categorías
     'categories' => [
-        'title' => 'Category Management',
+        'title' => 'Group your products so customers find what they need fast and buy with confidence',
         'breadcrumb' => 'Categories',
         'new_button' => 'New category',
         'search_placeholder' => 'Search by name or slug...',
@@ -89,36 +89,9 @@ return [
         'delete_button' => 'Delete category',
     ],
 
-    // Blog Categorías
-    'blog_categories' => [
-        'title' => 'Blog Category Management',
-        'breadcrumb' => 'Blog Categories',
-        'new_button' => 'New category',
-        'name_label' => 'Category name',
-        'name_placeholder' => 'e.g. Technology, News, Tutorials...',
-        'description_label' => 'Description (optional)',
-        'seo_description_label' => 'SEO Description (optional)',
-        'slug_label' => 'Slug (optional)',
-        'slug_placeholder' => 'e.g. technology',
-        'slug_helper' => 'If left empty, it will be generated automatically.',
-        'color_label' => 'Theme color',
-        'color_placeholder' => '#3B82F6',
-        'color_helper' => 'Color for the interface',
-        'icon_label' => 'Icon (optional)',
-        'icon_placeholder' => 'e.g. book, news, tech',
-        'image_label' => 'Image (optional)',
-        'image_placeholder' => 'URL or path',
-        'search_placeholder' => 'Search by name, slug or description...',
-        'edit_title' => 'Edit category',
-        'new_title' => 'Create new category',
-        'subtitle' => 'Blog taxonomy',
-        'delete_title' => 'Delete this category?',
-        'delete_button' => 'Delete category',
-    ],
-
     // Marcas
     'brands' => [
-        'title' => 'Brand Management',
+        'title' => 'Back your products with recognized brands that build trust and speed up buying decisions',
         'breadcrumb' => 'Commercial Brands',
         'new_button' => 'New brand',
         'search_placeholder' => 'Search by name or image...',
@@ -136,7 +109,7 @@ return [
 
     // Líneas
     'lines' => [
-        'title' => 'Product Line Management',
+        'title' => 'Organize your catalog by specialties so every professional finds their ideal solution',
         'breadcrumb' => 'Product Lines',
         'new_button' => 'New line',
         'name_label' => 'Line name',
@@ -157,7 +130,7 @@ return [
 
     // Testimonios
     'testimonials' => [
-        'title' => 'Testimonial Management',
+        'title' => "Turn your satisfied customers' voices into your most powerful sales tool",
         'breadcrumb' => 'Testimonials',
         'new_button' => 'New testimonial',
         'name_label' => 'Full name',
@@ -180,48 +153,9 @@ return [
         'delete_tooltip' => 'Delete testimonial',
     ],
 
-    // Artículos de blog
-    'blog_articles' => [
-        'title' => 'Blog Articles',
-        'breadcrumb' => 'Blog',
-        'parent_breadcrumb' => 'Content',
-        'new_button' => 'New article',
-        'no_category' => 'No category',
-        'no_author' => 'No author',
-        'remove_featured' => 'Remove featured',
-        'mark_featured' => 'Mark as featured',
-        'featured_badge' => 'Featured',
-        'pinned_badge' => 'Pinned',
-        'search_placeholder' => 'Search by title, author or content...',
-        'edit_title' => 'Edit Article',
-        'new_title' => 'New Article',
-        'subtitle' => 'Complete the article data',
-        'title_label' => 'Article Title',
-        'title_placeholder' => 'Article title',
-        'author_label' => 'Author',
-        'author_placeholder' => 'Author name',
-        'slug_label' => 'Slug (URL)',
-        'slug_placeholder' => 'article-url',
-        'category_label' => 'Category',
-        'excerpt_label' => 'Excerpt (Summary)',
-        'excerpt_placeholder' => 'Brief summary of the article',
-        'content_label' => 'Article Content',
-        'content_placeholder' => 'Write the full article content here...',
-        'featured_image_label' => 'Featured Image',
-        'featured_image_placeholder' => 'Select featured image',
-        'seo_section' => 'SEO and Meta Tags',
-        'meta_title_label' => 'Meta Title',
-        'meta_title_placeholder' => 'Title for SEO',
-        'meta_description_label' => 'Meta Description',
-        'meta_description_placeholder' => 'Description for SEO',
-        'meta_keywords_label' => 'Meta Keywords',
-        'meta_keywords_placeholder' => 'word1, word2, word3',
-        'delete_title' => 'Delete article?',
-    ],
-
     // Productos
     'products' => [
-        'title' => 'Product Catalog',
+        'title' => 'Sell more with product pages that inform, persuade and accelerate buying decisions',
         'breadcrumb' => 'Products',
         'parent_breadcrumb' => 'Catalog',
         'new_button' => 'New Product',
@@ -280,7 +214,7 @@ return [
 
     // Usuarios
     'users' => [
-        'title' => 'Administrator Management',
+        'title' => 'Empower your team with the right access to operate autonomously and securely',
         'breadcrumb' => 'Administrators',
         'new_button' => 'New administrator',
         'role' => 'Security role',
@@ -305,7 +239,7 @@ return [
 
     // Roles
     'roles' => [
-        'title' => 'Role Management',
+        'title' => "Structure your team's roles to protect your business and maintain full control",
         'breadcrumb' => 'Roles',
         'new_button' => 'New role',
         'search_placeholder' => 'Search roles by name...',
@@ -322,7 +256,7 @@ return [
 
     // Permisos
     'permissions' => [
-        'title' => 'Permission Management',
+        'title' => 'Control every system access to protect your data and reduce operational risks',
         'breadcrumb' => 'Permissions',
         'parent_breadcrumb' => 'Administration',
         'roles_breadcrumb' => 'System roles',
@@ -342,7 +276,7 @@ return [
 
     // Secciones
     'sections' => [
-        'title' => 'Content Blocks',
+        'title' => 'Design the path your customers follow to discover products and turn visitors into sales',
         'breadcrumb' => 'Platform Sections',
         'parent_breadcrumb' => 'Content Management',
         'edit_title' => 'Edit content block',
@@ -420,7 +354,7 @@ return [
 
     // Perfil
     'profile' => [
-        'title' => 'Profile Settings',
+        'title' => 'Keep your profile secure and up to date to operate with confidence in the system',
         'breadcrumb' => 'My Professional Profile',
          'cms_breadcrumb' => 'CMS',
         'update_button' => 'Update Profile',
@@ -527,10 +461,10 @@ return [
 
     // Configuraciones
     'settings' => [
-        'title' => 'System Settings',
+        'title' => 'Configure your brand identity to project a professional image at every touchpoint',
         'editing' => 'Editing',
         'edit_params' => 'Edit parameters',
-        'edit_subtitle' => 'Modify global system parameters',
+        'edit_subtitle' => 'Configure your brand identity to project a professional image at every touchpoint',
         'view_subtitle' => 'Manage global application settings',
         'cancel' => 'Cancel',
         'save' => 'Save changes',
@@ -579,7 +513,7 @@ return [
 
     // WhatsApp Numbers
     'whatsapp_numbers' => [
-        'title' => 'Manage WhatsApp numbers by state for commercial support',
+        'title' => 'Connect instantly with every customer in their region and close sales faster on WhatsApp',
         'breadcrumb' => 'WhatsApp Numbers',
         'new_button' => 'New number',
         'search_placeholder' => 'Search by number, executive or description...',
@@ -605,7 +539,7 @@ return [
 
     // Product Attributes
     'attributes' => [
-        'title' => 'Manage the dynamic attributes of the product catalog',
+        'title' => 'Highlight the features that set your products apart and help customers decide faster',
         'breadcrumb' => 'Product Attributes',
         'new_button' => 'New attribute',
         'search_placeholder' => 'Search by name, slug or description...',
@@ -642,7 +576,7 @@ return [
 
     // Attribute Values
     'attribute_values' => [
-        'title' => 'Manage the values of each catalog attribute',
+        'title' => 'Define the variants your customers search for to filter and buy without hesitation',
         'breadcrumb' => 'Attribute Values',
         'new_button' => 'New value',
         'search_placeholder' => 'Search by value, label or description...',
@@ -668,6 +602,78 @@ return [
         'value' => 'Value',
         'label' => 'Label',
         'color' => 'Color',
+    ],
+
+    // Customer Types
+    'customer_types' => [
+        'title' => 'Segment your customers to offer personalized service that accelerates closing deals',
+        'breadcrumb' => 'Customer Types',
+    ],
+
+    // Delivery Methods
+    'delivery_methods' => [
+        'title' => 'Offer clear delivery options that remove friction and convert more requests into sales',
+        'breadcrumb' => 'Delivery Methods',
+    ],
+
+    // Page SEO
+    'page_seo' => [
+        'title' => 'Rank your pages on Google and attract more organic customers without paying for ads',
+        'breadcrumb' => 'Page SEO',
+    ],
+
+    // System Products
+    'system_products' => [
+        'title' => 'Organize your product systems so professionals find complete solutions',
+        'breadcrumb' => 'Product Systems',
+    ],
+
+    // Product Platforms
+    'product_platforms' => [
+        'title' => 'Structure your platforms to present integrated solutions that increase average order value',
+        'breadcrumb' => 'Product Platforms',
+    ],
+
+    // Clinical Resources
+    'resources' => [
+        'title' => 'Position your brand as a clinical reference and retain professionals with valuable content',
+        'breadcrumb' => 'Clinical Resources',
+    ],
+
+    // Resource Types
+    'resource_types' => [
+        'title' => 'Categorize your clinical content so professionals quickly find what they need',
+        'breadcrumb' => 'Resource Types',
+    ],
+
+    // Resource Specialties
+    'resource_specialties' => [
+        'title' => 'Specialize your content to connect with each professional profile and generate more leads',
+        'breadcrumb' => 'Resource Specialties',
+    ],
+
+    // Payment Methods
+    'payment_methods' => [
+        'title' => 'Make payment easy with flexible options that remove barriers and close more sales',
+        'breadcrumb' => 'Payment Methods',
+    ],
+
+    // Website Menu
+    'menu' => [
+        'title' => 'Guide your customers to purchase with a clear and strategic navigation menu',
+        'breadcrumb' => 'Website Menu',
+    ],
+
+    // Contact Messages
+    'contact_messages' => [
+        'title' => 'Turn every message into a sales opportunity by responding on time',
+        'breadcrumb' => 'Contact Messages',
+    ],
+
+    // Commercial Requests
+    'commercial_requests' => [
+        'title' => 'Transform commercial requests into sales with efficient follow-up',
+        'breadcrumb' => 'Commercial Requests',
     ],
 
     // Errores
@@ -711,8 +717,6 @@ return [
 
     // Mensajes de abort (403)
     'abort' => [
-        'blog_articles' => 'Unauthorized access to Helin Blog Articles module.',
-        'blog_categories' => 'Unauthorized access to Helin Blog Categories module.',
         'brands' => 'Unauthorized access to Helin Brands module.',
         'categories' => 'Unauthorized access to Helin Taxonomy modules.',
         'lines' => 'Unauthorized access to Helin Lines module.',
@@ -737,40 +741,6 @@ return [
     'controllers' => [
         'auth' => [
             'login_system_error' => 'System error during authentication',
-        ],
-        'blog_articles' => [
-            'updated' => 'Blog article updated successfully',
-            'created' => 'Blog article created successfully',
-            'process_error' => 'Error processing blog article',
-            'deleted' => 'Blog article deleted successfully',
-            'delete_error' => 'Cannot delete article. Check associated data.',
-            'activated' => 'Article activated successfully',
-            'deactivated' => 'Article deactivated successfully',
-            'status_error' => 'Error changing article status',
-            'featured_on' => 'Article marked as featured',
-            'featured_off' => 'Article unmarked as featured',
-            'featured_error' => 'Error changing featured status',
-            'order_updated' => 'Order updated successfully',
-            'order_error' => 'Error reordering articles',
-            'activity_updated' => 'Blog article updated: ID #:id',
-            'activity_created' => 'Blog article created: ID #:id',
-            'activity_deleted' => 'Blog article deleted: :title',
-            'activity_status' => 'Blog article :status: ID #:id',
-            'activity_featured' => 'Blog article :status: ID #:id',
-            'activity_reordered' => 'Blog articles reordered by User ID #:user_id',
-        ],
-        'blog_categories' => [
-            'updated' => 'Blog category updated successfully',
-            'created' => 'Blog category created successfully',
-            'process_error' => 'Error processing blog category',
-            'deleted' => 'Blog category deleted successfully',
-            'delete_error' => 'Cannot delete category. Check associated blogs.',
-            'order_updated' => 'Category order updated successfully',
-            'order_error' => 'Error reordering blog categories',
-            'activity_updated' => 'Blog category updated: ID #:id',
-            'activity_created' => 'Blog category created: ID #:id',
-            'activity_deleted' => 'Blog category deleted: :name',
-            'activity_reordered' => 'Blog categories reordered by User ID #:user_id',
         ],
         'brands' => [
             'updated' => 'Brand updated successfully',
