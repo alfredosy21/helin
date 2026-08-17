@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\Category;
 use App\Models\Activities;
+use App\Models\Category;
+use App\Models\Module;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 /**
  * Class CategoriesController
  * * Manages the product families for the Helin eCommerce catalog.
  * Handles primary product families and their organizational sequencing (positioning).
+ *
  * * @version 1.0.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Gestión de Familias de Productos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class CategoriesController extends Component {
-
+class CategoriesController extends Component
+{
+    use WithFileUploads;
     use WithPagination;
 
     /** @var string Display name of the family */
@@ -46,6 +52,34 @@ class CategoriesController extends Component {
     /** @var string|null SEO keywords for meta tags */
     #[Validate('nullable|string|max:500')]
     public ?string $seo_keywords = '';
+
+    /** @var mixed|null Uploaded image file instance */
+    public $image;
+
+    /** @var string|null Existing image path from storage */
+    public ?string $current_image = null;
+
+    /** @var bool Featured status */
+    #[Validate('boolean')]
+    public bool $is_featured = false;
+
+    /** @var string|null Banner label (small text above title) */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_label = '';
+
+    /** @var string|null Banner title */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_title = '';
+
+    /** @var string|null Banner description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $banner_description = '';
+
+    /** @var mixed|null Uploaded banner image file instance */
+    public $banner_image;
+
+    /** @var string|null Existing banner image path from storage */
+    public ?string $current_banner_image = null;
 
     /** @var int|null ID of the family being modified */
     public ?int $editingId = null;
@@ -71,34 +105,34 @@ class CategoriesController extends Component {
     /**
      * Component Lifecycle: Authorization Check.
      */
-    public function mount(): void {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.categories'));
-        }
+    public function mount(): void
+    {
+        CmsAccess::authorize(Module::CATALOG, Submodule::PRODUCT_FAMILIES, __('cms.abort.categories'));
     }
 
     /**
      * Render the component with paginated and sorted families.
      */
-    public function render(): View {
+    public function render(): View
+    {
         $categories = Category::query()
-                ->when($this->search, function ($query) {
-                    $query->where('name', 'like', "%{$this->search}%")
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%");
-                })
-                ->orderBy('order', 'asc')
-                ->paginate($this->perPage);
+            })
+            ->orderBy('order', 'asc')
+            ->paginate($this->perPage);
 
         return view('cms.categories.index', [
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
     /**
      * Prepare the interface for a new category record.
      */
-    public function create(): void {
+    public function create(): void
+    {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -107,19 +141,38 @@ class CategoriesController extends Component {
     /**
      * Persist or synchronize category data.
      */
-    public function save(): void {
+    public function save(): void
+    {
         $this->isLoading = true;
         $this->validate();
 
         try {
             $data = [
                 'name' => $this->name,
-                'slug' => $this->slug ?: \Illuminate\Support\Str::slug($this->name),
+                'slug' => $this->slug ?: Str::slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
                 'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
+                'is_featured' => $this->is_featured,
+                'banner_label' => $this->banner_label,
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
             ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('categories', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['image'] = $this->current_image;
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('categories/banners', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['banner_image'] = $this->current_banner_image;
+            }
 
             if ($this->editingId) {
                 $category = Category::findOrFail($this->editingId);
@@ -150,7 +203,8 @@ class CategoriesController extends Component {
     /**
      * Hydrate form with existing category data.
      */
-    public function edit(int $id): void {
+    public function edit(int $id): void
+    {
         $category = Category::findOrFail($id);
 
         $this->editingId = $id;
@@ -160,6 +214,12 @@ class CategoriesController extends Component {
         $this->seo_description = $category->seo_description;
         $this->seo_keywords = $category->seo_keywords;
         $this->is_active = $category->is_active;
+        $this->is_featured = (bool) $category->is_featured;
+        $this->banner_label = $category->banner_label;
+        $this->banner_title = $category->banner_title;
+        $this->banner_description = $category->banner_description;
+        $this->current_image = $category->image;
+        $this->current_banner_image = $category->banner_image;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -168,7 +228,8 @@ class CategoriesController extends Component {
     /**
      * Execute category removal after UI confirmation.
      */
-    public function confirmDelete(int $id): void {
+    public function confirmDelete(int $id): void
+    {
         try {
             $category = Category::findOrFail($id);
             $categoryName = $category->name;
@@ -184,9 +245,11 @@ class CategoriesController extends Component {
 
     /**
      * Reorder the display sequence of categories via drag & drop data.
+     *
      * * @param array $orderedIds Array of IDs in the new order
      */
-    public function updateOrder(array $orderedIds): void {
+    public function updateOrder(array $orderedIds): void
+    {
         try {
             foreach ($orderedIds as $index => $id) {
                 Category::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -203,32 +266,38 @@ class CategoriesController extends Component {
     /**
      * Close form and reset internal state.
      */
-    public function cancel(): void {
+    public function cancel(): void
+    {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
     }
 
-    protected function validationAttributes(): array {
+    protected function validationAttributes(): array
+    {
         return [
             'name' => __('cms.validation_attributes.category_name'),
         ];
     }
 
-    private function resetForm(): void {
-        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'editingId']);
+    private function resetForm(): void
+    {
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'is_featured', 'banner_label', 'banner_title', 'banner_description', 'image', 'current_image', 'banner_image', 'current_banner_image', 'editingId']);
         $this->is_active = true;
+        $this->is_featured = false;
         $this->resetValidation();
     }
 
-    public function updatedSearch(): void {
+    public function updatedSearch(): void
+    {
         $this->resetPage();
     }
 
     /**
      * Compatibility bridge for legacy frontend calls.
      */
-    public function getCategoryLists(): array {
+    public function getCategoryLists(): array
+    {
         return Category::orderBy('order', 'asc')->get()->toArray();
     }
 }

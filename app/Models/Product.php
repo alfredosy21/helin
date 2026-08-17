@@ -28,8 +28,10 @@ class Product extends Model {
      */
     protected $fillable = [
         'name',
+        'spanish_name',
         'slug',
         'sku',
+        'supplier_reference',
         'brand_id',
         'description',
         'clinical_specs',
@@ -40,7 +42,15 @@ class Product extends Model {
         'meta_title',
         'meta_description',
         'meta_keywords',
+        'seo_description',
+        'seo_keywords',
+        'material',
+        'dimensions',
+        'is_biomaterial',
+        'system_product_id',
+        'product_platform_id',
         'category_id',
+        'line_id',
         'is_active',
         'is_featured',
         'is_new',
@@ -88,12 +98,39 @@ class Product extends Model {
     }
 
     /**
+     * Get the line that owns the product.
+     *
+     * @return BelongsTo<Line, Product>
+     */
+    public function line(): BelongsTo {
+        return $this->belongsTo(Line::class);
+    }
+
+    /**
      * Get the brand that owns the product.
      *
      * @return BelongsTo<Brand, Product>
      */
     public function brand(): BelongsTo {
         return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get the system product that owns the product.
+     *
+     * @return BelongsTo<SystemProduct, Product>
+     */
+    public function systemProduct(): BelongsTo {
+        return $this->belongsTo(SystemProduct::class);
+    }
+
+    /**
+     * Get the product platform that owns the product.
+     *
+     * @return BelongsTo<ProductPlatform, Product>
+     */
+    public function productPlatform(): BelongsTo {
+        return $this->belongsTo(ProductPlatform::class);
     }
 
     /**
@@ -141,7 +178,7 @@ class Product extends Model {
      */
     public function attributeValues(): BelongsToMany {
         return $this->belongsToMany(AttributeValue::class, 'attribute_value_product')
-                        ->withPivot(['notes', 'numeric_value', 'text_value'])
+                        ->withPivot(['notes', 'numeric_value', 'text_value', 'price', 'sale_price', 'sku'])
                         ->withTimestamps();
     }
 
@@ -235,18 +272,26 @@ class Product extends Model {
     }
 
     /**
-     * Get the main image URL with fallback.
+     * Get the main image URL.
      *
-     * @return string
+     * @return string|null
      */
-    public function getMainImageUrlAttribute(): string {
-        $mainImage = $this->mainImage()->first();
+    public function getMainImageUrlAttribute(): ?string {
+        $mainImage = null;
+
+        if ($this->relationLoaded('images')) {
+            $mainImage = $this->images->first(fn ($img) => (bool) $img->is_main) ?? $this->images->first();
+        }
+
+        if (!$mainImage && !$this->relationLoaded('images')) {
+            $mainImage = $this->mainImage()->first();
+        }
 
         if ($mainImage) {
             return asset('storage/' . $mainImage->file_path);
         }
 
-        return asset('images/default-product.png');
+        return null;
     }
 
     /**

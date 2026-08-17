@@ -14,17 +14,48 @@
       <i class="fa fa-location-arrow" aria-hidden="true"></i>
    </div>
    <div>
+      @php
+          $nearSection = \App\Models\Sections::find(\App\Models\Sections::NEAR_YOU);
+      @endphp
       <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">
-         <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
+         @if($nearSection && $nearSection->status == 1 && $nearSection->status_content == 1)
+            @php
+                $nearTitle = $nearSection->title ?? '';
+                $nearComma = strpos($nearTitle, ',');
+                if ($nearComma !== false) {
+                    $nearHead = trim(substr($nearTitle, 0, $nearComma));
+                    $nearTail = trim(substr($nearTitle, $nearComma + 1));
+                } else {
+                    $nearHead = $nearTitle;
+                    $nearTail = '';
+                }
+            @endphp
+            <span class="text-turquesa">{{ $nearHead }}</span>@if($nearTail), {{ $nearTail }}@endif
+         @else
+            <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
+         @endif
       </h2>
       <p class="text-helin-text font-bold mt-1">
-         <a href="https://wa.me/584242789481?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Caracas</a>
-         ·
-         <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="hover:text-turquesa transition-colors">Valencia</a>
-         ·
-         <a href="https://wa.me/584143805640?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Barquisimeto</a>
-         ·
-         <a href="https://wa.me/584242550811?text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial." target="_blank" class="hover:text-turquesa transition-colors">Maracaibo</a>
+         @php
+             $nearSettings = \App\Models\Settings::getSettings();
+             $nearOffices = $nearSettings && $nearSettings->offices ? $nearSettings->offices : [];
+             $nearMessage = 'Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.';
+             $nearLinks = [];
+             foreach ($nearOffices as $nearOffice) {
+                 $nearActive = isset($nearOffice['active']) ? (bool) $nearOffice['active'] : true;
+                 if (!$nearActive) continue;
+                 $nearWhatsapp = $nearOffice['whatsapp'] ?? null;
+                 if (!$nearWhatsapp) continue;
+                 $nearPhone = preg_replace('/[^0-9]/', '', $nearWhatsapp);
+                 if (!$nearPhone) continue;
+                 $nearCityName = ucfirst($nearOffice['city'] ?? $nearOffice['name'] ?? '');
+                 if (!$nearCityName) continue;
+                 $nearLinks[$nearCityName] = 'https://wa.me/' . $nearPhone . '?text=' . urlencode($nearMessage);
+             }
+         @endphp
+         @foreach($nearLinks as $nearCityName => $nearUrl)
+            <a href="{{ $nearUrl }}" target="_blank" class="hover:text-turquesa transition-colors">{{ $nearCityName }}</a>@if(!$loop->last)<span> · </span>@endif
+         @endforeach
       </p>
    </div>
 </section>

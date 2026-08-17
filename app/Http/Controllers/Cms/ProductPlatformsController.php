@@ -4,28 +4,32 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\ProductPlatform;
 use App\Models\Activities;
+use App\Models\Module;
+use App\Models\ProductPlatform;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 /**
  * Class ProductPlatformsController
  * * Manages the product platforms for the Helin eCommerce catalog.
  * Handles primary product platforms and their organizational sequencing (positioning).
+ *
  * * @version 1.0.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Gestión de Plataforma de Productos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class ProductPlatformsController extends Component
 {
-
+    use WithFileUploads;
     use WithPagination;
 
     /** @var string Display name of the platform */
@@ -43,6 +47,30 @@ class ProductPlatformsController extends Component
     /** @var string|null SEO description for meta tags */
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
+
+    /** @var string|null SEO keywords for meta tags */
+    #[Validate('nullable|string|max:500')]
+    public ?string $seo_keywords = '';
+
+    /** @var mixed|null Uploaded image file instance */
+    public $image;
+
+    /** @var string|null Existing image path from storage */
+    public ?string $current_image = null;
+
+    /** @var string|null Banner title */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_title = '';
+
+    /** @var string|null Banner description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $banner_description = '';
+
+    /** @var mixed|null Uploaded banner image file instance */
+    public $banner_image;
+
+    /** @var string|null Existing banner image path from storage */
+    public ?string $current_banner_image = null;
 
     /** @var int|null ID of the platform being modified */
     public ?int $editingId = null;
@@ -70,10 +98,7 @@ class ProductPlatformsController extends Component
      */
     public function mount(): void
     {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.product_platforms'));
-        }
+        CmsAccess::authorize(Module::CATALOG, Submodule::PRODUCT_PLATFORMS, __('cms.abort.product_platforms'));
     }
 
     /**
@@ -82,12 +107,12 @@ class ProductPlatformsController extends Component
     public function render(): View
     {
         $platforms = ProductPlatform::query()
-                ->when($this->search, function ($query) {
-                    $query->where('name', 'like', "%{$this->search}%")
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%");
-                })
-                ->orderBy('order', 'asc')
-                ->paginate($this->perPage);
+            })
+            ->orderBy('order', 'asc')
+            ->paginate($this->perPage);
 
         return view('cms.product-platforms.index', [
             'platforms' => $platforms,
@@ -114,7 +139,12 @@ class ProductPlatformsController extends Component
         $this->slug = $platform->slug;
         $this->description = $platform->description;
         $this->seo_description = $platform->seo_description;
+        $this->seo_keywords = $platform->seo_keywords;
         $this->is_active = $platform->is_active;
+        $this->banner_title = $platform->banner_title;
+        $this->banner_description = $platform->banner_description;
+        $this->current_image = $platform->image;
+        $this->current_banner_image = $platform->banner_image;
         $this->showForm = true;
     }
 
@@ -126,14 +156,29 @@ class ProductPlatformsController extends Component
         $this->validate();
 
         try {
-            $platform = ProductPlatform::create([
+            $data = [
                 'name' => $this->name,
                 'slug' => $this->slug ?: str()->slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
                 'order' => ProductPlatform::max('order') + 1,
-            ]);
+            ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('product-platforms', $filename, 'public');
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('product-platforms/banners', $filename, 'public');
+            }
+
+            $platform = ProductPlatform::create($data);
 
             Activities::saveActivity(__('cms.controllers.product_platforms.activity_created', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.product_platforms.created'), type: 'success');
@@ -154,13 +199,33 @@ class ProductPlatformsController extends Component
 
         try {
             $platform = ProductPlatform::findOrFail($this->editingId);
-            $platform->update([
+
+            $data = [
                 'name' => $this->name,
                 'slug' => $this->slug ?: str()->slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
-            ]);
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
+            ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('product-platforms', $filename, 'public');
+            } elseif ($this->current_image) {
+                $data['image'] = $this->current_image;
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('product-platforms/banners', $filename, 'public');
+            } elseif ($this->current_banner_image) {
+                $data['banner_image'] = $this->current_banner_image;
+            }
+
+            $platform->update($data);
 
             Activities::saveActivity(__('cms.controllers.product_platforms.activity_updated', ['user_id' => Auth::id()]));
             $this->dispatch('toast', message: __('cms.controllers.product_platforms.updated'), type: 'success');
@@ -196,11 +261,11 @@ class ProductPlatformsController extends Component
     {
         try {
             $platform = ProductPlatform::findOrFail($id);
-            $platform->update(['is_active' => !$platform->is_active]);
+            $platform->update(['is_active' => ! $platform->is_active]);
 
             $status = $platform->is_active ? 'activated' : 'deactivated';
-            Activities::saveActivity(__('cms.controllers.product_platforms.activity_' . $status, ['user_id' => Auth::id()]));
-            $this->dispatch('toast', message: __('cms.controllers.product_platforms.' . $status), type: 'success');
+            Activities::saveActivity(__('cms.controllers.product_platforms.activity_'.$status, ['user_id' => Auth::id()]));
+            $this->dispatch('toast', message: __('cms.controllers.product_platforms.'.$status), type: 'success');
         } catch (\Exception $ex) {
             report($ex);
             $this->dispatch('toast', message: __('cms.controllers.product_platforms.status_error'), type: 'error');
@@ -223,7 +288,6 @@ class ProductPlatformsController extends Component
             $this->dispatch('toast', message: __('cms.controllers.product_platforms.order_error'), type: 'error');
         }
     }
-
 
     /**
      * Close the form modal.

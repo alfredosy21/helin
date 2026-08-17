@@ -18,8 +18,14 @@ class ResourceType extends Model
     protected $fillable = [
         'name',
         'description',
+        'icon',
+        'format_label',
+        'image',
         'is_active',
         'position',
+        'banner_title',
+        'banner_description',
+        'banner_image',
     ];
 
     /**

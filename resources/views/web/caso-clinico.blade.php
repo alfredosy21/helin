@@ -1,49 +1,23 @@
 @extends('web.layouts.app')
 
-@section('title', 'Detalle Caso Clínico - Helin')
+@section('title', $resource->title . ' - Helin')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('helin/css/caso-clinico.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<style>
-.tabs-wrapper {
-    position: relative;
-}
-@media (max-width: 1023px) {
-    .tabs-scroll-hint {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding-right: 10px;
-        background: linear-gradient(to right, transparent, #fff 70%);
-        pointer-events: none;
-        z-index: 2;
-        color: #9ca3af;
-        font-size: 11px;
-        opacity: 0.7;
-        transition: opacity .25s;
-        border-radius: 0 10px 10px 0;
-    }
-    .tabs-scroll-hint.hidden {
-        opacity: 0;
-    }
-}
-@media (min-width: 1024px) {
-    .tabs-scroll-hint {
-        display: none;
-    }
-}
-</style>
 @endsection
 
 @section('content')
 <hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
 
+@php
+    $shareSection = \App\Models\Sections::find(\App\Models\Sections::CASE_SHARE);
+    $advisorSection = \App\Models\Sections::find(\App\Models\Sections::CASE_ADVISOR);
+    $bottomCtaSection = \App\Models\Sections::find(\App\Models\Sections::CASE_BOTTOM_CTA);
+
+    $settings = \App\Models\Settings::getSettings();
+    $caseWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
+@endphp
 <main class="page">
     @include('web.components.breadcrumb', [
         'items' => [
@@ -65,38 +39,40 @@
                     <div class="meta-icon"><i class="fas fa-heartbeat"></i></div>
                     <div>
                         <small>Especialidad</small>
-                        <strong>{{ $resource->specialty->name ?? 'General' }}</strong>
+                        <strong>{{ $resource->resourceSpecialty->name ?? 'General' }}</strong>
                     </div>
                 </div>
                 <div class="meta-item">
                     <div class="meta-icon"><i class="fas fa-file-alt"></i></div>
                     <div>
                         <small>Formato</small>
-                        <strong>{{ $resource->type->name ?? 'Artículo' }}</strong>
+                        <strong>{{ $resource->resourceType->name ?? 'Artículo' }}</strong>
                     </div>
                 </div>
                 <div class="meta-item">
                     <div class="meta-icon"><i class="fas fa-calendar"></i></div>
                     <div>
                         <small>Fecha</small>
-                        <strong style="color:#172b49">{{ $resource->created_at->format('d M, Y') ?? '15 mayo, 2024' }}</strong>
+                        <strong style="color:#172b49">{{ $resource->created_at->format('d M, Y') }}</strong>
                     </div>
                 </div>
             </div>
 
             <div class="hero-actions">
-                <a href="{{ $resource->video_url ?? '#' }}" target="_blank" class="primary-btn">
+                @if($resource->video_url)
+                <a href="{{ $resource->video_url }}" target="_blank" class="primary-btn">
                     <i class="fas fa-play"></i> Ver video completo
                 </a>
-                @if($resource->file_path)
+                @endif
+                @if($resource->file_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($resource->file_path))
                     <a href="{{ asset('storage/' . $resource->file_path) }}" download class="outline-btn">
-                        <i class="fas fa-download"></i> Descargar PDF
+                        <i class="fas fa-download"></i> Descargar {{ $resource->format === 'video' ? 'Video' : 'PDF' }}
                     </a>
                 @endif
             </div>
         </div>
 
-        <div class="clinical-photo" style="background-image: url('{{ asset('images/regeneracion-osea-guiada-recursos1.jpg') }}'); background-size: cover; background-position: center;"></div>
+        <div class="clinical-photo" @if($resource->image_url) style="background-image: url('{{ $resource->image_url }}'); background-size: cover; background-position: center;" @endif></div>
     </section>
 
     <div class="tabs-wrapper">
@@ -115,10 +91,11 @@
             <section id="descripcion" class="tab-panel active">
                 <article class="case-card">
                     <h2>Descripción del caso</h2>
-                    <p>Caso clínico de regeneración ósea guiada (ROG) en la zona posterior, realizado para recuperar el volumen óseo perdido y crear las condiciones ideales para una rehabilitación implantológica predecible. El tratamiento se planificó mediante evaluación clínica y radiográfica, priorizando la estabilidad del injerto y la regeneración de tejido óseo de calidad.</p>
                     <p>{!! $resource->content !!}</p>
 
-                    <img src="{{ asset('images/regeneracion-osea-guiada-recursos2.jpg') }}" alt="Regeneración ósea guiada" class="case-detail-image" loading="lazy">
+                    @if($resource->image_url)
+                        <img src="{{ $resource->image_url }}" alt="{{ $resource->title }}" class="case-detail-image" loading="lazy">
+                    @endif
 
                     @if($resource->diagnosis)
                         <h3>Diagnóstico inicial</h3>
@@ -144,122 +121,86 @@
             <section id="materiales" class="tab-panel">
                 <article class="case-card">
                     <h2>Materiales utilizados</h2>
-                    <ul>
-                        <li>Biomaterial de injerto óseo.</li>
-                        <li>Membrana para regeneración ósea guiada.</li>
-                        <li>Instrumental de cirugía oral e implantología.</li>
-                        <li>Material de sutura.</li>
-                        <li>Soluciones de irrigación y desinfección.</li>
-                    </ul>
+                    @if($resource->materials)
+                        @php $materialsList = explode("\n", $resource->materials); @endphp
+                        <ul>
+                            @foreach($materialsList as $material)
+                                @if(trim($material))
+                                    <li>{{ trim($material) }}</li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>Información de materiales próximamente.</p>
+                    @endif
                 </article>
             </section>
 
             <section id="resultados" class="tab-panel">
                 <article class="case-card">
                     <h2>Resultados</h2>
-                    <p>Se evidenció una adecuada regeneración del volumen óseo, con una cicatrización favorable y una integración estable del injerto. El seguimiento confirmó condiciones óptimas para la futura colocación de implantes y una rehabilitación funcional con un pronóstico favorable.</p>
+                    @if($resource->results)
+                        <p>{!! nl2br(e($resource->results)) !!}</p>
+                    @else
+                        <p>Información de resultados próximamente.</p>
+                    @endif
                 </article>
             </section>
         </div>
 
         <aside>
+            @if($shareSection && $shareSection->status == 1 && $shareSection->status_content == 1)
             <section class="share-card">
                 <div class="share-header">
-                    <h3>Compartir este recurso</h3>
+                    <h3>{{ $shareSection->title }}</h3>
                     <button type="button" class="share-copy" onclick="copyPageLink(this)" aria-label="Copiar enlace">
                         <i class="fas fa-link"></i>
                         <span class="tooltip">Enlace copiado</span>
                     </button>
                 </div>
             </section>
+            @endif
 
+            @if($advisorSection && $advisorSection->status == 1 && $advisorSection->status_content == 1)
             <section class="advisor-card">
                 <div class="advisor-head">
                     <div class="advisor-icon"><i class="fas fa-headset"></i></div>
                     <div>
-                        <h3>¿Necesitas asesoría personalizada?</h3>
-                        <p>Un asesor Helin puede ayudarte a resolver dudas sobre este caso y los materiales utilizados.</p>
+                        <h3>{{ $advisorSection->title }}</h3>
+                        @if($advisorSection->description)
+                        <p>{{ $advisorSection->description }}</p>
+                        @endif
                     </div>
                 </div>
-                <a href="https://wa.me/584244669150?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
-                    <i class="fab fa-whatsapp"></i> Hablar por WhatsApp
+                @if($caseWhatsApp)
+                <a href="https://wa.me/{{ $caseWhatsApp }}?text={{ urlencode('Hola, tengo dudas sobre un caso clínico de Helin.') }}" target="_blank" class="advisor-btn">
+                    <i class="fab fa-whatsapp"></i> {{ $advisorSection->name_button ?: 'Hablar por WhatsApp' }}
                 </a>
+                @endif
             </section>
+            @endif
         </aside>
     </section>
 
+    @if($bottomCtaSection && $bottomCtaSection->status == 1 && $bottomCtaSection->status_content == 1)
     <section class="bottom-cta">
         <div class="bottom-icon"><i class="fas fa-comments"></i></div>
         <div>
-            <h2>¿Tienes un caso similar o necesitas orientación?</h2>
-            <p>Nuestro equipo de especialistas está disponible para brindarte asesoría personalizada y acompañarte en la planificación de tus procedimientos.</p>
+            <h2>{{ $bottomCtaSection->title }}</h2>
+            @if($bottomCtaSection->description)
+            <p>{{ $bottomCtaSection->description }}</p>
+            @endif
         </div>
         <a href="{{ route('contactanos', ['asunto' => 'recursos-clinicos']) }}" class="advisor-btn">
-            <i class="material-icons">email</i> Solicitar asesoría especializada
+            <i class="material-icons">email</i> {{ $bottomCtaSection->name_button ?: 'Solicitar asesoría especializada' }}
         </a>
     </section>
+    @endif
 </main>
 
 @include('web.partials.beneficios')
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabs = document.querySelectorAll('.tabs .tab');
-        const panels = document.querySelectorAll('.tab-panel');
-
-        function activateTab(targetId) {
-            tabs.forEach(function (tab) {
-                tab.classList.toggle('active', tab.getAttribute('href') === '#' + targetId);
-            });
-            panels.forEach(function (panel) {
-                panel.classList.toggle('active', panel.id === targetId);
-            });
-        }
-
-        tabs.forEach(function (tab) {
-            tab.addEventListener('click', function (e) {
-                e.preventDefault();
-                activateTab(this.getAttribute('href').substring(1));
-            });
-        });
-
-        if (window.location.hash) {
-            activateTab(window.location.hash.substring(1));
-        }
-    });
-
-    function copyPageLink(button) {
-        navigator.clipboard.writeText(window.location.href).then(function () {
-            const tooltip = button.querySelector('.tooltip');
-            tooltip.classList.add('show');
-            setTimeout(function () {
-                tooltip.classList.remove('show');
-            }, 2000);
-        });
-    }
-
-    // Tabs scroll hint
-    (function() {
-        const nav = document.getElementById('tabsNav');
-        const hint = document.getElementById('tabsScrollHint');
-        if (!nav || !hint) return;
-
-        function checkScroll() {
-            const maxScroll = nav.scrollWidth - nav.clientWidth;
-            if (maxScroll <= 2) {
-                hint.classList.add('hidden');
-            } else if (nav.scrollLeft >= maxScroll - 4) {
-                hint.classList.add('hidden');
-            } else {
-                hint.classList.remove('hidden');
-            }
-        }
-
-        nav.addEventListener('scroll', checkScroll, { passive: true });
-        window.addEventListener('resize', checkScroll);
-        checkScroll();
-    })();
-</script>
+<script src="@minAsset('helin/js/caso-clinico.js')"></script>
 @endpush
 @endsection

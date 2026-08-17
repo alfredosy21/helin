@@ -32,14 +32,14 @@
     <div class="modal-content fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 z-50">
         <!-- Modal Header -->
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 class="text-lg font-semibold text-heading dark:text-white">
                 {{ $title }}
             </h3>
         </div>
         
         <!-- Modal Body -->
         <div class="px-6 py-4">
-            <p class="text-gray-600 dark:text-gray-300">
+            <p class="text-body dark:text-gray-300">
                 {{ $message }}
             </p>
         </div>
@@ -49,7 +49,7 @@
             <button
                 type="button"
                 onclick="closeModal('{{ $id }}')"
-                class="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
+                class="px-4 py-2 text-body dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
             >
                 {{ $cancelText }}
             </button>

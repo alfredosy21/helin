@@ -18,7 +18,7 @@ class Testimonial extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'charge', 'position', 'order', 'image', 'is_active'];
+    protected $fillable = ['name', 'specialty', 'content', 'image', 'is_active', 'position'];
 
     /**
      * Create testimony

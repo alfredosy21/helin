@@ -8,6 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('contact-submit');
     if (!form) return;
 
+    // ─── reCAPTCHA callbacks ─────────────────────────────────────────────────
+    window.onContactRecaptchaSuccess = function() {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+        }
+    };
+
+    window.onContactRecaptchaExpired = function() {
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+        }
+    };
+
     const fields = {
         nombre:          form.querySelector('[name="nombre"]'),
         email:           form.querySelector('[name="email"]'),
@@ -108,8 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setLoading(loading) {
         if (!submitBtn) return;
-        submitBtn.disabled = loading;
-        submitBtn.textContent = loading ? '⟳ Enviando...' : '➤ Contactar a Helin';
-        submitBtn.style.opacity = loading ? '0.7' : '1';
+        if (loading) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⟳ Enviando...';
+            submitBtn.style.opacity = '0.7';
+        } else {
+            // Only re-enable if reCAPTCHA is verified or not present
+            const recaptchaResponse = document.querySelector('[name="g-recaptcha-response"]');
+            if (!recaptchaResponse || recaptchaResponse.value) {
+                submitBtn.disabled = false;
+            }
+            submitBtn.textContent = '➤ Contactar a Helin';
+            submitBtn.style.opacity = recaptchaResponse && !recaptchaResponse.value ? '0.5' : '1';
+        }
     }
 });

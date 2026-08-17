@@ -30,7 +30,7 @@
 <div class="space-y-1">
     {{-- Label --}}
     @if($label)
-        <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 {{ $required ? 'text-red-500' : '' }}">
+        <label for="{{ $name }}" class="block text-xs font-semibold text-body uppercase tracking-wider">
             {{ $label }}
             @if($required) <span class="text-red-500">*</span> @endif
         </label>
@@ -40,7 +40,7 @@
     <div class="relative">
         {{-- Prefix --}}
         @if($prefix)
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-body">
                 {{ $prefix }}
             </div>
         @endif
@@ -56,15 +56,15 @@
             {{ $disabled ? 'disabled' : '' }}
             {{ $readonly ? 'readonly' : '' }}
             @php
-    $inputClasses = 'block w-full rounded-2xl border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-colors duration-200 placeholder:text-gray-400';
+    $inputClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-body';
     if ($error) {
         $inputClasses .= ' border-red-500 focus:border-red-500 focus:ring-red-500/20';
     }
     if ($disabled) {
-        $inputClasses .= ' bg-gray-100 cursor-not-allowed';
+        $inputClasses .= ' bg-soft/50 cursor-not-allowed';
     }
     if ($readonly) {
-        $inputClasses .= ' bg-gray-50 cursor-not-allowed';
+        $inputClasses .= ' bg-soft/50 cursor-not-allowed';
     }
 @endphp
         {{ $attributes->merge([
@@ -74,14 +74,14 @@
 
         {{-- Suffix --}}
         @if($suffix)
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-body">
                 {{ $suffix }}
             </div>
         @endif
 
         {{-- Error Message --}}
         @if($error)
-            <p class="mt-1 text-sm text-red-600">{{ $error }}</p>
+            <p class="mt-1 text-xs text-red-500 font-medium italic">{{ $error }}</p>
         @endif
     </div>
 </div>

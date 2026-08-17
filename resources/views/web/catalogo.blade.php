@@ -11,11 +11,11 @@
     }
 @endphp
 
-@section('title', $currentCategory ? ($currentCategory->name . ' - Catálogo - Helin') : 'Catálogo de Productos - Helin')
-@section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.')
-@section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela')
+@section('title', $currentCategory ? ($currentCategory->name . ' - Catálogo - Helin') : ($pageSeo?->seo_title ?? 'Catálogo de Productos - Helin'))
+@section('meta-description', $currentCategory ? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Explora nuestra selección de ' . $currentCategory->name . ' en Helin. Productos de alta calidad para profesionales odontológicos con garantía y envío a todo Venezuela.') : ($pageSeo?->seo_description ?? 'Explora nuestro catálogo completo de productos odontológicos. Implantes, instrumentos, biomateriales y equipos de las mejores marcas. Calidad garantizada Helin.'))
+@section('meta-keywords', $currentCategory ? ($currentCategory->seo_keywords ?? ($currentCategory->name . ', ' . ($currentCategory->name . ' Venezuela') . ', productos odontológicos, helin, material dental')) : ($pageSeo?->seo_keywords ?? 'catálogo productos odontológicos, implantes dentales, instrumentos quirúrgicos, biomateriales, equipos odontológicos, helin, material dental Venezuela'))
 @section('og-type', 'website')
-@section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : asset('images/helin-catalog-og.jpg'))
+@section('og-image', $currentCategory && $currentCategory->image ? asset('storage/' . $currentCategory->image) : ($pageSeo?->og_image ? asset('storage/' . $pageSeo->og_image) : null))
 
 @section('content')
 @php
@@ -30,6 +30,9 @@
 
     $initSearch   = request('search', '');
     $initCategory = request('category', '');
+    if (is_array($initCategory)) {
+        $initCategory = $initCategory[0] ?? '';
+    }
 
     /**
      * Get current category if filter is applied
@@ -38,11 +41,6 @@
     if ($initCategory) {
         $currentCategory = \App\Models\Category::where('slug', $initCategory)->first();
     }
-
-    $productsQuery = \App\Models\Product::with(['category', 'brand'])->where('is_active', true);
-    if ($initSearch)   $productsQuery->where(fn($q) => $q->where('name','like',"%$initSearch%")->orWhere('description','like',"%$initSearch%")->orWhere('sku','like',"%$initSearch%"));
-    if ($initCategory) $productsQuery->whereHas('category', fn($q) => $q->where('slug', $initCategory));
-    $products = $productsQuery->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 @endphp
 
 <hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
@@ -201,118 +199,14 @@
             <!-- Banner -->
             @if($currentCategory)
             @php
-                $bannerBg = asset('images/banner_imp1.png');
-                $categoryBanners = [
-                    'implantologia' => [
-                        'label'       => 'Bienvenidos al Catálogo de Implantología',
-                        'title'       => 'Todo Para Tus Procedimientos De Implantología En Un Solo Lugar',
-                        'description' => 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'aditamentos' => [
-                        'label'       => 'Catálogo de Aditamentos',
-                        'title'       => 'Aditamentos Para Tus Procedimientos En Un Solo Lugar',
-                        'description' => 'Encuentra aditamentos de alta calidad para complementar tus procedimientos clínicos.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'kits-quirurgicos' => [
-                        'label'       => 'Catálogo de Kits Quirúrgicos',
-                        'title'       => 'Kits Quirúrgicos Completos Para Cada Procedimiento',
-                        'description' => 'Todo lo que necesitas en un solo kit para tus procedimientos quirúrgicos.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'biomateriales' => [
-                        'label'       => 'Catálogo de Biomateriales',
-                        'title'       => 'Biomateriales De Alta Calidad Para Tu Práctica Clínica',
-                        'description' => 'Selección de biomateriales especializados para procedimientos de regeneración.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'regeneracion-guiada-bucal-gbr' => [
-                        'label'       => 'Catálogo de Regeneración Ósea Guiada',
-                        'title'       => 'Soluciones Completas En Regeneración Ósea Guiada',
-                        'description' => 'Encuentra los mejores productos para procedimientos de regeneración ósea y tisular.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'suturas' => [
-                        'label'       => 'Catálogo de Suturas',
-                        'title'       => 'Suturas De Alta Calidad Para Procedimientos Odontológicos',
-                        'description' => 'Amplia variedad de suturas especializadas para cirugías bucales y maxilofaciales.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'placas' => [
-                        'label'       => 'Catálogo de Osteosíntesis',
-                        'title'       => 'Placas Y Sistemas De Fijación Para Cirugía Maxilofacial',
-                        'description' => 'Sistemas de osteosíntesis de titanio de alta precisión para reconstrucción ósea.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'tornillos' => [
-                        'label'       => 'Catálogo de Osteosíntesis',
-                        'title'       => 'Tornillos Y Fijaciones Para Cirugía Maxilofacial',
-                        'description' => 'Tornillos de osteosíntesis de alta resistencia para procedimientos de fijación ósea.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'cajetin' => [
-                        'label'       => 'Catálogo de Osteosíntesis',
-                        'title'       => 'Cajetines Y Accesorios Para Cirugía Maxilofacial',
-                        'description' => 'Sistemas completos de cajetines para almacenamiento y uso de implantes quirúrgicos.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'cuidados-especiales-quirurgicos' => [
-                        'label'       => 'Catálogo de Cuidado Bucal',
-                        'title'       => 'Cuidados Especiales Para El Postoperatorio Quirúrgico',
-                        'description' => 'Productos especializados para el cuidado y recuperación en el postoperatorio.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'cuidados-diarios-paciente' => [
-                        'label'       => 'Catálogo de Cuidado Bucal',
-                        'title'       => 'Cuidados Diarios Para La Salud Bucal De Tu Paciente',
-                        'description' => 'Soluciones para el cuidado diario y mantenimiento de la salud bucal.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'tijeras' => [
-                        'label'       => 'Catálogo de Instrumentos',
-                        'title'       => 'Instrumentos De Precisión Para Procedimientos Odontológicos',
-                        'description' => 'Tijeras y herramientas de corte de alta precisión para cirugía bucal.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'pinzas' => [
-                        'label'       => 'Catálogo de Instrumentos',
-                        'title'       => 'Pinzas Y Herramientas Para Procedimientos Odontológicos',
-                        'description' => 'Pinzas de alta calidad diseñadas para procedimientos odontológicos especializados.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'separadores' => [
-                        'label'       => 'Catálogo de Instrumentos',
-                        'title'       => 'Separadores Para Cirugía Bucal Y Maxilofacial',
-                        'description' => 'Separadores de tejidos de alta precisión para una mejor visibilidad quirúrgica.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'cinceles' => [
-                        'label'       => 'Catálogo de Instrumentos',
-                        'title'       => 'Cinceles Y Escoplos Para Cirugía Ósea',
-                        'description' => 'Cinceles de acero quirúrgico de alta calidad para procedimientos de osteotomía.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'periostomos' => [
-                        'label'       => 'Catálogo de Instrumentos',
-                        'title'       => 'Periostótomos Para Cirugía Bucal Especializada',
-                        'description' => 'Periostótomos de precisión para el despegamiento y manejo de tejidos periósticos.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'equipos-odontologicos' => [
-                        'label'       => 'Catálogo de Equipos',
-                        'title'       => 'Equipos Odontológicos De Alta Tecnología',
-                        'description' => 'Equipos especializados para optimizar cada procedimiento en tu consultorio.',
-                        'bg'          => $bannerBg,
-                    ],
-                    'planificacion-digital' => [
-                        'label'       => 'Catálogo de Planificación Digital',
-                        'title'       => 'Soluciones Digitales Para Tu Práctica Odontológica',
-                        'description' => 'Herramientas de planificación digital, impresión 3D y escaneo intraoral de última generación.',
-                        'bg'          => $bannerBg,
-                    ],
+                $catalogoSettings = \App\Models\Settings::getSettings();
+                $bannerBg = $catalogoSettings && $catalogoSettings->default_banner_image ? asset('storage/' . $catalogoSettings->default_banner_image) : null;
+                $bannerData = [
+                    'label'       => $currentCategory->banner_label ?: ('Bienvenidos al Catálogo de ' . $currentCategory->name),
+                    'title'       => $currentCategory->banner_title ?: ('Todo Para Tus Procedimientos De ' . $currentCategory->name . ' En Un Solo Lugar'),
+                    'description' => $currentCategory->banner_description ?: ($currentCategory->seo_description ?? $currentCategory->description ?? 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.'),
+                    'bg'          => $currentCategory->banner_image ? asset('storage/' . $currentCategory->banner_image) : $bannerBg,
                 ];
-                $bannerData = $categoryBanners[$currentCategory->slug] ?? null;
             @endphp
             @php
                 $bannerStyle = ($bannerData && isset($bannerData['bg']))
@@ -321,11 +215,11 @@
             @endphp
             <div class="rounded-2xl mb-6 relative overflow-hidden" style="{{ $bannerStyle }}">
                 <div class="p-5 sm:p-7 lg:p-8 w-full sm:max-w-[58%]">
-                    <p class="text-white/85 text-xs mb-2 font-medium">{{ $bannerData['label'] ?? 'Bienvenidos al Catálogo de ' . $currentCategory->name }}</p>
+                    <p class="text-white/85 text-xs mb-2 font-medium">{{ $bannerData['label'] }}</p>
                     <h1 class="text-white font-black text-lg sm:text-xl lg:text-2xl leading-tight mb-2" style="text-shadow: 0 1px 4px rgba(0,0,0,0.2);">
-                        {{ $bannerData['title'] ?? 'Todo Para Tus Procedimientos De ' . $currentCategory->name . ' En Un Solo Lugar' }}
+                        {{ $bannerData['title'] }}
                     </h1>
-                    <p class="text-white/85 text-xs sm:text-sm mb-4">{{ $bannerData['description'] ?? ($currentCategory->seo_description ?? $currentCategory->description ?? 'Encuentra componentes, instrumentos y soluciones especializadas para optimizar cada etapa clínica.') }}</p>
+                    <p class="text-white/85 text-xs sm:text-sm mb-4">{{ $bannerData['description'] }}</p>
                 </div>
             </div>
             @endif
@@ -361,39 +255,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('helin/js/catalogo.js') }}"></script>
-<script>
-// Ocultar skeleton y mostrar contenido cuando la página carga
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        const skeleton = document.getElementById('productsSkeleton');
-        const content = document.getElementById('productsContent');
-
-        if (skeleton && content) {
-            skeleton.style.display = 'none';
-            content.classList.remove('hidden');
-        }
-    }, 500); // Pequeño delay para simular carga inicial
-});
-
-// Mostrar skeleton durante cargas AJAX
-function showProductsSkeleton() {
-    const skeleton = document.getElementById('productsSkeleton');
-    const content = document.getElementById('productsContent');
-    const loading = document.getElementById('catalogLoading');
-
-    if (skeleton) skeleton.style.display = 'grid';
-    if (content) content.classList.add('hidden');
-    if (loading) loading.classList.add('hidden');
-}
-
-// Ocultar skeleton y mostrar contenido
-function hideProductsSkeleton() {
-    const skeleton = document.getElementById('productsSkeleton');
-    const content = document.getElementById('productsContent');
-
-    if (skeleton) skeleton.style.display = 'none';
-    if (content) content.classList.remove('hidden');
-}
-</script>
+<script src="@minAsset('helin/js/catalogo.js')"></script>
 @endpush

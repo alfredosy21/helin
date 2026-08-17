@@ -20,6 +20,11 @@ class State extends Model
         return $this->hasMany(City::class);
     }
 
+    public function whatsappNumbers()
+    {
+        return $this->belongsToMany(WhatsAppNumber::class, 'state_whatsapp_number', 'state_id', 'whatsapp_number_id');
+    }
+
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('name', 'asc');

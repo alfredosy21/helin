@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cachedBsRate !== null) return cachedBsRate;
 
         try {
-            const response = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+            const response = await fetch('https://ve.dolarapi.com/v1/euros/oficial');
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
-            cachedBsRate = parseFloat(data.promedio) || 0;
+            cachedBsRate = parseFloat(parseFloat(data.promedio).toFixed(2)) || 0;
         } catch (e) {
             console.error('Error fetching Bs rate:', e);
             cachedBsRate = 0;
@@ -46,8 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const subtotal = items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const discount = subtotal > 500 ? subtotal * 0.05 : 0;
-        const total = subtotal - discount;
+        const total = subtotal;
         const bsRate = await fetchBsRate();
         const totalBs = (total * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const formattedBsRate = bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -60,10 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         summaryRoot.innerHTML = `
-            <div class="bg-turquesa text-white rounded-t-lg flex justify-between text-sm font-semibold px-4 py-3">
-                <span>Producto</span>
-                <span>Subtotal</span>
-            </div>
             <div class="px-4">
                 ${itemsHtml}
             </div>
@@ -72,12 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="text-helin-text">Subtotal</span>
                     <span class="font-medium text-helin-heading">$${subtotal.toFixed(2)}</span>
                 </div>
-                ${discount > 0 ? `
-                    <div class="flex justify-between text-sm mb-2">
-                        <span class="text-helin-text">Descuento (5%)</span>
-                        <span class="text-green-500 font-medium">-$${discount.toFixed(2)}</span>
-                    </div>
-                ` : ''}
                 <div class="flex justify-between font-bold">
                     <span class="text-helin-heading">Total</span>
                     <span class="text-turquesa">$${total.toFixed(2)}</span>
@@ -208,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderSummary(items) {
         const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
         const bsRate   = await fetchBsRate();
-        const totalBs  = (subtotal * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2 });
+        const totalBs  = (subtotal * bsRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         return `
             <div class="lg:w-[35%] xl:w-[30%]">
@@ -228,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="bg-helin-soft rounded-lg p-4 mb-6">
                         <p class="text-xs text-helin-text mb-1">Tasa de conversión a Bs.</p>
-                        <p class="text-sm text-helin-text mb-2">1 USD = ${bsRate} Bs.</p>
+                        <p class="text-sm text-helin-text mb-2">1 USD = ${bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bs.</p>
                         <div class="flex justify-between items-center border-t border-helin-border pt-2">
                             <span class="font-semibold text-helin-heading">Total en Bs.</span>
                             <span class="font-bold text-turquesa" id="cart-summary-bs">${totalBs} Bs.</span>

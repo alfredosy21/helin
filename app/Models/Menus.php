@@ -52,6 +52,7 @@ class Menus extends Model {
     const TYPE_HEADER = 1;
     const TYPE_FOOTER = 2;
     const TYPE_SIDEBAR = 3;
+    const TYPE_MEGA = 4;
 
     /**
      * Parent relationship for nested menus
@@ -107,7 +108,7 @@ class Menus extends Model {
     public function setUrlAttribute($value) {
         $value = strtolower($value);
         $value = mb_strtolower($value, 'UTF-8');
-        $value = preg_replace('/[^a-zA-Z0-9[#&=[\/]-_.:\s]/s', '', $value);
+        $value = preg_replace('/[^a-zA-Z0-9?#%&=\/_.:\s\[\]\-]/s', '', $value);
         $value = str_replace('https://', 'http://', $value);
         $value = str_replace('www.', 'http://', $value);
         $value = str_replace('http://http://', 'http://', $value);
@@ -161,6 +162,24 @@ class Menus extends Model {
     }
 
     /**
+     * Get available mega menu columns with nested groups and links
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getMegaMenuItems() {
+        return self::active()
+                        ->byType(self::TYPE_MEGA)
+                        ->root()
+                        ->with(['children' => function ($query) {
+                                $query->active()->orderBy('position', 'asc')
+                                      ->with(['children' => function ($q) {
+                                              $q->active()->orderBy('position', 'asc');
+                                          }]);
+                            }])
+                        ->orderBy('position', 'asc')
+                        ->get();
+    }
+
+    /**
      * Get available website menu items (legacy compatibility)
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -178,7 +197,8 @@ class Menus extends Model {
         return [
             self::TYPE_HEADER => 'Header',
             self::TYPE_FOOTER => 'Footer',
-            self::TYPE_SIDEBAR => 'Sidebar'
+            self::TYPE_SIDEBAR => 'Sidebar',
+            self::TYPE_MEGA => 'Mega Menu'
         ];
     }
 

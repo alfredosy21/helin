@@ -13,12 +13,16 @@ class LineSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('lines')->delete();
+
         $lines = [
             [
                 'name' => 'Implantología',
                 'slug' => 'implantologia',
                 'description' => 'Soluciones completas para implantes dentales y procedimientos reconstructivos',
                 'seo_description' => 'Catálogo de implantes dentales, aditamentos y kits quirúrgicos para rehabilitación oral',
+                'image' => 'categories/categoria1.png',
+                'banner_image' => 'sections/banner_imp.png',
                 'is_active' => true,
                 'order' => 1,
                 'created_at' => now(),
@@ -29,6 +33,8 @@ class LineSeeder extends Seeder
                 'slug' => 'regeneracion-osea-guiada',
                 'description' => 'Biomateriales y membranas para regeneración tisular guiada',
                 'seo_description' => 'Productos para regeneración ósea y tejidos blandos en procedimientos dentales',
+                'image' => 'categories/cat5.png',
+                'banner_image' => 'sections/banner_rc_clinic.png',
                 'is_active' => true,
                 'order' => 2,
                 'created_at' => now(),
@@ -39,6 +45,8 @@ class LineSeeder extends Seeder
                 'slug' => 'osteosintesis',
                 'description' => 'Sistemas de fijación y osteosíntesis para estabilización maxilofacial',
                 'seo_description' => 'Placas, tornillos y sistemas de fijación para cirugía maxilofacial y traumatología',
+                'image' => 'categories/cat7.png',
+                'banner_image' => null,
                 'is_active' => true,
                 'order' => 3,
                 'created_at' => now(),
@@ -49,6 +57,8 @@ class LineSeeder extends Seeder
                 'slug' => 'cuidado-bucal',
                 'description' => 'Productos especializados para higiene y cuidado oral post-tratamiento',
                 'seo_description' => 'Línea Bluem de productos para cuidado bucal e higiene oral profesional',
+                'image' => 'brands/bluem_logo.jpg',
+                'banner_image' => null,
                 'is_active' => true,
                 'order' => 4,
                 'created_at' => now(),
@@ -59,6 +69,8 @@ class LineSeeder extends Seeder
                 'slug' => 'instrumentos',
                 'description' => 'Instrumental quirúrgico y dental de alta precisión',
                 'seo_description' => 'Instrumentos especializados para cirugía dental, implantología y procedimientos bucales',
+                'image' => 'categories/cat3.png',
+                'banner_image' => null,
                 'is_active' => true,
                 'order' => 5,
                 'created_at' => now(),
@@ -69,6 +81,8 @@ class LineSeeder extends Seeder
                 'slug' => 'equipos',
                 'description' => 'Equipamiento y tecnología para consultorios y clínicas dentales',
                 'seo_description' => 'Sistemas y equipos para planificación digital y ejecución de tratamientos dentales',
+                'image' => 'categories/cat6.png',
+                'banner_image' => null,
                 'is_active' => true,
                 'order' => 6,
                 'created_at' => now(),
@@ -79,6 +93,8 @@ class LineSeeder extends Seeder
                 'slug' => 'planificacion-digital',
                 'description' => 'Soluciones digitales para planificación y guía quirúrgica',
                 'seo_description' => 'Software y sistemas digitales para planificación precisa de tratamientos dentales',
+                'image' => 'categories/cat4.png',
+                'banner_image' => null,
                 'is_active' => true,
                 'order' => 7,
                 'created_at' => now(),

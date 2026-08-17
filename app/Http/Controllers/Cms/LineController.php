@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Cms;
 
-use App\Models\Line;
 use App\Models\Activities;
+use App\Models\Line;
+use App\Models\Module;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class LineController
@@ -31,12 +36,12 @@ use Livewire\Attributes\Validate;
  * - Role-based access control
  *
  * @version 1.0.0
- * @package App\Http\Controllers\Cms
  */
 #[Title('Gestión de Líneas | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
-class LineController extends Component {
-
+class LineController extends Component
+{
+    use WithFileUploads;
     use WithPagination;
 
     /** @var string Display name of the product line */
@@ -54,6 +59,30 @@ class LineController extends Component {
     /** @var string|null SEO description for meta tags */
     #[Validate('nullable|string|max:1000')]
     public ?string $seo_description = '';
+
+    /** @var string|null SEO keywords for meta tags */
+    #[Validate('nullable|string|max:500')]
+    public ?string $seo_keywords = '';
+
+    /** @var mixed|null Uploaded image file instance */
+    public $image;
+
+    /** @var string|null Existing image path from storage */
+    public ?string $current_image = null;
+
+    /** @var string|null Banner title */
+    #[Validate('nullable|string|max:255')]
+    public ?string $banner_title = '';
+
+    /** @var string|null Banner description */
+    #[Validate('nullable|string|max:1000')]
+    public ?string $banner_description = '';
+
+    /** @var mixed|null Uploaded banner image file instance */
+    public $banner_image;
+
+    /** @var string|null Existing banner image path from storage */
+    public ?string $current_banner_image = null;
 
     /** @var int|null ID of the line being modified */
     public ?int $editingId = null;
@@ -82,14 +111,11 @@ class LineController extends Component {
      * Validates user permissions to access line management.
      * Only administrators and content managers can access this module.
      *
-     * @return void
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws AccessDeniedHttpException
      */
-    public function mount(): void {
-        $user = Auth::user();
-        if (!$user || ($user->rol_id !== 1 && $user->level !== 1)) {
-            abort(403, __('cms.abort.lines'));
-        }
+    public function mount(): void
+    {
+        CmsAccess::authorize(Module::CATALOG, Submodule::PRODUCT_LINES, __('cms.abort.lines'));
     }
 
     /**
@@ -98,21 +124,20 @@ class LineController extends Component {
      * Displays product lines in a tabular format with search capabilities,
      * pagination, and ordering. Includes both active and inactive lines
      * for comprehensive management.
-     *
-     * @return View
      */
-    public function render(): View {
+    public function render(): View
+    {
         $lines = Line::query()
-                ->when($this->search, function ($query) {
-                    $query->where('name', 'like', "%{$this->search}%")
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', "%{$this->search}%")
                     ->orWhere('slug', 'like', "%{$this->search}%");
-                })
-                ->orderBy('order', 'asc')
-                ->orderBy('name', 'asc')
-                ->paginate($this->perPage);
+            })
+            ->orderBy('order', 'asc')
+            ->orderBy('name', 'asc')
+            ->paginate($this->perPage);
 
         return view('cms.lines.index', [
-            'lines' => $lines
+            'lines' => $lines,
         ]);
     }
 
@@ -121,10 +146,9 @@ class LineController extends Component {
      *
      * Initializes form fields with default values and calculates the next
      * order position automatically. Opens the modal for data entry.
-     *
-     * @return void
      */
-    public function create(): void {
+    public function create(): void
+    {
         $this->resetForm();
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -136,16 +160,15 @@ class LineController extends Component {
      * Handles both creation and update operations with comprehensive validation.
      * Automatically generates slug if not provided. Updates activity log and
      * provides user feedback through toast notifications.
-     *
-     * @return void
      */
-    public function save(): void {
+    public function save(): void
+    {
         $this->isLoading = true;
 
         // Dynamic unique validation
         $this->validate([
-            'name' => 'required|string|max:255|unique:lines,name' . ($this->editingId ? ",{$this->editingId}" : ''),
-            'slug' => 'nullable|string|max:255|unique:lines,slug' . ($this->editingId ? ",{$this->editingId}" : ''),
+            'name' => 'required|string|max:255|unique:lines,name'.($this->editingId ? ",{$this->editingId}" : ''),
+            'slug' => 'nullable|string|max:255|unique:lines,slug'.($this->editingId ? ",{$this->editingId}" : ''),
         ]);
 
         try {
@@ -154,8 +177,25 @@ class LineController extends Component {
                 'slug' => $this->slug ?: Str::slug($this->name),
                 'description' => $this->description,
                 'seo_description' => $this->seo_description,
+                'seo_keywords' => $this->seo_keywords,
                 'is_active' => $this->is_active,
+                'banner_title' => $this->banner_title,
+                'banner_description' => $this->banner_description,
             ];
+
+            if ($this->image) {
+                $filename = time().'_'.$this->image->getClientOriginalName();
+                $data['image'] = $this->image->storeAs('lines', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['image'] = $this->current_image;
+            }
+
+            if ($this->banner_image) {
+                $filename = time().'_'.$this->banner_image->getClientOriginalName();
+                $data['banner_image'] = $this->banner_image->storeAs('lines/banners', $filename, 'public');
+            } elseif ($this->editingId) {
+                $data['banner_image'] = $this->current_banner_image;
+            }
 
             if ($this->editingId) {
                 $line = Line::findOrFail($this->editingId);
@@ -188,10 +228,10 @@ class LineController extends Component {
      * Loads all line properties into the form for editing.
      * Opens the modal and prepares the interface for modification.
      *
-     * @param int $id The line identifier
-     * @return void
+     * @param  int  $id  The line identifier
      */
-    public function edit(int $id): void {
+    public function edit(int $id): void
+    {
         $line = Line::findOrFail($id);
 
         $this->editingId = $id;
@@ -199,7 +239,12 @@ class LineController extends Component {
         $this->slug = $line->slug;
         $this->description = $line->description;
         $this->seo_description = $line->seo_description;
+        $this->seo_keywords = $line->seo_keywords;
         $this->is_active = $line->is_active;
+        $this->banner_title = $line->banner_title;
+        $this->banner_description = $line->banner_description;
+        $this->current_image = $line->image;
+        $this->current_banner_image = $line->banner_image;
 
         $this->showForm = true;
         $this->dispatch('open-form');
@@ -212,10 +257,10 @@ class LineController extends Component {
      * Updates activity log and provides user feedback.
      * Handles potential constraint violations gracefully.
      *
-     * @param int $id The line identifier
-     * @return void
+     * @param  int  $id  The line identifier
      */
-    public function confirmDelete(int $id): void {
+    public function confirmDelete(int $id): void
+    {
         try {
             $line = Line::findOrFail($id);
             $lineName = $line->name;
@@ -235,10 +280,10 @@ class LineController extends Component {
      * Updates the order field for multiple lines in a single operation.
      * Validates the input data and updates activity log for audit trail.
      *
-     * @param array $orderedIds Array of IDs in the new order
-     * @return void
+     * @param  array  $orderedIds  Array of IDs in the new order
      */
-    public function updateOrder(array $orderedIds): void {
+    public function updateOrder(array $orderedIds): void
+    {
         try {
             foreach ($orderedIds as $index => $id) {
                 Line::query()->where('id', $id)->update(['order' => $index + 1]);
@@ -257,10 +302,9 @@ class LineController extends Component {
      *
      * Clears all form data, hides the modal, and resets validation state.
      * Dispatches event to notify frontend components of state change.
-     *
-     * @return void
      */
-    public function cancel(): void {
+    public function cancel(): void
+    {
         $this->resetForm();
         $this->showForm = false;
         $this->dispatch('close-form');
@@ -274,14 +318,16 @@ class LineController extends Component {
      *
      * @return void
      */
-    protected function validationAttributes(): array {
+    protected function validationAttributes(): array
+    {
         return [
             'name' => __('cms.validation_attributes.line_name'),
         ];
     }
 
-    private function resetForm(): void {
-        $this->reset(['name', 'slug', 'description', 'seo_description', 'is_active', 'editingId']);
+    private function resetForm(): void
+    {
+        $this->reset(['name', 'slug', 'description', 'seo_description', 'seo_keywords', 'is_active', 'banner_title', 'banner_description', 'image', 'current_image', 'banner_image', 'current_banner_image', 'editingId']);
         $this->is_active = true;
         $this->resetValidation();
     }
@@ -291,10 +337,9 @@ class LineController extends Component {
      *
      * Automatically resets pagination to first page when search query changes.
      * Ensures consistent user experience during search operations.
-     *
-     * @return void
      */
-    public function updatedSearch(): void {
+    public function updatedSearch(): void
+    {
         $this->resetPage();
     }
 
@@ -303,13 +348,12 @@ class LineController extends Component {
      *
      * Provides backward compatibility for existing frontend components
      * that may rely on the old method naming convention.
-     *
-     * @return array
      */
-    public function getLineLists(): array {
+    public function getLineLists(): array
+    {
         return Line::orderBy('order', 'asc')
-                        ->orderBy('name', 'asc')
-                        ->get()
-                        ->toArray();
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
     }
 }

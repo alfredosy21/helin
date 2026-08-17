@@ -11,7 +11,6 @@ class WhatsAppNumber extends Model
     protected $fillable = [
         'phone_number',
         'executive_name',
-        'state_id',
         'is_active',
         'description',
     ];
@@ -25,17 +24,17 @@ class WhatsAppNumber extends Model
      */
     public static function getActiveByState(int $stateId): ?self
     {
-        return static::where('state_id', $stateId)
+        return static::whereHas('states', fn($q) => $q->where('states.id', $stateId))
             ->where('is_active', true)
             ->first();
     }
 
     /**
-     * Relación con el estado
+     * Relación muchos-a-muchos con estados
      */
-    public function state()
+    public function states()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsToMany(State::class, 'state_whatsapp_number', 'whatsapp_number_id', 'state_id');
     }
 
     /**

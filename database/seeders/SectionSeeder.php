@@ -52,7 +52,7 @@ class SectionSeeder extends Seeder
                 'title' => 'helin.',
                 'subtitle' => 'Soluciones que cuidan.',
                 'description' => 'Instrumental, insumos y soluciones diseñadas para procedimientos quirúrgicos seguros, precisos y eficientes.',
-                'image' => 'hero-home.jpg',
+                'image' => 'sections/banner111.png',
                 'layout_type' => self::LAYOUT_HERO_BADGES,
                 'icon_style' => self::ICON_EMOJI,
                 'items' => json_encode([
@@ -108,20 +108,57 @@ HTML,
             ],
             Sections::CLINICAL_RESOURCES_HERO => [
                 'title' => 'Centro de conocimiento clínico',
-                'image' => null,
+                'image' => 'resources/recursos_clinicos_banner_helin.png',
                 'name_button' => null,
                 'url_button' => null,
                 'status' => 1,
                 'status_content' => 1,
-                'content' => <<<HTML
-<span class="hero-badge">Centro de conocimiento clínico</span>
-<h1>Recursos clínicos para decisiones más precisas.</h1>
-<p>Explora casos clínicos, videos, manuales técnicos, fichas descargables y guías de referencia para profesionales odontológicos.</p>
-<div class="hero-buttons">
-    <a href="#recursos" class="hero-btn-primary">Explorar recursos →</a>
-    <a href="#casos" class="hero-btn-secondary">Ver casos clínicos</a>
-</div>
-HTML,
+                'layout_type' => self::LAYOUT_FEATURE_BOX,
+                'icon_style' => self::ICON_NONE,
+                'items' => json_encode([
+                    'items' => [
+                        ['icon' => '<i class="fas fa-file-medical"></i>', 'title' => 'Casos clínicos', 'description' => 'Protocolos, materiales utilizados y resultados.', 'order' => 1],
+                        ['icon' => '<i class="fas fa-play-circle"></i>', 'title' => 'Videos', 'description' => 'Contenido audiovisual para soporte técnico.', 'order' => 2],
+                        ['icon' => '<i class="fas fa-file-pdf"></i>', 'title' => 'Manuales', 'description' => 'Documentos técnicos y descargables.', 'order' => 3],
+                        ['icon' => '<i class="fas fa-cloud-arrow-down"></i>', 'title' => 'Fichas técnicas', 'description' => 'Información clave de productos y soluciones.', 'order' => 4],
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => null,
+            ],
+            Sections::CLINICAL_STATS => [
+                'title' => 'Estadísticas de recursos clínicos',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'category_slug' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'layout_type' => 'stats_grid',
+                'icon_style' => 'lucide',
+                'items' => json_encode([
+                    [
+                        'icon' => '<i class="fas fa-laptop-medical"></i>',
+                        'label' => 'Recursos disponibles',
+                        'value_key' => 'total_resources',
+                    ],
+                    [
+                        'icon' => '<i class="fas fa-star"></i>',
+                        'label' => 'Especialidades clínicas',
+                        'value_key' => 'total_specialties',
+                    ],
+                    [
+                        'icon' => '<i class="fas fa-download"></i>',
+                        'label' => 'Descargables técnicos',
+                        'value_key' => 'total_pdfs',
+                    ],
+                    [
+                        'icon' => '<i class="fas fa-book-open"></i>',
+                        'label' => 'Casos clínicos',
+                        'value_key' => 'total_cases',
+                    ],
+                ]),
             ],
             Sections::CLINICAL_LIBRARY => [
                 'title' => 'Biblioteca clínica Helin',
@@ -130,6 +167,7 @@ HTML,
                 'url_button' => null,
                 'status' => 1,
                 'status_content' => 1,
+                'subtitle' => 'Busca, filtra y consulta recursos especializados.',
                 'content' => <<<HTML
 <div>
     <small>Biblioteca clínica Helin</small>
@@ -140,7 +178,7 @@ HTML,
             ],
             Sections::CLINICAL_CONTENT_FEATURE => [
                 'title' => 'Contenido clínico pensado para acompañar tu práctica.',
-                'image' => null,
+                'image' => 'sections/banner_rc_clinic.png',
                 'name_button' => 'Contactar asesor',
                 'url_button' => 'web.contactanos',
                 'status' => 1,
@@ -158,6 +196,7 @@ HTML,
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
                 'url_button' => 'catalogo',
+                'category_slug' => 'implantologia',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -183,6 +222,7 @@ HTML,
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
                 'url_button' => 'catalogo',
+                'category_slug' => 'regeneracion-guiada-bucal-gbr',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -208,6 +248,7 @@ HTML,
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
                 'url_button' => 'catalogo',
+                'category_slug' => 'instrumentos',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -300,21 +341,6 @@ HTML,
                 'status' => 1,
                 'status_content' => 1,
             ],
-            Sections::CTA_HOME => [
-                'title' => '¿Listo para transformar tu práctica clínica?',
-                'image' => 'CTA',
-                'name_button' => '☏ Háblale con WhatsApp',
-                'url_button' => 'https://wa.me/584241232025',
-                'status' => 1,
-                'status_content' => 1,
-                'content' => <<<HTML
-<p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
-<div class="cta-actions">
-    <a href="https://wa.me/584241232025" target="_blank" class="btn-primary">☏ Háblale con WhatsApp</a>
-    <a href="{{ route('contactanos') }}" class="btn-outline">✉ Permítenos por correo</a>
-</div>
-HTML,
-            ],
             // ==========================================
             // ---------- SECCIONES DE TESTIMONIOS --------
             // ==========================================
@@ -340,7 +366,7 @@ HTML,
                 'title' => 'Comprometidos con la excelencia en cada solución',
                 'subtitle' => 'Nuestra empresa',
                 'description' => 'En Helin, nos apasiona hacer excelencia, integridad y experiencia para acompañar a profesionales y laboratorios en cada tratamiento y cada sonrisa.',
-                'image' => 'company-hero',
+                'image' => 'sections/banner_empresa.png',
                 'layout_type' => self::LAYOUT_HERO_BUTTONS,
                 'icon_style' => self::ICON_NONE,
                 'buttons' => json_encode([
@@ -487,7 +513,7 @@ HTML,
             // ==========================================
             Sections::ABOUT_US => [
                 'title' => 'Soluciones que impulsan mejores resultados clínicos',
-                'image' => 'Quiénes somos',
+                'image' => 'sections/imagen_empresa.png',
                 'name_button' => null,
                 'url_button' => '#quienes-somos',
                 'status' => 1,
@@ -505,7 +531,7 @@ HTML,
             ],
             Sections::MISSION_VISION => [
                 'title' => 'Misión y Visión',
-                'image' => 'Misión y visión',
+                'image' => 'sections/banner_empresa.png',
                 'name_button' => null,
                 'url_button' => '#mision-vision',
                 'status' => 1,
@@ -529,9 +555,69 @@ HTML,
 </div>
 HTML,
             ],
+            // ==========================================
+            // ---------- NUESTROS VALORES --------------
+            // ==========================================
+            Sections::COMPANY_VALUES => [
+                'title' => 'Nuestros Valores',
+                'subtitle' => 'Valores',
+                'description' => 'Creemos en construir relaciones de confianza con los especialistas, ofreciendo respaldo, conocimiento y soluciones pensadas para su práctica profesional.',
+                'image' => null,
+                'layout_type' => self::LAYOUT_VALUE_GRID,
+                'icon_style' => self::ICON_CUSTOM,
+                'items' => json_encode([
+                    'value_grid' => [
+                        [
+                            'number' => '01',
+                            'icon' => 'far fa-handshake',
+                            'title' => 'Cercanía Profesional',
+                            'text' => 'Atendemos al especialista con criterio técnico, pero también con una relación humana, clara y accesible.',
+                            'row' => 1,
+                            'order' => 1,
+                        ],
+                        [
+                            'number' => '02',
+                            'icon' => 'fas fa-shield-halved',
+                            'title' => 'Responsabilidad Clínica',
+                            'text' => 'Sabemos que cada decisión impacta un procedimiento real, por eso actuamos con seriedad y precisión.',
+                            'row' => 1,
+                            'order' => 2,
+                        ],
+                        [
+                            'number' => '03',
+                            'icon' => 'fas fa-bolt',
+                            'title' => 'Servicio Ágil',
+                            'text' => 'Buscamos responder con rapidez, claridad y soluciones concretas a las necesidades del profesional.',
+                            'row' => 2,
+                            'order' => 3,
+                        ],
+                        [
+                            'number' => '04',
+                            'icon' => 'fas fa-lightbulb',
+                            'title' => 'Formación Continua',
+                            'text' => 'Creemos en compartir conocimiento, apoyar la educación y fortalecer la práctica de los especialistas.',
+                            'row' => 2,
+                            'order' => 4,
+                        ],
+                        [
+                            'number' => '05',
+                            'icon' => 'fas fa-people-group',
+                            'title' => 'Respaldo Integral',
+                            'text' => 'Ofrecemos más que productos: ofrecemos orientación, soporte y soluciones conectadas entre sí.',
+                            'row' => 2,
+                            'order' => 5,
+                        ],
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => '#nuestros-valores',
+                'status' => 1,
+                'status_content' => 1,
+            ],
             Sections::TEAM => [
                 'title' => 'Un equipo que te acompaña',
-                'image' => 'Nuestro team',
+                'image' => 'sections/team_helin_test.png',
                 'name_button' => '☏ Conoce al equipo',
                 'url_button' => '/contactanos',
                 'status' => 1,
@@ -548,30 +634,31 @@ HTML,
             ],
             Sections::ALLIES => [
                 'title' => 'Trabajamos junto a marcas líderes',
-                'image' => 'Nuestros aliados',
+                'subtitle' => 'Nuestros aliados',
+                'description' => 'Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.',
+                'image' => 'sections/banner_footer_empresa.png',
+                'layout_type' => self::LAYOUT_BRAND_GRID,
+                'icon_style' => self::ICON_NONE,
+                'items' => json_encode([
+                    'items' => [
+                        ['image' => 'sections/gdt_logo.jpg', 'title' => 'GDT', 'order' => 1],
+                        ['image' => 'sections/ab_logo.jpg', 'title' => 'AB', 'order' => 2],
+                        ['image' => 'sections/bluem_logo.jpg', 'title' => 'Bluem', 'order' => 3],
+                        ['image' => 'sections/logo_czmedietch.jpg', 'title' => 'CZ Medietch', 'order' => 4],
+                        ['image' => 'sections/tealth_logo.jpg', 'title' => 'Tealth', 'order' => 5],
+                        ['image' => 'sections/tissum_logo.jpg', 'title' => 'Tissum', 'order' => 6],
+                    ]
+                ]),
                 'name_button' => null,
                 'url_button' => '#nuestros-aliados',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
 <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
-<div>
-    <div class="logos-grid">
-        <div class="brand-card">GDT</div>
-        <div class="brand-card">AB</div>
-        <div class="brand-card">b:u</div>
-        <div class="brand-card">NSK</div>
-        <div class="brand-card">WOODPECKER</div>
-        <div class="brand-card">Dentistry<br>Sironа</div>
-        <div class="brand-card">Bio-Oss®</div>
-        <div class="brand-card">Geistlich</div>
-    </div>
-    <div class="slider-dot"></div>
-</div>
 HTML,
             ],
             Sections::NEAR_YOU => [
-                'title' => 'Estamos cerca de ti',
+                'title' => 'Estamos cerca de ti, donde construyes salud oral',
                 'image' => null,
                 'name_button' => null,
                 'url_button' => '#',
@@ -579,18 +666,12 @@ HTML,
                 'status_content' => 1,
                 'content' => <<<HTML
 <div class="location-icon">⌖</div>
-<p>donde construyes salud oral</p>
-<div class="cities-list">
-    <div class="city-item">Caracas</div>
-    <div class="city-item">Valencia</div>
-    <div class="city-item">Barquisimeto</div>
-    <div class="city-item">Maracaibo</div>
-</div>
+<p>Caracas · Valencia · Barquisimeto · Maracaibo</p>
 HTML,
             ],
             Sections::CTA_COMPANY => [
                 'title' => '¿Listo para transformar tu práctica clínica?',
-                'image' => 'CTA',
+                'image' => 'sections/banner_footer_empresa.png',
                 'name_button' => 'Acciones',
                 'url_button' => '#',
                 'status' => 1,
@@ -603,7 +684,7 @@ HTML,
             // ==========================================
             // ---------- SECCIONES DE CONTACTO ----------
             // ==========================================
-            Sections::CONTACT_HERO => [
+Sections::CONTACT_HERO => [
                 'title' => '¿Tienes alguna consulta? Estamos para ayudarte.',
                 'image' => null,
                 'name_button' => null,
@@ -616,6 +697,63 @@ HTML,
 </p>
 HTML,
             ],
+
+            // GLOBAL SECTIONS
+            Sections::BENEFITS => [
+                'title' => 'Barra de beneficios',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+                'items' => json_encode([
+                    'items' => [
+                        ['icon' => 'fas fa-truck', 'title' => 'Envíos rápidos y seguros', 'description' => 'A toda Venezuela', 'order' => 1],
+                        ['icon' => 'fas fa-shield-alt', 'title' => 'Garantía Helin', 'description' => 'Calidad y respaldo en cada producto', 'order' => 2],
+                        ['icon' => 'fas fa-headset', 'title' => 'Asesoría especializada', 'description' => 'Soporte técnico y comercial', 'order' => 3],
+                        ['icon' => 'fas fa-box', 'title' => 'Stock disponible', 'description' => 'Productos de las mejores marcas', 'order' => 4],
+                        ['icon' => 'fa-regular fa-square-check', 'title' => 'Productos certificados', 'description' => 'Cumplimos con los más altos estándares', 'order' => 5],
+                    ]
+                ]),
+                'buttons' => json_encode([]),
+            ],
+
+            // ==========================================
+            // ---------- SECCIONES DE CASO CLÍNICO ------
+            // ==========================================
+            Sections::CASE_SHARE => [
+                'title' => 'Compartir este recurso',
+                'image' => null,
+                'name_button' => null,
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+            Sections::CASE_ADVISOR => [
+                'title' => '¿Necesitas asesoría personalizada?',
+                'subtitle' => null,
+                'description' => 'Un asesor Helin puede ayudarte a resolver dudas sobre este caso y los materiales utilizados.',
+                'image' => null,
+                'name_button' => 'Hablar por WhatsApp',
+                'url_button' => null,
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+            Sections::CASE_BOTTOM_CTA => [
+                'title' => '¿Tienes un caso similar o necesitas orientación?',
+                'subtitle' => null,
+                'description' => 'Nuestro equipo de especialistas está disponible para brindarte asesoría personalizada y acompañarte en la planificación de tus procedimientos.',
+                'image' => null,
+                'name_button' => 'Solicitar asesoría especializada',
+                'url_button' => 'contactanos',
+                'status' => 1,
+                'status_content' => 1,
+                'content' => null,
+            ],
+
         ];
 
         foreach ($sections as $id => $data) {

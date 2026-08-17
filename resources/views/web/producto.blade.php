@@ -4,16 +4,11 @@
 @section('meta-description', $product->seo_description ?? $product->description ?? 'Compra ' . $product->name . ' en Helin. ' . ($product->category->name ?? '') . ' de alta calidad para profesionales odontológicos. Envíos a todo Venezuela.')
 @section('meta-keywords', $product->seo_keywords ?? ($product->name . ', ' . ($product->category->name ?? '') . ', implantes dentales, material dental, helin, productos odontológicos'))
 @section('og-type', 'product')
-@section('og-image', $product->image ? asset('storage/' . $product->image) : asset('images/helin-product-default.jpg'))
+@section('og-image', $product->main_image_url)
 @section('twitter-card', 'product')
 
 @push('styles')
-<style>
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance: textfield; appearance: textfield; }
-.qty-btn:hover { background-color: #6BC2C3 !important; color: #ffffff !important; }
-</style>
+<link rel="stylesheet" href="@minAsset('helin/css/producto.css')">
 @endpush
 
 @section('content')
@@ -34,19 +29,20 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         <!-- Imagen del Producto -->
         <div class="lg:w-1/2">
             @php
-                $galleryImages = [
-                    asset('images/bluem1.jpg'),
-                    asset('images/bluem2.jpg'),
-                    asset('images/bluem3.jpg'),
-                    asset('images/bluem4.jpeg'),
-                ];
-                shuffle($galleryImages);
+                $galleryImages = $product->images->map(function ($img) {
+                    return asset('storage/' . $img->file_path);
+                })->values()->all();
+
+                if (empty($galleryImages)) {
+                    $galleryImages = [$product->main_image_url];
+                }
             @endphp
             <div class="bg-white rounded-xl border border-gray-100 p-6 mb-4">
                 <div class="w-full" style="aspect-ratio: 1 / 1;">
                     <img id="mainProductImage" src="{{ $galleryImages[0] }}" alt="{{ $product->name }}" class="w-full h-full object-contain" loading="eager">
                 </div>
             </div>
+            @if(count($galleryImages) > 1)
             <div class="grid grid-cols-4 gap-3">
                 @foreach($galleryImages as $i => $img)
                 <button onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.replace('border-turquesa','border-helin-border')); this.classList.replace('border-helin-border','border-turquesa');" class="thumb-btn {{ $i === 0 ? 'border-2 border-turquesa' : 'border border-helin-border hover:border-turquesa' }} rounded-lg overflow-hidden p-2 bg-white transition-all">
@@ -56,6 +52,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 </button>
                 @endforeach
             </div>
+            @endif
         </div>
 
         <!-- Info del Producto -->
@@ -74,89 +71,54 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
             <p class="text-helin-text mb-6">{{ $product->description }}</p>
 
             <!-- Selector de Dimensiones -->
+            @php
+                $dimensionOptions = $product->attributeValues->map(function ($av) use ($product) {
+                    $rawValue = $av->label ?? $av->value;
+                    $numPart = preg_replace('/[^0-9.]/', '', (string) $rawValue);
+                    $skuSuffix = $numPart !== '' ? str_replace('.', '', $numPart) : '';
+
+                    // Precio y SKU específicos de la dimensión desde el pivot
+                    $dimPrice = $av->pivot->price !== null ? (float) $av->pivot->price : (float) $product->price;
+                    $dimSalePrice = $av->pivot->sale_price !== null ? (float) $av->pivot->sale_price : ($product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null);
+                    $dimSku = $av->pivot->sku ?: ($product->sku ? $product->sku . '-' . $skuSuffix : '');
+
+                    return [
+                        'label' => $rawValue,
+                        'suffix' => $skuSuffix,
+                        'price' => $dimPrice,
+                        'sale_price' => $dimSalePrice,
+                        'sku' => $dimSku,
+                    ];
+                })->filter(function ($opt) {
+                    return $opt['label'] !== '';
+                })->values()->all();
+
+                $hasDimensions = count($dimensionOptions) > 0;
+                $defaultDimension = $hasDimensions
+                    ? $dimensionOptions[0]
+                    : ['label' => '', 'suffix' => '', 'price' => (float) $product->price, 'sale_price' => ($product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null), 'sku' => $product->sku ?? ''];
+                $dimensionPrices = collect($dimensionOptions)->mapWithKeys(function ($opt) {
+                    return [$opt['label'] => [
+                        'base' => $opt['price'],
+                        'sale' => $opt['sale_price'],
+                        'sku' => $opt['sku'],
+                    ]];
+                })->all();
+            @endphp
+            @if($hasDimensions)
             <div class="mb-6">
                 <h3 class="font-semibold text-helin-heading mb-1">Dimensiones</h3>
                 <p class="text-[13px] font-normal mb-1" style="color: #626772;">Seleccione una dimensión</p>
                 <select id="sizeSelector" aria-label="Dimensiones" onchange="updatePriceBySize(this.value)"
                     class="w-full sm:w-56 h-9 pl-3 pr-9 rounded-lg border border-gray-300 bg-white text-sm text-helin-heading outline-none cursor-pointer focus:ring-1 focus:ring-turquesa/30 focus:border-turquesa appearance-none"
                     style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23123F4A%22><path fill-rule=%22evenodd%22 d=%22M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z%22 clip-rule=%22evenodd%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 14px;"
-                    @foreach(['Ø3.3 mm','Ø4.1 mm','Ø4.8 mm'] as $si => $size)
-                        <option value="{{ $size }}" {{ $si === 0 ? 'selected' : '' }}>{{ $size }}</option>
+                    @foreach($dimensionOptions as $di => $dimension)
+                        <option value="{{ $dimension['label'] }}" {{ $di === 0 ? 'selected' : '' }}>{{ $dimension['label'] }}</option>
                     @endforeach
                 </select>
             </div>
-            <script>
-            function updatePriceBySize(size) {
-                // Precios y SKU por dimensión (ajustar según tus datos reales)
-                const baseSku = @json($product->sku ?? '');
-                const sizePrices = {
-                    'Ø3.3 mm': {
-                        base: @json($product->price),
-                        sale: @json($product->sale_price ?? null),
-                        sku: baseSku ? baseSku + '-33' : ''
-                    },
-                    'Ø4.1 mm': {
-                        base: @json($product->price * 1.15), // 15% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.15),
-                        sku: baseSku ? baseSku + '-41' : ''
-                    },
-                    'Ø4.8 mm': {
-                        base: @json($product->price * 1.25), // 25% más caro
-                        sale: @json(($product->sale_price ?? $product->price) * 1.25),
-                        sku: baseSku ? baseSku + '-48' : ''
-                    }
-                };
-
-                const priceInfo = sizePrices[size] || sizePrices['Ø3.3 mm'];
-                const currentPriceEl = document.getElementById('currentPrice');
-                const oldPriceEl = document.getElementById('oldPrice');
-                const skuEl = document.getElementById('productSkuValue');
-                const cartButton = document.querySelector('[data-cart-add]');
-
-                // Actualizar precios con animación
-                currentPriceEl.style.opacity = '0.5';
-                if (oldPriceEl) oldPriceEl.style.opacity = '0.5';
-
-                setTimeout(() => {
-                    // Actualizar precio actual
-                    currentPriceEl.textContent = '$' + priceInfo.sale.toFixed(2);
-
-                    // Actualizar precio anterior si hay oferta
-                    if (priceInfo.sale < priceInfo.base) {
-                        if (!oldPriceEl) {
-                            // Crear elemento de precio anterior si no existe
-                            const priceDisplay = document.getElementById('priceDisplay');
-                            const newOldPrice = document.createElement('span');
-                            newOldPrice.id = 'oldPrice';
-                            newOldPrice.className = 'text-lg text-helin-text line-through opacity-70';
-                            priceDisplay.insertBefore(newOldPrice, currentPriceEl);
-                            oldPriceEl = newOldPrice;
-                        }
-                        oldPriceEl.textContent = '$' + priceInfo.base.toFixed(2);
-                        oldPriceEl.style.display = 'inline';
-                    } else if (oldPriceEl) {
-                        // Ocultar precio anterior si no hay oferta
-                        oldPriceEl.style.display = 'none';
-                    }
-
-                    // Actualizar SKU mostrado según la dimensión seleccionada
-                    if (skuEl && priceInfo.sku) {
-                        skuEl.textContent = priceInfo.sku;
-                    }
-
-                    // Actualizar datos del botón de carrito (precio, SKU y dimensión)
-                    if (cartButton) {
-                        cartButton.setAttribute('data-price', priceInfo.sale.toFixed(2));
-                        if (priceInfo.sku) cartButton.setAttribute('data-sku', priceInfo.sku);
-                        cartButton.setAttribute('data-dimension', size);
-                    }
-
-                    // Restaurar opacidad con animación
-                    currentPriceEl.style.opacity = '1';
-                    if (oldPriceEl) oldPriceEl.style.opacity = '0.7';
-                }, 200);
-            }
-            </script>
+            <script>window.HelinProduct = { sku: @json($product->sku ?? ''), prices: @json($dimensionPrices) };</script>
+            @endif
 
             <!-- Cantidad y Botón -->
             <div class="flex flex-col sm:flex-row items-center gap-4 mb-6" data-cart-context>
@@ -171,10 +133,10 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     data-slug="{{ $product->slug }}"
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
-                    data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
-                    data-sku="{{ $product->sku ? $product->sku . '-33' : '' }}"
-                    data-dimension="Ø3.3 mm"
-                    data-image="{{ asset('images/im3.png') }}">
+                    data-price="{{ $defaultDimension['sale_price'] ?? $defaultDimension['price'] }}"
+                    data-sku="{{ $defaultDimension['sku'] }}"
+                    data-dimension="{{ $defaultDimension['label'] }}"
+                    data-image="{{ $product->main_image_url }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
                 </button>
             </div>
@@ -184,7 +146,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                 @if($product->sku)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">SKU:</span>
-                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}-33</span>
+                        <span class="text-helin-heading/90" id="productSkuValue">{{ $defaultDimension['sku'] }}</span>
                     </div>
                 @endif
 
@@ -194,6 +156,20 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                         <a href="{{ route('catalogo', ['category' => $product->category->slug]) }}" class="text-helin-heading/90 hover:text-helin-heading hover:underline">
                             {{ $product->category->name }}
                         </a>
+                    </div>
+                @endif
+
+                @if($product->systemProduct)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Sistema:</span>
+                        <span class="text-helin-heading/90">{{ $product->systemProduct->name }}</span>
+                    </div>
+                @endif
+
+                @if($product->productPlatform)
+                    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+                        <span class="font-bold text-helin-heading">Plataforma:</span>
+                        <span class="text-helin-heading/90">{{ $product->productPlatform->name }}</span>
                     </div>
                 @endif
 
@@ -248,12 +224,14 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
                     </div>
                 @endif
 
+                @if($product->documents->count() > 0)
                 <div>
-                    <a href="{{ asset('images/ficha_test.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-9 px-4 rounded-full border border-helin-heading/90 bg-white text-sm font-medium text-helin-heading/90 transition-colors hover:text-helin-heading hover:border-helin-heading hover:bg-turquesa/10">
+                    <a href="{{ asset('storage/' . $product->documents->first()->file_path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center h-9 px-4 rounded-full border border-helin-heading/90 bg-white text-sm font-medium text-helin-heading/90 transition-colors hover:text-helin-heading hover:border-helin-heading hover:bg-turquesa/10">
                         <i class="fas fa-file-pdf text-base mr-2"></i>
                         Descargar ficha técnica
                     </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -271,29 +249,23 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
         </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @if($relatedProducts->count() > 0)
-                @foreach($relatedProducts as $ri => $related)
+                @foreach($relatedProducts as $related)
                     @php
                         $badge = '';
                         if($related->is_new) $badge = 'Nuevo';
                         elseif($related->is_on_sale) $badge = 'Oferta';
-                        $relatedImg = asset('images/im' . (($ri % 6) + 1) . '.png');
                     @endphp
                     @include('web.components.product-card', [
-                        'productImage' => $relatedImg,
+                        'productImage' => $related->main_image_url,
                         'productName' => $related->name,
                         'productBrand' => $related->brand->name ?? 'Helin',
-                        'productPrice' => $related->price,
-                        'productOldPrice' => $related->is_on_sale ? $related->price : null,
+                        'productPrice' => $related->is_on_sale && $related->sale_price ? $related->sale_price : $related->price,
+                        'productOldPrice' => $related->is_on_sale && $related->sale_price ? $related->price : null,
                         'productBadge' => $badge,
                         'productLink' => route('producto', ['slug' => $related->slug]),
                         'productSlug' => $related->slug,
                     ])
                 @endforeach
-            @else
-                @include('web.components.product-card', ['productImage' => asset('images/im1.png'), 'productName' => 'Biomaterial Óseo Bio-Oss', 'productBrand' => 'Geistlich', 'productPrice' => 149.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im2.png'), 'productName' => 'Membrana Colágeno Bio-Gide', 'productBrand' => 'Geistlich', 'productPrice' => 89.00, 'productBadge' => '', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im3.png'), 'productName' => 'Kit de Cirugía Implantológica', 'productBrand' => 'Helin', 'productPrice' => 199.00, 'productBadge' => 'Nuevo', 'productLink' => route('catalogo')])
-                @include('web.components.product-card', ['productImage' => asset('images/im4.png'), 'productName' => 'Suturas Resorbibles 4-0', 'productBrand' => 'Johnson & Johnson', 'productPrice' => 45.00, 'productBadge' => '', 'productLink' => route('catalogo')])
             @endif
         </div>
     </section>
@@ -303,3 +275,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 @include('web.partials.beneficios')
 @endsection
+
+@push('scripts')
+<script src="@minAsset('helin/js/producto.js')"></script>
+@endpush

@@ -10,7 +10,8 @@
         "format": "prettier --write \"resources/{js,css}/**/*.{js,css,scss}\"",
         "lint": "eslint resources/js --fix",
         "type-check": "tsc --noEmit",
-        "clean": "rimraf public/build public/hot"
+        "clean": "rimraf public/build public/hot",
+        "minify": "node scripts/minify.mjs"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",

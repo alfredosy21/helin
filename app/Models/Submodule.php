@@ -46,6 +46,17 @@ class Submodule extends Model {
     // SETTINGS EXTENDED (MODULE 2)
     const CUSTOMER_TYPES = 22; // Tipos de Cliente
     const DELIVERY_METHODS = 23; // Métodos de Entrega
+    const WHATSAPP_NUMBERS = 24; // Números de WhatsApp
+
+    // CATALOG EXTENDED (MODULE 3)
+    const ATTRIBUTES = 25; // Atributos de Productos
+    const ATTRIBUTE_VALUES = 26; // Valores de Atributos
+
+    // REQUESTS (MODULE 6)
+    const COMMERCIAL_REQUESTS = 27; // Solicitudes Comerciales
+
+    // SETTINGS EXTENDED (MODULE 2)
+    const PAGE_SEO = 28; // SEO de Páginas
 
     /**
      * Name of the table

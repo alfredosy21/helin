@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ContactFormMail;
+use App\Models\ContactMessage;
 use App\Models\Settings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,29 +17,46 @@ class ContactController extends Controller
     public function send(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'nombre'   => ['required', 'string', 'min:2', 'max:100'],
-            'email'    => ['required', 'email', 'max:150'],
+            'nombre' => ['required', 'string', 'min:2', 'max:100'],
+            'email' => ['required', 'email', 'max:150'],
             'telefono' => ['nullable', 'string', 'max:30'],
-            'asunto'   => ['required', 'string', 'max:100'],
-            'mensaje'  => ['required', 'string', 'min:10', 'max:2000'],
+            'asunto' => ['required', 'string', 'max:100'],
+            'mensaje' => ['required', 'string', 'min:10', 'max:2000'],
+            'g-recaptcha-response' => [config('services.recaptcha.enabled') ? 'required' : 'nullable'],
         ], [
-            'nombre.required'  => 'El nombre es obligatorio.',
-            'nombre.min'       => 'El nombre debe tener al menos 2 caracteres.',
-            'email.required'   => 'El correo electrónico es obligatorio.',
-            'email.email'      => 'Ingresa un correo electrónico válido.',
-            'asunto.required'  => 'Selecciona un asunto.',
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.min' => 'El nombre debe tener al menos 2 caracteres.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'Ingresa un correo electrónico válido.',
+            'asunto.required' => 'Selecciona un asunto.',
             'mensaje.required' => 'El mensaje es obligatorio.',
-            'mensaje.min'      => 'El mensaje debe tener al menos 10 caracteres.',
+            'mensaje.min' => 'El mensaje debe tener al menos 10 caracteres.',
+            'g-recaptcha-response.required' => 'Debes completar el reCAPTCHA.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'errors'  => $validator->errors()->toArray(),
+                'errors' => $validator->errors()->toArray(),
             ], 422);
         }
 
-        $settings    = Settings::getSettings();
+        if (config('services.recaptcha.enabled')) {
+            $recaptchaResponse = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$recaptchaResponse->json('success', false)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['g-recaptcha-response' => ['La verificación de reCAPTCHA falló. Inténtalo de nuevo.']],
+                ], 422);
+            }
+        }
+
+        $settings = Settings::getSettings();
         $destination = $settings->email ?? config('mail.from.address');
 
         if (empty($destination)) {
@@ -48,12 +67,20 @@ class ContactController extends Controller
         }
 
         try {
+            ContactMessage::create([
+                'nombre' => $request->input('nombre'),
+                'email' => $request->input('email'),
+                'telefono' => $request->input('telefono', ''),
+                'asunto' => $request->input('asunto'),
+                'mensaje' => $request->input('mensaje'),
+            ]);
+
             Mail::to($destination)->send(new ContactFormMail(
-                senderName:  $request->input('nombre'),
+                senderName: $request->input('nombre'),
                 senderEmail: $request->input('email'),
-                phone:       $request->input('telefono', ''),
-                subject:     $request->input('asunto'),
-                message:     $request->input('mensaje'),
+                phone: $request->input('telefono', ''),
+                emailSubject: $request->input('asunto'),
+                bodyMessage: $request->input('mensaje'),
             ));
 
             return response()->json([

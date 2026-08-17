@@ -78,9 +78,9 @@ Proyecto Laravel + Livewire + Blade brownfield. El CMS vive bajo `/cms` con cont
 **Alternativa considerada 2**: Reutilizar Sections con campos SEO. Se descarta porque mezcla responsabilidades (contenido de secciones vs metadatos de página) y no todas las páginas tienen una sección 1:1.
 
 ### D10: Sedes como JSON `offices` en Settings (no tabla separada)
-**Decisión**: Reemplazar los campos individuales `caracas_location`/`valencia_location`/`barquisimeto_location` por un campo JSON `offices` en `Settings` con estructura `[{name, url, active}]`.
+**Decisión**: Reemplazar los campos individuales `caracas_location`/`valencia_location`/`barquisimeto_location`/`maracay_location`/`maracaibo_location` y sus `*_whatsapp` por un campo JSON `offices` en `Settings` con estructura `[{name, url, whatsapp, active}]`.
 
-**Rationale**: Las sedes son pocos registros (3-5) que solo se muestran en la vista de contacto. Una tabla `offices` sería over-engineering. El JSON es flexible (añadir/quitar sedes sin migración) y se gestiona desde el SettingsController existente. La vista itera el JSON en lugar de tener 3 bloques Blade hardcodeados.
+**Rationale**: Las sedes son pocos registros (4-5) que solo se muestran en la vista de contacto y en "Estamos cerca de ti". Una tabla `offices` sería over-engineering. El JSON es flexible (añadir/quitar sedes sin migración) y se gestiona desde el SettingsController existente. Las vistas iteran el JSON en lugar de bloques Blade hardcodeados. El campo `whatsapp` por sede es necesario porque cada oficina tiene su propio número (verificado en `partials/near.blade.php`: `584242789481`, `584244669150`, `584143805640`, `584242550811`).
 
 **Alternativa considerada**: Tabla `offices` con CRUD. Se descarta por ser pocos datos y ya existir el patrón de Settings con campos individuales — el JSON es el paso natural.
 
@@ -115,19 +115,19 @@ Proyecto Laravel + Livewire + Blade brownfield. El CMS vive bajo `/cms` con cont
 **Rationale**: Duplicar un testimonio manualmente en la vista es un hack que confunde al usuario (ve el mismo testimonio repetido) y mezcla lógica de presentación con datos. El JS del carrusel ya tiene lógica de clonado para infinito — si necesita más slides, puede clonar visualmente sin que el HTML los duplique.
 
 ### D12: Migración de datos de sedes individuales a JSON `offices` dentro de la migración (no solo seeder)
-**Decisión**: La migración que añade `offices` a `settings` incluye un paso de migración de datos que lee los valores existentes de `caracas_location`, `valencia_location`, `barquisimeto_location` y los consolida en el JSON `offices` con un `UPDATE`. El método `down()` revierte el JSON a los campos individuales antes de eliminar la columna.
+**Decisión**: La migración que añade `offices` a `settings` incluye un paso de migración de datos que lee los valores existentes de `caracas_location`, `valencia_location`, `barquisimeto_location`, `maracay_location`, `maracaibo_location` y sus `*_whatsapp`, y los consolida en el JSON `offices` con estructura `[{name, url, whatsapp, active}]` mediante un `UPDATE`. El método `down()` revierte el JSON a los campos individuales antes de eliminar la columna.
 
 **Rationale**: Si hay datos en producción, el seeder no es suficiente porque los seeders se usan para datos iniciales, no para migrar datos existentes. La migración debe ser idempotente: si los campos individuales ya tienen valores, los migra al JSON; si están vacíos, deja `offices` como null. Esto garantiza que la transición no pierda datos en ningún entorno.
 
 **Estructura del `up()`**:
 1. Añadir columna `offices` JSON nullable.
 2. Leer el registro único de `settings`.
-3. Si `caracas_location` o `valencia_location` o `barquisimeto_location` tienen valor, construir el JSON `[{name: "Caracas", url: "...", active: true}, ...]` y hacer `UPDATE`.
+3. Para cada sede (Caracas, Valencia, Barquisimeto, Maracay, Maracaibo): si `{city}_location` o `{city}_whatsapp` tienen valor, construir la entrada `{name, url: "{city}_location", whatsapp: "{city}_whatsapp", active: true}` y hacer `UPDATE`.
 4. (Opcional) Mantener las columnas individuales durante esta migración para rollback seguro; se eliminan en una migración posterior una vez verificado que `offices` funciona.
 
 **Estructura del `down()`**:
 1. Leer `offices` JSON.
-2. Para cada entrada, restaurar el valor en el campo individual correspondiente (`caracas_location`, etc.).
+2. Para cada entrada, restaurar el valor en el campo individual correspondiente (`{city}_location`, `{city}_whatsapp`).
 3. Eliminar la columna `offices`.
 
 ## Risks / Trade-offs

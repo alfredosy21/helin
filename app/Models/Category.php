@@ -30,11 +30,19 @@ class Category extends Model {
     protected $fillable = [
         'name',
         'slug',
+        'image',
         'description',
+        'subtitle',
         'seo_description',
+        'seo_keywords',
         'parent_id',
         'is_active',
+        'is_featured',
         'order',
+        'banner_label',
+        'banner_title',
+        'banner_description',
+        'banner_image',
     ];
 
     /**
@@ -45,6 +53,7 @@ class Category extends Model {
     protected $casts = [
         'parent_id' => 'integer',
         'is_active' => 'boolean',
+        'is_featured' => 'boolean',
         'order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

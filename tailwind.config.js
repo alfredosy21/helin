@@ -8,25 +8,30 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Mapeamos el color corporativo de Helin como la paleta primaria de la aplicación
+        // Paleta turquesa unificada con el frontend público (Helin brand)
         primary: {
-          50: '#e6f9f7',
-          100: '#b3ece6',
-          200: '#80dfd4',
-          300: '#4dd2c2',
-          400: '#1ac5b1',
-          500: '#09b6a2', // Tu verde/turquesa de marca exacto
-          600: '#079282',
-          700: '#056e61',
-          800: '#044a41',
-          900: '#022520',
-          950: '#011310',
+          DEFAULT: '#6BC2C3',
+          50: '#f0fafa',
+          100: '#d8f2f2',
+          200: '#b0e6e6',
+          300: '#8fdada',
+          400: '#7cd0cf',
+          500: '#6BC2C3', // Turquesa de marca exacto (igual al frontend)
+          600: '#4AA8A9',
+          700: '#3A9A9B',
+          800: '#2A7A7B',
+          900: '#1A5A5B',
+          950: '#0d3435',
         },
-        // Añadimos el tono exacto del Sidebar moderno para usarlo semánticamente
+        heading: '#123F4A',
+        body: '#2D3740',
+        soft: '#f2f2f4',
+        line: '#E5E7EB',
+        // Sidebar claro, alineado con la estética del frontend
         sidebar: {
-          dark: '#1e293b',      // Slate oscuro e impecable de las capturas
-          hover: 'rgba(255, 255, 255, 0.05)',
-          active: 'rgba(255, 255, 255, 0.1)',
+          light: '#ffffff',
+          hover: '#f8fafc',
+          active: 'rgba(107, 194, 195, 0.1)',
         }
       },
       fontFamily: {

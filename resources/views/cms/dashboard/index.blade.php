@@ -1,148 +1,91 @@
 <!-- Modern Dashboard Design -->
-<div class="min-h-screen bg-[#f8fafc]">
-
-    <!-- Minimalist Header -->
-    <div class="bg-white border-b border-slate-100">
-        <div class="px-6 py-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <!-- User Avatar -->
-                    <div class="relative">
-                        @if(auth()->user()->image)
-                        <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-100">
-                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
-                        </div>
-                        @else
-                        <div class="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">{{ substr(auth()->user()->name, 0, 1) }}</span>
-                        </div>
-                        @endif
-                        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                    </div>
-
-                    <!-- Welcome Text -->
-                    <div>
-                        <h1 class="text-xl font-bold text-slate-900">
-                            {{ auth()->user()->name }}
-                        </h1>
-                        <p class="text-xs text-[#c0c1c6]">
-                            {{ now()->format('d M Y') }} • {{ now()->format('H:i') }}
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Refresh Button -->
-                <button wire:click="refreshStats" class="p-2 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors border-none cursor-pointer">
-                    <x-ui-icon name="refresh-cw" class="w-5 h-5 text-slate-500" />
-                </button>
-            </div>
-        </div>
-    </div>
+<div class="min-h-screen bg-soft">
 
     <!-- Main Content -->
-    <div class="px-6 py-6">
-        <div class="max-w-7xl mx-auto space-y-6">
+    <div class="px-3 sm:px-6 py-4 sm:py-6">
+        <div class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
             <!-- Stats Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Users Card -->
-                <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="users" class="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div class="flex items-center gap-1 px-2 py-0.5 bg-blue-100 rounded-full">
-                            <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                            <span class="text-[10px] font-semibold text-blue-700">+{{ $stats['new_users'] ?? 0 }}</span>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs font-medium text-blue-400 uppercase tracking-wide">Usuarios Totales</p>
-                        <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_users'] ?? 0) }}</p>
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="trending-up" class="w-3 h-3 text-blue-500" />
-                            <span>{{ $stats['new_users'] ?? 0 }} nuevos este mes</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                <x-ui-stat-card
+                    icon="package"
+                    :value="number_format($stats['total_products'] ?? 0)"
+                    label="Productos"
+                    :trend="($stats['new_products'] ?? 0) > 0 ? '+' . $stats['new_products'] . ' este mes' : null"
+                    :trend-up="true"
+                />
 
-                <!-- Products Card -->
-                <div class="bg-emerald-50 rounded-xl p-6 border border-emerald-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="package" class="w-5 h-5 text-emerald-600" />
-                        </div>
-                        <div class="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 rounded-full">
-                            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                            <span class="text-[10px] font-semibold text-emerald-700">+{{ $stats['new_products'] ?? 0 }}</span>
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs font-medium text-emerald-400 uppercase tracking-wide">Productos</p>
-                        <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_products'] ?? 0) }}</p>
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="trending-up" class="w-3 h-3 text-emerald-500" />
-                            <span>{{ $stats['new_products'] ?? 0 }} nuevos este mes</span>
-                        </div>
-                    </div>
-                </div>
+                <x-ui-stat-card
+                    icon="folder"
+                    :value="number_format($stats['total_categories'] ?? 0)"
+                    label="Categorías"
+                />
 
-                <!-- Categories Card -->
-                <div class="bg-purple-50 rounded-xl p-6 border border-purple-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="folder" class="w-5 h-5 text-purple-600" />
-                        </div>
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs font-medium text-purple-400 uppercase tracking-wide">Categorías</p>
-                        <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['total_categories'] ?? 0) }}</p>
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="layers" class="w-3 h-3 text-purple-500" />
-                            <span>Organización completa</span>
-                        </div>
-                    </div>
-                </div>
+                <x-ui-stat-card
+                    icon="users"
+                    :value="number_format($stats['total_users'] ?? 0)"
+                    label="Usuarios"
+                    :trend="($stats['new_users'] ?? 0) > 0 ? '+' . $stats['new_users'] . ' este mes' : null"
+                    :trend-up="true"
+                />
 
-                <!-- System Status Card -->
-                <div class="bg-green-50 rounded-xl p-6 border border-green-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                            <x-ui-icon name="zap" class="w-5 h-5 text-green-600" />
-                        </div>
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs font-medium text-green-400 uppercase tracking-wide">Sistema</p>
-                        <p class="text-2xl font-bold text-green-600">Online</p>
-                        <div class="flex items-center gap-2 text-xs text-slate-500">
-                            <x-ui-icon name="check-circle" class="w-3 h-3 text-green-500" />
-                            <span>99.9% uptime</span>
-                        </div>
-                    </div>
-                </div>
+                <x-ui-stat-card
+                    icon="bookmark"
+                    :value="number_format($stats['total_brands'] ?? 0)"
+                    label="Marcas"
+                />
+            </div>
+
+            <!-- Secondary Stats Row -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                <x-ui-stat-card
+                    icon="file-text"
+                    :value="number_format($stats['total_commercial_requests'] ?? 0)"
+                    label="Solicitudes Comerciales"
+                    :trend="($stats['pending_commercial_requests'] ?? 0) > 0 ? $stats['pending_commercial_requests'] . ' pendientes' : null"
+                    :trend-up="false"
+                />
+
+                <x-ui-stat-card
+                    icon="mail"
+                    :value="number_format($stats['total_contact_messages'] ?? 0)"
+                    label="Mensajes de Contacto"
+                    :trend="($stats['unread_contact_messages'] ?? 0) > 0 ? $stats['unread_contact_messages'] . ' sin leer' : null"
+                    :trend-up="false"
+                />
+
+                <x-ui-stat-card
+                    icon="book-open"
+                    :value="number_format($stats['total_resources'] ?? 0)"
+                    label="Recursos"
+                />
+
+                <x-ui-stat-card
+                    icon="message-circle"
+                    :value="number_format($stats['total_testimonials'] ?? 0)"
+                    label="Testimonios"
+                />
             </div>
 
             <!-- Content Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
 
                 <!-- Live Activity Feed -->
-                <div class="lg:col-span-2 bg-white rounded-xl border border-slate-100 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100">
+                <div class="lg:col-span-2 bg-white rounded-xl border border-line overflow-hidden">
+                    <div class="p-4 sm:p-6 border-b border-line">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
-                                    <x-ui-icon name="pulse" class="w-5 h-5 text-slate-600" />
+                                <div class="w-10 h-10 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="pulse" class="w-5 h-5 text-primary-600" />
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-bold text-slate-900">{{ __('cms.dashboard.live_feed') }}</h3>
-                                    <p class="text-xs text-[#c0c1c6]">{{ __('cms.dashboard.real_time') }}</p>
+                                    <h3 class="text-base font-bold text-heading">{{ __('cms.dashboard.live_feed') }}</h3>
+                                    <p class="text-[13px] text-body">{{ __('cms.dashboard.real_time') }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2">
-                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span class="text-[10px] font-semibold text-green-600 uppercase tracking-wider">{{ __('cms.dashboard.live') }}</span>
+                                <div class="w-2 h-2 bg-primary-500 rounded-full"></div>
+                                <span class="text-[10px] font-semibold text-primary-600 uppercase tracking-wider">{{ __('cms.dashboard.live') }}</span>
                             </div>
                         </div>
                     </div>
@@ -150,12 +93,12 @@
                     <!-- Activity Cards -->
                     <div class="p-4 space-y-3 max-h-96 overflow-y-auto">
                         @forelse ($recentActivity as $activity)
-                        <div class="bg-white rounded-xl p-4 border border-slate-100">
+                        <div class="bg-white rounded-xl p-4 border border-line">
                             <div class="flex items-start gap-3">
                                 <!-- User Avatar -->
                                 <div class="relative flex-shrink-0">
-                                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
-                                        <span class="text-slate-600 font-bold text-sm">{{ substr($activity['user'], 0, 1) }}</span>
+                                    <div class="w-10 h-10 bg-primary-500/10 rounded-full flex items-center justify-center">
+                                        <span class="text-primary-700 font-bold text-sm">{{ substr($activity['user'], 0, 1) }}</span>
                                     </div>
                                 </div>
 
@@ -164,10 +107,10 @@
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="space-y-1">
                                             <div class="flex items-center gap-2">
-                                                <span class="font-semibold text-sm text-slate-900">{{ $activity['user'] }}</span>
-                                                <span class="text-[10px] text-[#c0c1c6] font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
+                                                <span class="font-semibold text-sm text-heading">{{ $activity['user'] }}</span>
+                                                <span class="text-[10px] text-body font-medium uppercase tracking-wider">{{ $activity['time'] }}</span>
                                             </div>
-                                            <p class="text-xs text-slate-600 leading-relaxed">
+                                            <p class="text-[13px] text-body leading-relaxed">
                                                 {{ $activity['description'] }}
                                             </p>
                                         </div>
@@ -176,59 +119,135 @@
                             </div>
                         </div>
                         @empty
-                        <div class="text-center py-12">
-                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-                                <x-ui-icon name="monitor-off" class="w-8 h-8 text-slate-300" />
-                            </div>
-                            <div class="mt-4 space-y-1">
-                                <h4 class="text-sm font-semibold text-slate-900">{{ __('cms.dashboard.system_waiting') }}</h4>
-                                <p class="text-xs text-slate-500 max-w-sm mx-auto">
-                                    {{ __('cms.dashboard.no_activity') }}
-                                </p>
-                            </div>
-                        </div>
+                        <x-ui-empty-state
+                            icon="monitor-off"
+                            :title="__('cms.dashboard.system_waiting')"
+                            :description="__('cms.dashboard.no_activity')"
+                        />
                         @endforelse
                     </div>
                 </div>
 
                 <!-- Quick Actions -->
-                <div class="space-y-8">
-                    <!-- Quick Actions -->
-                    <div class="bg-blue-50 rounded-xl p-6 border border-blue-100">
+                <div class="space-y-4 sm:space-y-6">
+                    <!-- Quick Actions - Catalog -->
+                    <div class="bg-primary-500/5 rounded-xl p-4 sm:p-6 border border-primary-500/10">
                         <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <x-ui-icon name="zap" class="w-5 h-5 text-blue-600" />
+                            <div class="w-10 h-10 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                <x-ui-icon name="zap" class="w-5 h-5 text-primary-600" />
                             </div>
                             <div>
-                                <h3 class="text-base font-bold text-slate-900">{{ __('cms.general.quick_actions') }}</h3>
-                                <p class="text-xs text-[#c0c1c6]">{{ __('cms.dashboard.quick_actions_subtitle') }}</p>
+                                <h3 class="text-base font-bold text-heading">{{ __('cms.general.quick_actions') }}</h3>
+                                <p class="text-[13px] text-body">{{ __('cms.dashboard.quick_actions_subtitle') }}</p>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="{{ route('catalog.products.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
-                                    <x-ui-icon name="package" class="w-4 h-4 text-blue-600" />
+                        <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                            <a href="{{ route('catalog.products.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="package" class="w-4 h-4 text-primary-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.product') }}</span>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Producto</span>
                             </a>
-                            <a href="{{ route('catalog.family.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
-                                    <x-ui-icon name="folder" class="w-4 h-4 text-blue-600" />
+                            <a href="{{ route('catalog.family.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="folder" class="w-4 h-4 text-primary-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.family') }}</span>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Familia</span>
                             </a>
-                            <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
-                                    <x-ui-icon name="tag" class="w-4 h-4 text-blue-600" />
+                            <a href="{{ route('catalog.brands.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="bookmark" class="w-4 h-4 text-primary-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.brand') }}</span>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Marca</span>
                             </a>
-                            <a href="{{ route('settings.index') }}" class="group flex flex-col items-center gap-2 p-3 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors">
-                                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-blue-200">
-                                    <x-ui-icon name="settings" class="w-4 h-4 text-blue-600" />
+                            <a href="{{ route('catalog.lines.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="layers" class="w-4 h-4 text-primary-600" />
                                 </div>
-                                <span class="text-[10px] font-semibold text-blue-700 uppercase tracking-wider">{{ __('cms.general.config') }}</span>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Línea</span>
+                            </a>
+                            <a href="{{ route('blog.articles.create') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="file-text" class="w-4 h-4 text-primary-600" />
+                                </div>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Artículo</span>
+                            </a>
+                            <a href="{{ route('testimonials.index') }}" class="group flex flex-col items-center gap-2 p-3 bg-white hover:bg-primary-500/10 border border-primary-500/10 rounded-lg transition-colors">
+                                <div class="w-8 h-8 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                    <x-ui-icon name="message-circle" class="w-4 h-4 text-primary-600" />
+                                </div>
+                                <span class="text-[10px] font-semibold text-primary-700 uppercase tracking-wider text-center">Testimonio</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Module Shortcuts -->
+                    <div class="bg-white rounded-xl p-4 sm:p-6 border border-line">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-primary-500/10 rounded-lg flex items-center justify-center">
+                                <x-ui-icon name="grid" class="w-5 h-5 text-primary-600" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-heading">Módulos</h3>
+                                <p class="text-[13px] text-body">Acceso rápido</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <a href="{{ route('sections.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="layout" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Secciones</span>
+                                </div>
+                                <span class="text-[11px] text-body">{{ $stats['total_sections'] ?? 0 }}</span>
+                            </a>
+                            <a href="{{ route('menu.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="menu" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Menú Web</span>
+                                </div>
+                                <span class="text-[11px] text-body">{{ $stats['total_menus'] ?? 0 }}</span>
+                            </a>
+                            <a href="{{ route('resources.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="book-open" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Recursos</span>
+                                </div>
+                                <span class="text-[11px] text-body">{{ $stats['total_resources'] ?? 0 }}</span>
+                            </a>
+                            <a href="{{ route('commercial-requests.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="file-text" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Solicitudes</span>
+                                </div>
+                                <span class="text-[11px] text-body">{{ $stats['total_commercial_requests'] ?? 0 }}</span>
+                            </a>
+                            <a href="{{ route('contact-messages.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="mail" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Mensajes</span>
+                                </div>
+                                <span class="text-[11px] text-body">{{ $stats['total_contact_messages'] ?? 0 }}</span>
+                            </a>
+                            <a href="{{ route('settings.index') }}" class="flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-50 transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-primary-500/10 transition-colors">
+                                        <x-ui-icon name="settings" class="w-4 h-4 text-body group-hover:text-primary-600 transition-colors" />
+                                    </div>
+                                    <span class="text-[13px] text-body group-hover:text-heading transition-colors">Configuración</span>
+                                </div>
+                                <x-ui-icon name="chevron-right" class="w-4 h-4 text-body" />
                             </a>
                         </div>
                     </div>

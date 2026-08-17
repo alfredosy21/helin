@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
             DeliveryMethodSeeder::class,
             StateCitySeeder::class,
             WhatsAppNumberSeeder::class,
+            PageSeoSeeder::class,
+            AttributeSeeder::class,
+            AttributeValueSeeder::class,
+            ContactMessageSeeder::class,
         ]);
     }
 }

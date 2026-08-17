@@ -45,13 +45,13 @@
             @endif
             <div class="field">
                 <label>Asunto</label>
-                <p>{{ $subject }}</p>
+                <p>{{ $emailSubject }}</p>
             </div>
             <hr class="divider">
             <div class="field">
                 <label>Mensaje</label>
                 <div class="message-box">
-                    <p>{{ $message }}</p>
+                    <p>{{ $bodyMessage }}</p>
                 </div>
             </div>
         </div>

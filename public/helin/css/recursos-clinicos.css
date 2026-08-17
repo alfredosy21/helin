@@ -1,5 +1,42 @@
 /* Recursos Clínicos Page - Specific Styles */
 
+/* Asegurar que el header y sus elementos sean visibles */
+header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+header .hidden.sm\:block {
+    display: none !important;
+}
+
+@media (min-width: 640px) {
+    header .hidden.sm\:block {
+        display: block !important;
+    }
+}
+
+header .hidden.lg\:block {
+    display: none !important;
+}
+
+@media (min-width: 1024px) {
+    header .hidden.lg\:block {
+        display: block !important;
+    }
+}
+
+header .lg\:hidden {
+    display: block !important;
+}
+
+@media (min-width: 1024px) {
+    header .lg\:hidden {
+        display: none !important;
+    }
+}
+
 /* Hero Banner - Estadísticas */
 .hero-banner {
     background: linear-gradient(135deg, var(--helin-primary) 0%, var(--helin-primary-light) 100%);
@@ -94,7 +131,6 @@
 .hero {
     position: relative;
     overflow: hidden;
-    background: url('/images/recursos_clinicos_banner_helin.png') center/cover no-repeat;
     color: var(--white);
     border-top: 1px solid rgba(255,255,255,0.15);
     z-index: 0;
@@ -594,7 +630,6 @@
 .featured-section {
     margin-top: 42px;
     border-radius: 32px;
-    background: url('/images/banner_rc_clinic.png') center/cover no-repeat;
     color: var(--white);
     overflow: hidden;
     box-shadow: 0 24px 58px rgba(18, 63, 74, 0.22);
@@ -747,6 +782,14 @@
     100% { transform: rotate(360deg); }
 }
 
+/* Solo ocultar elementos .hidden dentro del contenido de recursos clínicos,
+   sin afectar el header compartido (botón "Escríbenos" usa hidden lg:flex) */
+main .hidden,
+.resource-search .hidden,
+.quick-cards .hidden,
+#resourcesContent .hidden {
+    display: none !important;
+}
 
 .error-message {
     background-color: #fee;

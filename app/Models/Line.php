@@ -29,10 +29,15 @@ class Line extends Model {
     protected $fillable = [
         'name',
         'slug',
+        'image',
         'description',
         'seo_description',
+        'seo_keywords',
         'is_active',
         'order',
+        'banner_title',
+        'banner_description',
+        'banner_image',
     ];
 
     /**

@@ -2,7 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\City;
+use App\Models\CommercialRequest;
+use App\Models\CustomerType;
+use App\Models\DeliveryMethod;
+use App\Models\PaymentMethod;
+use App\Models\Product;
+use App\Models\ResourceSpecialty;
+use App\Models\ResourceType;
+use App\Models\Sections;
+use App\Models\Settings;
+use App\Models\State;
+use App\Models\Testimonial;
+use App\Models\WhatsAppNumber;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Http;
 
 class WebController extends Controller
 {
@@ -12,43 +29,37 @@ class WebController extends Controller
     public function home()
     {
         // Hero section
-        $heroSection = \App\Models\Sections::find(\App\Models\Sections::HERO_HOME);
+        $heroSection = Sections::find(Sections::HERO_HOME);
 
         // Flow how-to section
-        $howToSection = \App\Models\Sections::find(\App\Models\Sections::FLOW_HOW_TO);
+        $howToSection = Sections::find(Sections::FLOW_HOW_TO);
 
         // Featured products
-        $featuredProducts = \App\Models\Product::where('is_active', true)
+        $featuredProducts = Product::where('is_active', true)
             ->where('is_featured', true)
+            ->with('images')
             ->inRandomOrder()
             ->take(4)
             ->get();
 
         // Product sections
-        $productSections = \App\Models\Sections::where('status', 1)
-            ->whereIn('id', [\App\Models\Sections::IMPLANTOLOGY_PRODUCTS, \App\Models\Sections::GBR_PRODUCTS, \App\Models\Sections::INSTRUMENTS_PRODUCTS])
+        $productSections = Sections::where('status', 1)
+            ->whereIn('id', [Sections::IMPLANTOLOGY_PRODUCTS, Sections::GBR_PRODUCTS, Sections::INSTRUMENTS_PRODUCTS])
             ->orderBy('id')
             ->get();
 
-        // Mapear secciones a categorías
-        $sectionCategories = [
-            \App\Models\Sections::IMPLANTOLOGY_PRODUCTS => ['name' => 'Implantes', 'slug' => 'implantes'],
-            \App\Models\Sections::GBR_PRODUCTS         => ['name' => 'Regeneración Guiada Bucal (GBR)', 'slug' => 'regeneracion-guiada-bucal-gbr'],
-            \App\Models\Sections::INSTRUMENTS_PRODUCTS => ['name' => 'Instrumentos', 'slug' => 'tijeras'],
-        ];
-
         // Testimonials section
-        $testimonialsSection = \App\Models\Sections::find(\App\Models\Sections::TESTIMONIALS);
+        $testimonialsSection = Sections::find(Sections::TESTIMONIALS);
 
         // Testimonials data
-        $testimonials = \App\Models\Testimonial::where('is_active', true)
+        $testimonials = Testimonial::where('is_active', true)
             ->orderBy('position', 'asc')
             ->take(4)
             ->get();
 
         return view('web.home', compact(
             'heroSection', 'howToSection', 'featuredProducts',
-            'productSections', 'sectionCategories', 'testimonialsSection', 'testimonials'
+            'productSections', 'testimonialsSection', 'testimonials'
         ));
     }
 
@@ -62,13 +73,13 @@ class WebController extends Controller
         $categorySlug = request('category');
 
         if ($categorySlug) {
-            $currentCategory = \App\Models\Category::where('slug', $categorySlug)
+            $currentCategory = Category::where('slug', $categorySlug)
                 ->where('is_active', true)
                 ->first();
         }
 
         // Get products with filters
-        $query = \App\Models\Product::with(['category', 'brand'])
+        $query = Product::with(['category', 'brand', 'line', 'images'])
             ->where('is_active', true);
 
         // Apply category filter if present
@@ -78,8 +89,8 @@ class WebController extends Controller
 
         // Apply brand filter if present
         $brandSlugs = (array) request('brand');
-        if (!empty($brandSlugs)) {
-            $brandIds = \App\Models\Brand::whereIn('slug', $brandSlugs)->where('is_active', true)->pluck('id');
+        if (! empty($brandSlugs)) {
+            $brandIds = Brand::whereIn('slug', $brandSlugs)->where('is_active', true)->pluck('id');
             if ($brandIds->isNotEmpty()) {
                 $query->whereIn('brand_id', $brandIds);
             }
@@ -87,7 +98,7 @@ class WebController extends Controller
 
         // Apply tag filter if present
         $tags = (array) request('tag');
-        if (!empty($tags)) {
+        if (! empty($tags)) {
             foreach ($tags as $tag) {
                 if ($tag === 'new') {
                     $query->where('is_new', true);
@@ -102,36 +113,68 @@ class WebController extends Controller
                     [$tagType, $tagValue] = explode(':', $tag, 2);
 
                     if ($tagType === 'material') {
-                        $query->where('material', 'like', '%' . $tagValue . '%');
+                        $query->where('material', 'like', '%'.$tagValue.'%');
                     }
                 }
             }
         }
 
+        // Apply featured filter if passed directly (deep link "Ver todos los productos")
+        if (request('featured') === '1') {
+            $query->where('is_featured', true);
+        }
+
         // Apply material filter if present
         $materials = (array) request('material');
-        if (!empty($materials)) {
+        if (! empty($materials)) {
             $query->where(function ($q) use ($materials) {
                 foreach ($materials as $m) {
-                    $q->orWhere('material', 'like', '%' . $m . '%');
+                    $q->orWhere('material', 'like', '%'.$m.'%');
                 }
             });
         }
 
-
         // Apply search filter if present
         $searchTerm = request('search');
         if ($searchTerm) {
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                  ->orWhereHas('brand', function($brandQuery) use ($searchTerm) {
-                      $brandQuery->where('name', 'like', '%' . $searchTerm . '%');
-                  });
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('spanish_name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('sku', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('supplier_reference', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('description', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('dimensions', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('material', 'like', '%'.$searchTerm.'%')
+                    ->orWhereHas('category', function ($cq) use ($searchTerm) {
+                        $cq->where('name', 'like', '%'.$searchTerm.'%');
+                    })
+                    ->orWhereHas('brand', function ($bq) use ($searchTerm) {
+                        $bq->where('name', 'like', '%'.$searchTerm.'%');
+                    })
+                    ->orWhereHas('line', function ($lq) use ($searchTerm) {
+                        $lq->where('name', 'like', '%'.$searchTerm.'%');
+                    });
             });
         }
 
-        $products = $query->orderBy('name')->get();
+        // Apply sort (default: recent, same as AJAX endpoint)
+        $sortBy = request('sort', 'recent');
+        switch ($sortBy) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query->orderBy('name', 'asc');
+                break;
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(15)->withQueryString();
 
         return view('web.catalogo', compact('products', 'currentCategory'));
     }
@@ -141,15 +184,16 @@ class WebController extends Controller
      */
     public function producto(string $slug)
     {
-        $product = \App\Models\Product::with(['category', 'brand'])
+        $product = Product::with(['category', 'brand', 'systemProduct', 'productPlatform', 'attributeValues', 'images', 'documents'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
 
         // Obtener productos relacionados
-        $relatedProducts = \App\Models\Product::where('category_id', $product->category_id)
+        $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
+            ->with('images')
             ->inRandomOrder()
             ->take(4)
             ->get();
@@ -170,55 +214,76 @@ class WebController extends Controller
      */
     public function solicitud()
     {
-        $customerTypes   = \App\Models\CustomerType::active()->ordered()->get();
-        $deliveryMethods = \App\Models\DeliveryMethod::active()->ordered()->get();
-        $paymentMethods  = \App\Models\PaymentMethod::active()->ordered()->get();
-        $states          = \App\Models\State::ordered()->get();
-        $cities          = \App\Models\City::all(); // all for JS filter
-        $settings        = \App\Models\Settings::getSettings();
-
-        $pickupInfo = [
-            // Zona 1 - Ejecutivo Caracas
-            'DC' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'MI' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'VA' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'AN' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'SU' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'MO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'NE' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'DF' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            'BO' => ['city' => 'caracas', 'label' => 'Caracas', 'zone' => 1, 'phone' => '+58 424-2789481'],
-            // Zona 2 - Ejecutivo Valencia
-            'CA' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AR' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'CO' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'GU' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AP' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            'AM' => ['city' => 'valencia', 'label' => 'Valencia', 'zone' => 2, 'phone' => '+58 424-4669150'],
-            // Zona 3 - Ejecutivo Barquisimeto
-            'LA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'YA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'PO' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'BA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'ME' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'TR' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            'TA' => ['city' => 'barquisimeto', 'label' => 'Barquisimeto', 'zone' => 3, 'phone' => '+58 414-3805640'],
-            // Zona 4 - Ejecutivo Maracaibo
-            'ZU' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
-            'FA' => ['city' => 'maracaibo', 'label' => 'Maracaibo', 'zone' => 4, 'phone' => '+58 424-2550811'],
-        ];
+        $customerTypes = CustomerType::active()->ordered()->get();
+        $deliveryMethods = DeliveryMethod::active()->ordered()->get();
+        $paymentMethods = PaymentMethod::active()->ordered()->get();
+        $states = State::ordered()->get();
+        $cities = City::all(); // all for JS filter
+        $settings = Settings::getSettings();
 
         $pickups = [];
-        foreach ($pickupInfo as $code => $meta) {
-            $whatsapp = $settings->{"{$meta['city']}_whatsapp"} ?? null;
-            $location = $settings->{"{$meta['city']}_location"} ?? null;
 
-            $pickups[$code] = [
-                'label'    => $meta['label'],
-                'zone'     => $meta['zone'],
-                'phone'    => $meta['phone'],
-                'whatsapp' => $whatsapp,
-                'location' => $location,
+        // Zonas comerciales: mapeo de código de estado → zona
+        $stateZoneMap = [
+            // Zona 1 - Caracas
+            'DC' => 1, 'MI' => 1, 'VA' => 1, 'AN' => 1, 'SU' => 1, 'MO' => 1, 'NE' => 1, 'DF' => 1, 'BO' => 1,
+            // Zona 2 - Valencia
+            'CA' => 2, 'AR' => 2, 'CO' => 2, 'GU' => 2, 'AP' => 2, 'AM' => 2,
+            // Zona 3 - Barquisimeto
+            'LA' => 3, 'YA' => 3, 'PO' => 3, 'BA' => 3, 'ME' => 3, 'TR' => 3, 'TA' => 3,
+            // Zona 4 - Maracaibo
+            'ZU' => 4, 'FA' => 4,
+        ];
+
+        // Direcciones por zona
+        $zoneData = [
+            1 => [
+                'label' => 'Caracas',
+                'location' => 'CCCT, Torre C, Oficina 13-07, Caracas',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B029\'03.2%22N+66%C2%B051\'18.3%22W/@10.4842222,-66.8550833,1059m/data=!3m1!1e3!4m4!3m3!8m2!3d10.4842222!4d-66.8550833',
+            ],
+            2 => [
+                'label' => 'Valencia',
+                'location' => 'CC Otama, Nivel 2, Local 2-2, Valencia, Edo. Carabobo',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B012\'39.5%22N+68%C2%B000\'59.1%22W/@10.2109722,-68.0164167,1060m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d10.2109722!4d-68.0164167',
+            ],
+            3 => [
+                'label' => 'Barquisimeto',
+                'location' => 'Centro Empresarial Plaza Madrid, Piso 4, Oficina 4-9, Barquisimeto, Edo. Lara',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B003\'53.2%22N+69%C2%B017\'02.9%22W/@10.0647778,-69.2841389,1061m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d10.0647778!4d-69.2841389',
+            ],
+            4 => [
+                'label' => 'Maracaibo',
+                'location' => 'CC Terraza 77, Piso 1, Local L-15, Maracaibo, Edo. Zulia',
+                'map_url' => 'https://www.google.com/maps/place/Centro+Comercial+Terraza+77/@10.66712,-71.6033406,1059m/data=!3m2!1e3!4b1!4m6!3m5!1s0x8e89990a82a8667f:0xb5f35dd883bdff5a!8m2!3d10.66712!4d-71.6033406!16s%2Fg%2F11gzmpqc73',
+            ],
+        ];
+
+        // WhatsApp numbers activos para info de contacto
+        $activeNumbers = WhatsAppNumber::with('states')->where('is_active', true)->get();
+        $phoneByState = [];
+        foreach ($activeNumbers as $number) {
+            $state = $number->states->first();
+            if ($state) {
+                $phoneByState[$state->code] = $number->formatted_number;
+            }
+        }
+
+        // Construir pickups por estado
+        foreach ($states as $state) {
+            $zone = $stateZoneMap[$state->code] ?? null;
+            if (!$zone || !isset($zoneData[$zone])) {
+                continue;
+            }
+
+            $zd = $zoneData[$zone];
+            $pickups[$state->code] = [
+                'label' => $zd['label'],
+                'zone' => $zone,
+                'phone' => $phoneByState[$state->code] ?? null,
+                'whatsapp' => null,
+                'location' => $zd['location'],
+                'map_url' => $zd['map_url'] ?? null,
             ];
         }
 
@@ -230,8 +295,8 @@ class WebController extends Controller
      */
     public function contactanos()
     {
-        $settings = \App\Models\Settings::getSettings();
-        $contactSection = \App\Models\Sections::find(\App\Models\Sections::CONTACT_HERO);
+        $settings = Settings::getSettings();
+        $contactSection = Sections::find(Sections::CONTACT_HERO);
 
         return view('web.contactanos', compact('settings', 'contactSection'));
     }
@@ -241,14 +306,15 @@ class WebController extends Controller
      */
     public function nuestraEmpresa()
     {
-        $companyHeroSection = \App\Models\Sections::find(\App\Models\Sections::COMPANY_HERO);
-        $aboutSection   = \App\Models\Sections::find(\App\Models\Sections::ABOUT_US);
-        $missionSection = \App\Models\Sections::find(\App\Models\Sections::MISSION_VISION);
-        $teamSection    = \App\Models\Sections::find(\App\Models\Sections::TEAM);
-        $alliesSection  = \App\Models\Sections::find(\App\Models\Sections::ALLIES);
-        $ctaSection     = \App\Models\Sections::find(\App\Models\Sections::CTA_COMPANY);
+        $companyHeroSection = Sections::find(Sections::COMPANY_HERO);
+        $aboutSection = Sections::find(Sections::ABOUT_US);
+        $missionSection = Sections::find(Sections::MISSION_VISION);
+        $valuesSection = Sections::find(Sections::COMPANY_VALUES);
+        $teamSection = Sections::find(Sections::TEAM);
+        $alliesSection = Sections::find(Sections::ALLIES);
+        $ctaSection = Sections::find(Sections::CTA_COMPANY);
 
-        return view('web.nuestra-empresa', compact('companyHeroSection', 'aboutSection', 'missionSection', 'teamSection', 'alliesSection', 'ctaSection'));
+        return view('web.nuestra-empresa', compact('companyHeroSection', 'aboutSection', 'missionSection', 'valuesSection', 'teamSection', 'alliesSection', 'ctaSection'));
     }
 
     /**
@@ -256,8 +322,8 @@ class WebController extends Controller
      */
     public function politicas()
     {
-        $sections = \App\Models\Sections::where('status', 1)
-            ->whereIn('id', [\App\Models\Sections::SHIPPING_POLICIES, \App\Models\Sections::TERMS_CONDITIONS, \App\Models\Sections::PRIVACY_POLICIES])
+        $sections = Sections::where('status', 1)
+            ->whereIn('id', [Sections::SHIPPING_POLICIES, Sections::TERMS_CONDITIONS, Sections::PRIVACY_POLICIES])
             ->orderBy('id')
             ->get();
 
@@ -270,11 +336,11 @@ class WebController extends Controller
     public function recursosClinicos()
     {
         // Hero section
-        $heroSection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_RESOURCES_HERO);
+        $heroSection = Sections::find(Sections::CLINICAL_RESOURCES_HERO);
 
         // Estadísticas
         $totalResources = \App\Models\Resource::where('is_active', true)->count();
-        $totalSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)
+        $totalSpecialties = ResourceSpecialty::where('is_active', true)
             ->whereHas('resources', function ($query) {
                 $query->where('is_active', true);
             })
@@ -283,22 +349,28 @@ class WebController extends Controller
         $totalCases = \App\Models\Resource::where('is_active', true)->where('type', 'case_study')->count();
 
         // Library section
-        $librarySection = \App\Models\Sections::find(\App\Models\Sections::CLINICAL_LIBRARY);
+        $librarySection = Sections::find(Sections::CLINICAL_LIBRARY);
+
+        // Stats section
+        $statsSection = Sections::find(Sections::CLINICAL_STATS);
+
+        // Featured CTA section
+        $featuredSection = Sections::find(Sections::CLINICAL_CONTENT_FEATURE);
 
         // Filtros
-        $resourceSpecialties = \App\Models\ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
-        $resourceTypes = \App\Models\ResourceType::where('is_active', true)->orderBy('name')->get();
+        $resourceSpecialties = ResourceSpecialty::where('is_active', true)->orderBy('name')->get();
+        $resourceTypes = ResourceType::where('is_active', true)->orderBy('name')->get();
 
         // Contadores para filtros
-        $resourceTypeCounts = \App\Models\ResourceType::where('is_active', true)
-            ->withCount(['resources' => function($query) {
+        $resourceTypeCounts = ResourceType::where('is_active', true)
+            ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
             ->orderBy('name')
             ->get();
 
-        $resourceSpecialtyCounts = \App\Models\ResourceSpecialty::where('is_active', true)
-            ->withCount(['resources' => function($query) {
+        $resourceSpecialtyCounts = ResourceSpecialty::where('is_active', true)
+            ->withCount(['resources' => function ($query) {
                 $query->where('is_active', true);
             }])
             ->orderBy('name')
@@ -313,20 +385,20 @@ class WebController extends Controller
             ->get();
 
         // Recursos con filtros
-        $search          = request('search', '');
-        $typeId          = request('type', '');
-        $specialtyId     = request('specialty', '');
-        $format          = request('format', []);
-        $resourceType    = request('resource_type', []);
+        $search = request('search', '');
+        $typeId = request('type', '');
+        $specialtyId = request('specialty', '');
+        $format = request('format', []);
+        $resourceType = request('resource_type', []);
         $resourceSpecialty = request('resource_specialty', []);
-        $sortBy          = request('sort', 'position');
+        $sortBy = request('sort', 'position');
 
         $resourcesQuery = \App\Models\Resource::where('is_active', true);
 
         if ($search) {
             $resourcesQuery->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
+                $q->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
             });
         }
 
@@ -338,31 +410,28 @@ class WebController extends Controller
             $resourcesQuery->where('resource_specialty_id', $specialtyId);
         }
 
-        if (!empty($resourceType)) {
+        if (! empty($resourceType)) {
             $resourcesQuery->whereIn('resource_type_id', (array) $resourceType);
         }
 
-        if (!empty($resourceSpecialty)) {
+        if (! empty($resourceSpecialty)) {
             $resourcesQuery->whereIn('resource_specialty_id', (array) $resourceSpecialty);
         }
 
-        if (!empty($format)) {
+        if (! empty($format)) {
             $resourcesQuery->whereIn('format', (array) $format);
         }
 
         $baseResources = $resourcesQuery
-            ->with(['resourceType','resourceSpecialty'])
+            ->with(['resourceType', 'resourceSpecialty'])
             ->orderBy($sortBy === 'recent' ? 'created_at' : 'position', $sortBy === 'recent' ? 'desc' : 'asc')
             ->get();
 
-        $multiplier = 4;
-        $rawResources = $baseResources->flatMap(fn($r) => array_fill(0, $multiplier, $r));
-
         $perPage = 12;
         $currentPage = (int) request('page', 1);
-        $resources = new \Illuminate\Pagination\LengthAwarePaginator(
-            $rawResources->forPage($currentPage, $perPage)->values(),
-            $rawResources->count(),
+        $resources = new LengthAwarePaginator(
+            $baseResources->forPage($currentPage, $perPage)->values(),
+            $baseResources->count(),
             $perPage,
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
@@ -370,13 +439,15 @@ class WebController extends Controller
 
         return view('web.recursos-clinicos', compact(
             'heroSection', 'totalResources', 'totalSpecialties', 'totalPDFs', 'totalCases',
-            'librarySection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
+            'statsSection', 'librarySection', 'featuredSection', 'resourceSpecialties', 'resourceTypes', 'resourceTypeCounts',
             'resourceSpecialtyCounts', 'formats', 'resources'
         ));
     }
 
     /**
      * Búsqueda AJAX de productos para autocompletado
+     * Busca en: nombre, sinónimo (spanish_name), SKU, referencia de proveedor,
+     * descripción, categoría, marca, línea y dimensiones.
      */
     public function searchProducts(Request $request)
     {
@@ -387,33 +458,43 @@ class WebController extends Controller
             return response()->json([]);
         }
 
-        $products = \App\Models\Product::with(['category', 'brand'])
+        $products = Product::with(['category', 'brand', 'line', 'images'])
             ->where('is_active', true)
-            ->where(function($q) use ($query) {
-                $q->where('name', 'like', '%' . $query . '%')
-                  ->orWhere('description', 'like', '%' . $query . '%')
-                  ->orWhere('sku', 'like', '%' . $query . '%');
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('spanish_name', 'like', '%'.$query.'%')
+                    ->orWhere('sku', 'like', '%'.$query.'%')
+                    ->orWhere('supplier_reference', 'like', '%'.$query.'%')
+                    ->orWhere('description', 'like', '%'.$query.'%')
+                    ->orWhere('dimensions', 'like', '%'.$query.'%')
+                    ->orWhere('material', 'like', '%'.$query.'%')
+                    ->orWhereHas('category', function ($cq) use ($query) {
+                        $cq->where('name', 'like', '%'.$query.'%');
+                    })
+                    ->orWhereHas('brand', function ($bq) use ($query) {
+                        $bq->where('name', 'like', '%'.$query.'%');
+                    })
+                    ->orWhereHas('line', function ($lq) use ($query) {
+                        $lq->where('name', 'like', '%'.$query.'%');
+                    });
             })
             ->orderBy('name')
             ->limit($limit)
             ->get();
 
-        $results = $products->map(function($product, $index) {
-            // Usar las mismas imágenes que la página de producto (im1.png - im6.png)
-            $imagePool = ['im1.png', 'im2.png', 'im3.png', 'im4.png', 'im5.png', 'im6.png'];
-            $imageIndex = $index % count($imagePool);
-            $imageUrl = asset('images/' . $imagePool[$imageIndex]);
-
+        $results = $products->map(function ($product) {
             return [
                 'id' => $product->id,
                 'name' => $product->name,
+                'spanish_name' => $product->spanish_name,
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'sale_price' => $product->sale_price,
-                'image' => $imageUrl,
+                'image' => $product->main_image_url,
                 'category' => $product->category ? $product->category->name : 'Sin categoría',
                 'category_slug' => $product->category ? $product->category->slug : null,
                 'brand' => $product->brand ? $product->brand->name : 'Helin',
+                'line' => $product->line ? $product->line->name : null,
                 'url' => route('producto', ['slug' => $product->slug]),
                 'is_on_sale' => $product->is_on_sale,
                 'is_new' => $product->is_new,
@@ -441,7 +522,7 @@ class WebController extends Controller
      */
     public function solicitudEnviada($uuid)
     {
-        $commercialRequest = \App\Models\CommercialRequest::with(['deliveryMethod', 'paymentMethod', 'whatsappNumber'])
+        $commercialRequest = CommercialRequest::with(['deliveryMethod', 'paymentMethod', 'whatsappNumber'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
@@ -449,13 +530,16 @@ class WebController extends Controller
         $subtotal = 0;
 
         if ($commercialRequest) {
-            $cartData = json_decode($commercialRequest->cart_data, true) ?? [];
+            $cartData = is_array($commercialRequest->cart_data)
+                ? $commercialRequest->cart_data
+                : json_decode($commercialRequest->cart_data, true) ?? [];
             foreach ($cartData as $item) {
-                $product = \App\Models\Product::find($item['id']);
+                $slug = explode('::', $item['id'] ?? '')[0];
+                $product = $slug ? Product::where('slug', $slug)->first() : null;
                 if ($product) {
-                    $cartItems[] = (object)[
+                    $cartItems[] = (object) [
                         'product' => $product,
-                        'quantity' => $item['quantity']
+                        'quantity' => $item['quantity'],
                     ];
                     $subtotal += $product->price * $item['quantity'];
                 }
@@ -465,10 +549,10 @@ class WebController extends Controller
         // Obtener tasa de conversión a Bs. desde la API CV (DolarAPI Venezuela)
         $tasa = 0;
         try {
-            $response = \Illuminate\Support\Facades\Http::timeout(10)
-                ->get('https://ve.dolarapi.com/v1/dolares/oficial');
+            $response = Http::timeout(10)
+                ->get('https://ve.dolarapi.com/v1/euros/oficial');
             if ($response->successful()) {
-                $tasa = (float) ($response->json('promedio') ?? 0);
+                $tasa = (float) number_format($response->json('promedio') ?? 0, 2, '.', '');
             }
         } catch (\Exception $e) {
             report($e);
@@ -477,5 +561,50 @@ class WebController extends Controller
         $total = $subtotal * $tasa;
 
         return view('web.solicitud-enviada', compact('uuid', 'commercialRequest', 'cartItems', 'subtotal', 'tasa', 'total'));
+    }
+
+    /**
+     * Descargar PDF de cotización comercial.
+     */
+    public function downloadCotizacionPdf($uuid)
+    {
+        $commercialRequest = CommercialRequest::with([
+            'customerType',
+            'state',
+            'city',
+            'deliveryMethod',
+            'paymentMethod',
+            'whatsappNumber',
+        ])->where('uuid', $uuid)->firstOrFail();
+
+        $cartItems = [];
+        $subtotal = 0;
+
+        $cartData = is_array($commercialRequest->cart_data)
+            ? $commercialRequest->cart_data
+            : json_decode($commercialRequest->cart_data, true) ?? [];
+
+        foreach ($cartData as $item) {
+            $slug = explode('::', $item['id'] ?? '')[0];
+            $product = $slug ? Product::where('slug', $slug)->first() : null;
+            if ($product) {
+                $cartItems[] = (object) [
+                    'product' => $product,
+                    'quantity' => $item['quantity'] ?? 1,
+                ];
+                $subtotal += $product->price * ($item['quantity'] ?? 1);
+            }
+        }
+
+        $settings = Settings::getSettings();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.cotizacion', [
+            'commercialRequest' => $commercialRequest,
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'settings' => $settings,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream("cotizacion-{$commercialRequest->correlative}.pdf");
     }
 }

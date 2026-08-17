@@ -13,7 +13,7 @@
         'default' => 'bg-white',
         'elevated' => 'bg-white',
         'flat' => 'bg-gray-50',
-        'bordered' => 'bg-white border border-gray-200',
+        'bordered' => 'bg-white border border-line',
         'gradient' => 'bg-gradient-to-br from-blue-50 to-indigo-50'
     ];
     
@@ -36,7 +36,7 @@
     
     $currentVariant = $variantClasses[$variant] ?? $variantClasses['default'];
     $currentPadding = $paddingClasses[$padding] ?? $paddingClasses['normal'];
-    $currentShadow = $shadow ? ($shadowClasses[$shadow] ?? 'shadow-lg') : '';
+    $currentShadow = $shadow ? ($shadowClasses[$shadow] ?? 'shadow-md') : '';
     $hoverClass = $hover ? 'hover:shadow-xl hover:scale-[1.02] transition-all duration-300' : '';
 @endphp
 --}}
@@ -47,8 +47,8 @@
         {$currentPadding}
         {$currentShadow}
         {$hoverClass}
-        rounded-3xl
-        {$bordered ? 'border-gray-200' : ''}
+        rounded-xl
+        {$bordered ? 'border border-line' : ''}
         shadow-black/5
     "])}}
 >
@@ -56,13 +56,13 @@
     @if($title || $subtitle)
         <div class="mb-4 {{ $padding === 'none' ? '' : 'space-y-2' }}">
             @if($title)
-                <h3 class="text-lg font-semibold text-gray-900 {{ $subtitle ? 'text-base' : 'text-lg' }}">
+                <h3 class="text-lg font-semibold text-heading {{ $subtitle ? 'text-base' : 'text-lg' }}">
                     {{ $title }}
                 </h3>
             @endif
             
             @if($subtitle)
-                <p class="text-sm text-gray-600 {{ $title ? '' : 'text-base font-medium' }}">
+                <p class="text-[13px] text-body {{ $title ? '' : 'text-base font-medium' }}">
                     {{ $subtitle }}
                 </p>
             @endif

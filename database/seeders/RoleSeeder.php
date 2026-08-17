@@ -24,22 +24,19 @@ class RoleSeeder extends BaseSeeder
     {
         $roles = [
             [
+                'id' => Role::ADMINISTRATOR,
                 'name' => 'Administrador',
-                'display_name' => 'Administrator',
-                'description' => 'Super administrator with full system access',
-                'is_active' => true,
             ],
             [
+                'id' => Role::EDITOR,
                 'name' => 'Editores',
-                'display_name' => 'Editores',
-                'description' => 'Content editors with limited access',
-                'is_active' => true,
             ],
         ];
 
         foreach ($roles as $role) {
             $createdRole = Role::updateOrCreate(
-                ['name' => $role['name']],
+                ['id' => $role['id']],
+                $role
             );
 
             // Create permissions for this role

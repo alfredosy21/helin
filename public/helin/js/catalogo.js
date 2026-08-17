@@ -180,8 +180,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    async function applyFilters() {
+    async function applyFilters(page) {
         const params = getFilters();
+
+        if (page && page > 1) {
+            params.append('page', page);
+        }
 
         try {
             showLoading();
@@ -219,6 +223,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Re-bind botón limpiar del estado vacío
                 const clearEmpty = document.getElementById('clearFiltersEmpty');
                 if (clearEmpty) clearEmpty.addEventListener('click', clearAll);
+
+                // Re-bind enlaces de paginación
+                productsContent.querySelectorAll('a[href*="page="]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const url = new URL(this.href, window.location.origin);
+                        const page = url.searchParams.get('page');
+                        if (page) applyFilters(parseInt(page));
+                    });
+                });
 
                 // Actualizar URL sin recargar
                 const qs = params.toString();
@@ -301,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             console.log('[Autocompletado] Buscando:', term);
-            const response = await fetch('/api/products/autocomplete?q=' + encodeURIComponent(term), {
+            const response = await fetch('/api/search/products?q=' + encodeURIComponent(term), {
                 method: 'GET',
                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 signal: abortController.signal
@@ -324,15 +338,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let html = '';
         products.forEach(product => {
+            const price = product.is_on_sale && product.sale_price ? product.sale_price : product.price;
+            const formattedPrice = '$' + parseFloat(price || 0).toFixed(2);
+            const productImage = product.image || '';
             html += '<a href="' + product.url + '" class="autocomplete-item flex items-center gap-3 px-4 py-3 hover:bg-turquesa/10 cursor-pointer transition-colors border-b border-helin-border last:border-0">' +
                 '<div class="w-12 h-12 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-helin-border">' +
-                    '<img src="' + product.image + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
+                    '<img src="' + productImage + '" alt="' + escapeHtml(product.name) + '" class="w-full h-full object-contain">' +
                 '</div>' +
                 '<div class="flex-1 min-w-0">' +
                     '<div class="text-sm font-semibold text-helin-heading truncate">' + highlightMatch(product.name, term) + '</div>' +
                     '<div class="text-xs text-helin-text truncate">' + escapeHtml(product.category || 'Helin') + '</div>' +
                 '</div>' +
-                '<div class="text-sm font-bold text-turquesa flex-shrink-0">' + product.formatted_price + '</div>' +
+                '<div class="text-sm font-bold text-turquesa flex-shrink-0">' + formattedPrice + '</div>' +
             '</a>';
         });
 
@@ -443,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
     getParamValues('brand').forEach(v => checkFilter('brand', v));
     getParamValues('material').forEach(v => checkFilter('material', v));
     getParamValues('tag').forEach(v => checkFilter('tag', v));
+    if (urlParams.get('featured') === '1') checkFilter('tag', 'featured');
 
     if (urlParams.has('search') && searchInput) {
         searchInput.value = urlParams.get('search');
@@ -459,3 +477,36 @@ document.addEventListener('DOMContentLoaded', function () {
     updateClearButton();
     renderActiveFilters();
 });
+
+// Ocultar skeleton y mostrar contenido cuando la página carga
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const skeleton = document.getElementById('productsSkeleton');
+        const content = document.getElementById('productsContent');
+
+        if (skeleton && content) {
+            skeleton.style.display = 'none';
+            content.classList.remove('hidden');
+        }
+    }, 500); // Pequeño delay para simular carga inicial
+});
+
+// Mostrar skeleton durante cargas AJAX
+function showProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+    const loading = document.getElementById('catalogLoading');
+
+    if (skeleton) skeleton.style.display = 'grid';
+    if (content) content.classList.add('hidden');
+    if (loading) loading.classList.add('hidden');
+}
+
+// Ocultar skeleton y mostrar contenido
+function hideProductsSkeleton() {
+    const skeleton = document.getElementById('productsSkeleton');
+    const content = document.getElementById('productsContent');
+
+    if (skeleton) skeleton.style.display = 'none';
+    if (content) content.classList.remove('hidden');
+}

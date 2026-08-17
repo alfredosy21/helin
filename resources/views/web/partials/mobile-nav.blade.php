@@ -13,36 +13,44 @@
                 <i class="fas fa-home text-turquesa w-5 text-center"></i> Inicio
             </a>
             <a href="{{ route('catalogo') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
-                <i class="fa fa-list-ul text-turquesa w-5 text-center" aria-hidden="true"></i> Todos los productos
+                <i class="fas fa-th-large text-turquesa w-5 text-center"></i> Todos los Productos
             </a>
             <div class="border-t border-helin-border my-3"></div>
-            <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-tooth text-turquesa w-5 text-center"></i> Implantología
+            <p class="px-4 py-2 text-xs text-helin-text uppercase font-semibold tracking-wide">Categorías</p>
+            @foreach(\App\Models\Category::active()->ordered()->get() as $category)
+                <a href="{{ route('catalogo', ['category' => $category->slug]) }}" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                    <span class="flex items-center gap-3"><i class="fas {{ $category->icon ?? 'fa-th' }} text-helin-text w-5 text-center"></i> {{ $category->name }}</span>
+                    <i class="fas fa-chevron-right text-xs text-helin-text"></i>
+                </a>
+            @endforeach
+            <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-tags text-turquesa w-5 text-center"></i> Ofertas
             </a>
-            <a href="{{ route('catalogo', ['category' => 'regeneracion-guiada-bucal']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-bone text-turquesa w-5 text-center"></i> Regeneración Ósea Guiada
-            </a>
-            <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-toolbox text-turquesa w-5 text-center"></i> Osteosíntesis
-            </a>
-            <a href="{{ route('catalogo', ['category' => 'cuidados-especiales']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-face-smile text-turquesa w-5 text-center"></i> Cuidado Bucal
-            </a>
-            <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-tools text-turquesa w-5 text-center"></i> Instrumentos
-            </a>
-            <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-gears text-turquesa w-5 text-center"></i> Equipos
-            </a>
-            <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-cube text-turquesa w-5 text-center"></i> Planificación Digital
+            <a href="{{ route('recursos-clinicos') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-cloud-download-alt text-turquesa w-5 text-center"></i> Recursos Clínicos
             </a>
             <div class="border-t border-helin-border my-3"></div>
             <a href="{{ route('carrito') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-shopping-cart text-turquesa w-5 text-center"></i> Ir a carrito
+                <i class="fas fa-shopping-cart text-turquesa w-5 text-center"></i> Ir al carrito
             </a>
-            <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+            @php
+                $settings = \App\Models\Settings::getSettings();
+                $mobileOffices = $settings && is_array($settings->offices) ? $settings->offices : [];
+                $mobileWhatsApp = null;
+                foreach ($mobileOffices as $office) {
+                    if (!empty($office['whatsapp'])) {
+                        $mobileWhatsApp = preg_replace('/[^0-9]/', '', $office['whatsapp']);
+                        break;
+                    }
+                }
+            @endphp
+            @if($mobileWhatsApp)
+            <a href="https://wa.me/{{ $mobileWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fab fa-whatsapp text-green-500 w-5 text-center"></i> Escríbenos por WhatsApp
+            </a>
+            @endif
+            <a href="{{ route('solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-file-contract text-turquesa w-5 text-center"></i> Solicitud Comercial
             </a>
         </nav>
     </div>

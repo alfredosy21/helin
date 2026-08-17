@@ -9,7 +9,7 @@
     @php
         $settings = \App\Models\Settings::getSettings();
     @endphp
-    <title>@yield('title', $settings->name ?? 'Helin - Material Dental')</title>
+    <title>@yield('title', $pageSeo?->seo_title ?? $settings->name ?? 'Helin - Material Dental')</title>
     <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
 
     {{-- SEO Meta Tags --}}
@@ -21,12 +21,12 @@
         <meta property="og:description" content="@yield('meta-description', $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud')">
         <meta property="og:type" content="@yield('og-type', 'website')">
         <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:image" content="@yield('og-image', $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-og-default.jpg'))">
+        <meta property="og:image" content="@yield('og-image', $settings->image ? asset('storage/' . $settings->image) : null)">
         <meta property="og:site_name" content="{{ $settings->name ?? 'Helin' }}">
         <meta name="twitter:card" content="@yield('twitter-card', 'summary_large_image')">
         <meta name="twitter:title" content="@yield('title', $settings->name ?? 'Helin - Material Dental')">
         <meta name="twitter:description" content="@yield('meta-description', $settings->description ?? 'Soluciones médicas de alta calidad para profesionales de la salud')">
-        <meta name="twitter:image" content="@yield('twitter-image', $settings->image ? asset('storage/' . $settings->image) : asset('images/helin-twitter-default.jpg'))">
+        <meta name="twitter:image" content="@yield('twitter-image', $settings->image ? asset('storage/' . $settings->image) : null)">
     @else
         <meta name="description" content="@yield('meta-description', 'Soluciones médicas de alta calidad para profesionales de la salud. Especialistas en implantología, reingeniería y cirugía guiada.')">
         <meta name="keywords" content="@yield('meta-keywords', 'implantes, cirugía odontológica, material dental, helin, productos médicos')">
@@ -34,12 +34,15 @@
     @endif
 
     <script src="https://cdn.tailwindcss.com"></script>
+    @if(config('services.recaptcha.enabled'))
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('helin/css/fonts.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/variables.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/helin-components.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/custom-container.css') }}">
-    <link rel="stylesheet" href="{{ asset('helin/css/skeleton.css') }}">
+    <link rel="stylesheet" href="@minAsset('helin/css/fonts.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/variables.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/helin-components.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/custom-container.css')">
+    <link rel="stylesheet" href="@minAsset('helin/css/skeleton.css')">
 
     @yield('styles')
     <!-- Habilitar soporte para @push('styles') si lo usas en el futuro -->
@@ -86,13 +89,13 @@
 
 @include('web.partials.footer')
 
-<script src="{{ asset('helin/js/helin-theme.js') }}"></script>
-<script src="{{ asset('helin/js/lazy-loading.js') }}"></script>
-<script src="{{ asset('helin/js/cart.js') }}"></script>
-<script src="{{ asset('helin/js/cart-toast.js') }}"></script>
-<script src="{{ asset('helin/js/cart-ui.js') }}"></script>
-<script src="{{ asset('helin/js/header-search.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('helin/css/header-search.css') }}">
+<script src="@minAsset('helin/js/helin-theme.js')"></script>
+<script src="@minAsset('helin/js/lazy-loading.js')"></script>
+<script src="@minAsset('helin/js/cart.js')"></script>
+<script src="@minAsset('helin/js/cart-toast.js')"></script>
+<script src="@minAsset('helin/js/cart-ui.js')"></script>
+<script src="@minAsset('helin/js/header-search.js')"></script>
+<link rel="stylesheet" href="@minAsset('helin/css/header-search.css')">
 
 <!-- Mantenemos el yield por si lo usas en otras vistas antiguas -->
 @yield('scripts')

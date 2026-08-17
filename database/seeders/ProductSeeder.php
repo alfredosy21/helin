@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\ProductMedia;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Line;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,30 +19,54 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         DB::table('products')->delete();
+        DB::table('product_media')->delete();
 
         // Obtener categorías y marcas
         $categories = Category::all();
         $brands = Brand::all();
+        $lines = Line::all()->keyBy('slug');
+
+        // Mapear categoría → línea (por slug de línea)
+        $categoryToLine = [
+            'implantologia' => 'implantologia',
+            'regeneracion-guiada-bucal-gbr' => 'regeneracion-osea-guiada',
+            'osteosintesis' => 'osteosintesis',
+            'cuidado-bucal' => 'cuidado-bucal',
+            'instrumentos' => 'instrumentos',
+            'equipos-odontologicos' => 'equipos',
+            'planificacion-digital' => 'planificacion-digital',
+        ];
+
+        // Sinónimos en español por categoría
+        $spanishNames = [
+            'Implantología' => ['Implante Dental', 'Pilar Protésico', 'Kit Quirúrgico', 'Aditamento Implantológico'],
+            'Regeneración' => ['Injerto Óseo', 'Membrana de Regeneración', 'Biomaterial Regenerativo'],
+            'Osteosíntesis' => ['Placa de Fijación', 'Tornillo de Osteosíntesis', 'Sistema de Fijación'],
+            'Cuidado Bucal' => ['Sutura Quirúrgica', 'Producto de Cuidado', 'Material de Higiene'],
+            'Instrumentos' => ['Instrumental Quirúrgico', 'Tijera Quirúrgica', 'Pinza Hemostática'],
+            'Equipos' => ['Equipo Odontológico', 'Motor Quirúrgico', 'Unidad Dental'],
+            'Planificación Digital' => ['Software de Planificación', 'Guía Quirúrgica Digital', 'Escáner Intraoral'],
+        ];
+
+        // Dimensiones por categoría
+        $dimensionsByCategory = [
+            'Implantología' => ['Ø3.3mm L8mm', 'Ø4.1mm L10mm', 'Ø4.8mm L12mm', 'Ø3.5mm L6mm'],
+            'Regeneración' => ['25x25mm',  '30x40mm', '15x20mm', '10x10mm'],
+            'Osteosíntesis' => ['L50mm 1.0mm', 'L60mm 1.3mm', 'L70mm 2.0mm', 'L80mm 2.4mm'],
+            'Cuidado Bucal' => ['L75cm Ø0.3mm', 'L70cm Ø0.4mm', 'L45cm Ø0.5mm', 'L60cm Ø0.2mm'],
+            'Instrumentos' => ['L140mm', 'L160mm', 'L180mm', 'L120mm'],
+            'Equipos' => ['220V 50Hz', '110V 60Hz', '24V DC', '380V 50Hz'],
+            'Planificación Digital' => ['Licencia 1 año', 'Licencia 3 años', 'Hardware+Software', 'Cloud 12 meses'],
+        ];
 
         // Datos base para generar productos
         $productNames = [
-            'Implante' => ['Implante BLX', 'Implante SLA', 'Implante T3', 'Implante Roxolid', 'Implante Regular', 'Implante Wide', 'Implante Narrow', 'Implante Short', 'Implante Standard', 'Implante Plus', 'Implante Active', 'Implante Active BLX', 'Implante Active SLA', 'Implante Active T3', 'Implante Active Roxolid', 'Implante Bone Level', 'Implante Tissue Level', 'Implante CrossFit', 'Implante SynOcta', 'Implante ITI'],
-            'Aditamentos' => ['Pilar Cónico', 'Pilar Cónico Angulado', 'Pilar Cónico Estético', 'Pilar UCLA', 'Pilar Multi-Unit', 'Pilar Ball Abutment', 'Pilar Locator', 'Pilar Gold Adaptor', 'Pilar Titanium Adaptor', 'Pilar Zirconia Adaptor', 'Pilar Temporary', 'Pilar Healing', 'Pilar Gingival Former', 'Pilar Custom Abutment', 'Pilar Screw Retained', 'Pilar Cement Retained', 'Pilar Overdenture', 'Pilar Bar', 'Pilar Telescopic', 'Pilar Attachment'],
-            'Kits Quirúrgicos' => ['Kit Básico', 'Kit Avanzado', 'Kit Premium', 'Kit Estándar', 'Kit Completo', 'Kit Especializado', 'Kit Pro', 'Kit Expert', 'Kit Master', 'Kit Starter', 'Kit Essential', 'Kit Professional', 'Kit Ultimate', 'Kit Deluxe', 'Kit Elite', 'Kit Prime', 'Kit Select', 'Kit Core', 'Kit Basic Plus', 'Kit Advanced Plus'],
-            'Biomateriales' => ['Injerto Óseo', 'Membrana Colágena', 'Matriz Ósea', 'Sustituto Óseo', 'Biomaterial Porcino', 'Biomaterial Bovino', 'Biomaterial Sintético', 'Cemento Óseo', 'Pasta Ósea', 'Bloque Óseo', 'Lámina Cortical', 'Esponja Ósea', 'Gel Hemostático', 'Plasma Rico en Plaquetas', 'Factores de Crecimiento', 'Matriz Derivada', 'Membrana Reabsorbible', 'Membrana No Reabsorbible', 'Parche Óseo', 'Cemento de Fosfato'],
-            'Regeneración Guiada Bucal (GBR)' => ['Membrana GBR', 'Injerto GBR', 'Kit GBR', 'Membrana Colágena GBR', 'Injerto Porcino GBR', 'Injerto Bovino GBR', 'Membrana PTFE', 'Membrana Tiempo', 'Membrana Crosslink', 'Parche GBR', 'Bloque GBR', 'Lámina GBR', 'Esponja GBR', 'Gel GBR', 'Matrix GBR', 'Sistema GBR', 'Kit Completo GBR', 'Kit Básico GBR', 'Kit Avanzado GBR', 'Kit Premium GBR'],
-            'Suturas' => ['Sutura 4-0', 'Sutura 5-0', 'Sutura 3-0', 'Sutura 6-0', 'Sutura 2-0', 'Sutura 7-0', 'Sutura 8-0', 'Sutura Nylon', 'Sutura Seda', 'Sutura Vicryl', 'Sutura PDS', 'Sutura Monocryl', 'Sutura Chromic', 'Sutura Gut', 'Sutura Poliglecaprone', 'Sutura Poliglactin', 'Sutura Polipropileno', 'Sutura Acero', 'Sutura Seda Negra', 'Sutura Seda Blanca'],
-            'Placas' => ['Placa 1.0mm', 'Placa 1.3mm', 'Placa 1.5mm', 'Placa 2.0mm', 'Placa 2.4mm', 'Placa Mini', 'Placa Micro', 'Placa Mandibular', 'Placa Maxilar', 'Placa Reconstrucción', 'Placa Trauma', 'Placa Ortopédica', 'Placa Adaptativa', 'Placa Universal', 'Placa Especializada', 'Placa 3D', 'Placa Anatómica', 'Placa Preformada', 'Placa Personalizada', 'Placa Híbrida'],
-            'Tornillos' => ['Tornillo 2.0mm', 'Tornillo 2.4mm', 'Tornillo 2.7mm', 'Tornillo 3.0mm', 'Tornillo 3.5mm', 'Tornillo 4.0mm', 'Tornillo Mini', 'Tornillo Micro', 'Tornillo Corto', 'Tornillo Largo', 'Tornillo Auto-perforante', 'Tornillo Cortante', 'Tornillo Bicortical', 'Tornillo Monocortical', 'Tornillo Cónico', 'Tornillo Paralelo', 'Tornillo Especializado', 'Tornillo Universal', 'Tornillo Adaptativo', 'Tornillo Híbrido'],
-            'Cajetín' => ['Cajetín Básico', 'Cajetín Estándar', 'Cajetín Premium', 'Cajetín Compacto', 'Cajetín Amplio', 'Cajetín Modular', 'Cajetín Personalizado', 'Cajetín Universal', 'Cajetín Especializado', 'Cajetín Pro', 'Cajetín Expert', 'Cajetín Master', 'Cajetín Elite', 'Cajetín Prime', 'Cajetín Select', 'Cajetín Core', 'Cajetín Basic', 'Cajetín Advanced', 'Cajetín Deluxe', 'Cajetín Ultimate'],
-            'Cuidados Especiales (Quirúrgicos)' => ['Gel Antibacterial', 'Spray Cicatrizante', 'Enjuague Post-Op', 'Compresa Fría', 'Compresa Caliente', 'Manta Térmica', 'Protector Bucal', 'Venda Elástica', 'Gasas Estériles', 'Esponjas Hemostáticas', 'Sellador de Heridas', 'Pomada Antibiótica', 'Crema Cicatrizante', 'Gel Anestésico', 'Spray Anestésico', 'Compresas de Gasas', 'Aftercare Kit', 'Post-Op Kit', 'Recovery Kit', 'Healing Kit'],
-            'Cuidados Diarios (Paciente)' => ['Cepillo Dental', 'Pasta Dental', 'Hilo Dental', 'Enjuague Bucal', 'Cepillo Interdental', 'Raspador Lingual', 'Limpiador Lingual', 'Irrigador Bucal', 'Spray Bucal', 'Chicles Dentales', 'Pastillas Masticables', 'Esterilla Dental', 'Discos Limpiadores', 'Cepillo Sónico', 'Cepillo Eléctrico', 'Hilo Ceroso', 'Hilo Encerado', 'Cinta Dental', 'Enjuague Sin Alcohol'],
-            'Tijeras' => ['Tijera Curva', 'Tijera Recta', 'Tijera Metzenbaum', 'Tijera Mayo', 'Tijera Iris', 'Tijera Stitch', 'Tijera Lister', 'Tijera Gum', 'Tijera Suture', 'Tijera Dissecting', 'Tijera Operating', 'Tijera Bandage', 'Tijera Castroviejo', 'Tijera Stevens', 'Tijera Tenotomy', 'Tijera Potts-Smith', 'Tijera Lahey', 'Tijera Vannas', 'Tijera Noyes'],
-            'Pinzas' => ['Pinza Hemostática', 'Pinza Allis', 'Pinza Babcock', 'Pinza Kocher', 'Pinza Mosquito', 'Pinza Kelly', 'Pinza Adson', 'Pinza Brown-Adson', 'Pinza DeBakey', 'Pinza Russian', 'Pinza Foerster', 'Pinza Hartmann', 'Pinza Lane', 'Pinza Mixter', 'Pinza Ochsner', 'Pinza Rochester', 'Pinza Carmalt', 'Pinza Doyen', 'Pinza Payr', 'Pinza Satinsky'],
-            'Separadores' => ['Separador Farabeuf', 'Separador Senn', 'Separador Gelpi', 'Separador Weitlaner', 'Separador Balfour', 'Separador Finochietto', 'Separador Gelpi Pequeño', 'Separador Hohmann', 'Separador Hoke', 'Separador Jansen', 'Separador Langenbeck', 'Separador Morris', 'Separador Parker', 'Separator Ragnell', 'Separador Richardson', 'Separador Travers', 'Separador Volkmann', 'Separador Wylie', 'Separador Young'],
-            'Cinceles' => ['Cincel Recto', 'Cincel Curvo', 'Cincel Monobein', 'Cincel Bein', 'Cincel Wedge', 'Cincel Fissure', 'Cincel Osteotome', 'Cincel Chisel', 'Cincel Mallet', 'Cincel Rongeur', 'Cincel Bone', 'Cincel Cortical', 'Cincel Cancellous', 'Cincel Curvo Fino', 'Cincel Recto Fino', 'Cincel Especializado', 'Cincel Universal', 'Cincel Adaptativo', 'Cincel Híbrido', 'Cincel Premium'],
-            'Periostótomos' => ['Periostótomos Curvo', 'Periostótomos Recto', 'Periostótomos Molt', 'Periostótomos No. 9', 'Periostótomos No. 4', 'Periostótomos Freer', 'Periostótomos Howarth', 'Periostótomos Cottle', 'Periostótomos Joseph', 'Periostótomos Converse', 'Periostótomos Blair', 'Periostótomos Dingman', 'Periostótomos Aufricht', 'Periostótomos Peer', 'Periostótomos Goldman-Fox', 'Periostótomos Smith', 'Periostótomos Bovie', 'Periostótomos Coleman', 'Periostótomos Bard-Parker'],
-            'Equipos odontológicos' => ['Motor Eléctrico', 'Motor Neumático', 'Pieza de Mano', 'Contraángulo', 'Fresa', 'Lámpara Curing', 'Sistema de Aspiración', 'Sistema de Riego', 'Unidad Dental', 'Sillón Dental', 'Lámpara Dental', 'Escritorio Dental', 'Mesa Auxiliar', 'Carro Instrumental', 'Compresor', 'Autoclave', 'Esterilizador', 'Rayos X', 'Camera Intraoral', 'Scanner Intraoral'],
+            'Implantología' => ['Implante BLX', 'Implante SLA', 'Implante T3', 'Implante Roxolid', 'Implante Regular', 'Implante Wide', 'Implante Narrow', 'Implante Short', 'Implante Standard', 'Implante Plus', 'Implante Active', 'Implante Active BLX', 'Implante Active SLA', 'Implante Active T3', 'Implante Active Roxolid', 'Implante Bone Level', 'Implante Tissue Level', 'Implante CrossFit', 'Implante SynOcta', 'Implante ITI', 'Pilar Cónico', 'Pilar UCLA', 'Pilar Multi-Unit', 'Pilar Locator', 'Pilar Healing', 'Pilar Gingival Former', 'Kit Básico', 'Kit Avanzado', 'Kit Premium', 'Kit Completo'],
+            'Regeneración' => ['Injerto Óseo', 'Membrana Colágena', 'Matriz Ósea', 'Sustituto Óseo', 'Biomaterial Porcino', 'Biomaterial Bovino', 'Biomaterial Sintético', 'Cemento Óseo', 'Pasta Ósea', 'Bloque Óseo', 'Lámina Cortical', 'Esponja Ósea', 'Gel Hemostático', 'Membrana Reabsorbible', 'Membrana No Reabsorbible', 'Parche Óseo', 'Membrana GBR', 'Injerto GBR', 'Kit GBR', 'Membrana PTFE'],
+            'Osteosíntesis' => ['Placa 1.0mm', 'Placa 1.3mm', 'Placa 1.5mm', 'Placa 2.0mm', 'Placa 2.4mm', 'Placa Mini', 'Placa Micro', 'Placa Mandibular', 'Placa Maxilar', 'Placa Reconstrucción', 'Tornillo 2.0mm', 'Tornillo 2.4mm', 'Tornillo 2.7mm', 'Tornillo 3.0mm', 'Tornillo Mini', 'Tornillo Corto', 'Tornillo Largo', 'Tornillo Bicortical', 'Tornillo Monocortical', 'Cajetín Básico'],
+            'Cuidado Bucal' => ['Sutura 4-0', 'Sutura 5-0', 'Sutura 3-0', 'Sutura 6-0', 'Sutura Seda', 'Sutura Vicryl', 'Sutura PDS', 'Sutura Monocryl', 'Gel Antibacterial', 'Spray Cicatrizante', 'Enjuague Post-Op', 'Compresa Fría', 'Gasas Estériles', 'Pomada Antibiótica', 'Crema Cicatrizante', 'Cepillo Dental', 'Pasta Dental', 'Hilo Dental', 'Enjuague Bucal', 'Irrigador Bucal'],
+            'Instrumentos' => ['Kit Básico', 'Kit Avanzado', 'Kit Premium', 'Kit Estándar', 'Tijera Curva', 'Tijera Metzenbaum', 'Tijera Mayo', 'Pinza Hemostática', 'Pinza Allis', 'Pinza Kocher', 'Pinza Adson', 'Separador Farabeuf', 'Separador Senn', 'Separador Gelpi', 'Separador Weitlaner', 'Cincel Recto', 'Cincel Curvo', 'Periostótomos Curvo', 'Periostótomos Recto', 'Periostótomos Molt'],
+            'Equipos' => ['Motor Eléctrico', 'Motor Neumático', 'Pieza de Mano', 'Contraángulo', 'Fresa', 'Lámpara Curing', 'Sistema de Aspiración', 'Sistema de Riego', 'Unidad Dental', 'Sillón Dental', 'Lámpara Dental', 'Mesa Auxiliar', 'Carro Instrumental', 'Compresor', 'Autoclave', 'Esterilizador', 'Rayos X', 'Camera Intraoral', 'Scanner Intraoral', 'Lámpara Dental LED'],
             'Planificación Digital' => ['Software Planificación', 'Guía Quirúrgica', 'Splint Digital', 'Modelo 3D', 'Scanner Intraoral', 'Impresora 3D', 'Máquina CNC', 'Sistema CAD/CAM', 'Software CAD', 'Software CAM', 'Planificador Virtual', 'Simulador Quirúrgico', 'Navegador Quirúrgico', 'Sistema de Imagenología', 'Cone Beam', 'Tomografía', 'Software de Diseño', 'Sistema de Prototipado', 'Software de Análisis', 'Plataforma Cloud'],
         ];
 
@@ -61,17 +87,20 @@ class ProductSeeder extends Seeder
 
         // Categorías con más volumen para que los contadores y filtros se vean representativos
         $categoryVolume = [
-            'Implantes'                           => 50,
-            'Aditamentos'                         => 45,
-            'Biomateriales'                       => 40,
-            'Kits Quirúrgicos'                    => 35,
-            'Regeneración Guiada Bucal (GBR)'     => 30,
-            'Suturas'                             => 30,
-            'Placas'                              => 25,
-            'Tornillos'                           => 25,
-            'Equipos odontológicos'               => 20,
-            'Planificación Digital'               => 20,
+            'Implantología'         => 50,
+            'Regeneración'          => 40,
+            'Osteosíntesis'         => 30,
+            'Cuidado Bucal'         => 30,
+            'Instrumentos'          => 35,
+            'Equipos'               => 20,
+            'Planificación Digital' => 20,
         ];
+
+        // Imágenes disponibles en storage/products/
+        $productImages = ['products/im1.png', 'products/im2.png', 'products/im3.png', 'products/im4.png', 'products/im5.png', 'products/im6.png'];
+
+        // Seed fijo para que los slugs/SKUs sean determinísticos entre ejecuciones
+        mt_srand(20260817);
 
         $skuCounter = 1;
         foreach ($categories as $category) {
@@ -80,22 +109,40 @@ class ProductSeeder extends Seeder
             $total = $categoryVolume[$categoryName] ?? 20;
 
             for ($i = 1; $i <= $total; $i++) {
-                $brand = $brands->random();
+                // Marca determinística por categoría + índice
+                $brand = $brands[$i % $brands->count()];
                 $baseName = $baseNames[($i - 1) % count($baseNames)];
-                $price = rand(25, 500) + (rand(0, 99) / 100);
-                $isOnSale = rand(0, 10) > 7; // 30% de productos en oferta
-                $isNew = rand(0, 10) > 8; // 20% de productos nuevos
-                $isFeatured = rand(0, 10) > 8; // 20% de productos destacados
+                $price = mt_rand(25, 500) + (mt_rand(0, 99) / 100);
+                $isOnSale = mt_rand(0, 10) > 7; // 30% de productos en oferta
+                $isNew = mt_rand(0, 10) > 8; // 20% de productos nuevos
+                $isFeatured = mt_rand(0, 10) > 8; // 20% de productos destacados
 
-                // Generar SKU único con timestamp para evitar duplicados
-                $sku = strtoupper(substr($brand->slug, 0, 3)) . '-' . strtoupper(substr($category->slug, 0, 3)) . '-' . str_pad($skuCounter++, 4, '0', STR_PAD_LEFT) . '-' . time() % 1000;
+                // Generar SKU único (sin timestamp para que sea determinístico)
+                $sku = strtoupper(substr($brand->slug, 0, 3)) . '-' . strtoupper(substr($category->slug, 0, 3)) . '-' . str_pad($skuCounter++, 4, '0', STR_PAD_LEFT) . '-001';
+
+                // Referencia de proveedor
+                $supplierReference = 'REF-' . strtoupper($brand->slug) . '-' . str_pad($i, 4, '0', STR_PAD_LEFT);
+
+                // Sinónimo en español (determinístico)
+                $spanishOptions = $spanishNames[$categoryName] ?? ['Producto Odontológico'];
+                $spanishName = $spanishOptions[$i % count($spanishOptions)] . ' ' . $brand->name;
+
+                // Dimensiones (determinísticas)
+                $dimOptions = $dimensionsByCategory[$categoryName] ?? ['Estándar'];
+                $dimensions = $dimOptions[$i % count($dimOptions)];
+
+                // Línea asociada
+                $lineSlug = $categoryToLine[$category->slug] ?? null;
+                $lineId = $lineSlug && isset($lines[$lineSlug]) ? $lines[$lineSlug]->id : null;
 
                 $product = [
                     'name' => "{$baseName} {$brand->name} - {$categoryName}",
+                    'spanish_name' => $spanishName,
                     'slug' => Str::slug("{$baseName}-{$brand->name}-{$categoryName}-{$i}"),
                     'sku' => $sku,
+                    'supplier_reference' => $supplierReference,
                     'brand_id' => $brand->id,
-                    'description' => $descriptions[array_rand($descriptions)] . " Ideal para {$category->name}. Fabricado con materiales de alta calidad para garantizar durabilidad, precisión y seguridad en cada procedimiento.",
+                    'description' => $descriptions[$i % count($descriptions)] . " Ideal para {$category->name}. Fabricado con materiales de alta calidad para garantizar durabilidad, precisión y seguridad en cada procedimiento.",
                     'clinical_specs' => json_encode([
                         'material' => 'Titanio Grado 5',
                         'esterilizacion' => 'Autoclave 134°C',
@@ -104,29 +151,46 @@ class ProductSeeder extends Seeder
                     ]),
                     'price' => $price,
                     'currency' => 'USD',
-                    'stock' => rand(10, 100),
-                    'unit' => $units[array_rand($units)],
+                    'stock' => mt_rand(10, 100),
+                    'unit' => $units[$i % count($units)],
                     'meta_title' => "{$baseName} {$brand->name} - {$category->name} | Helin",
                     'meta_description' => "Compra {$baseName} {$brand->name} para {$category->name}. Alta calidad y garantía en Helin.",
                     'meta_keywords' => "{$category->slug}, {$brand->slug}, {$baseName}, odontología, cirugía dental",
+                    'material' => ['Titanio Grado 5', 'Acero Inoxidable', 'Colágeno', 'Cerámica', 'PEEK'][$i % 5],
+                    'dimensions' => $dimensions,
                     'category_id' => $category->id,
+                    'line_id' => $lineId,
                     'is_active' => true,
                     'is_featured' => $isFeatured,
                     'is_new' => $isNew,
                     'is_on_sale' => $isOnSale,
                     'sale_price' => $isOnSale ? $price * 0.85 : null,
-                    'sale_start_date' => $isOnSale ? now()->subDays(rand(1, 30)) : null,
-                    'sale_end_date' => $isOnSale ? now()->addDays(rand(30, 90)) : null,
-                    'view_count' => rand(0, 500),
-                    'search_count' => rand(0, 200),
-                    'rating' => rand(35, 50) / 10,
-                    'review_count' => rand(0, 50),
-                    'published_at' => now()->subDays(rand(1, 365)),
-                    'created_at' => now()->subDays(rand(1, 365)),
+                    'sale_start_date' => $isOnSale ? now()->subDays(mt_rand(1, 30)) : null,
+                    'sale_end_date' => $isOnSale ? now()->addDays(mt_rand(30, 90)) : null,
+                    'view_count' => mt_rand(0, 500),
+                    'search_count' => mt_rand(0, 200),
+                    'rating' => mt_rand(35, 50) / 10,
+                    'review_count' => mt_rand(0, 50),
+                    'published_at' => now()->subDays(mt_rand(1, 365)),
+                    'created_at' => now()->subDays(mt_rand(1, 365)),
                     'updated_at' => now(),
                 ];
 
-                Product::create($product);
+                $createdProduct = Product::create($product);
+
+                // Crear registro de media para el producto
+                $imagePath = $productImages[$i % count($productImages)];
+                ProductMedia::create([
+                    'product_id' => $createdProduct->id,
+                    'file_path' => $imagePath,
+                    'file_name' => basename($imagePath),
+                    'mime_type' => 'image/png',
+                    'type' => 'image',
+                    'alt_text' => $product['name'],
+                    'title' => $product['name'],
+                    'is_main' => true,
+                    'position' => 0,
+                ]);
             }
         }
     }

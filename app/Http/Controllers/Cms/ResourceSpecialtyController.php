@@ -2,38 +2,54 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Models\Module;
 use App\Models\ResourceSpecialty;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Title;
+use App\Models\Submodule;
+use App\Utils\CmsAccess;
 use Livewire\Attributes\Layout;
-use Illuminate\Support\Str;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 #[Title('Gestión de Especialidades de Recursos | Helin CMS')]
 #[Layout('cms.layouts.dashboard')]
 class ResourceSpecialtyController extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $showForm = false;
+
     public $editingId = null;
 
     // Form fields
     public $name;
+
     public $description;
+
     public $is_active = true;
+
     public $position = 0;
 
     // File upload
     public $image;
+
     public ?string $current_image = null;
+
+    public $banner_title;
+
+    public $banner_description;
+
+    public $banner_image;
+
+    public ?string $current_banner_image = null;
 
     // Filters
     public $search = '';
+
     public $perPage = 10;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -41,10 +57,12 @@ class ResourceSpecialtyController extends Component
         'is_active' => 'boolean',
         'position' => 'integer|min:0',
         'image' => 'nullable|image|max:2048',
+        'banner_image' => 'nullable|image|max:2048',
     ];
 
     public function mount()
     {
+        CmsAccess::authorize(Module::CONTENT, Submodule::RESOURCE_SPECIALTIES, __('cms.abort.resource_specialties'));
         $this->resetFilters();
     }
 
@@ -54,15 +72,15 @@ class ResourceSpecialtyController extends Component
 
         // Apply search
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%');
             });
         }
 
         // Order by position
         $resourceSpecialties = $query->orderBy('position')->orderBy('updated_at', 'desc')
-                                   ->paginate($this->perPage);
+            ->paginate($this->perPage);
 
         return view('cms.resource-specialties.index', compact('resourceSpecialties'));
     }
@@ -83,7 +101,10 @@ class ResourceSpecialtyController extends Component
         $this->description = $resourceSpecialty->description;
         $this->is_active = $resourceSpecialty->is_active;
         $this->position = $resourceSpecialty->position;
+        $this->banner_title = $resourceSpecialty->banner_title;
+        $this->banner_description = $resourceSpecialty->banner_description;
         $this->current_image = $resourceSpecialty->image;
+        $this->current_banner_image = $resourceSpecialty->banner_image;
 
         $this->showForm = true;
     }
@@ -96,15 +117,24 @@ class ResourceSpecialtyController extends Component
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
+            'banner_title' => $this->banner_title,
+            'banner_description' => $this->banner_description,
         ];
 
         // Handle image upload
         if ($this->image) {
-            $filename = time() . '_' . $this->image->getClientOriginalName();
+            $filename = time().'_'.$this->image->getClientOriginalName();
             $path = $this->image->storeAs('resource-specialties', $filename, 'public');
             $data['image'] = $path;
         } elseif ($this->editingId) {
             $data['image'] = $this->current_image;
+        }
+
+        if ($this->banner_image) {
+            $filename = time().'_'.$this->banner_image->getClientOriginalName();
+            $data['banner_image'] = $this->banner_image->storeAs('resource-specialties/banners', $filename, 'public');
+        } elseif ($this->editingId) {
+            $data['banner_image'] = $this->current_banner_image;
         }
 
         if ($this->editingId) {
@@ -135,6 +165,7 @@ class ResourceSpecialtyController extends Component
         // Check if there are associated resources
         if ($resourceSpecialty->resources()->count() > 0) {
             $this->dispatch('toast', message: 'No se puede eliminar la especialidad porque tiene recursos asociados', type: 'error');
+
             return;
         }
 
@@ -154,7 +185,8 @@ class ResourceSpecialtyController extends Component
     {
         $this->reset([
             'name', 'description',
-            'is_active', 'position', 'image', 'current_image'
+            'is_active', 'position', 'image', 'current_image',
+            'banner_title', 'banner_description', 'banner_image', 'current_banner_image',
         ]);
 
         $this->is_active = true;
