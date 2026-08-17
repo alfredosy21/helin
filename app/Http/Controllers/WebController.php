@@ -233,9 +233,9 @@ class WebController extends Controller
             }
         }
 
-        $activeNumbers = WhatsAppNumber::with('state')->where('is_active', true)->get();
+        $activeNumbers = WhatsAppNumber::with('states')->where('is_active', true)->get();
         foreach ($activeNumbers as $number) {
-            $state = $number->state;
+            $state = $number->states->first();
             if (! $state) {
                 continue;
             }
