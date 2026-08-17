@@ -108,7 +108,7 @@ class Menus extends Model {
     public function setUrlAttribute($value) {
         $value = strtolower($value);
         $value = mb_strtolower($value, 'UTF-8');
-        $value = preg_replace('/[^a-zA-Z0-9?#%[\]&=\/[\]-_.:\s]/s', '', $value);
+        $value = preg_replace('/[^a-zA-Z0-9?#%&=\/_.:\s\[\]\-]/s', '', $value);
         $value = str_replace('https://', 'http://', $value);
         $value = str_replace('www.', 'http://', $value);
         $value = str_replace('http://http://', 'http://', $value);

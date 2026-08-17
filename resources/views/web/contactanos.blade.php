@@ -19,7 +19,9 @@
         ]
     ])
 
-    <h1 class="page-title">Contáctanos</h1>
+    <header class="policies-header">
+        <h1 class="page-title">Contáctanos</h1>
+    </header>
 
     <section class="contact-layout">
         <aside class="info-block">

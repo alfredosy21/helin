@@ -19,10 +19,9 @@
       position: relative;
       overflow: hidden;
       " @endif>
-            <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 lg:gap-8 items-center">
+            <div class="hero-inner relative max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-14 lg:py-20 flex items-center justify-center lg:justify-start">
          <!-- Hero Copy -->
-         <div class="hero-copy text-center lg:text-left">
-            <small class="block text-xs font-black uppercase tracking-wide mb-3 text-[#123F4A]">Precisión para cada procedimiento</small>
+         <div class="hero-copy text-center lg:text-left max-w-3xl">
             <h1 class="text-4xl sm:text-5xl lg:text-7xl leading-tight mb-3 sm:mb-4" style="letter-spacing: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.25);">
                {!! $heroSection->content !!}
             </h1>
@@ -85,7 +84,7 @@
                <img src="{{ asset('storage/' . $featuredCategory->image) }}" alt="{{ $featuredCategory->name }}" class="category-featured-bg hidden md:block">
                @endif
                <div class="category-featured-content">
-                  <small class="block text-turquesa text-xs font-black mb-2">{{ $featuredCategory->banner_title ?? 'Soluciones especializadas' }}</small>
+                  <small class="block text-turquesa text-xs font-black mb-2">{{ $featuredCategory->subtitle ?? $featuredCategory->banner_title ?? 'Soluciones especializadas' }}</small>
                   <h2 class="text-3xl lg:text-4xl leading-none mb-4" style="letter-spacing: 0;">{{ $featuredCategory->name }}</h2>
                   <a href="{{ route('catalogo', ['category' => $featuredCategory->slug]) }}" class="text-link">Ver categoría →</a>
                </div>
@@ -112,7 +111,7 @@
                @endphp
 @forelse($categoryCards as $cardIndex => $categoryCard)
                     @include('web.components.category-card', [
-                        'categorySubtitle' => $categoryCard->banner_title ?: 'Productos Helin',
+                        'categorySubtitle' => $categoryCard->subtitle ?: ($categoryCard->banner_title ?: 'Productos Helin'),
                         'categoryTitle' => $categoryCard->name,
                         'categoryLink' => route('catalogo', ['category' => $categoryCard->slug]),
                         'categoryImage' => $categoryCard->image ? asset('storage/' . $categoryCard->image) : $homeDefaultCategoryImage,

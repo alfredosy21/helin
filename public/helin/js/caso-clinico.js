@@ -21,6 +21,21 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.hash) {
         activateTab(window.location.hash.substring(1));
     }
+
+    // Indicador de scroll horizontal de los tabs (solo móvil/tablet)
+    const nav = document.getElementById('tabsNav');
+    const hint = document.getElementById('tabsScrollHint');
+
+    if (nav && hint) {
+        const checkScroll = function () {
+            const maxScroll = nav.scrollWidth - nav.clientWidth;
+            hint.classList.toggle('hidden', maxScroll <= 2 || nav.scrollLeft >= maxScroll - 4);
+        };
+
+        nav.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+        checkScroll();
+    }
 });
 
 function copyPageLink(button) {

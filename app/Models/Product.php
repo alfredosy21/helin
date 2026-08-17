@@ -28,8 +28,10 @@ class Product extends Model {
      */
     protected $fillable = [
         'name',
+        'spanish_name',
         'slug',
         'sku',
+        'supplier_reference',
         'brand_id',
         'description',
         'clinical_specs',
@@ -43,10 +45,12 @@ class Product extends Model {
         'seo_description',
         'seo_keywords',
         'material',
+        'dimensions',
         'is_biomaterial',
         'system_product_id',
         'product_platform_id',
         'category_id',
+        'line_id',
         'is_active',
         'is_featured',
         'is_new',
@@ -91,6 +95,15 @@ class Product extends Model {
      */
     public function category(): BelongsTo {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get the line that owns the product.
+     *
+     * @return BelongsTo<Line, Product>
+     */
+    public function line(): BelongsTo {
+        return $this->belongsTo(Line::class);
     }
 
     /**
@@ -165,7 +178,7 @@ class Product extends Model {
      */
     public function attributeValues(): BelongsToMany {
         return $this->belongsToMany(AttributeValue::class, 'attribute_value_product')
-                        ->withPivot(['notes', 'numeric_value', 'text_value'])
+                        ->withPivot(['notes', 'numeric_value', 'text_value', 'price', 'sale_price', 'sku'])
                         ->withTimestamps();
     }
 

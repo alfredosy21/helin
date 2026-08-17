@@ -42,6 +42,8 @@ class Sections extends Model
 
     const MISSION_VISION = 14; // Misión y Visión
 
+    const COMPANY_VALUES = 28; // Nuestros Valores
+
     const TEAM = 15; // Un equipo que te acompaña
 
     const ALLIES = 16; // Trabajamos junto a marcas líderes

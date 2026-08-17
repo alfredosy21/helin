@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductMedia;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Line;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -23,6 +24,40 @@ class ProductSeeder extends Seeder
         // Obtener categorías y marcas
         $categories = Category::all();
         $brands = Brand::all();
+        $lines = Line::all()->keyBy('slug');
+
+        // Mapear categoría → línea (por slug de línea)
+        $categoryToLine = [
+            'implantologia' => 'implantologia',
+            'regeneracion-guiada-bucal-gbr' => 'regeneracion-osea-guiada',
+            'osteosintesis' => 'osteosintesis',
+            'cuidado-bucal' => 'cuidado-bucal',
+            'instrumentos' => 'instrumentos',
+            'equipos-odontologicos' => 'equipos',
+            'planificacion-digital' => 'planificacion-digital',
+        ];
+
+        // Sinónimos en español por categoría
+        $spanishNames = [
+            'Implantología' => ['Implante Dental', 'Pilar Protésico', 'Kit Quirúrgico', 'Aditamento Implantológico'],
+            'Regeneración' => ['Injerto Óseo', 'Membrana de Regeneración', 'Biomaterial Regenerativo'],
+            'Osteosíntesis' => ['Placa de Fijación', 'Tornillo de Osteosíntesis', 'Sistema de Fijación'],
+            'Cuidado Bucal' => ['Sutura Quirúrgica', 'Producto de Cuidado', 'Material de Higiene'],
+            'Instrumentos' => ['Instrumental Quirúrgico', 'Tijera Quirúrgica', 'Pinza Hemostática'],
+            'Equipos' => ['Equipo Odontológico', 'Motor Quirúrgico', 'Unidad Dental'],
+            'Planificación Digital' => ['Software de Planificación', 'Guía Quirúrgica Digital', 'Escáner Intraoral'],
+        ];
+
+        // Dimensiones por categoría
+        $dimensionsByCategory = [
+            'Implantología' => ['Ø3.3mm L8mm', 'Ø4.1mm L10mm', 'Ø4.8mm L12mm', 'Ø3.5mm L6mm'],
+            'Regeneración' => ['25x25mm',  '30x40mm', '15x20mm', '10x10mm'],
+            'Osteosíntesis' => ['L50mm 1.0mm', 'L60mm 1.3mm', 'L70mm 2.0mm', 'L80mm 2.4mm'],
+            'Cuidado Bucal' => ['L75cm Ø0.3mm', 'L70cm Ø0.4mm', 'L45cm Ø0.5mm', 'L60cm Ø0.2mm'],
+            'Instrumentos' => ['L140mm', 'L160mm', 'L180mm', 'L120mm'],
+            'Equipos' => ['220V 50Hz', '110V 60Hz', '24V DC', '380V 50Hz'],
+            'Planificación Digital' => ['Licencia 1 año', 'Licencia 3 años', 'Hardware+Software', 'Cloud 12 meses'],
+        ];
 
         // Datos base para generar productos
         $productNames = [
@@ -64,6 +99,9 @@ class ProductSeeder extends Seeder
         // Imágenes disponibles en storage/products/
         $productImages = ['products/im1.png', 'products/im2.png', 'products/im3.png', 'products/im4.png', 'products/im5.png', 'products/im6.png'];
 
+        // Seed fijo para que los slugs/SKUs sean determinísticos entre ejecuciones
+        mt_srand(20260817);
+
         $skuCounter = 1;
         foreach ($categories as $category) {
             $categoryName = $category->name;
@@ -71,22 +109,40 @@ class ProductSeeder extends Seeder
             $total = $categoryVolume[$categoryName] ?? 20;
 
             for ($i = 1; $i <= $total; $i++) {
-                $brand = $brands->random();
+                // Marca determinística por categoría + índice
+                $brand = $brands[$i % $brands->count()];
                 $baseName = $baseNames[($i - 1) % count($baseNames)];
-                $price = rand(25, 500) + (rand(0, 99) / 100);
-                $isOnSale = rand(0, 10) > 7; // 30% de productos en oferta
-                $isNew = rand(0, 10) > 8; // 20% de productos nuevos
-                $isFeatured = rand(0, 10) > 8; // 20% de productos destacados
+                $price = mt_rand(25, 500) + (mt_rand(0, 99) / 100);
+                $isOnSale = mt_rand(0, 10) > 7; // 30% de productos en oferta
+                $isNew = mt_rand(0, 10) > 8; // 20% de productos nuevos
+                $isFeatured = mt_rand(0, 10) > 8; // 20% de productos destacados
 
-                // Generar SKU único con timestamp para evitar duplicados
-                $sku = strtoupper(substr($brand->slug, 0, 3)) . '-' . strtoupper(substr($category->slug, 0, 3)) . '-' . str_pad($skuCounter++, 4, '0', STR_PAD_LEFT) . '-' . time() % 1000;
+                // Generar SKU único (sin timestamp para que sea determinístico)
+                $sku = strtoupper(substr($brand->slug, 0, 3)) . '-' . strtoupper(substr($category->slug, 0, 3)) . '-' . str_pad($skuCounter++, 4, '0', STR_PAD_LEFT) . '-001';
+
+                // Referencia de proveedor
+                $supplierReference = 'REF-' . strtoupper($brand->slug) . '-' . str_pad($i, 4, '0', STR_PAD_LEFT);
+
+                // Sinónimo en español (determinístico)
+                $spanishOptions = $spanishNames[$categoryName] ?? ['Producto Odontológico'];
+                $spanishName = $spanishOptions[$i % count($spanishOptions)] . ' ' . $brand->name;
+
+                // Dimensiones (determinísticas)
+                $dimOptions = $dimensionsByCategory[$categoryName] ?? ['Estándar'];
+                $dimensions = $dimOptions[$i % count($dimOptions)];
+
+                // Línea asociada
+                $lineSlug = $categoryToLine[$category->slug] ?? null;
+                $lineId = $lineSlug && isset($lines[$lineSlug]) ? $lines[$lineSlug]->id : null;
 
                 $product = [
                     'name' => "{$baseName} {$brand->name} - {$categoryName}",
+                    'spanish_name' => $spanishName,
                     'slug' => Str::slug("{$baseName}-{$brand->name}-{$categoryName}-{$i}"),
                     'sku' => $sku,
+                    'supplier_reference' => $supplierReference,
                     'brand_id' => $brand->id,
-                    'description' => $descriptions[array_rand($descriptions)] . " Ideal para {$category->name}. Fabricado con materiales de alta calidad para garantizar durabilidad, precisión y seguridad en cada procedimiento.",
+                    'description' => $descriptions[$i % count($descriptions)] . " Ideal para {$category->name}. Fabricado con materiales de alta calidad para garantizar durabilidad, precisión y seguridad en cada procedimiento.",
                     'clinical_specs' => json_encode([
                         'material' => 'Titanio Grado 5',
                         'esterilizacion' => 'Autoclave 134°C',
@@ -95,32 +151,35 @@ class ProductSeeder extends Seeder
                     ]),
                     'price' => $price,
                     'currency' => 'USD',
-                    'stock' => rand(10, 100),
-                    'unit' => $units[array_rand($units)],
+                    'stock' => mt_rand(10, 100),
+                    'unit' => $units[$i % count($units)],
                     'meta_title' => "{$baseName} {$brand->name} - {$category->name} | Helin",
                     'meta_description' => "Compra {$baseName} {$brand->name} para {$category->name}. Alta calidad y garantía en Helin.",
                     'meta_keywords' => "{$category->slug}, {$brand->slug}, {$baseName}, odontología, cirugía dental",
+                    'material' => ['Titanio Grado 5', 'Acero Inoxidable', 'Colágeno', 'Cerámica', 'PEEK'][$i % 5],
+                    'dimensions' => $dimensions,
                     'category_id' => $category->id,
+                    'line_id' => $lineId,
                     'is_active' => true,
                     'is_featured' => $isFeatured,
                     'is_new' => $isNew,
                     'is_on_sale' => $isOnSale,
                     'sale_price' => $isOnSale ? $price * 0.85 : null,
-                    'sale_start_date' => $isOnSale ? now()->subDays(rand(1, 30)) : null,
-                    'sale_end_date' => $isOnSale ? now()->addDays(rand(30, 90)) : null,
-                    'view_count' => rand(0, 500),
-                    'search_count' => rand(0, 200),
-                    'rating' => rand(35, 50) / 10,
-                    'review_count' => rand(0, 50),
-                    'published_at' => now()->subDays(rand(1, 365)),
-                    'created_at' => now()->subDays(rand(1, 365)),
+                    'sale_start_date' => $isOnSale ? now()->subDays(mt_rand(1, 30)) : null,
+                    'sale_end_date' => $isOnSale ? now()->addDays(mt_rand(30, 90)) : null,
+                    'view_count' => mt_rand(0, 500),
+                    'search_count' => mt_rand(0, 200),
+                    'rating' => mt_rand(35, 50) / 10,
+                    'review_count' => mt_rand(0, 50),
+                    'published_at' => now()->subDays(mt_rand(1, 365)),
+                    'created_at' => now()->subDays(mt_rand(1, 365)),
                     'updated_at' => now(),
                 ];
 
                 $createdProduct = Product::create($product);
 
                 // Crear registro de media para el producto
-                $imagePath = $productImages[array_rand($productImages)];
+                $imagePath = $productImages[$i % count($productImages)];
                 ProductMedia::create([
                     'product_id' => $createdProduct->id,
                     'file_path' => $imagePath,

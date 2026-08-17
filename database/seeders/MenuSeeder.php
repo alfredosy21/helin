@@ -44,11 +44,11 @@ class MenuSeeder extends Seeder
 
         // Children de Implantología
         $implantologiaChildren = [
-            ['title' => 'Implantes', 'url' => '/catalogo?category[]=implantologia', 'position' => 1],
-            ['title' => 'Aditamentos', 'url' => '/catalogo?category[]=aditamentos', 'position' => 2],
-            ['title' => 'Kits Quirúrgicos', 'url' => '/catalogo?category[]=kits-quirurgicos', 'position' => 3],
-            ['title' => 'Biomateriales', 'url' => '/catalogo?category[]=biomateriales', 'position' => 4],
-            ['title' => 'Regeneración Guiada Bucal', 'url' => '/catalogo?category[]=regeneracion-guiada-bucal-gbr', 'position' => 5],
+            ['title' => 'Implantes', 'url' => '/catalogo?category=implantologia', 'position' => 1],
+            ['title' => 'Aditamentos', 'url' => '/catalogo?category=aditamentos', 'position' => 2],
+            ['title' => 'Kits Quirúrgicos', 'url' => '/catalogo?category=kits-quirurgicos', 'position' => 3],
+            ['title' => 'Biomateriales', 'url' => '/catalogo?tag=biomaterial', 'position' => 4],
+            ['title' => 'Regeneración Guiada Bucal', 'url' => '/catalogo?category=regeneracion-guiada-bucal-gbr', 'position' => 5],
         ];
         foreach ($implantologiaChildren as $child) {
             Menus::create(array_merge($child, [
@@ -64,9 +64,9 @@ class MenuSeeder extends Seeder
 
         // Children de Osteosíntesis
         $osteosintesisChildren = [
-            ['title' => 'Placas', 'url' => '/catalogo?category[]=placas', 'position' => 1],
-            ['title' => 'Tornillos', 'url' => '/catalogo?category[]=tornillos', 'position' => 2],
-            ['title' => 'Suturas', 'url' => '/catalogo?category[]=suturas', 'position' => 3],
+            ['title' => 'Placas', 'url' => '/catalogo?category=placas-osteosintesis', 'position' => 1],
+            ['title' => 'Tornillos', 'url' => '/catalogo?category=tornillos-osteosintesis', 'position' => 2],
+            ['title' => 'Suturas', 'url' => '/catalogo?category=suturas', 'position' => 3],
         ];
         foreach ($osteosintesisChildren as $child) {
             Menus::create(array_merge($child, [
@@ -82,12 +82,12 @@ class MenuSeeder extends Seeder
 
         // Children de Instrumentos
         $instrumentosChildren = [
-            ['title' => 'Tijeras', 'url' => '/catalogo?category[]=tijeras', 'position' => 1],
-            ['title' => 'Pinzas', 'url' => '/catalogo?category[]=pinzas', 'position' => 2],
-            ['title' => 'Separadores', 'url' => '/catalogo?category[]=separadores', 'position' => 3],
-            ['title' => 'Cinceles', 'url' => '/catalogo?category[]=cinceles', 'position' => 4],
-            ['title' => 'Periostótomos', 'url' => '/catalogo?category[]=periostomos', 'position' => 5],
-            ['title' => 'Cajetín', 'url' => '/catalogo?category[]=cajetin', 'position' => 6],
+            ['title' => 'Tijeras', 'url' => '/catalogo?category=tijeras', 'position' => 1],
+            ['title' => 'Pinzas', 'url' => '/catalogo?category=pinzas', 'position' => 2],
+            ['title' => 'Separadores', 'url' => '/catalogo?category=separadores', 'position' => 3],
+            ['title' => 'Cinceles', 'url' => '/catalogo?category=cinceles', 'position' => 4],
+            ['title' => 'Periostótomos', 'url' => '/catalogo?category=periostomos', 'position' => 5],
+            ['title' => 'Cajetín', 'url' => '/catalogo?category=cajetin-osteosintesis', 'position' => 6],
         ];
         foreach ($instrumentosChildren as $child) {
             Menus::create(array_merge($child, [
@@ -103,8 +103,8 @@ class MenuSeeder extends Seeder
 
         // Children de Planificación digital
         $planificacionChildren = [
-            ['title' => 'Planificación Digital', 'url' => '/catalogo?category[]=planificacion-digital', 'position' => 1],
-            ['title' => 'Equipos odontológicos', 'url' => '/catalogo?category[]=equipos-odontologicos', 'position' => 2],
+            ['title' => 'Planificación Digital', 'url' => '/catalogo?category=planificacion-digital', 'position' => 1],
+            ['title' => 'Equipos odontológicos', 'url' => '/catalogo?category=equipos-odontologicos', 'position' => 2],
         ];
         foreach ($planificacionChildren as $child) {
             Menus::create(array_merge($child, [
@@ -123,7 +123,7 @@ class MenuSeeder extends Seeder
         // Columna 1: Implantología
         $megaImplantologia = Menus::create([
             'title' => 'Implantología',
-            'url' => '/catalogo?category[]=implantologia',
+            'url' => '/catalogo?category=implantologia',
             'type' => 4,
             'position' => 1,
             'parent_id' => null,
@@ -149,7 +149,7 @@ class MenuSeeder extends Seeder
         foreach (['Implantes' => 'implantologia', 'Aditamentos' => 'aditamentos', 'Kits' => 'kits-quirurgicos'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaImplantologiaAb->id,
@@ -176,7 +176,7 @@ class MenuSeeder extends Seeder
         foreach (['Implantes' => 'implantologia', 'Aditamentos' => 'aditamentos', 'Kits' => 'kits-quirurgicos'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaImplantologiaGdt->id,
@@ -191,7 +191,7 @@ class MenuSeeder extends Seeder
         // Columna 2: Regeneración Ósea Guiada
         $megaRegeneracion = Menus::create([
             'title' => 'Regeneración Ósea Guiada',
-            'url' => '/catalogo?category[]=regeneracion',
+            'url' => '/catalogo?category=regeneracion-guiada-bucal-gbr',
             'type' => 4,
             'position' => 2,
             'parent_id' => null,
@@ -201,7 +201,7 @@ class MenuSeeder extends Seeder
             'icon' => 'fa-bone',
             'image' => null,
         ]);
-        foreach (['Biomateriales' => 'tag=biomaterial', 'Regeneración Guiada Bucal' => 'category[]=regeneracion-guiada-bucal', 'Suturas' => 'category[]=suturas'] as $title => $query) {
+        foreach (['Biomateriales' => 'tag=biomaterial', 'Regeneración Guiada Bucal' => 'category=regeneracion-guiada-bucal-gbr', 'Suturas' => 'category=suturas'] as $title => $query) {
             Menus::create([
                 'title' => $title,
                 'url' => "/catalogo?{$query}",
@@ -219,7 +219,7 @@ class MenuSeeder extends Seeder
         // Columna 3: Osteosíntesis
         $megaOsteosintesis = Menus::create([
             'title' => 'Osteosíntesis',
-            'url' => '/catalogo?category[]=osteosintesis',
+            'url' => '/catalogo?category=osteosintesis',
             'type' => 4,
             'position' => 3,
             'parent_id' => null,
@@ -232,7 +232,7 @@ class MenuSeeder extends Seeder
         foreach (['Placas' => 'placas-osteosintesis', 'Tornillos' => 'tornillos-osteosintesis', 'Cajetín' => 'cajetin-osteosintesis'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaOsteosintesis->id,
@@ -247,7 +247,7 @@ class MenuSeeder extends Seeder
         // Columna 4: Cuidado Bucal
         $megaCuidado = Menus::create([
             'title' => 'Cuidado Bucal',
-            'url' => '/catalogo?category[]=cuidado-bucal',
+            'url' => '/catalogo?category=cuidado-bucal',
             'type' => 4,
             'position' => 4,
             'parent_id' => null,
@@ -260,7 +260,7 @@ class MenuSeeder extends Seeder
         foreach (['Cuidados Especiales' => 'cuidados-especiales', 'Cuidados Diarios' => 'cuidados-diarios'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaCuidado->id,
@@ -275,7 +275,7 @@ class MenuSeeder extends Seeder
         // Columna 5: Instrumentos y Equipos
         $megaInstrumentos = Menus::create([
             'title' => 'Instrumentos',
-            'url' => '/catalogo?category[]=instrumentos',
+            'url' => '/catalogo?category=instrumentos',
             'type' => 4,
             'position' => 5,
             'parent_id' => null,
@@ -285,10 +285,10 @@ class MenuSeeder extends Seeder
             'icon' => 'fa-tools',
             'image' => null,
         ]);
-        foreach (['Tijeras' => 'tijeras', 'Pinzas' => 'pinzas', 'Separadores' => 'separadores', 'Cinceles' => 'cinceles', 'Periostótomos' => 'periostotomos'] as $title => $slug) {
+        foreach (['Tijeras' => 'tijeras', 'Pinzas' => 'pinzas', 'Separadores' => 'separadores', 'Cinceles' => 'cinceles', 'Periostótomos' => 'periostomos'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaInstrumentos->id,
@@ -315,7 +315,7 @@ class MenuSeeder extends Seeder
         foreach (['Equipos odontológicos' => 'equipos-odontologicos', 'Piezas de mano' => 'piezas-de-mano', 'Motores' => 'motores-odontologicos'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaEquiposGroup->id,
@@ -330,7 +330,7 @@ class MenuSeeder extends Seeder
         // Columna 6: Planificación Digital
         $megaPlanificacion = Menus::create([
             'title' => 'Planificación Digital',
-            'url' => '/catalogo?category[]=planificacion-digital',
+            'url' => '/catalogo?category=planificacion-digital',
             'type' => 4,
             'position' => 6,
             'parent_id' => null,
@@ -343,7 +343,7 @@ class MenuSeeder extends Seeder
         foreach (['Planificación Digital' => 'planificacion-digital', 'Impresión 3D' => 'impresion-3d', 'Escaneo Intraoral' => 'escaneo-intraoral', 'PD Completa' => 'pd-completa'] as $title => $slug) {
             Menus::create([
                 'title' => $title,
-                'url' => "/catalogo?category[]={$slug}",
+                'url' => "/catalogo?category={$slug}",
                 'type' => 4,
                 'position' => 1,
                 'parent_id' => $megaPlanificacion->id,

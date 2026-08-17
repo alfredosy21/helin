@@ -30,6 +30,9 @@
 
     $initSearch   = request('search', '');
     $initCategory = request('category', '');
+    if (is_array($initCategory)) {
+        $initCategory = $initCategory[0] ?? '';
+    }
 
     /**
      * Get current category if filter is applied
@@ -40,7 +43,9 @@
     }
 @endphp
 
-<main class="container mx-auto px-4 py-8">
+<hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
+
+<main class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
     @php
     $breadcrumbItems = [
         ['label' => 'Inicio', 'url' => route('home'), 'linkAttributes' => 'class="hover:text-turquesa"']

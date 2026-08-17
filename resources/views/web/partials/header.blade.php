@@ -1,5 +1,5 @@
 <!-- Barra Informativa Superior -->
-<div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20">
+<div class="bg-turquesa text-white text-xs sm:text-sm border-b border-white/20 hidden sm:block">
     <div class='container mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-y-1.5 gap-x-3 sm:gap-4 text-center'>
         @php
             $settings = \App\Models\Settings::getSettings();
@@ -11,7 +11,7 @@
 
 <!-- Barra de Navegación Principal -->
 <header class='bg-turquesa sticky top-0 z-50'>
-    <div class="container mx-auto px-3 sm:px-4 py-2 sm:py-4">
+    <div class="w-full mx-auto px-3 sm:px-4 lg:max-w-[1200px] lg:px-10 py-2 sm:py-4">
         <div class='flex items-center gap-2 sm:gap-6'>
             @php
                 $settings = \App\Models\Settings::getSettings();
@@ -108,7 +108,7 @@
     <div class='hidden lg:block bg-white border-t border-helin-border relative'>
         <!-- Menú Desktop -->
         <div class='py-3'>
-            <div class="flex items-center container mx-auto px-4">
+            <div class="flex items-center w-full max-w-[1200px] mx-auto px-10">
                 <!-- Productos - Posición fija izquierda -->
                 <nav class='flex items-center text-sm'>
                     <!-- Productos con Mega Menú -->

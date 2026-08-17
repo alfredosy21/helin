@@ -19,7 +19,18 @@
       @endphp
       <h2 class="text-2xl lg:text-3xl leading-none" style="letter-spacing: 0;">
          @if($nearSection && $nearSection->status == 1 && $nearSection->status_content == 1)
-            <span class="text-turquesa">{{ $nearSection->title }}</span>
+            @php
+                $nearTitle = $nearSection->title ?? '';
+                $nearComma = strpos($nearTitle, ',');
+                if ($nearComma !== false) {
+                    $nearHead = trim(substr($nearTitle, 0, $nearComma));
+                    $nearTail = trim(substr($nearTitle, $nearComma + 1));
+                } else {
+                    $nearHead = $nearTitle;
+                    $nearTail = '';
+                }
+            @endphp
+            <span class="text-turquesa">{{ $nearHead }}</span>@if($nearTail), {{ $nearTail }}@endif
          @else
             <span class="text-turquesa">Estamos cerca de ti,</span> donde construyes salud oral
          @endif
@@ -31,11 +42,13 @@
              $nearMessage = 'Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.';
              $nearLinks = [];
              foreach ($nearOffices as $nearOffice) {
+                 $nearActive = isset($nearOffice['active']) ? (bool) $nearOffice['active'] : true;
+                 if (!$nearActive) continue;
                  $nearWhatsapp = $nearOffice['whatsapp'] ?? null;
                  if (!$nearWhatsapp) continue;
                  $nearPhone = preg_replace('/[^0-9]/', '', $nearWhatsapp);
                  if (!$nearPhone) continue;
-                 $nearCityName = ucfirst($nearOffice['city'] ?? '');
+                 $nearCityName = ucfirst($nearOffice['city'] ?? $nearOffice['name'] ?? '');
                  if (!$nearCityName) continue;
                  $nearLinks[$nearCityName] = 'https://wa.me/' . $nearPhone . '?text=' . urlencode($nearMessage);
              }

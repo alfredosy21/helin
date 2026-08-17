@@ -12,7 +12,9 @@
 @endpush
 
 @section('content')
-<main class="container mx-auto px-4 py-8">
+<hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
+
+<main class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
     @include('web.components.breadcrumb', [
         'attributes' => 'text-sm mb-6',
         'items' => [
@@ -70,13 +72,22 @@
 
             <!-- Selector de Dimensiones -->
             @php
-                $dimensionOptions = $product->attributeValues->map(function ($av) {
+                $dimensionOptions = $product->attributeValues->map(function ($av) use ($product) {
                     $rawValue = $av->label ?? $av->value;
                     $numPart = preg_replace('/[^0-9.]/', '', (string) $rawValue);
                     $skuSuffix = $numPart !== '' ? str_replace('.', '', $numPart) : '';
+
+                    // Precio y SKU específicos de la dimensión desde el pivot
+                    $dimPrice = $av->pivot->price !== null ? (float) $av->pivot->price : (float) $product->price;
+                    $dimSalePrice = $av->pivot->sale_price !== null ? (float) $av->pivot->sale_price : ($product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null);
+                    $dimSku = $av->pivot->sku ?: ($product->sku ? $product->sku . '-' . $skuSuffix : '');
+
                     return [
                         'label' => $rawValue,
                         'suffix' => $skuSuffix,
+                        'price' => $dimPrice,
+                        'sale_price' => $dimSalePrice,
+                        'sku' => $dimSku,
                     ];
                 })->filter(function ($opt) {
                     return $opt['label'] !== '';
@@ -85,12 +96,12 @@
                 $hasDimensions = count($dimensionOptions) > 0;
                 $defaultDimension = $hasDimensions
                     ? $dimensionOptions[0]
-                    : ['label' => '', 'suffix' => ''];
-                $dimensionPrices = collect($dimensionOptions)->mapWithKeys(function ($opt) use ($product) {
+                    : ['label' => '', 'suffix' => '', 'price' => (float) $product->price, 'sale_price' => ($product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null), 'sku' => $product->sku ?? ''];
+                $dimensionPrices = collect($dimensionOptions)->mapWithKeys(function ($opt) {
                     return [$opt['label'] => [
-                        'base' => (float) $product->price,
-                        'sale' => $product->is_on_sale && $product->sale_price ? (float) $product->sale_price : null,
-                        'sku' => $product->sku ? $product->sku . '-' . $opt['suffix'] : '',
+                        'base' => $opt['price'],
+                        'sale' => $opt['sale_price'],
+                        'sku' => $opt['sku'],
                     ]];
                 })->all();
             @endphp
@@ -122,8 +133,8 @@
                     data-slug="{{ $product->slug }}"
                     data-name="{{ $product->name }}"
                     data-brand="{{ $product->brand->name ?? 'Helin' }}"
-                    data-price="{{ $product->is_on_sale && $product->sale_price ? $product->sale_price : $product->price }}"
-                    data-sku="{{ $product->sku ? ($hasDimensions ? $product->sku . '-' . $defaultDimension['suffix'] : $product->sku) : '' }}"
+                    data-price="{{ $defaultDimension['sale_price'] ?? $defaultDimension['price'] }}"
+                    data-sku="{{ $defaultDimension['sku'] }}"
                     data-dimension="{{ $defaultDimension['label'] }}"
                     data-image="{{ $product->main_image_url }}">
                     <i class="fas fa-cart-plus mr-2"></i>Añadir al carrito
@@ -135,7 +146,7 @@
                 @if($product->sku)
                     <div class="flex flex-wrap items-center gap-1.5 text-sm">
                         <span class="font-bold text-helin-heading">SKU:</span>
-                        <span class="text-helin-heading/90" id="productSkuValue">{{ $product->sku }}{{ $hasDimensions ? '-' . $defaultDimension['suffix'] : '' }}</span>
+                        <span class="text-helin-heading/90" id="productSkuValue">{{ $defaultDimension['sku'] }}</span>
                     </div>
                 @endif
 
@@ -258,6 +269,8 @@
             @endif
         </div>
     </section>
+
+    <hr class="border-helin-border mb-0">
 </main>
 
 @include('web.partials.beneficios')

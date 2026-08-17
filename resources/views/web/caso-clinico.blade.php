@@ -73,11 +73,16 @@
         <div class="clinical-photo" @if($resource->image_url) style="background-image: url('{{ $resource->image_url }}'); background-size: cover; background-position: center;" @endif></div>
     </section>
 
-    <nav class="tabs">
-        <a class="tab active" href="#descripcion">Descripción</a>
-        <a class="tab" href="#materiales">Materiales utilizados</a>
-        <a class="tab" href="#resultados">Resultados</a>
-    </nav>
+    <div class="tabs-wrapper">
+        <nav class="tabs" id="tabsNav">
+            <a class="tab active" href="#descripcion">Descripción</a>
+            <a class="tab" href="#materiales">Materiales utilizados</a>
+            <a class="tab" href="#resultados">Resultados</a>
+        </nav>
+        <span class="tabs-scroll-hint" id="tabsScrollHint" aria-hidden="true">
+            <i class="fas fa-chevron-right"></i>
+        </span>
+    </div>
 
     <section class="content-layout">
         <div class="tab-panels">

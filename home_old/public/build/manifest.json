@@ -1,0 +1,28 @@
+{
+  "resources/cms/css/app.css": {
+    "file": "assets/app-8XoGHyp5.css",
+    "src": "resources/cms/css/app.css",
+    "isEntry": true
+  },
+  "resources/cms/js/app.js": {
+    "file": "assets/app-Ciyvy2ID.js",
+    "name": "app",
+    "src": "resources/cms/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-D8KwI9wr.css"
+    ]
+  },
+  "resources/cms/js/auth.js": {
+    "file": "assets/auth-IKEdyrAp.js",
+    "name": "auth",
+    "src": "resources/cms/js/auth.js",
+    "isEntry": true
+  },
+  "resources/cms/js/dashboard.js": {
+    "file": "assets/dashboard-DikYzkof.js",
+    "name": "dashboard",
+    "src": "resources/cms/js/dashboard.js",
+    "isEntry": true
+  }
+}

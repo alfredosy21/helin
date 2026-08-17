@@ -1,0 +1,73 @@
+/* MallOn-inspired Container Styles - Optimized margins for all screen sizes */
+.container {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+/* Small screens - Mobile first approach */
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px !important;
+    }
+}
+
+/* Medium screens - Tablets */
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px !important;
+    }
+}
+
+/* Large screens - Small desktops */
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px !important;
+    }
+}
+
+/* Extra Large screens - Desktops */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 95vw !important;
+    }
+}
+
+/* XXL screens - Large desktops */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 95vw !important;
+    }
+}
+
+/* Ultra-wide screens - 1600px+ */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 95vw !important;
+    }
+}
+
+/* 4K screens - 1920px+ */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 60vw !important;
+    }
+}
+
+/* Ultra-wide 4K+ - 2560px+ */
+@media (min-width: 2560px) {
+    .container {
+        max-width: 65vw !important;
+    }
+}
+
+/* Maximum cap for extremely large screens */
+@media (min-width: 3840px) {
+    .container {
+        max-width: 70vw !important;
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+    }
+}

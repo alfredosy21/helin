@@ -222,7 +222,7 @@ HTML,
                 'image' => null,
                 'name_button' => 'Ver todos los productos →',
                 'url_button' => 'catalogo',
-                'category_slug' => 'regeneracion',
+                'category_slug' => 'regeneracion-guiada-bucal-gbr',
                 'status' => 1,
                 'status_content' => 1,
                 'content' => <<<HTML
@@ -555,6 +555,66 @@ HTML,
 </div>
 HTML,
             ],
+            // ==========================================
+            // ---------- NUESTROS VALORES --------------
+            // ==========================================
+            Sections::COMPANY_VALUES => [
+                'title' => 'Nuestros Valores',
+                'subtitle' => 'Valores',
+                'description' => 'Creemos en construir relaciones de confianza con los especialistas, ofreciendo respaldo, conocimiento y soluciones pensadas para su práctica profesional.',
+                'image' => null,
+                'layout_type' => self::LAYOUT_VALUE_GRID,
+                'icon_style' => self::ICON_CUSTOM,
+                'items' => json_encode([
+                    'value_grid' => [
+                        [
+                            'number' => '01',
+                            'icon' => 'far fa-handshake',
+                            'title' => 'Cercanía Profesional',
+                            'text' => 'Atendemos al especialista con criterio técnico, pero también con una relación humana, clara y accesible.',
+                            'row' => 1,
+                            'order' => 1,
+                        ],
+                        [
+                            'number' => '02',
+                            'icon' => 'fas fa-shield-halved',
+                            'title' => 'Responsabilidad Clínica',
+                            'text' => 'Sabemos que cada decisión impacta un procedimiento real, por eso actuamos con seriedad y precisión.',
+                            'row' => 1,
+                            'order' => 2,
+                        ],
+                        [
+                            'number' => '03',
+                            'icon' => 'fas fa-bolt',
+                            'title' => 'Servicio Ágil',
+                            'text' => 'Buscamos responder con rapidez, claridad y soluciones concretas a las necesidades del profesional.',
+                            'row' => 2,
+                            'order' => 3,
+                        ],
+                        [
+                            'number' => '04',
+                            'icon' => 'fas fa-lightbulb',
+                            'title' => 'Formación Continua',
+                            'text' => 'Creemos en compartir conocimiento, apoyar la educación y fortalecer la práctica de los especialistas.',
+                            'row' => 2,
+                            'order' => 4,
+                        ],
+                        [
+                            'number' => '05',
+                            'icon' => 'fas fa-people-group',
+                            'title' => 'Respaldo Integral',
+                            'text' => 'Ofrecemos más que productos: ofrecemos orientación, soporte y soluciones conectadas entre sí.',
+                            'row' => 2,
+                            'order' => 5,
+                        ],
+                    ]
+                ]),
+                'content' => null,
+                'name_button' => null,
+                'url_button' => '#nuestros-valores',
+                'status' => 1,
+                'status_content' => 1,
+            ],
             Sections::TEAM => [
                 'title' => 'Un equipo que te acompaña',
                 'image' => 'sections/team_helin_test.png',
@@ -598,7 +658,7 @@ HTML,
 HTML,
             ],
             Sections::NEAR_YOU => [
-                'title' => 'Estamos cerca de ti',
+                'title' => 'Estamos cerca de ti, donde construyes salud oral',
                 'image' => null,
                 'name_button' => null,
                 'url_button' => '#',
@@ -606,13 +666,7 @@ HTML,
                 'status_content' => 1,
                 'content' => <<<HTML
 <div class="location-icon">⌖</div>
-<p>donde construyes salud oral</p>
-<div class="cities-list">
-    <div class="city-item">Caracas</div>
-    <div class="city-item">Valencia</div>
-    <div class="city-item">Barquisimeto</div>
-    <div class="city-item">Maracaibo</div>
-</div>
+<p>Caracas · Valencia · Barquisimeto · Maracaibo</p>
 HTML,
             ],
             Sections::CTA_COMPANY => [

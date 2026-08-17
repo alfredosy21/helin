@@ -129,6 +129,58 @@
         @endif
     </section>
 
+    <!-- Nuestros Valores -->
+    @php
+        $valuesJson = $valuesSection ? (json_decode($valuesSection->items, true) ?: []) : [];
+        $valuesItems = $valuesJson['value_grid'] ?? $valuesJson['items'] ?? $valuesJson;
+        $valuesRow1 = array_filter($valuesItems, fn($v) => ($v['row'] ?? 1) == 1);
+        $valuesRow2 = array_filter($valuesItems, fn($v) => ($v['row'] ?? 2) == 2);
+    @endphp
+    @if($valuesSection && $valuesSection->status == 1 && $valuesSection->status_content == 1 && count($valuesItems) > 0)
+    <section class="valores-section" id="nuestros-valores">
+        <div class="valores-layout">
+            <div class="valores-header">
+                <span class="section-label">{{ $valuesSection->subtitle ?? 'Valores' }}</span>
+                <h2 class="valores-title">{{ $valuesSection->title }}</h2>
+                <div class="valores-accent-line"></div>
+                @if($valuesSection->description)
+                    <p class="valores-description">{{ $valuesSection->description }}</p>
+                @endif
+            </div>
+            <div class="valores-cards">
+                @if(count($valuesRow1) > 0)
+                <div class="valores-row valores-row--2">
+                    @foreach($valuesRow1 as $valor)
+                        <div class="valor-card">
+                            <div class="valor-icon">
+                                <i class="{{ $valor['icon'] ?? 'fas fa-circle' }}"></i>
+                            </div>
+                            <div class="valor-line"></div>
+                            <h4 class="valor-number-title">{{ $valor['number'] ?? '' }}.&nbsp;{{ $valor['title'] ?? '' }}</h4>
+                            <p class="valor-text">{{ $valor['text'] ?? $valor['description'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                @endif
+                @if(count($valuesRow2) > 0)
+                <div class="valores-row valores-row--3">
+                    @foreach($valuesRow2 as $valor)
+                        <div class="valor-card">
+                            <div class="valor-icon">
+                                <i class="{{ $valor['icon'] ?? 'fas fa-circle' }}"></i>
+                            </div>
+                            <div class="valor-line"></div>
+                            <h4 class="valor-number-title">{{ $valor['number'] ?? '' }}.&nbsp;{{ $valor['title'] ?? '' }}</h4>
+                            <p class="valor-text">{{ $valor['text'] ?? $valor['description'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
     <!-- Team Section -->
     <section class="section-card team" id="nuestro-team">
         <div>
@@ -192,9 +244,9 @@
                 $companyWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
             @endphp
             @if($companyWhatsApp)
-            <a href="https://wa.me/{{ $companyWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <a href="https://wa.me/{{ $companyWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="cta-btn-helin"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
             @endif
-            <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Enviar un correo</a>
+            <a href="{{ route('contactanos') }}" class="cta-btn-helin btn-white"><i class="fas fa-envelope"></i> Enviar un correo</a>
         </div>
     </section>
 </main>

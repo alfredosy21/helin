@@ -13,6 +13,8 @@ class LineSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('lines')->delete();
+
         $lines = [
             [
                 'name' => 'Implantología',

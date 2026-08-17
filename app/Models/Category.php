@@ -32,6 +32,7 @@ class Category extends Model {
         'slug',
         'image',
         'description',
+        'subtitle',
         'seo_description',
         'seo_keywords',
         'parent_id',

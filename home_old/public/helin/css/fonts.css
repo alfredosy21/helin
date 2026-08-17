@@ -1,0 +1,82 @@
+/* Fuentes locales - Helin */
+
+/* ==========================================
+   BARLOW CONDENSED
+   ========================================== */
+@font-face {
+    font-family: 'Barlow Condensed Bold';
+    src: url('fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Barlow Condensed SemiBold';
+    src: url('fonts/Barlow_Condensed/BarlowCondensed-SemiBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Barlow Condensed Medium';
+    src: url('fonts/Barlow_Condensed/BarlowCondensed-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+/* ==========================================
+   BARLOW
+   ========================================== */
+@font-face {
+    font-family: 'Barlow SemiBold';
+    src: url('fonts/Barlow/Barlow-SemiBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Barlow Medium';
+    src: url('fonts/Barlow/Barlow-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url('fonts/Barlow/Barlow-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+/* ==========================================
+   INTER
+   ========================================== */
+@font-face {
+    font-family: 'Inter SemiBold';
+    src: url('fonts/Inter/inter.28pt-semibold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Inter Medium';
+    src: url('fonts/Inter/inter.18pt-medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter/inter.regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}

@@ -79,7 +79,7 @@ class WebController extends Controller
         }
 
         // Get products with filters
-        $query = Product::with(['category', 'brand', 'images'])
+        $query = Product::with(['category', 'brand', 'line', 'images'])
             ->where('is_active', true);
 
         // Apply category filter if present
@@ -139,8 +139,21 @@ class WebController extends Controller
         if ($searchTerm) {
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('spanish_name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('sku', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('supplier_reference', 'like', '%'.$searchTerm.'%')
                     ->orWhere('description', 'like', '%'.$searchTerm.'%')
-                    ->orWhere('sku', 'like', '%'.$searchTerm.'%');
+                    ->orWhere('dimensions', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('material', 'like', '%'.$searchTerm.'%')
+                    ->orWhereHas('category', function ($cq) use ($searchTerm) {
+                        $cq->where('name', 'like', '%'.$searchTerm.'%');
+                    })
+                    ->orWhereHas('brand', function ($bq) use ($searchTerm) {
+                        $bq->where('name', 'like', '%'.$searchTerm.'%');
+                    })
+                    ->orWhereHas('line', function ($lq) use ($searchTerm) {
+                        $lq->where('name', 'like', '%'.$searchTerm.'%');
+                    });
             });
         }
 
@@ -296,11 +309,12 @@ class WebController extends Controller
         $companyHeroSection = Sections::find(Sections::COMPANY_HERO);
         $aboutSection = Sections::find(Sections::ABOUT_US);
         $missionSection = Sections::find(Sections::MISSION_VISION);
+        $valuesSection = Sections::find(Sections::COMPANY_VALUES);
         $teamSection = Sections::find(Sections::TEAM);
         $alliesSection = Sections::find(Sections::ALLIES);
         $ctaSection = Sections::find(Sections::CTA_COMPANY);
 
-        return view('web.nuestra-empresa', compact('companyHeroSection', 'aboutSection', 'missionSection', 'teamSection', 'alliesSection', 'ctaSection'));
+        return view('web.nuestra-empresa', compact('companyHeroSection', 'aboutSection', 'missionSection', 'valuesSection', 'teamSection', 'alliesSection', 'ctaSection'));
     }
 
     /**
@@ -432,6 +446,8 @@ class WebController extends Controller
 
     /**
      * Búsqueda AJAX de productos para autocompletado
+     * Busca en: nombre, sinónimo (spanish_name), SKU, referencia de proveedor,
+     * descripción, categoría, marca, línea y dimensiones.
      */
     public function searchProducts(Request $request)
     {
@@ -442,12 +458,25 @@ class WebController extends Controller
             return response()->json([]);
         }
 
-        $products = Product::with(['category', 'brand', 'images'])
+        $products = Product::with(['category', 'brand', 'line', 'images'])
             ->where('is_active', true)
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('spanish_name', 'like', '%'.$query.'%')
+                    ->orWhere('sku', 'like', '%'.$query.'%')
+                    ->orWhere('supplier_reference', 'like', '%'.$query.'%')
                     ->orWhere('description', 'like', '%'.$query.'%')
-                    ->orWhere('sku', 'like', '%'.$query.'%');
+                    ->orWhere('dimensions', 'like', '%'.$query.'%')
+                    ->orWhere('material', 'like', '%'.$query.'%')
+                    ->orWhereHas('category', function ($cq) use ($query) {
+                        $cq->where('name', 'like', '%'.$query.'%');
+                    })
+                    ->orWhereHas('brand', function ($bq) use ($query) {
+                        $bq->where('name', 'like', '%'.$query.'%');
+                    })
+                    ->orWhereHas('line', function ($lq) use ($query) {
+                        $lq->where('name', 'like', '%'.$query.'%');
+                    });
             })
             ->orderBy('name')
             ->limit($limit)
@@ -457,6 +486,7 @@ class WebController extends Controller
             return [
                 'id' => $product->id,
                 'name' => $product->name,
+                'spanish_name' => $product->spanish_name,
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'sale_price' => $product->sale_price,
@@ -464,6 +494,7 @@ class WebController extends Controller
                 'category' => $product->category ? $product->category->name : 'Sin categoría',
                 'category_slug' => $product->category ? $product->category->slug : null,
                 'brand' => $product->brand ? $product->brand->name : 'Helin',
+                'line' => $product->line ? $product->line->name : null,
                 'url' => route('producto', ['slug' => $product->slug]),
                 'is_on_sale' => $product->is_on_sale,
                 'is_new' => $product->is_new,
