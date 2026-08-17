@@ -42,7 +42,7 @@
                                 @php
                                     $categories = \App\Models\Category::active()->ordered()->get();
                                 @endphp
-                                <select name='category' onchange='this.form.submit()' class='bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold'>
+                                <select name='category' id='header-category-select' class='bg-transparent text-helin-heading text-xs outline-none cursor-pointer w-full font-semibold'>
                                     <option value=''>Todas las categorías</option>
                                     @foreach($categories as $category)
                                         <option value='{{ $category->slug }}' {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>

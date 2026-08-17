@@ -108,27 +108,6 @@ class SettingsController extends Component
     /** @var array<int, array{value: string, label: string, active: bool}> Contact subject list */
     public array $contact_subjects = [];
 
-    /** @var string|null Office WhatsApp links and locations */
-    public ?string $caracas_whatsapp = null;
-
-    public ?string $caracas_location = null;
-
-    public ?string $valencia_whatsapp = null;
-
-    public ?string $valencia_location = null;
-
-    public ?string $barquisimeto_whatsapp = null;
-
-    public ?string $barquisimeto_location = null;
-
-    public ?string $maracay_whatsapp = null;
-
-    public ?string $maracay_location = null;
-
-    public ?string $maracaibo_whatsapp = null;
-
-    public ?string $maracaibo_location = null;
-
     /**
      * Component Validation Rules.
      *
@@ -146,7 +125,7 @@ class SettingsController extends Component
             'opinion_url' => 'nullable|url|max:500',
             'offices' => 'nullable|array',
             'offices.*.name' => 'nullable|string|max:255',
-            'offices.*.url' => 'nullable|url|max:500',
+            'offices.*.url' => 'nullable|string|max:500',
             'offices.*.whatsapp' => 'nullable|string|max:50',
             'offices.*.active' => 'boolean',
             'contact_subjects' => 'nullable|array',
@@ -177,11 +156,6 @@ class SettingsController extends Component
             'name', 'email', 'address', 'tagline', 'contact_address', 'phone', 'shedule', 'copy',
             'facebook', 'instagram', 'linkedin', 'youtube',
             'keywords', 'description', 'settings_description', 'analytics_code',
-            'caracas_whatsapp', 'caracas_location',
-            'valencia_whatsapp', 'valencia_location',
-            'barquisimeto_whatsapp', 'barquisimeto_location',
-            'maracay_whatsapp', 'maracay_location',
-            'maracaibo_whatsapp', 'maracaibo_location',
             'opinion_url',
         ]));
 
@@ -234,16 +208,6 @@ class SettingsController extends Component
                 'description' => $this->description,
                 'settings_description' => $this->settings_description,
                 'analytics_code' => $this->analytics_code,
-                'caracas_whatsapp' => $this->caracas_whatsapp,
-                'caracas_location' => $this->caracas_location,
-                'valencia_whatsapp' => $this->valencia_whatsapp,
-                'valencia_location' => $this->valencia_location,
-                'barquisimeto_whatsapp' => $this->barquisimeto_whatsapp,
-                'barquisimeto_location' => $this->barquisimeto_location,
-                'maracay_whatsapp' => $this->maracay_whatsapp,
-                'maracay_location' => $this->maracay_location,
-                'maracaibo_whatsapp' => $this->maracaibo_whatsapp,
-                'maracaibo_location' => $this->maracaibo_location,
                 'opinion_url' => $this->opinion_url,
                 'offices' => array_values($this->offices),
                 'contact_subjects' => array_values($this->contact_subjects),

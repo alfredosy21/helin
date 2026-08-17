@@ -202,7 +202,6 @@
 .search-result-title mark {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
-    padding: 1px 3px;
     border-radius: 3px;
     font-weight: 700;
 }

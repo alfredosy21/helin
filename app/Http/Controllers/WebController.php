@@ -209,47 +209,51 @@ class WebController extends Controller
         $settings = Settings::getSettings();
 
         $pickups = [];
-        $settings = is_object($settings) ? $settings : null;
 
-        // Zonas por ciudad: desde Settings->offices (cast array) o fallback por convención
-        $defaultOffices = ['caracas' => 1, 'valencia' => 2, 'barquisimeto' => 3, 'maracaibo' => 4, 'maracay' => 5];
-        $settingsOffices = $settings && is_array($settings->offices) ? $settings->offices : [];
-        $offices = [];
-        $officeData = [];
-        foreach ($settingsOffices as $office) {
-            $cityKey = strtolower(trim((string) ($office['city'] ?? '')));
-            if ($cityKey !== '') {
-                $offices[$cityKey] = (int) ($office['zone'] ?? $defaultOffices[$cityKey] ?? 0);
-                $officeData[$cityKey] = $office;
-            }
-        }
-        $offices = $offices ?: $defaultOffices;
+        // Zonas comerciales: mapeo de código de estado → zona
+        $stateZoneMap = [
+            // Zona 1 - Caracas
+            'DC' => 1, 'MI' => 1, 'VA' => 1, 'AN' => 1, 'SU' => 1, 'MO' => 1, 'NE' => 1, 'DF' => 1, 'BO' => 1,
+            // Zona 2 - Valencia
+            'CA' => 2, 'AR' => 2, 'CO' => 2, 'GU' => 2, 'AP' => 2, 'AM' => 2,
+            // Zona 3 - Barquisimeto
+            'LA' => 3, 'YA' => 3, 'PO' => 3, 'BA' => 3, 'ME' => 3, 'TR' => 3, 'TA' => 3,
+            // Zona 4 - Maracaibo
+            'ZU' => 4, 'FA' => 4,
+        ];
 
-        $officeByPhone = [];
-        foreach ($offices as $city => $zone) {
-            $whatsapp = $officeData[$city]['whatsapp'] ?? null;
-            if ($whatsapp) {
-                $officeByPhone[preg_replace('/[^0-9]/', '', $whatsapp)] = ['city' => $city, 'zone' => $zone];
-            }
-        }
+        // Direcciones por zona
+        $zoneData = [
+            1 => ['label' => 'Caracas',  'location' => 'CCCT, Torre C, Oficina 13-07, Caracas'],
+            2 => ['label' => 'Valencia', 'location' => 'CC Otama, Nivel 2, Local 2-2, Valencia, Edo. Carabobo'],
+            3 => ['label' => 'Barquisimeto', 'location' => 'Centro Empresarial Plaza Madrid, Piso 4, Oficina 4-9, Barquisimeto, Edo. Lara'],
+            4 => ['label' => 'Maracaibo', 'location' => 'CC Terraza 77, Piso 1, Local L-15, Maracaibo, Edo. Zulia'],
+        ];
 
+        // WhatsApp numbers activos para info de contacto
         $activeNumbers = WhatsAppNumber::with('states')->where('is_active', true)->get();
+        $phoneByState = [];
         foreach ($activeNumbers as $number) {
             $state = $number->states->first();
-            if (! $state) {
+            if ($state) {
+                $phoneByState[$state->code] = $number->formatted_number;
+            }
+        }
+
+        // Construir pickups por estado
+        foreach ($states as $state) {
+            $zone = $stateZoneMap[$state->code] ?? null;
+            if (!$zone || !isset($zoneData[$zone])) {
                 continue;
             }
 
-            $phoneDigits = preg_replace('/[^0-9]/', '', $number->phone_number);
-            $office = $officeByPhone[$phoneDigits] ?? ['city' => null, 'zone' => null];
-            $city = $office['city'];
-
+            $zd = $zoneData[$zone];
             $pickups[$state->code] = [
-                'label' => $city ? ucfirst($city) : ($number->executive_name ?? $state->name),
-                'zone' => $office['zone'],
-                'phone' => $number->formatted_number,
-                'whatsapp' => $city ? ($officeData[$city]['whatsapp'] ?? null) : null,
-                'location' => $city ? ($officeData[$city]['location'] ?? null) : null,
+                'label' => $zd['label'],
+                'zone' => $zone,
+                'phone' => $phoneByState[$state->code] ?? null,
+                'whatsapp' => null,
+                'location' => $zd['location'],
             ];
         }
 
@@ -498,9 +502,9 @@ class WebController extends Controller
         $tasa = 0;
         try {
             $response = Http::timeout(10)
-                ->get('https://ve.dolarapi.com/v1/dolares/oficial');
+                ->get('https://ve.dolarapi.com/v1/euros/oficial');
             if ($response->successful()) {
-                $tasa = (float) ($response->json('promedio') ?? 0);
+                $tasa = (float) number_format($response->json('promedio') ?? 0, 2, '.', '');
             }
         } catch (\Exception $e) {
             report($e);
