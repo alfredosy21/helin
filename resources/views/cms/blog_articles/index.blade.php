@@ -1,7 +1,7 @@
 <div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
-    <div class="relative z-10 p-6 space-y-6">
+    <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
 
         {{-- SECCIÓN DE LA TABLA (Se muestra solo si showForm es falso) --}}
 
@@ -24,7 +24,7 @@
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
 
             {{-- Search & Filter Section --}}
-            <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
+            <div class="p-3 sm:p-4 bg-white border-b border-slate-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <div class="relative flex-1">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-body">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -142,12 +142,12 @@
         <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
 
             {{-- Cabecera limpia sin botón X --}}
-            <div class="p-6 border-b border-slate-50">
+            <div class="p-4 sm:p-6 border-b border-slate-50">
                 <h2 class="text-lg font-bold text-heading">{{ $editingId ? __('cms.blog_articles.edit_title') : __('cms.blog_articles.new_title') }}</h2>
                 <p class="text-[13px] text-body mt-1">{{ __('cms.blog_articles.subtitle') }}</p>
             </div>
 
-            <div class="p-6 space-y-6">
+            <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 {{-- Toggles de estado agrupados --}}
                 <div class="flex flex-wrap gap-6 p-4 bg-slate-50/50 rounded-lg border border-slate-100">
                     <x-ui-toggle wire:model="is_active" :label="__('cms.general.published')" />
@@ -156,7 +156,7 @@
                 </div>
 
                 {{-- Título y Autor en Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div class="space-y-1.5">
                         <label class="block text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.blog_articles.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" required placeholder="{{ __('cms.blog_articles.title_placeholder') }}"
@@ -172,7 +172,7 @@
                 </div>
 
                 {{-- Slug y Categoría en Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div class="space-y-1.5">
                         <label class="block text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.blog_articles.slug_label') }}</label>
                         <input type="text" wire:model="slug" placeholder="{{ __('cms.blog_articles.slug_placeholder') }}"

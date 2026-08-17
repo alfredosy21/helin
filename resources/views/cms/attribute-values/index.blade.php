@@ -1,6 +1,6 @@
 <div class="min-h-screen pb-12 bg-soft relative">
 
-    <div class="relative z-10 p-6 space-y-6">
+    <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
         <x-ui-section-header :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::ATTRIBUTE_VALUES" :subtitle="__('cms.attribute_values.breadcrumb')">
@@ -22,7 +22,7 @@
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
 
             {{-- Search & Filter Section --}}
-            <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
+            <div class="p-3 sm:p-4 bg-white border-b border-slate-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <div class="relative flex-1">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-body">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
@@ -124,7 +124,7 @@
         <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
 
             {{-- Cabecera limpia --}}
-            <div class="p-6 border-b border-slate-50">
+            <div class="p-4 sm:p-6 border-b border-slate-50">
                 <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.attribute_values.edit_title') : __('cms.attribute_values.new_title') }}
                 </h2>
@@ -133,7 +133,7 @@
 
             {{-- Formulario --}}
             <form wire:submit.prevent="save" class="w-full">
-                <div class="p-6 space-y-6">
+                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
 
                     {{-- Toggle de estado --}}
                     <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
@@ -190,8 +190,8 @@
                 </div>
 
                 {{-- Acciones alineadas a la derecha --}}
-                <div class="p-6 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-3">
-                    <button type="button" wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
                     <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">

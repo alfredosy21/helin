@@ -33,7 +33,7 @@
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.corporate_info') }}
                     </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <x-ui-input label="{{ __('cms.settings.company_name') }}" wire:model="name" required />
                         <x-ui-input label="{{ __('cms.settings.contact_email') }}" wire:model="email" required />
                         <x-ui-input label="{{ __('cms.settings.main_phone') }}" wire:model="phone" />
@@ -64,7 +64,7 @@
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.default_images') }}
                     </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {{-- Imagen por defecto de categoría --}}
                         <x-ui-file-upload model="default_category_image" current-model="current_default_category_image" :preview="$default_category_image" :current-image="$current_default_category_image" :label="__('cms.settings.default_category_image')" height="h-20">
                             {{ __('cms.settings.select_image') }}
@@ -84,7 +84,7 @@
                     <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                     {{ __('cms.settings.social_seo') }}
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                     <x-ui-input label="{{ __('cms.settings.facebook_url') }}" wire:model="facebook" />
                     <x-ui-input label="{{ __('cms.settings.instagram_url') }}" wire:model="instagram" />
                     <x-ui-input label="{{ __('cms.settings.linkedin_url') }}" wire:model="linkedin" />

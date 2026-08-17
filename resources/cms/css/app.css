@@ -362,6 +362,20 @@
     @apply px-4 py-2.5 text-[13px] text-body align-middle;
   }
 
+  /* Responsive: padding más compacto en mobile */
+  @media (max-width: 640px) {
+    .overflow-x-auto > table > thead > tr > th {
+      @apply px-3 py-2;
+    }
+    .overflow-x-auto > table > tbody > tr > td {
+      @apply px-3 py-2;
+    }
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+  }
+
   /* Ellipsis solo en elementos con clase cms-truncate */
   .cms-truncate {
     max-width: 280px;
@@ -629,13 +643,13 @@
   box-shadow: 0 0 0 3px rgb(var(--color-gray-300) / 0.3) !important;
 }
 
-/* Botón confirmar en diálogos de eliminación - rojo peligro */
+/* Botón confirmar por defecto - turquesa */
 .swal2-confirm.swal2-styled,
 .swal2-popup.swal2-toast .swal2-confirm {
   background-color: rgb(var(--color-primary)) !important;
 }
 
-/* Cuando el icono es warning/error, el confirm puede ser rojo */
+/* Cuando el icono es warning/error, el confirm es rojo (peligro) */
 .swal2-icon.swal2-warning ~ .swal2-actions .swal2-confirm,
 .swal2-icon.swal2-error ~ .swal2-actions .swal2-confirm {
   background-color: rgb(var(--color-danger)) !important;
@@ -643,6 +657,15 @@
 
 .swal2-icon.swal2-warning ~ .swal2-actions .swal2-confirm:focus {
   box-shadow: 0 0 0 3px rgb(var(--color-danger) / 0.3) !important;
+}
+
+/* Excepción: diálogo de inactividad - botón confirmar turquesa */
+.swal-inactivity .swal2-confirm {
+  background-color: rgb(var(--color-primary)) !important;
+}
+
+.swal-inactivity .swal2-confirm:focus {
+  box-shadow: 0 0 0 3px rgb(var(--color-primary) / 0.3) !important;
 }
 
 .swal2-icon.swal2-warning {

@@ -1,9 +1,9 @@
-<div class="w-full max-w-md">
-    <div class="bg-white rounded-xl p-8">
+<div class="w-full max-w-md px-4 sm:px-0">
+    <div class="bg-white rounded-xl p-6 sm:p-8">
 
             <!-- Title Section -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-heading">
+            <div class="text-center mb-6 sm:mb-8">
+                <h1 class="text-2xl sm:text-3xl font-bold text-heading">
                     {{ $isLocked ? __('cms.login.unlock_session') : __('cms.login.welcome_back') }}
                 </h1>
                 <p class="mt-2 text-sm text-body">
@@ -12,11 +12,11 @@
             </div>
 
             <!-- Login Form -->
-            <form wire:submit.prevent="{{ $isLocked ? 'unlock' : 'login' }}" class="space-y-6">
+            <form wire:submit.prevent="{{ $isLocked ? 'unlock' : 'login' }}" class="space-y-5 sm:space-y-6">
                 <div class="space-y-5">
                     <!-- Email Field -->
                     <div class="group">
-                        <label for="email" class="block text-sm font-semibold text-body mb-2">
+                        <label for="email" class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-2">
                             {{ __('cms.login.email') }}
                         </label>
                         <div class="relative">
@@ -29,16 +29,16 @@
                                 type="email"
                                 required
                                 @if($isLocked) readonly @endif
-                                class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white border border-line rounded-xl text-heading text-[13px] focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
                                 placeholder="{{ __('cms.login.email') }}"
                                 >
                         </div>
-                        @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                        @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Password Field -->
                     <div class="group">
-                        <label for="password" class="block text-sm font-semibold text-body mb-2">
+                        <label for="password" class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-2">
                             {{ __('cms.login.password') }}
                         </label>
                         <div class="relative">
@@ -50,21 +50,21 @@
                                 id="password"
                                 type="password"
                                 required
-                                class="w-full pl-10 pr-12 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
+                                class="w-full pl-10 pr-12 py-2.5 sm:py-3 bg-white border border-line rounded-xl text-heading text-[13px] focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('password') ? 'border-red-500' : '' }}"
                                 placeholder="••••••••"
                                 >
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="togglePassword('password')">
                                 <x-ui-icon name="eye" class="h-5 w-5 text-body hover:text-body" />
                             </button>
                         </div>
-                        @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                        @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 @if(!$isLocked)
                 <div class="flex justify-end">
                     <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500">{{ __('cms.login.forgot_password') }}</a>
+                        <a href="{{ route('password.request') }}" class="font-medium text-primary-600 hover:text-primary-500 text-[13px]">{{ __('cms.login.forgot_password') }}</a>
                     </div>
                 </div>
                 @endif
@@ -74,7 +74,7 @@
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
-                        class="w-full flex justify-center items-center py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all disabled:opacity-50"
+                        class="w-full flex justify-center items-center py-2.5 sm:py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all disabled:opacity-50 text-[13px] font-medium"
                         >
                         <span wire:loading wire:target="{{ $isLocked ? 'unlock' : 'login' }}" class="mr-2">
                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">

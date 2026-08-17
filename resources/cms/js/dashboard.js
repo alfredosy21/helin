@@ -144,7 +144,8 @@ function initializeInactivitySystem() {
                 cancelButtonText: 'Cerrar Sesión',
                 reverseButtons: true,
                 allowOutsideClick: false,
-                allowEscapeKey: false
+                allowEscapeKey: false,
+                customClass: { popup: 'swal-inactivity' }
             }).then((result) => {
                 if (result.isConfirmed) {
                     continueSession();

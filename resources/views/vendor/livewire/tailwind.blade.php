@@ -12,15 +12,15 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 
 <div>
     @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between border-t border-line bg-soft/50 px-4 py-3">
+        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between border-t border-line bg-soft/50 px-3 sm:px-4 py-2.5 sm:py-3">
             <div class="flex justify-between flex-1 sm:hidden">
                 <span>
                     @if ($paginator->onFirstPage())
-                        <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-slate-400 bg-white border border-line cursor-not-allowed opacity-40 leading-5 rounded-lg">
+                        <span class="relative inline-flex items-center px-3 py-1.5 text-[13px] font-medium text-slate-400 bg-white border border-line cursor-not-allowed opacity-40 leading-5 rounded-lg">
                             {!! __('pagination.previous') !!}
                         </span>
                     @else
-                        <button type="button" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-body bg-white border border-line leading-5 rounded-lg hover:bg-primary-500/5 hover:text-primary-600 transition ease-in-out duration-150">
+                        <button type="button" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="relative inline-flex items-center px-3 py-1.5 text-[13px] font-medium text-body bg-white border border-line leading-5 rounded-lg hover:bg-primary-500/5 hover:text-primary-600 transition ease-in-out duration-150">
                             {!! __('pagination.previous') !!}
                         </button>
                     @endif
@@ -28,11 +28,11 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 
                 <span>
                     @if ($paginator->hasMorePages())
-                        <button type="button" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-body bg-white border border-line leading-5 rounded-lg hover:bg-primary-500/5 hover:text-primary-600 transition ease-in-out duration-150">
+                        <button type="button" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled" dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}.before" class="relative inline-flex items-center px-3 py-1.5 ml-2 text-[13px] font-medium text-body bg-white border border-line leading-5 rounded-lg hover:bg-primary-500/5 hover:text-primary-600 transition ease-in-out duration-150">
                             {!! __('pagination.next') !!}
                         </button>
                     @else
-                        <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-slate-400 bg-white border border-line cursor-not-allowed opacity-40 leading-5 rounded-lg">
+                        <span class="relative inline-flex items-center px-3 py-1.5 ml-2 text-[13px] font-medium text-slate-400 bg-white border border-line cursor-not-allowed opacity-40 leading-5 rounded-lg">
                             {!! __('pagination.next') !!}
                         </span>
                     @endif
@@ -41,7 +41,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 
             <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
-                    <p class="text-sm text-body leading-5">
+                    <p class="text-[13px] text-body leading-5">
                         <span>Mostrando</span>
                         <span class="font-medium text-heading">{{ $paginator->firstItem() }}</span>
                         <span>a</span>

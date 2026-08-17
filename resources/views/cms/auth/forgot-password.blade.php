@@ -1,9 +1,9 @@
-<div class="w-full max-w-md">
-    <div class="bg-white rounded-xl p-8">
+<div class="w-full max-w-md px-4 sm:px-0">
+    <div class="bg-white rounded-xl p-6 sm:p-8">
 
             <!-- Title Section -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-heading">
+            <div class="text-center mb-6 sm:mb-8">
+                <h1 class="text-2xl sm:text-3xl font-bold text-heading">
                     {{ __('cms.forgot_password.title') }}
                 </h1>
                 <p class="mt-2 text-sm text-body">
@@ -26,7 +26,7 @@
                     </p>
                 </div>
                 <a href="{{ route('login') }}"
-                   class="inline-flex items-center justify-center w-full py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all text-sm font-semibold">
+                   class="inline-flex items-center justify-center w-full py-2.5 sm:py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all text-[13px] font-semibold">
                     {{ __('cms.forgot_password.back_to_login') }}
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
@@ -35,9 +35,9 @@
             </div>
             @else
             {{-- Form --}}
-            <form wire:submit.prevent="sendResetLink" class="space-y-6">
+            <form wire:submit.prevent="sendResetLink" class="space-y-5 sm:space-y-6">
                 <div class="group">
-                    <label for="email" class="block text-sm font-semibold text-body mb-2">
+                    <label for="email" class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-2">
                         {{ __('cms.forgot_password.email_label') }}
                     </label>
                     <div class="relative">
@@ -49,18 +49,18 @@
                             id="email"
                             type="email"
                             required
-                            class="w-full pl-10 pr-4 py-3 bg-white border border-line rounded-xl text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
+                            class="w-full pl-10 pr-4 py-2.5 sm:py-3 bg-white border border-line rounded-xl text-heading text-[13px] focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all {{ $errors->has('email') ? 'border-red-500' : '' }}"
                             placeholder="{{ __('cms.forgot_password.email_placeholder') }}"
                             >
                     </div>
-                    @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                    @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
-                        class="w-full flex justify-center items-center py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all disabled:opacity-50 text-sm font-semibold"
+                        class="w-full flex justify-center items-center py-2.5 sm:py-3 px-4 rounded-xl text-white bg-primary-500 hover:bg-primary-600 transition-all disabled:opacity-50 text-[13px] font-semibold"
                         >
                         <span wire:loading wire:target="sendResetLink" class="mr-2">
                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="text-center">
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">
+                    <a href="{{ route('login') }}" class="text-[13px] font-medium text-primary-600 hover:text-primary-500">
                         {{ __('cms.forgot_password.back_to_login') }}
                     </a>
                 </div>

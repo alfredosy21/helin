@@ -2,7 +2,7 @@
 <div class="min-h-screen pb-12 bg-soft relative">
 
     {{-- Content Layout --}}
-    <div class="relative z-10 p-6 space-y-6">
+    <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
 
 
         {{-- SECCIÓN DE LA TABLA (Se muestra solo si showForm es falso) --}}
@@ -25,7 +25,7 @@
         <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
 
             {{-- Search & Filter Section --}}
-            <div class="p-4 bg-white border-b border-line flex flex-col md:flex-row gap-3">
+            <div class="p-3 sm:p-4 bg-white border-b border-line flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <div class="relative flex-1">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-body">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
@@ -114,7 +114,7 @@
         <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
 
             {{-- Cabecera limpia sin botón X --}}
-            <div class="p-6 border-b border-line">
+            <div class="p-4 sm:p-6 border-b border-line">
                 <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.testimonials.edit_title') : __('cms.testimonials.new_title') }}
                 </h2>
@@ -130,7 +130,7 @@
                 </div>
 
                 {{-- Inputs principales organizados en dos columnas --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.testimonials.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
@@ -154,8 +154,8 @@
                 <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" label="Imagen del Autor" accept="image/*" />
 
             {{-- Acciones alineadas a la derecha --}}
-            <div class="p-6 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-3">
-                <button type="button" wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+            <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                     {{ __('cms.general.cancel') }}
                 </button>
                 <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-primary-600 text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">

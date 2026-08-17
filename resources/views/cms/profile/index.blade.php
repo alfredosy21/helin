@@ -49,7 +49,7 @@
                         {{ __('cms.profile.personal_info') }}
                     </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <x-ui-input label="{{ __('cms.profile.full_name') }}" wire:model="name" icon="user" required />
                             @error('name') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror

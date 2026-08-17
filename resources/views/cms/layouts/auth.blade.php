@@ -64,15 +64,15 @@
             </div>
 
             <!-- Mobile Compact Header (hidden on desktop) -->
-            <div class="lg:hidden flex items-center justify-center gap-3 bg-primary-500 text-white py-6">
-                <div class="h-10 w-10 flex items-center justify-center rounded-xl bg-white shadow-sm">
-                    <span class="text-primary-600 font-bold text-lg">H</span>
+            <div class="lg:hidden flex items-center justify-center gap-3 bg-primary-500 text-white py-5">
+                <div class="h-9 w-9 flex items-center justify-center rounded-xl bg-white shadow-sm">
+                    <span class="text-primary-600 font-bold text-base">H</span>
                 </div>
-                <span class="text-lg font-bold">Helin CMS</span>
+                <span class="text-base font-bold">Helin CMS</span>
             </div>
 
             <!-- Right Form Panel -->
-            <main class="flex-1 flex items-center justify-center bg-soft px-4 py-12 sm:px-6 lg:px-8">
+            <main class="flex-1 flex items-center justify-center bg-soft px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
                 {{--
                 IMPORTANTE: Livewire 3 inyecta el contenido aquí.
                 Dejamos ambos para que sea compatible con componentes antiguos y nuevos.

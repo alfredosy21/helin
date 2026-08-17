@@ -1,5 +1,5 @@
 <div class="min-h-screen pb-12 bg-soft relative">
-    <div class="relative z-10 p-6 space-y-6">
+    <div class="relative z-10 p-3 sm:p-4 lg:p-6 space-y-4 sm:space-y-6">
         <x-ui-section-header :module-id="\App\Models\Module::ADMINISTRATORS" :submodule-id="\App\Models\Submodule::ROLES" section="cms.permissions.breadcrumb" :subtitle="__('cms.permissions.role_access') . ' ' . ($roleName ?: 'Unknown Role')">
             <x-slot:sectionIcon>
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

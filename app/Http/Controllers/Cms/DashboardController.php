@@ -7,7 +7,14 @@ namespace App\Http\Controllers\Cms;
 use App\Models\Activities;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\CommercialRequest;
+use App\Models\ContactMessage;
+use App\Models\Line;
+use App\Models\Menus;
 use App\Models\Product;
+use App\Models\Resource;
+use App\Models\Sections;
+use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
@@ -56,19 +63,25 @@ class DashboardController extends Component
                 'total_products' => Product::query()->count(['id']),
                 'total_categories' => Category::query()->count(['id']),
                 'total_brands' => Brand::query()->count(['id']),
+                'total_lines' => Line::query()->count(['id']),
                 'total_users' => User::query()->count(['id']),
+                'total_resources' => Resource::query()->count(['id']),
+                'total_testimonials' => Testimonial::query()->count(['id']),
+                'total_sections' => Sections::query()->count(['id']),
+                'total_menus' => Menus::query()->count(['id']),
+                'total_commercial_requests' => CommercialRequest::query()->count(['id']),
+                'pending_commercial_requests' => CommercialRequest::query()->where('status', 'pending')->count(),
+                'total_contact_messages' => ContactMessage::query()->count(['id']),
+                'unread_contact_messages' => ContactMessage::query()->where('is_read', false)->count(),
                 // Growth Indicators (Current Month)
                 'new_users' => User::query()
                     ->whereMonth('created_at', $currentMonth)
                     ->count(),
-                // Option B: Fallback using whereRaw if your DB driver is being strict
                 'new_products' => Product::query()
                     ->whereMonth('created_at', $currentMonth)
                     ->count(),
                 // Operational Metrics
-                'active_products' => Product::query()->count(['id']), // Placeholder for status-based filtering
-                'total_blogs' => 0, // Blog model implementation pending
-                'new_blogs' => 0,
+                'active_products' => Product::query()->count(['id']),
                 'uptime' => '99.9%',
             ];
         } catch (\Exception $e) {

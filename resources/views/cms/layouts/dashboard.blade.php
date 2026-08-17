@@ -41,12 +41,12 @@
                  class="fixed inset-0 z-40 bg-black/30 lg:hidden"></div>
 
             {{-- Ultra Clean & Modern Sidebar --}}
-            <aside class="fixed inset-y-0 left-0 z-50 w-64 lg:static lg:z-40 lg:inset-0 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:translate-x-0"
+            <aside class="fixed inset-y-0 left-0 z-50 w-60 sm:w-64 lg:static lg:z-40 lg:inset-0 flex-shrink-0 transform transition-transform duration-300 ease-in-out lg:translate-x-0"
                    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
                 <div class="flex flex-col flex-grow h-full bg-white overflow-hidden">
 
                     {{-- Logo Area - Identical to your exact brand header --}}
-                    <div class="flex items-center h-16 px-6 bg-primary-500 text-white flex-shrink-0">
+                    <div class="flex items-center h-14 sm:h-16 px-4 sm:px-6 bg-primary-500 text-white flex-shrink-0">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                                 <span class="text-primary-500 font-bold text-lg">H</span>

@@ -1,5 +1,5 @@
 {{-- Content Layout --}}
-<div class="p-6 space-y-6">
+<div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
    {{-- Header Section & Breadcrumb --}}
    <x-ui-section-header :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::PRODUCTS" :subtitle="__('cms.products.title')">
       @if(!$showForm)
@@ -172,13 +172,13 @@
    {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
    <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
       {{-- Cabecera limpia sin botón X --}}
-      <div class="p-6 border-b border-slate-50">
+      <div class="p-4 sm:p-6 border-b border-slate-50">
          <h2 class="text-lg font-bold text-heading">{{ $editingId ? __('cms.products.edit_title') : __('cms.products.new_title') }}</h2>
       </div>
       {{-- Formulario --}}
       <form wire:submit.prevent="save" class="p-6 space-y-6">
          {{-- Básico --}}
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
                <input type="text" wire:model="name" required
@@ -192,7 +192,7 @@
                @error('sku') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
          </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
                <select wire:model="category_id" required
@@ -216,7 +216,7 @@
                @error('brand_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
          </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
                <select wire:model="system_product_id"
@@ -269,7 +269,7 @@
                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
          </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Material</label>
                <input type="text" wire:model="material" placeholder="ej: Titanio Grado 5, Cerámica, Acero"
@@ -410,7 +410,7 @@
          {{-- Promociones --}}
          <div class="border-t border-slate-100 pt-5 space-y-4">
             <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.promotions_section') }}</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                <div class="space-y-1.5">
                   <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sale_price') }}</label>
                   <input type="number" step="0.01" wire:model="sale_price" placeholder="0.00"
