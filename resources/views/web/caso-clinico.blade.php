@@ -8,6 +8,8 @@
 @endsection
 
 @section('content')
+<hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
+
 @php
     $shareSection = \App\Models\Sections::find(\App\Models\Sections::CASE_SHARE);
     $advisorSection = \App\Models\Sections::find(\App\Models\Sections::CASE_ADVISOR);

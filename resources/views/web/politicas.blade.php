@@ -7,6 +7,8 @@
 @endsection
 
 @section('content')
+<hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
+
 <main class="container mx-auto px-4 py-8">
     @include('web.components.breadcrumb', [
         'items' => [
