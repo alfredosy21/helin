@@ -115,8 +115,23 @@ class DashboardController extends Component
                 ];
             });
 
+        // Latest 10 commercial requests with relations for the dashboard table
+        $recentRequests = CommercialRequest::query()
+            ->with(['customerType', 'state', 'deliveryMethod', 'paymentMethod'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        // Latest 10 contact messages for the dashboard table
+        $recentMessages = ContactMessage::query()
+            ->latest()
+            ->take(10)
+            ->get();
+
         return view('cms.dashboard.index', [
             'recentActivity' => $recentActivities,
+            'recentRequests' => $recentRequests,
+            'recentMessages' => $recentMessages,
             /**
              * Calculate category distribution by counting related products
              * for the top 5 largest categories.

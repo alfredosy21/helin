@@ -79,12 +79,14 @@ class Module extends Model {
                 ->where('permissions.module_id', $module_id)
                 ->get([
             'submodules.url',
-            'submodules.name'
+            'submodules.name',
+            'submodules.icon'
         ]);
         foreach ($permissions_from_submodules as $row) {
             $submodules[] = array(
                 "name" => $row->name,
-                "url" => $row->url
+                "url" => $row->url,
+                "icon" => $row->icon
             );
         }
         return $submodules;

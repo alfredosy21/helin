@@ -103,6 +103,7 @@ class ModuleSeeder extends Seeder
                         'id' => $submoduleData['id'],
                         'module_id' => $module->id,
                         'url' => $submoduleData['url'],
+                        'icon' => $submoduleData['icon'],
                     ];
 
                     Submodule::updateOrCreate(
@@ -112,6 +113,10 @@ class ModuleSeeder extends Seeder
                 }
             }
         }
+
+        // Remove obsolete modules (e.g. Blog) and their submodules
+        $validIds = array_column($modules, 'id');
+        Module::whereNotIn('id', $validIds)->delete();
 
         $this->command->info('Database icons successfully refreshed with verified clean Lucide assets!');
     }
