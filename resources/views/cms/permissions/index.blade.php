@@ -1,20 +1,12 @@
 <div class="min-h-screen pb-12 bg-soft relative">
     <div class="relative z-10 p-6 space-y-6">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-
-                <x-cms-breadcrumb :module-id="\App\Models\Module::ADMINISTRATORS" :submodule-id="\App\Models\Submodule::ROLES" section="cms.permissions.breadcrumb" >
-                    <x-slot name="sectionIcon">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
-                        </svg>
-                    </x-slot>
-                </x-cms-breadcrumb>
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.permissions.role_access') }} <span class="font-semibold text-slate-700">{{ $roleName ?: 'Unknown Role' }}</span>
-                </p>
-            </div>
-            <div class="flex items-center gap-3">
+        <x-ui-section-header :module-id="\App\Models\Module::ADMINISTRATORS" :submodule-id="\App\Models\Submodule::ROLES" section="cms.permissions.breadcrumb" :subtitle="__('cms.permissions.role_access') . ' ' . ($roleName ?: 'Unknown Role')">
+            <x-slot:sectionIcon>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                </svg>
+            </x-slot:sectionIcon>
+            <x-slot:action>
                 <button wire:click="toggleAllModules(1)"
                         class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -29,8 +21,8 @@
                     </svg>
                     {{ __('cms.permissions.deactivate_all') }}
                 </button>
-            </div>
-        </div>
+            </x-slot:action>
+        </x-ui-section-header>
 
         @if($isLoading)
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] p-12 text-center">

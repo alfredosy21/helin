@@ -3,24 +3,18 @@
     <div class="relative z-10 p-6 space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::ATTRIBUTES" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.attributes.breadcrumb') }}
-                </p>
-            </div>
-
-            {{-- Botón Principal --}}
+        <x-ui-section-header :module-id="\App\Models\Module::CATALOG" :submodule-id="\App\Models\Submodule::ATTRIBUTES" :subtitle="__('cms.attributes.breadcrumb')">
             @if(!$showForm)
-            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                {{ __('cms.attributes.new_button') }}
-            </button>
+            <x-slot:action>
+                <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    {{ __('cms.attributes.new_button') }}
+                </button>
+            </x-slot:action>
             @endif
-        </div>
+        </x-ui-section-header>
 
         @if(!$showForm)
 
@@ -109,10 +103,7 @@
                         @empty
                         <tr>
                             <td colspan="5" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg>
-                                    <p class="text-xs font-medium">{{ __('cms.attributes.no_attributes') }}</p>
-                                </div>
+                                <x-ui-empty-state icon="folder" :title="__('cms.attributes.no_attributes')" />
                             </td>
                         </tr>
                         @endforelse
@@ -141,11 +132,7 @@
 
                     {{-- Toggle de estado --}}
                     <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                        </label>
+                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
                     </div>
 
                     {{-- Nombre --}}

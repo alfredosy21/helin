@@ -6,14 +6,8 @@
         {{-- SECCIÓN DE LA TABLA (Se muestra solo si showEditForm es falso) --}}
 
         {{-- Header Section & Breadcrumb Refinado --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::SECTIONS" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.sections.title') }}
-                </p>
-            </div>
-        </div>
+        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::SECTIONS" :subtitle="__('cms.sections.title')">
+        </x-ui-section-header>
         @if(!$showEditForm)
         {{-- Main Unified Card: Filtros y Tabla --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
@@ -83,13 +77,8 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/>
-                                    </svg>
-                                    <p class="text-xs font-medium">{{ __('cms.sections.no_sections') }}</p>
-                                </div>
+                            <td colspan="5">
+                                <x-ui-empty-state icon="folder" :title="__('cms.sections.no_sections')" />
                             </td>
                         </tr>
                         @endforelse
@@ -118,21 +107,9 @@
 
                     {{-- Toggles de estado agrupados --}}
                     <div class="flex flex-wrap items-center gap-6 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <label class="flex items-center gap-3 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" wire:model="status" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">{{ __('cms.sections.active') }}</span>
-                        </label>
+                        <x-ui-toggle wire:model="status" :label="__('cms.sections.active')" />
 
-                        <label class="flex items-center gap-3 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" wire:model="status_content" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">{{ __('cms.sections.visible') }}</span>
-                        </label>
+                        <x-ui-toggle wire:model="status_content" :label="__('cms.sections.visible')" />
                     </div>
 
                     {{-- Título a ancho completo --}}

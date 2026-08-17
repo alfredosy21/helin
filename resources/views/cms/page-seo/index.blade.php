@@ -4,24 +4,18 @@
     <div class="relative z-10 p-6 space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::PAGE_SEO" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.page_seo.breadcrumb') }}
-                </p>
-            </div>
-
-            {{-- Botón Principal --}}
+        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::PAGE_SEO" :subtitle="__('cms.page_seo.breadcrumb')">
             @if(!$showForm)
-            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                {{ __('cms.page_seo.new_button') }}
-            </button>
+            <x-slot:action>
+                <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    {{ __('cms.page_seo.new_button') }}
+                </button>
+            </x-slot:action>
             @endif
-        </div>
+        </x-ui-section-header>
 
         @if(!$showForm)
 
@@ -91,10 +85,7 @@
                         @empty
                         <tr>
                             <td colspan="4" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                    <p class="text-xs font-medium">{{ __('cms.page_seo.no_records') }}</p>
-                                </div>
+                                <x-ui-empty-state icon="folder" :title="__('cms.page_seo.no_records')" />
                             </td>
                         </tr>
                         @endforelse
@@ -150,7 +141,10 @@
                     </div>
 
                     {{-- Imagen OG --}}
-                    <div class="space-y-1.5">
+                    <x-ui-file-upload model="og_image" current-model="current_og_image" :preview="$og_image" :current-image="$current_og_image" :label="__('cms.page_seo.og_image')" hint="JPG, PNG (Máx. 2MB)" height="h-24">
+                        {{ __('cms.page_seo.select_image') }}
+                    </x-ui-file-upload>
+                    <div class="space-y-1.5 d-none">
                         <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ __('cms.page_seo.og_image') }}</label>
                         <div class="relative">
                             @if($og_image)

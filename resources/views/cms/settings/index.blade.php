@@ -2,15 +2,8 @@
 
     <!-- Header -->
     <div class="p-6">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::GENERAL_SETTINGS" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.settings.edit_subtitle') }}
-                </p>
-            </div>
-
-            <div class="flex items-center gap-6">
+        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::GENERAL_SETTINGS" :subtitle="__('cms.settings.edit_subtitle')">
+            <x-slot:action>
                 <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="min-w-[120px] flex items-center justify-center px-4 py-2.5 bg-primary hover:bg-[#079d8b] text-white text-sm font-medium rounded-lg transition-colors border-none cursor-pointer">
                     <span wire:loading.remove wire:target="save">
                         {{ __('cms.settings.save') }}
@@ -25,8 +18,8 @@
                         {{ __('cms.settings.save') }}
                     </span>
                 </button>
-            </div>
-        </div>
+            </x-slot:action>
+        </x-ui-section-header>
     </div>
 
     <div class="relative px-6 pb-6">
@@ -60,28 +53,9 @@
                         <div class="w-1.5 h-6 bg-primary rounded-full"></div>
                         {{ __('cms.settings.corporate_image') }}
                     </h2>
-                    <div class="relative">
-                        @if($image)
-                        <div class="mb-3 relative">
-                            <img src="{{ $image->temporaryUrl() }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
-                        </div>
-                        @elseif($current_image)
-                        <div class="mb-3 relative">
-                            <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-48 object-contain rounded-lg border border-slate-100 bg-slate-50">
-                        </div>
-                        @endif
-                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
-                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                                <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                </svg>
-                                <p class="text-xs text-slate-500">{{ __('cms.settings.select_image') }}</p>
-                                <p class="text-[10px] text-slate-400 mt-0.5">{{ __('cms.settings.image_formats_hint') }}</p>
-                            </div>
-                            <input type="file" wire:model="image" wire:change="save" class="hidden" accept="image/*" />
-                        </label>
-                        @error('image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                    </div>
+                    <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" :label="__('cms.settings.select_image')" :hint="__('cms.settings.image_formats_hint')" height="h-24">
+                        {{ __('cms.settings.select_image') }}
+                    </x-ui-file-upload>
                 </div>
 
                 <!-- Default Images Card -->
@@ -92,52 +66,14 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {{-- Imagen por defecto de categoría --}}
-                        <div class="relative">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">{{ __('cms.settings.default_category_image') }}</label>
-                            @if($default_category_image)
-                            <div class="mb-3 relative">
-                                <img src="{{ $default_category_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
-                            @elseif($current_default_category_image)
-                            <div class="mb-3 relative">
-                                <img src="{{ asset('storage/' . $current_default_category_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
-                            @endif
-                            <label class="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
-                                <div class="flex flex-col items-center justify-center pt-3 pb-3">
-                                    <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                    </svg>
-                                    <p class="text-xs text-slate-500">{{ __('cms.settings.select_image') }}</p>
-                                </div>
-                                <input type="file" wire:model="default_category_image" class="hidden" accept="image/*" />
-                            </label>
-                            @error('default_category_image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                        </div>
+                        <x-ui-file-upload model="default_category_image" current-model="current_default_category_image" :preview="$default_category_image" :current-image="$current_default_category_image" :label="__('cms.settings.default_category_image')" height="h-20">
+                            {{ __('cms.settings.select_image') }}
+                        </x-ui-file-upload>
 
                         {{-- Imagen por defecto de banner --}}
-                        <div class="relative">
-                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">{{ __('cms.settings.default_banner_image') }}</label>
-                            @if($default_banner_image)
-                            <div class="mb-3 relative">
-                                <img src="{{ $default_banner_image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
-                            @elseif($current_default_banner_image)
-                            <div class="mb-3 relative">
-                                <img src="{{ asset('storage/' . $current_default_banner_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100 bg-slate-50">
-                            </div>
-                            @endif
-                            <label class="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
-                                <div class="flex flex-col items-center justify-center pt-3 pb-3">
-                                    <svg class="w-5 h-5 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                    </svg>
-                                    <p class="text-xs text-slate-500">{{ __('cms.settings.select_image') }}</p>
-                                </div>
-                                <input type="file" wire:model="default_banner_image" class="hidden" accept="image/*" />
-                            </label>
-                            @error('default_banner_image') <span class="text-xs text-red-500 font-medium">{{ $message }}</span> @enderror
-                        </div>
+                        <x-ui-file-upload model="default_banner_image" current-model="current_default_banner_image" :preview="$default_banner_image" :current-image="$current_default_banner_image" :label="__('cms.settings.default_banner_image')" height="h-20">
+                            {{ __('cms.settings.select_image') }}
+                        </x-ui-file-upload>
                     </div>
                 </div>
             </div>
@@ -202,28 +138,24 @@
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nombre de la sede</label>
                             <input type="text" wire:model="offices.{{ $index }}.name" placeholder="ej: Caracas"
-                                   class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('offices.' . $index . '.name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">WhatsApp (URL)</label>
                             <input type="text" wire:model="offices.{{ $index }}.whatsapp" placeholder="https://wa.me/58424..."
-                                   class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('offices.' . $index . '.whatsapp') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5 md:col-span-2">
                             <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Dirección punto de retiro</label>
                             <textarea wire:model="offices.{{ $index }}.url" rows="2"
-                                      class="w-full px-3 py-2 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300 resize-none"
+                                      class="w-full px-3 py-2 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300 resize-none"
                                       placeholder="Dirección del punto de retiro"></textarea>
                             @error('offices.' . $index . '.url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="flex items-center gap-3 md:col-span-2">
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" wire:model="offices.{{ $index }}.active" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                <span class="ml-3 text-sm font-medium text-slate-700">Sede activa</span>
-                            </label>
+                            <x-ui-toggle wire:model="offices.{{ $index }}.active" :label="__('cms.general.status_active')" />
                         </div>
                     </div>
                 </div>
@@ -259,21 +191,17 @@
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Valor (slug)</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.value" placeholder="ej: informacion-comercial"
-                                   class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('contact_subjects.' . $index . '.value') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Etiqueta visible</label>
                             <input type="text" wire:model="contact_subjects.{{ $index }}.label" placeholder="ej: Información comercial"
-                                   class="w-full px-3 py-2.5 bg-white border border-slate-100 text-sm text-slate-700 rounded-lg focus:outline-none focus:border-primary transition-colors placeholder-slate-300" />
+                                   class="w-full px-3 py-2.5 bg-white border border-line text-sm text-slate-700 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-slate-300" />
                             @error('contact_subjects.' . $index . '.label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                         <div class="flex items-center gap-3 md:col-span-2">
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" wire:model="contact_subjects.{{ $index }}.active" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                <span class="ml-3 text-sm font-medium text-slate-700">Asunto activo</span>
-                            </label>
+                            <x-ui-toggle wire:model="contact_subjects.{{ $index }}.active" :label="__('cms.general.status_active')" />
                         </div>
                     </div>
                 </div>

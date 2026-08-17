@@ -5,24 +5,18 @@
     <div class="relative z-10 p-6 space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::WEBSITE_MENU" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    Gestiona el menú de navegación del sitio web
-                </p>
-            </div>
-
-            {{-- Botón Principal --}}
+        <x-ui-section-header :module-id="\App\Models\Module::SETTINGS" :submodule-id="\App\Models\Submodule::WEBSITE_MENU" subtitle="Gestiona el menú de navegación del sitio web">
             @if(!$showForm)
-            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                Nuevo Menú
-            </button>
+            <x-slot:action>
+                <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Nuevo Menú
+                </button>
+            </x-slot:action>
             @endif
-        </div>
+        </x-ui-section-header>
 
         @if(!$showForm)
 
@@ -145,10 +139,7 @@
                         @empty
                         <tr>
                             <td colspan="7" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                    <p class="text-xs font-medium">No se encontraron menús</p>
-                                </div>
+                                <x-ui-empty-state icon="folder" title="No se encontraron menús" />
                             </td>
                         </tr>
                         @endforelse
@@ -179,11 +170,7 @@
 
                     {{-- Toggle de estado --}}
                     <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <label for="status" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="status" wire:model="status" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">Activo</span>
-                        </label>
+                        <x-ui-toggle wire:model="status" :label="__('cms.general.status_active')" />
                     </div>
 
                     {{-- Inputs principales --}}
@@ -251,46 +238,13 @@
 
                     {{-- Opciones adicionales --}}
                     <div class="space-y-1.5">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" wire:model="target_blank" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">Abrir en nueva pestaña</span>
-                        </label>
+                        <x-ui-toggle wire:model="target_blank" :label="__('cms.general.open_new_tab')" />
                     </div>
 
                     {{-- Imagen --}}
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Imagen</label>
-                        <div class="relative">
-                            @if($image)
-                            <div class="mb-3 relative group max-w-xs">
-                                <img src="{{ $image->temporaryUrl() }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                                <button type="button" wire:click="$set('image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-                            @elseif($current_image)
-                            <div class="mb-3 relative group max-w-xs">
-                                <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-32 object-cover rounded-lg border border-slate-100">
-                                <button type="button" wire:click="$set('current_image', null)" class="absolute top-2 right-2 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-                            @endif
-
-                            <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors bg-slate-50/30">
-                                <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                                    <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                                    </svg>
-                                    <p class="text-xs text-slate-500 font-medium">Subir imagen</p>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
-                                </div>
-                                <input type="file" wire:model="image" class="hidden" accept="image/*" />
-                            </label>
-                            @error('image') <span class="text-xs text-red-500 font-medium italic mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
+                    <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" :label="__('cms.general.image')" hint="JPG, PNG (Máx. 2MB)" height="h-28">
+                        {{ __('cms.general.upload_image') }}
+                    </x-ui-file-upload>
 
                 </div>
 

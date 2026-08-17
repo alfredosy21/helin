@@ -6,24 +6,19 @@
         {{-- SECCIÓN DE LA TABLA --}}
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::RESOURCE_SPECIALTIES" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.resource_specialties.breadcrumb') }}
-                </p>
-            </div>
-
-            {{-- Botón Principal --}}
+        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::RESOURCE_SPECIALTIES" :subtitle="__('cms.resource_specialties.breadcrumb')">
             @if(!$showForm)
-            <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                {{ __('cms.resource_specialties.new_button') }}
-            </button>
+            <x-slot:action>
+                {{-- Botón Principal --}}
+                <button wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    {{ __('cms.resource_specialties.new_button') }}
+                </button>
+            </x-slot:action>
             @endif
-        </div>
+        </x-ui-section-header>
 
         @if(!$showForm)
 
@@ -101,11 +96,8 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                    <p class="text-xs font-medium">{{ __('cms.resource_specialties.no_specialties') }}</p>
-                                </div>
+                            <td colspan="4">
+                                <x-ui-empty-state icon="folder" :title="__('cms.resource_specialties.no_specialties')" />
                             </td>
                         </tr>
                         @endforelse
@@ -134,11 +126,7 @@
 
                     {{-- Toggle de estado --}}
                     <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                        </label>
+                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
                     </div>
 
                     {{-- Inputs principales --}}

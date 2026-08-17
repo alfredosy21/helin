@@ -5,14 +5,7 @@
     <div class="relative z-10 p-6 space-y-6">
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTACT" :submodule-id="\App\Models\Submodule::CONTACT_MESSAGES" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    Mensajes recibidos del formulario de contacto
-                </p>
-            </div>
-        </div>
+        <x-ui-section-header :module-id="\App\Models\Module::CONTACT" :submodule-id="\App\Models\Submodule::CONTACT_MESSAGES" subtitle="Mensajes recibidos del formulario de contacto" />
 
         {{-- Main Unified Card: Filtros y Tabla --}}
         <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
@@ -97,8 +90,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-4 py-12 text-center text-sm text-slate-400">
-                                    No hay mensajes de contacto registrados.
+                                <td colspan="7" class="px-4 py-12 text-center">
+                                    <x-ui-empty-state icon="folder" title="No hay mensajes de contacto registrados." />
                                 </td>
                             </tr>
                         @endforelse
