@@ -13,7 +13,7 @@ class ProductFilterController extends Controller
         $search     = $request->get('search', '');
         $categories = $request->get('category', []);
         $brands     = $request->get('brand', []);
-        $tags       = $request->get('tag', []);
+        $tags       = (array) $request->get('tag', []);
         $featured   = $request->get('featured', '');
         $sortBy     = $request->get('sort', 'recent');
 
