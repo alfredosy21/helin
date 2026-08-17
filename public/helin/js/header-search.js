@@ -22,6 +22,9 @@ class HelinHeaderSearch {
         // Buscador Móvil
         this.setupSearch('mobile', '#mobile-search-input', '#mobile-search-dropdown', '#mobile-search-submit');
 
+        // Filtro por categoría del header
+        this.setupCategoryFilter();
+
         // Cerrar dropdowns al hacer clic fuera
         document.addEventListener('click', this.handleOutsideClick.bind(this));
 
@@ -71,15 +74,26 @@ class HelinHeaderSearch {
         });
     }
 
+    setupCategoryFilter() {
+        const categorySelect = document.querySelector('#header-search-category');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', () => {
+                this.executeSearch('desktop');
+            });
+        }
+    }
+
     executeSearch(type) {
         const input = document.querySelector(type === 'mobile' ? '#mobile-search-input' : '#header-search-input');
         const query = input?.value.trim() || '';
+        const category = document.querySelector('#header-search-category')?.value || '';
 
-        if (query) {
-            window.location.href = '/catalogo?search=' + encodeURIComponent(query);
-        } else {
-            window.location.href = '/catalogo';
-        }
+        const params = new URLSearchParams();
+        if (query) params.set('search', query);
+        if (category) params.set('category', category);
+
+        const qs = params.toString();
+        window.location.href = '/catalogo' + (qs ? '?' + qs : '');
     }
 
     async performSearch(query, dropdown, type) {
@@ -156,7 +170,7 @@ class HelinHeaderSearch {
             return '';
         }
 
-        const safeName = product.name || '';
+        const safeName = (product.name || '').trim().replace(/\s+/g, ' ');
         const safeImage = product.image || '/images/placeholder-product.webp';
         const safeCategory = product.category || 'Sin categoría';
         const safeBrand = product.brand || 'Helin';
