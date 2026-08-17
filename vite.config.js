@@ -7,6 +7,7 @@ export default defineConfig({
             input: [
                 'resources/cms/css/app.css',
                 'resources/cms/js/app.js',
+                'resources/cms/js/cms-toast.js',
                 'resources/cms/js/dashboard.js',
                 'resources/cms/js/auth.js',
             ],

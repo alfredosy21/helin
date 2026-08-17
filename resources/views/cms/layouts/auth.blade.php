@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}">
         <title>@yield('title', 'Helin CMS')</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,33 +17,16 @@
     </head>
     <body class="h-full bg-soft">
 
-        <!-- Flash Messages (Mantenemos tu lógica intacta) -->
+        <!-- Flash Messages (estilo toast Helin - misma tarjeta que el carrito web) -->
         @foreach (['error', 'success', 'warning', 'info'] as $msg)
         @if (session($msg))
-        <div class="fixed top-4 right-4 z-50 max-w-sm flash-message">
-            @php
-            $colors = [
-            'error' => 'red', 'success' => 'primary',
-            'warning' => 'amber', 'info' => 'primary'
-            ];
-            $icon = [
-            'error' => 'alert-circle', 'success' => 'check-circle',
-            'warning' => 'alert-triangle', 'info' => 'info'
-            ];
-            @endphp
-            <div class="bg-{{ $colors[$msg] }}-50 border border-{{ $colors[$msg] }}-200 rounded-lg p-4 shadow-lg">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <x-ui-icon name="{{ $icon[$msg] }}" class="w-5 h-5 text-{{ $colors[$msg] }}-500" />
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-{{ $colors[$msg] }}-800">
-                            {{ session($msg) }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.CmsToast) {
+                    window.CmsToast.show({ message: @json(session($msg)), type: @json($msg === 'error' ? 'error' : ($msg === 'success' ? 'success' : ($msg === 'warning' ? 'warning' : 'info'))) });
+                }
+            });
+        </script>
         @endif
         @endforeach
 
@@ -91,22 +75,7 @@
         </footer>
         @endif
 
-        @vite(['resources/cms/js/auth.js'])
-        @vite(['resources/cms/js/app.js'])
-
-        <!-- Flash Messages Auto-hide -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const flashMessages = document.querySelectorAll('.flash-message');
-                flashMessages.forEach(function (message) {
-                    setTimeout(function () {
-                        message.style.opacity = '0';
-                        message.style.transition = 'opacity 0.5s ease-out';
-                        setTimeout(() => message.remove(), 500);
-                    }, 3000);
-                });
-            });
-        </script>
+        @vite(['resources/cms/js/cms-toast.js', 'resources/cms/js/auth.js', 'resources/cms/js/app.js'])
 
         @stack('scripts')
 

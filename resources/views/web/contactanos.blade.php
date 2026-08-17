@@ -47,13 +47,18 @@
                     </div>
                 </article>
 
-                <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="info-item" style="text-decoration:none;color:inherit;">
+                @php
+                    $contactWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
+                @endphp
+                @if($contactWhatsApp)
+                <a href="https://wa.me/{{ $contactWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="info-item" style="text-decoration:none;color:inherit;">
                     <div class="info-icon"><img src="{{ asset('icons/ws.svg') }}" alt="WhatsApp Comercial" width="24" height="24"></div>
                     <div>
                         <h3>WhatsApp Comercial</h3>
                         <p>{{ $settings?->phone }}</p>
                     </div>
                 </a>
+                @endif
 
                 <article class="info-item">
                     <div class="info-icon"><img src="{{ asset('icons/mail.svg') }}" alt="Correo electrónico" width="24" height="24"></div>

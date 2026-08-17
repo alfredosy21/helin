@@ -26,7 +26,11 @@
             @endphp
             <!-- Logo -->
             <a href='{{ route("home") }}' class='flex items-center gap-2 text-white flex-shrink-0'>
-                <img src='{{ asset("images/logo_blanco_helin.png") }}' alt='Helin' class='h-12 sm:h-16 w-auto'>
+                @php
+                    $headerSettings = \App\Models\Settings::getSettings();
+                    $headerLogo = ($headerSettings && !empty($headerSettings->image)) ? asset('storage/' . $headerSettings->image) : asset('images/logo_blanco_helin.png');
+                @endphp
+                <img src='{{ $headerLogo }}' alt='Helin' class='h-12 sm:h-16 w-auto'>
             </a>
 
             <!-- Buscador - Solo en tablet/desktop -->

@@ -233,42 +233,25 @@
         </div>
 
 
-        {{-- Flash Notifications Dynamic Banner Popups Container --}}
-        <div class="fixed top-4 right-4 z-[100] flex flex-col space-y-3">
-            @foreach (['success', 'error', 'warning', 'info'] as $type)
-            @if(session($type))
-            @php
-            $flashBorder = match($type) {
-                'success' => 'border-primary-500',
-                'error' => 'border-red-500',
-                'warning' => 'border-amber-500',
-                default => 'border-primary-500',
-            };
-            $flashIcon = match($type) {
-                'success' => 'text-primary-600',
-                'error' => 'text-red-500',
-                'warning' => 'text-amber-500',
-                default => 'text-primary-600',
-            };
-            @endphp
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)" class="flash-message">
-                <div class="bg-white border-l-4 {{ $flashBorder }} rounded-xl p-4 shadow-md flex items-center space-x-4 min-w-[300px]">
-                    <x-ui-icon name="{{ $type == 'success' ? 'check-circle' : 'alert-circle' }}" class="w-6 h-6 {{ $flashIcon }}" />
-                    <p class="text-sm font-semibold text-body">{{ session($type) }}</p>
-                </div>
-            </div>
-            @endif
-            @endforeach
-        </div>
+        {{-- Flash Notifications (usan CmsToast - mismo estilo que el carrito web) --}}
+        @foreach (['success', 'error', 'warning', 'info'] as $type)
+        @if(session($type))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.CmsToast) {
+                    window.CmsToast.show({ message: @json(session($type)), type: @json($type) });
+                }
+            });
+        </script>
+        @endif
+        @endforeach
 
         {{-- Third Party Core Production Assets Scripts --}}
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         {{-- Alpine.js is bundled with Livewire v4, no need to load separately --}}
 
-        @vite(['resources/cms/js/dashboard.js'])
+        @vite(['resources/cms/js/cms-toast.js', 'resources/cms/js/dashboard.js'])
 
         <script>
                                         // Wait for dashboard.js to be loaded before calling updateDashboardConfig

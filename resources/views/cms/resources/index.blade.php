@@ -36,21 +36,15 @@
                 </div>
                 <select wire:model.live="filterType" class="cms-perpage-select bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                     <option value="">{{ __('cms.resources.all_types') }}</option>
-                    <option value="case_study">Caso clínico</option>
-                    <option value="video">Video</option>
-                    <option value="manual">Manual</option>
-                    <option value="technical_sheet">Ficha técnica</option>
-                    <option value="downloadable_guide">Guía descargable</option>
-                    <option value="article">Artículo</option>
+                    @foreach($cmsResourceTypes as $rt)
+                        <option value="{{ $rt->id }}">{{ $rt->name }}</option>
+                    @endforeach
                 </select>
                 <select wire:model.live="filterSpecialty" class="cms-perpage-select bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                     <option value="">{{ __('cms.resources.all_specialties') }}</option>
-                    <option value="Cirugía Bucal">Cirugía Bucal</option>
-                    <option value="Maxilofacial">Maxilofacial</option>
-                    <option value="Periodoncia">Periodoncia</option>
-                    <option value="Ortodoncia">Ortodoncia</option>
-                    <option value="Endodoncia">Endodoncia</option>
-                    <option value="Implantología">Implantología</option>
+                    @foreach($cmsResourceSpecialties as $rs)
+                        <option value="{{ $rs->id }}">{{ $rs->name }}</option>
+                    @endforeach
                 </select>
                 <select wire:model.live="perPage" class="cms-perpage-select bg-slate-50 border border-slate-100 rounded-lg px-3 py-1.5 pr-8 text-[13px] text-body focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer">
                     <option value="10">10 por página</option>
@@ -209,12 +203,9 @@
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
                         <select wire:model="resource_type_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                             <option value="">Seleccionar tipo</option>
-                            <option value="1">Caso Clínico</option>
-                            <option value="2">Video</option>
-                            <option value="3">Manual</option>
-                            <option value="4">Ficha Técnica</option>
-                            <option value="5">Guía Descargable</option>
-                            <option value="6">Artículo</option>
+                            @foreach($cmsResourceTypes as $rt)
+                                <option value="{{ $rt->id }}">{{ $rt->name }}</option>
+                            @endforeach
                         </select>
                         @error('resource_type_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
@@ -222,15 +213,9 @@
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Especialidad</label>
                         <select wire:model="resource_specialty_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                             <option value="">Seleccionar especialidad</option>
-                            <option value="1">Cirugía Bucal</option>
-                            <option value="2">Maxilofacial</option>
-                            <option value="3">Periodoncia</option>
-                            <option value="4">Ortodoncia</option>
-                            <option value="5">Endodoncia</option>
-                            <option value="6">Implantología</option>
-                            <option value="7">Osteosíntesis</option>
-                            <option value="8">Biomateriales</option>
-                            <option value="9">Odontología General</option>
+                            @foreach($cmsResourceSpecialties as $rs)
+                                <option value="{{ $rs->id }}">{{ $rs->name }}</option>
+                            @endforeach
                         </select>
                         @error('resource_specialty_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>

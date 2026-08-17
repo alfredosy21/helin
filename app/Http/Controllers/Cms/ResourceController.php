@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Cms;
 
 use App\Models\Module;
 use App\Models\Resource;
+use App\Models\ResourceSpecialty;
+use App\Models\ResourceType;
 use App\Models\Submodule;
 use App\Utils\CmsAccess;
 use Illuminate\Support\Str;
@@ -132,7 +134,11 @@ class ResourceController extends Component
         $resources = $query->orderBy('position')->orderBy('updated_at', 'desc')
             ->paginate($this->perPage);
 
-        return view('cms.resources.index', compact('resources'));
+        return view('cms.resources.index', compact('resources'))
+            ->with([
+                'cmsResourceTypes' => ResourceType::orderBy('position')->get(),
+                'cmsResourceSpecialties' => ResourceSpecialty::orderBy('position')->get(),
+            ]);
     }
 
     public function create()
