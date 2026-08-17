@@ -23,6 +23,7 @@
 - [x] 3.5 Create `resources/views/cms/components/ui/file-upload.blade.php`: dashed `border-line` drop zone with turquesa hover, cloud-upload icon, preview support, accepts `wire:model` via `$attrs`
 - [x] 3.6 Create `resources/views/cms/components/ui/stat-card.blade.php`: props for `icon`, `value`, `label`, `trend`, `trendUp`; renders turquesa gradient card `from-primary/5 to-primary/10` with icon circle, large value, trend indicator with up/down arrow
 - [x] 3.7 Create custom Livewire pagination view: published Livewire's default `tailwind` theme to `resources/views/vendor/livewire/tailwind.blade.php` (via `php artisan livewire:publish --pagination`) and restyled with "Showing X–Y of Z results" text, page buttons with `rounded-lg` and turquesa active state, prev/next with arrow icons and disabled opacity, wrapped in `border-t border-line bg-soft/50` footer. Applies globally with zero PHP changes.
+- [x] 3.8 Ensure the new reusable UI components are resolvable as standard Laravel anonymous components: create `resources/views/components/ui-*.blade.php` for `stat-card`, `empty-state`, `badge-status`, `file-upload`, `toggle`, and `section-header` (or register the `resources/views/cms/components/ui/` path), and include a real `@props([...])` directive in each so attributes are defined.
 
 ## 4. Update existing Blade components
 

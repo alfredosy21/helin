@@ -11,7 +11,7 @@ The CMS interface feels robotic and disconnected from the brand identity. Colors
 - **Restyle pagination**: Replace default Livewire pagination with a custom styled view using turquesa accents.
 - **Refresh dashboard**: Replace generic multi-color stat cards (blue/emerald/purple) with a cohesive turquesa-toned palette and softer gradients.
 - **Redesign auth views**: Login, lock, and forgot-password screens with a split-screen layout — turquesa gradient branding panel on the left, clean form panel on the right. Includes auth layout restyling.
-- **Create reusable components**: `ui/empty-state`, `ui/toggle`, `ui/badge-status`, `ui/section-header`, `ui/file-upload`, `ui/stat-card` to eliminate class duplication across views.
+- **Create reusable components**: `ui/empty-state`, `ui/toggle`, `ui/badge-status`, `ui/section-header`, `ui/file-upload`, `ui/stat-card` to eliminate class duplication across views. Also expose them as standard Laravel anonymous components at `resources/views/components/ui-*.blade.php` so `<x-ui-stat-card>` and similar tags resolve without custom component namespaces.
 - **Softer shadows and transitions**: Replace near-invisible shadows with soft, layered elevations. Add smooth hover transitions throughout.
 - **Remove dark mode classes**: Strip all `dark:` utility classes from CMS views — the CMS is light-only. This prevents broken dark: styles after the palette change.
 - **Restyle third-party notifications**: Override SweetAlert2 and Toastify default colors to use turquesa brand accents.
@@ -33,7 +33,7 @@ _None — no spec-level behavior changes. All modifications are visual/CSS only.
 
 - **CSS/Build**: `resources/cms/css/app.css`, `tailwind.config.js` — color tokens, component classes.
 - **Blade views**: All 41 CMS views under `resources/views/cms/` — class updates, component adoption.
-- **Blade components**: `resources/views/cms/components/ui/` — new components added, existing ones updated.
+- **Blade components**: `resources/views/cms/components/ui/` — new components added, existing ones updated; plus `resources/views/components/ui-*.blade.php` — standard anonymous component copies to ensure `<x-ui-...>` tags resolve correctly.
 - **Layouts**: `resources/views/cms/layouts/dashboard.blade.php` and `resources/views/cms/layouts/auth.blade.php` — sidebar, header, footer, auth wrapper restyling.
 - **Livewire pagination**: Custom pagination view to replace default Tailwind pagination.
 - **No backend changes**: Controllers, models, routes, migrations, and business logic remain untouched.

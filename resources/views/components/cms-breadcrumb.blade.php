@@ -27,7 +27,7 @@ $isSubmoduleActive = $submodule && !$section;
 
     {{-- Module Rendering --}}
     @if($module)
-    <span class="text-slate-300">/</span>
+    <x-ui-icon name="chevron-right" class="w-3 h-3 text-slate-300" />
     <span class="flex items-center gap-1 {{ $isModuleActive ? 'text-primary-600 font-semibold' : 'text-body' }}">
         @if($module->class)
         {{-- Fixed: Using your layout's custom icon component --}}
@@ -39,7 +39,7 @@ $isSubmoduleActive = $submodule && !$section;
 
     {{-- Submodule Rendering --}}
     @if($submodule)
-    <span class="text-slate-300">/</span>
+    <x-ui-icon name="chevron-right" class="w-3 h-3 text-slate-300" />
     <span class="flex items-center gap-1 {{ $isSubmoduleActive ? 'text-primary-600 font-semibold' : 'text-body' }}">
         @if($submodule->icon)
         {{-- Fixed: Using your layout's custom icon component --}}
@@ -51,7 +51,7 @@ $isSubmoduleActive = $submodule && !$section;
 
     {{-- Optional Section Rendering --}}
     @if($section)
-    <span class="text-slate-300">/</span>
+    <x-ui-icon name="chevron-right" class="w-3 h-3 text-slate-300" />
     <span class="flex items-center gap-1 text-primary-600 font-semibold">
         @if($sectionIcon)
         {{-- Fixed: Using your layout's custom icon component --}}

@@ -8,38 +8,32 @@
         {{-- SECCIÓN DE LA TABLA (Se muestra solo si showForm es falso) --}}
 
         {{-- Header Section & Breadcrumb --}}
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2">
-            <div>
-                <x-cms-breadcrumb :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::TESTIMONIALS" />
-                <p class="text-sm text-slate-500 mt-2.5">
-                    {{ __('cms.testimonials.title') }}
-                </p>
-            </div>
-
-            {{-- Botón Principal --}}
+        <x-ui-section-header :module-id="\App\Models\Module::CONTENT" :submodule-id="\App\Models\Submodule::TESTIMONIALS" :subtitle="__('cms.testimonials.title')">
             @if(!$showForm)
-            <button type="button" wire:click="create" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/>
-                </svg>
-                {{ __('cms.testimonials.new_button') }}
-            </button>
+            <x-slot:action>
+                <button type="button" wire:click="create" class="rounded-lg bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 text-sm font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/>
+                    </svg>
+                    {{ __('cms.testimonials.new_button') }}
+                </button>
+            </x-slot:action>
             @endif
-        </div>
+        </x-ui-section-header>
         @if(!$showForm)
         {{-- Main Unified Card: Filtros y Tabla --}}
-        <div class="bg-white rounded-xl border border-slate-100 shadow-[0_1px_2px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
 
             {{-- Search & Filter Section --}}
-            <div class="p-4 bg-white border-b border-slate-50 flex flex-col md:flex-row gap-3">
+            <div class="p-4 bg-white border-b border-line flex flex-col md:flex-row gap-3">
                 <div class="relative flex-1">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.604 10.604Z"/></svg>
                     </span>
                     <input type="text" wire:model.live="search" placeholder="{{ __('cms.testimonials.search_placeholder') }}"
-                           class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:outline-none focus:border-primary transition-colors text-sm text-heading placeholder-slate-300" />
+                           class="w-full pl-10 pr-4 py-2 bg-soft border border-line rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors text-sm text-heading placeholder-slate-300" />
                 </div>
-                <select wire:model.live="perPage" class="bg-slate-50 border border-slate-100 rounded-lg px-4 py-2 text-sm text-slate-600 focus:outline-none focus:border-primary transition-colors">
+                <select wire:model.live="perPage" class="bg-soft border border-line rounded-xl px-4 py-2 text-sm text-body focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
                     <option value="10">{{ __('cms.tables.per_page_10') }}</option>
                     <option value="20">{{ __('cms.tables.per_page_20') }}</option>
                     <option value="50">{{ __('cms.tables.per_page_50') }}</option>
@@ -50,7 +44,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/70 border-b border-slate-100 text-slate-400 text-xs font-semibold">
+                        <tr class="bg-soft border-b border-line text-heading text-xs font-semibold uppercase tracking-wider">
                             <th class="px-4 py-3.5 w-2/5">{{ __('cms.testimonials.author') }}</th>
                             <th class="px-4 py-3.5">{{ __('cms.testimonials.testimony') }}</th>
                             <th class="px-4 py-3.5 text-center w-24">{{ __('cms.tables.updated_at') }}</th>
@@ -58,9 +52,9 @@
                             <th class="px-4 py-3.5 text-center w-24">{{ __('cms.testimonials.actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody id="testimonials-table-body" class="divide-y divide-slate-50 text-sm">
+                    <tbody id="testimonials-table-body" class="divide-y divide-line text-sm">
                         @forelse($testimonials as $testimonial)
-                        <tr wire:key="testimonial-{{ $testimonial->id }}" data-id="{{ $testimonial->id }}" class="sortable-row hover:bg-slate-50/50 transition-colors">
+                        <tr wire:key="testimonial-{{ $testimonial->id }}" data-id="{{ $testimonial->id }}" class="sortable-row hover:bg-primary/5 transition-colors duration-150">
                             <td class="px-4 py-3">
                                 <div class="flex items-start gap-2">
                                     <div class="drag-handle cursor-move text-slate-400 hover:text-slate-600 mt-1 flex-shrink-0">
@@ -104,11 +98,8 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
-                                <div class="flex flex-col items-center text-slate-400">
-                                    <svg class="w-10 h-10 mb-2 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18a2.25 2.25 0 0 1 2.25 2.25v4.25a2.25 2.25 0 0 1-2.25 2.25H2.25A2.25 2.25 0 0 1 0 20.25v-4.25A2.25 2.25 0 0 1 2.25 13.5A2.25 2.25 0 0 0 2.25 11.25V7.104a2.25 2.25 0 0 1 .515-1.425l3.525-4.406A2.25 2.25 0 0 1 8.012 1.5h7.976a2.25 2.25 0 0 1 1.722.813l3.525 4.406a2.25 2.25 0 0 1 .515 1.425v4.146ZM12 3v3.75m0-3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75Z"/></svg>
-                                    <p class="text-xs font-medium">{{ __('cms.general.no_records') }}</p>
-                                </div>
+                            <td colspan="5">
+                                <x-ui-empty-state icon="inbox" :title="__('cms.general.no_records')" />
                             </td>
                         </tr>
                         @endforelse
@@ -121,10 +112,10 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
 
             {{-- Cabecera limpia sin botón X --}}
-            <div class="p-6 border-b border-slate-50">
+            <div class="p-6 border-b border-line">
                 <h2 class="text-lg font-bold text-heading">
                     {{ $editingId ? __('cms.testimonials.edit_title') : __('cms.testimonials.new_title') }}
                 </h2>
@@ -135,12 +126,8 @@
             <form wire:submit.prevent="save" class="p-6 space-y-6">
 
                 {{-- Toggle de estado activo/inactivo --}}
-                <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                    <label for="is_active" class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                        <span class="ml-3 text-sm font-medium text-slate-700">{{ __('cms.general.status_active') }}</span>
-                    </label>
+                <div class="flex items-center gap-6 bg-soft/50 border border-line p-4 rounded-lg">
+                    <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
                 </div>
 
                 {{-- Inputs principales organizados en dos columnas --}}
@@ -165,46 +152,14 @@
                 </div>
 
                 {{-- Imagen del testimonio --}}
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Imagen del Autor</label>
-                    @if($image)
-                    <div class="mb-2 relative group w-32 h-32">
-                        <img src="{{ $image->temporaryUrl() }}" class="w-full h-full object-cover rounded-lg border border-slate-100">
-                        <button type="button" wire:click="$set('image', null)" class="absolute top-1 right-1 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                    @elseif($current_image)
-                    <div class="mb-2 relative group w-32 h-32">
-                        <img src="{{ asset('storage/' . $current_image) }}" class="w-full h-full object-cover rounded-lg border border-slate-100">
-                        <button type="button" wire:click="$set('current_image', null)" class="absolute top-1 right-1 p-1 bg-white rounded-lg shadow-sm text-red-500 hover:text-red-700 border-none cursor-pointer">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                    @endif
-                    <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-primary hover:bg-slate-50 transition-colors bg-slate-50/50">
-                        <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                            <svg class="w-6 h-6 text-slate-400 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
-                            </svg>
-                            <p class="text-xs text-slate-500">Subir imagen del autor</p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">JPG, PNG (Máx. 2MB)</p>
-                        </div>
-                        <input type="file" wire:model="image" class="hidden" accept="image/*" />
-                    </label>
-                    @error('image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                </div>
+                <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" label="Imagen del Autor" accept="image/*" />
 
             {{-- Acciones alineadas a la derecha --}}
             <div class="p-6 border-t border-slate-50 bg-slate-50/30 flex justify-end gap-3">
                 <button type="button" wire:click="cancel" class="px-5 py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                     {{ __('cms.general.cancel') }}
                 </button>
-                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-6 py-2.5 rounded-lg text-sm font-medium bg-primary hover:bg-primary-600 text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
                     <span wire:loading wire:target="save">
                         <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -239,7 +194,7 @@
         sortableInstance = new Sortable(tbody, {
         handle: '.drag-handle',
                 animation: 150,
-                ghostClass: 'bg-emerald-50',
+                ghostClass: 'bg-primary/5',
                 onEnd: function() {
                 const rows = tbody.querySelectorAll('tr[data-id]');
                 const orderedIds = Array.from(rows).map(row => parseInt(row.dataset.id));
