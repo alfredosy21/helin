@@ -10,31 +10,36 @@
         </div>
         <nav class="p-4 space-y-1 overflow-y-auto h-[calc(100%-70px)]">
             <a href="{{ route('home') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-home text-turquesa"></i> Inicio
+                <i class="fas fa-home text-turquesa w-5 text-center"></i> Inicio
             </a>
             <a href="{{ route('catalogo') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-th-large text-turquesa"></i> Todos los Productos
+                <i class="fas fa-th-large text-turquesa w-5 text-center"></i> Todos los productos
             </a>
             <div class="border-t border-helin-border my-3"></div>
-            <p class="px-4 py-2 text-xs text-helin-text uppercase font-semibold tracking-wide">Categorías</p>
-            @foreach(\App\Models\Category::active()->ordered()->get() as $category)
-                <a href="{{ route('catalogo', ['category' => $category->slug]) }}" class="flex items-center justify-between py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                    <span class="flex items-center gap-3"><i class="fas fa-th text-helin-text w-5"></i> {{ $category->name }}</span>
-                    <i class="fas fa-chevron-right text-xs text-helin-text"></i>
-                </a>
-            @endforeach
-            <div class="border-t border-helin-border my-3"></div>
-            @php
-                $settings = \App\Models\Settings::getSettings();
-                $mobileWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
-            @endphp
-            @if($mobileWhatsApp)
-            <a href="https://wa.me/{{ $mobileWhatsApp }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fab fa-whatsapp text-green-500"></i> Escríbenos por WhatsApp
+            <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-tooth text-turquesa w-5 text-center"></i> Implantología
             </a>
-            @endif
-            <a href="{{ route('solicitud') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-file-contract text-turquesa"></i> Solicitud Comercial
+            <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-toolbox text-turquesa w-5 text-center"></i> Osteosíntesis
+            </a>
+            <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-tools text-turquesa w-5 text-center"></i> Instrumentos
+            </a>
+            <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-cube text-turquesa w-5 text-center"></i> Planificación Digital
+            </a>
+            <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-tags text-turquesa w-5 text-center"></i> Ofertas
+            </a>
+            <a href="{{ route('recursos-clinicos') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-cloud-download-alt text-turquesa w-5 text-center"></i> Recursos Clínicos
+            </a>
+            <div class="border-t border-helin-border my-3"></div>
+            <a href="{{ route('carrito') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-shopping-cart text-turquesa w-5 text-center"></i> Ir a carrito
+            </a>
+            <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fab fa-whatsapp text-green-500 w-5 text-center"></i> Escríbenos por WhatsApp
             </a>
         </nav>
     </div>

@@ -19,7 +19,9 @@
         ]
     ])
 
-    <h1 class="page-title">Contáctanos</h1>
+    <header class="policies-header">
+        <h1 class="page-title">Contáctanos</h1>
+    </header>
 
     <section class="contact-layout">
         <aside class="info-block">
@@ -43,13 +45,13 @@
                     </div>
                 </article>
 
-                <article class="info-item">
+                <a href="https://wa.me/584244669150?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="info-item" style="text-decoration:none;color:inherit;">
                     <div class="info-icon"><img src="{{ asset('icons/ws.svg') }}" alt="WhatsApp Comercial" width="24" height="24"></div>
                     <div>
                         <h3>WhatsApp Comercial</h3>
                         <p>{{ $settings?->phone }}</p>
                     </div>
-                </article>
+                </a>
 
                 <article class="info-item">
                     <div class="info-icon"><img src="{{ asset('icons/mail.svg') }}" alt="Correo electrónico" width="24" height="24"></div>

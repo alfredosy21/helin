@@ -1,9 +1,9 @@
 @extends('web.layouts.app')
 
-@section('title', $pageSeo?->seo_title ?? 'Nuestra Empresa - Helin')
+@section('title', 'Nuestra Empresa - Helin')
 
 @section('styles')
-<link rel="stylesheet" href="@minAsset('helin/css/nuestra-empresa.css')">
+<link rel="stylesheet" href="{{ asset('helin/css/nuestra-empresa.css') }}">
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
     ])
 
     <!-- Hero Section -->
-    <section class="about-hero" @if($companyHeroSection && $companyHeroSection->image) style="background: url('{{ asset('storage/' . $companyHeroSection->image) }}') right center/cover no-repeat;" @endif>
+    <section class="about-hero">
         <div class="about-hero-copy">
             @if($companyHeroSection && $companyHeroSection->status == 1 && $companyHeroSection->status_content == 1)
                 @if($companyHeroSection->layout_type === 'hero_buttons')
@@ -62,71 +62,122 @@
     </section>
 
     <!-- About Section -->
-    @php
-        $aboutJson = $aboutSection ? (json_decode($aboutSection->items, true) ?: []) : [];
-        $aboutItems = $aboutJson['items'] ?? $aboutJson;
-    @endphp
     <section class="section-card about" id="quienes-somos">
         <div>
             <span class="section-label">Quiénes somos</span>
             <h2>{{ $aboutSection->title }}</h2>
-            @if($aboutSection && $aboutSection->content)
-                {!! $aboutSection->content !!}
-            @else
-                <p>Somos más que una casa comercial: un aliado con visión quirúrgica, clínica y digital, trabajando junto a especialistas, con educación sin fronteras, ética, foco en respaldo y calidad real.</p>
-                <p>Seleccionamos e importamos lo mejor en odontología y trabajamos codo a codo con ustedes para que cada procedimiento sea un reflejo de la diferencia real: la sonrisa clínica.</p>
-            @endif
+            <p>Somos más que una casa comercial: un aliado con visión quirúrgica, clínica y digital, trabajando junto a especialistas, con educación sin fronteras, ética, foco en respaldo y calidad real.</p>
+            <p>Seleccionamos e importamos lo mejor en odontología y trabajamos codo a codo con ustedes para que cada procedimiento sea un reflejo de la diferencia real: la sonrisa clínica.</p>
 
             <div class="features-grid">
-                @if(count($aboutItems) > 0)
-                    @foreach($aboutItems as $item)
-                        <div class="feature">
-                            @if(!empty($item['icon']))
-                                <i class="{{ $item['icon'] }}"></i>
-                            @endif
-                            <h4>{{ $item['title'] ?? $item['text'] ?? '' }}</h4>
-                        </div>
-                    @endforeach
-                @endif
+                <div class="feature">
+                    <i class="fas fa-shield-halved"></i>
+                    <h4>Calidad comprobada</h4>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-stethoscope"></i>
+                    <h4>Asesoría especializada</h4>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-table-cells-large"></i>
+                    <h4>Portafolio completo</h4>
+                </div>
+                <div class="feature">
+                    <i class="far fa-handshake"></i>
+                    <h4>Respaldo y confianza</h4>
+                </div>
             </div>
         </div>
-        <div class="about-visual" @if($aboutSection && $aboutSection->image) style="background: url('{{ asset('storage/' . $aboutSection->image) }}') center/cover no-repeat;" @endif>
-            @if($aboutSection && $aboutSection->image)
-                <img src="{{ asset('storage/' . $aboutSection->image) }}" alt="{{ $aboutSection->title }}" class="about-visual-img">
-            @else
-                <div class="implants-row">
-                    <div class="implant"></div>
-                    <div class="implant"></div>
-                    <div class="implant"></div>
-                    <div class="implant"></div>
-                </div>
-                <div class="kit-base"></div>
-            @endif
+        <div class="about-visual">
+            <div class="implants-row">
+                <div class="implant"></div>
+                <div class="implant"></div>
+                <div class="implant"></div>
+                <div class="implant"></div>
+            </div>
+            <div class="kit-base"></div>
         </div>
     </section>
 
     <!-- Mission and Vision -->
-    @php
-        $missionJson = $missionSection ? (json_decode($missionSection->items, true) ?: []) : [];
-        $missionItems = $missionJson['items'] ?? $missionJson;
-    @endphp
     <section id="mision-vision">
-        <span class="section-label">{{ $missionSection->title ?? 'Misión y visión' }}</span>
-        @if(count($missionItems) > 0)
-            <div class="mission-vision">
-                @foreach($missionItems as $mv)
-                    <article class="mv-card">
-                        <div class="mv-icon"><i class="{{ $mv['icon'] ?? 'fas fa-crosshairs' }}"></i></div>
-                        <div>
-                            <h3>{{ $mv['title'] ?? '' }}</h3>
-                            <p>{{ $mv['text'] ?? $mv['description'] ?? '' }}</p>
-                        </div>
-                    </article>
-                @endforeach
+        <span class="section-label">Misión y visión</span>
+        <div class="mission-vision">
+            <article class="mv-card">
+                <div class="mv-icon"><i class="fas fa-crosshairs"></i></div>
+                <div>
+                    <h3>Misión</h3>
+                    <p>Acompañar a odontólogos, implantólogos, cirujanos maxilofaciales y especialistas con soluciones integrales para sus procedimientos, combinando productos de alto valor clínico, asesoría técnica y una atención cercana que facilite su trabajo antes, durante y después de cada caso.</p>
+                </div>
+            </article>
+            <article class="mv-card">
+                <div class="mv-icon"><i class="fas fa-binoculars"></i></div>
+                <div>
+                    <h3>Visión</h3>
+                    <p>Convertirnos en el aliado estratégico de referencia para los especialistas en odontología quirúrgica en Venezuela, ayudándolos a resolver sus casos con mayor seguridad, precisión y respaldo técnico.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Nuestros Valores -->
+    <section class="valores-section" id="nuestros-valores">
+        <div class="valores-layout">
+            <div class="valores-header">
+                <span class="section-label">Valores</span>
+                <h2 class="valores-title">Nuestros<br>Valores</h2>
+                <div class="valores-accent-line"></div>
+                <p class="valores-description">Creemos en construir relaciones de confianza con los especialistas, ofreciendo respaldo, conocimiento y soluciones pensadas para su práctica profesional.</p>
             </div>
-        @elseif($missionSection && $missionSection->content)
-            {!! $missionSection->content !!}
-        @endif
+            <div class="valores-cards">
+                <!-- Fila 1: 2 tarjetas -->
+                <div class="valores-row valores-row--2">
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="far fa-handshake"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">01. &nbsp;Cercanía Profesional</h4>
+                        <p class="valor-text">Atendemos al especialista con criterio técnico, pero también con una relación humana, clara y accesible.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">02. &nbsp;Responsabilidad Clínica</h4>
+                        <p class="valor-text">Sabemos que cada decisión impacta un procedimiento real, por eso actuamos con seriedad y precisión.</p>
+                    </div>
+                </div>
+                <!-- Fila 2: 3 tarjetas -->
+                <div class="valores-row valores-row--3">
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">03. &nbsp;Servicio Ágil</h4>
+                        <p class="valor-text">Buscamos responder con rapidez, claridad y soluciones concretas a las necesidades del profesional.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">04. &nbsp;Formación Continua</h4>
+                        <p class="valor-text">Creemos en compartir conocimiento, apoyar la educación y fortalecer la práctica de los especialistas.</p>
+                    </div>
+                    <div class="valor-card">
+                        <div class="valor-icon">
+                            <i class="fas fa-people-group"></i>
+                        </div>
+                        <div class="valor-line"></div>
+                        <h4 class="valor-number-title">05. &nbsp;Respaldo Integral</h4>
+                        <p class="valor-text">Ofrecemos más que productos: ofrecemos orientación, soporte y soluciones conectadas entre sí.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Team Section -->
@@ -137,64 +188,37 @@
             <p>{{ $teamSection->description ?: strip_tags($teamSection->content) }}</p>
             <a href="{{ route('contactanos', ['asunto' => 'informacion-comercial']) }}" class="btn-outline">Solicitar atención comercial <i class="fas fa-comments"></i></a>
         </div>
-        @if($teamSection->image)
         <div class="team-photo">
-            <img src="{{ asset('storage/' . $teamSection->image) }}" alt="Team Helin">
+            <img src="{{ asset('images/team_helin_test.png') }}" alt="Team Helin">
         </div>
-        @endif
     </section>
 
     <!-- Allies Section -->
-    @php
-        $alliesJson = $alliesSection ? (json_decode($alliesSection->items, true) ?: []) : [];
-        $alliesItems = $alliesJson['items'] ?? $alliesJson;
-    @endphp
     <section class="section-card allies" id="nuestros-aliados">
         <div>
             <span class="section-label">Nuestros aliados</span>
-            <h2>{{ $alliesSection->title }}</h2>
-            @if($alliesSection && $alliesSection->content)
-                {!! $alliesSection->content !!}
-            @else
-                <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
-            @endif
+            <h2>Trabajamos junto a marcas líderes</h2>
+            <p>Aliados estratégicos de reconocimiento mundial, que comparten los valores y los mismos de ética, y calidad clínica.</p>
         </div>
-        @if(count($alliesItems) > 0)
         <div class="logos-grid">
-            @foreach($alliesItems as $ally)
-                <div class="brand-card">
-                    @php $allyImg = $ally['image'] ?? $ally['url'] ?? $ally['icon'] ?? null; @endphp
-                    @if($allyImg)
-                        @php $isAbsolute = str_starts_with($allyImg, 'http://') || str_starts_with($allyImg, 'https://'); @endphp
-                        <img src="{{ $isAbsolute ? $allyImg : asset('storage/' . $allyImg) }}" alt="{{ $ally['title'] ?? 'Aliado Helin' }}">
-                    @else
-                        <span>{{ $ally['title'] ?? '' }}</span>
-                    @endif
-                </div>
-            @endforeach
+            <div class="brand-card"><img src="{{ asset('images/gdt_logo.jpg') }}" alt="GDT"></div>
+            <div class="brand-card"><img src="{{ asset('images/ab_logo.jpg') }}" alt="AB"></div>
+            <div class="brand-card"><img src="{{ asset('images/bluem_logo.jpg') }}" alt="Bluem"></div>
+            <div class="brand-card"><img src="{{ asset('images/logo_czmedietch.jpg') }}" alt="CZ Medietch"></div>
+            <div class="brand-card"><img src="{{ asset('images/tealth_logo.jpg') }}" alt="Tealth"></div>
+            <div class="brand-card"><img src="{{ asset('images/tissum_logo.jpg') }}" alt="Tissum"></div>
         </div>
-        @endif
     </section>
 
     <!-- CTA Section -->
-    <section class="cta" @if($ctaSection && $ctaSection->image) style="background: url('{{ asset('storage/' . $ctaSection->image) }}') center/cover no-repeat;" @endif>
+    <section class="cta">
         <div>
-            <h2>{{ $ctaSection->title ?? '¿Listo para transformar tu práctica clínica?' }}</h2>
-            @if($ctaSection && $ctaSection->content)
-                {!! $ctaSection->content !!}
-            @else
-                <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
-            @endif
+            <h2>¿Listo para transformar tu práctica clínica?</h2>
+            <p>Somos tu aliado en cada paso hacia la excelencia de la salud bucal.</p>
         </div>
         <div class="cta-actions">
-            @php
-                $settings = \App\Models\Settings::getSettings();
-                $companyWhatsApp = $settings && !empty($settings->valencia_whatsapp) ? preg_replace('/[^0-9]/', '', $settings->valencia_whatsapp) : null;
-            @endphp
-            @if($companyWhatsApp)
-            <a href="https://wa.me/{{ $companyWhatsApp }}?text={{ urlencode('Hola, estoy interesado en productos Helin y me gustaría recibir asesoría de un ejecutivo comercial.') }}" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
-            @endif
-            <a href="{{ route('contactanos') }}" class="btn-outline"><i class="fas fa-envelope"></i> Enviar un correo</a>
+            <a href="https://api.whatsapp.com/send/?phone=584244669150&text=Hola%2C+estoy+interesado+en+productos+Helin+y+me+gustar%C3%ADa+recibir+asesor%C3%ADa+de+un+ejecutivo+comercial.&type=phone_number&app_absent=0" target="_blank" class="cta-btn-helin"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <a href="{{ route('contactanos') }}" class="cta-btn-helin btn-white"><i class="fas fa-envelope"></i> Enviar un correo</a>
         </div>
     </section>
 </main>
