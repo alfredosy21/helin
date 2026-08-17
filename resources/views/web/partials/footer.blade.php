@@ -70,9 +70,9 @@
                 <ul class="space-y-1.5 md:space-y-2 text-white/80 text-xs md:text-sm">
                     @foreach($offices as $office)
                         @php
-                            $cityName = ucfirst($office['city'] ?? $office['name'] ?? '');
+                            $cityName = ucfirst($office['name'] ?? '');
                             $whatsapp = $office['whatsapp'] ?? null;
-                            $location = $office['location'] ?? $office['url'] ?? null;
+                            $location = $office['url'] ?? null;
                             if ($location && !preg_match('~^https?://~', $location)) {
                                 $location = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($location);
                             }

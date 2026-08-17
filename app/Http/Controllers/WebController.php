@@ -224,10 +224,26 @@ class WebController extends Controller
 
         // Direcciones por zona
         $zoneData = [
-            1 => ['label' => 'Caracas',  'location' => 'CCCT, Torre C, Oficina 13-07, Caracas'],
-            2 => ['label' => 'Valencia', 'location' => 'CC Otama, Nivel 2, Local 2-2, Valencia, Edo. Carabobo'],
-            3 => ['label' => 'Barquisimeto', 'location' => 'Centro Empresarial Plaza Madrid, Piso 4, Oficina 4-9, Barquisimeto, Edo. Lara'],
-            4 => ['label' => 'Maracaibo', 'location' => 'CC Terraza 77, Piso 1, Local L-15, Maracaibo, Edo. Zulia'],
+            1 => [
+                'label' => 'Caracas',
+                'location' => 'CCCT, Torre C, Oficina 13-07, Caracas',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B029\'03.2%22N+66%C2%B051\'18.3%22W/@10.4842222,-66.8550833,1059m/data=!3m1!1e3!4m4!3m3!8m2!3d10.4842222!4d-66.8550833',
+            ],
+            2 => [
+                'label' => 'Valencia',
+                'location' => 'CC Otama, Nivel 2, Local 2-2, Valencia, Edo. Carabobo',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B012\'39.5%22N+68%C2%B000\'59.1%22W/@10.2109722,-68.0164167,1060m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d10.2109722!4d-68.0164167',
+            ],
+            3 => [
+                'label' => 'Barquisimeto',
+                'location' => 'Centro Empresarial Plaza Madrid, Piso 4, Oficina 4-9, Barquisimeto, Edo. Lara',
+                'map_url' => 'https://www.google.com/maps/place/10%C2%B003\'53.2%22N+69%C2%B017\'02.9%22W/@10.0647778,-69.2841389,1061m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d10.0647778!4d-69.2841389',
+            ],
+            4 => [
+                'label' => 'Maracaibo',
+                'location' => 'CC Terraza 77, Piso 1, Local L-15, Maracaibo, Edo. Zulia',
+                'map_url' => 'https://www.google.com/maps/place/Centro+Comercial+Terraza+77/@10.66712,-71.6033406,1059m/data=!3m2!1e3!4b1!4m6!3m5!1s0x8e89990a82a8667f:0xb5f35dd883bdff5a!8m2!3d10.66712!4d-71.6033406!16s%2Fg%2F11gzmpqc73',
+            ],
         ];
 
         // WhatsApp numbers activos para info de contacto
@@ -254,6 +270,7 @@ class WebController extends Controller
                 'phone' => $phoneByState[$state->code] ?? null,
                 'whatsapp' => null,
                 'location' => $zd['location'],
+                'map_url' => $zd['map_url'] ?? null,
             ];
         }
 
