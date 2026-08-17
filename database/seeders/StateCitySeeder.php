@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\State;
 use App\Models\City;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class StateCitySeeder extends Seeder
 {
@@ -128,7 +129,8 @@ class StateCitySeeder extends Seeder
 
         foreach ($citiesByState[$stateCode] ?? [] as $cityName) {
             City::updateOrCreate(
-                ['state_id' => $state->id, 'name' => $cityName]
+                ['state_id' => $state->id, 'name' => $cityName],
+                ['slug' => Str::slug($cityName)]
             );
         }
     }

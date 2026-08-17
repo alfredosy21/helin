@@ -69,9 +69,9 @@ class CommercialRequestController extends Controller
             // Get customer type ID from slug
             $customerType = \App\Models\CustomerType::where('slug', $request->tipo_cliente)->first();
 
-            // Get state and city IDs
+            // Get state and city IDs (city scoped to state to avoid slug collisions across states)
             $state = \App\Models\State::where('code', $request->estado)->first();
-            $city = \App\Models\City::where('slug', $request->ciudad)->first();
+            $city = \App\Models\City::where('slug', $request->ciudad)->where('state_id', $state->id)->first();
 
             // Get delivery method
             $deliveryMethod = \App\Models\DeliveryMethod::where('slug', $request->envio)->first();
@@ -84,7 +84,9 @@ class CommercialRequestController extends Controller
             $shippingCity = null;
             if ($request->envio_estado && $request->envio_ciudad) {
                 $shippingState = \App\Models\State::where('code', $request->envio_estado)->first();
-                $shippingCity = \App\Models\City::where('slug', $request->envio_ciudad)->first();
+                $shippingCity = $shippingState
+                    ? \App\Models\City::where('slug', $request->envio_ciudad)->where('state_id', $shippingState->id)->first()
+                    : null;
             }
 
             // Get WhatsApp number for the state
