@@ -32,7 +32,7 @@
 <div class="space-y-1">
     {{-- Label --}}
     @if($label)
-        <label for="{{ $name }}" class="block text-xs font-semibold text-body uppercase tracking-wider">
+        <label for="{{ $name }}" class="block text-[11px] font-medium text-body">
             {{ $label }}
             @if($required) <span class="text-red-500">*</span> @endif
         </label>
@@ -51,7 +51,7 @@
             {{ $readonly ? 'readonly' : '' }}
             {{ $maxlength ? "maxlength=\"{$maxlength}\"" : '' }}
             @php
-            $textareaClasses = 'block w-full rounded-xl border border-line bg-white text-body focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm transition-colors duration-200 placeholder:text-body';
+            $textareaClasses = 'block w-full rounded-lg border border-line bg-white text-[13px] text-body px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary/20 transition-colors duration-200 placeholder:text-body placeholder:text-[11px]';
             if ($error) {
                 $textareaClasses .= ' border-red-500 focus:border-red-500 focus:ring-red-500/20';
             }

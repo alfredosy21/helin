@@ -33,30 +33,31 @@
 
             {{-- Messages Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">ID</th>
                             <th class="px-4 py-2.5">Nombre</th>
                             <th class="px-4 py-2.5">Contacto</th>
                             <th class="px-4 py-2.5">Asunto</th>
-                            <th class="px-4 py-2.5 text-center">Estado</th>
-                            <th class="px-4 py-2.5 text-center">Fecha</th>
-                            <th class="px-4 py-2.5 text-center">Acciones</th>
+                            <th class="px-4 py-2.5 text-center w-28">Estado</th>
+                            <th class="px-4 py-2.5 text-center w-36">Fecha</th>
+                            <th class="px-4 py-2.5 text-center w-32">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-[13px]">
                         @forelse($messages as $message)
                             <tr class="hover:bg-slate-50/60 transition-colors {{ $message->is_read ? 'text-body' : 'text-body' }}">
                                 <td class="px-4 py-2.5">#{{ $message->id }}</td>
-                                <td class="px-4 py-2.5">{{ $message->nombre }}</td>
+                                <td class="px-4 py-2.5"><span class="block truncate">{{ $message->nombre }}</span></td>
                                 <td class="px-4 py-2.5">
-                                    <div>{{ $message->email }}</div>
+                                    <div class="min-w-0"><div class="truncate">{{ $message->email }}</div>
                                     @if ($message->telefono)
-                                        <div class="text-[13px] text-body">{{ $message->telefono }}</div>
+                                        <div class="text-[13px] text-body truncate">{{ $message->telefono }}</div>
                                     @endif
+                                </div>
                                 </td>
-                                <td class="px-4 py-2.5 max-w-[220px] truncate">{{ $message->asunto }}</td>
+                                <td class="px-4 py-2.5"><span class="block truncate">{{ $message->asunto }}</span></td>
                                 <td class="px-4 py-2.5 text-center">
                                     @if ($message->is_read)
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs bg-primary-500/10 text-primary-700">

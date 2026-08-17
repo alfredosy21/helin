@@ -41,7 +41,7 @@
 
             {{-- Payment Methods Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">Método de Pago</th>
@@ -58,9 +58,9 @@
                                     <div class="drag-handle cursor-move text-body hover:text-body mt-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div>
-                                        <div class="text-body">{{ $method->name }}</div>
-                                        <div class="text-[13px] text-body line-clamp-2">{{ $method->description }}</div>
+                                    <div class="min-w-0">
+                                        <div class="text-body truncate">{{ $method->name }}</div>
+                                        <div class="text-[13px] text-body truncate">{{ $method->description }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -107,29 +107,18 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? 'Editar Método de Pago' : 'Nuevo Método de Pago' }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">Configura los métodos de pago disponibles para tus clientes</p>
-            </div>
-
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-
-                    {{-- Toggle de estado --}}
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? 'Editar Método de Pago' : 'Nuevo Método de Pago' }}" description="Configura los métodos de pago disponibles para tus clientes" icon="credit-card">
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                         <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
                         <div class="sm:ml-6">
                             <x-ui-toggle wire:model="requires_receipt" label="Requiere comprobante" />
                         </div>
                     </div>
 
-                    {{-- Información básica --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Título <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="Ej: Transferencia Bancaria"
@@ -137,8 +126,6 @@
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-
-                    {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Descripción</label>
                         <textarea wire:model="description" rows="8"
@@ -146,31 +133,30 @@
                                   placeholder="Describe detalladamente cómo funciona este método de pago, sus características, requisitos, tiempos de procesamiento, comisiones aplicables y cualquier información relevante que los clientes necesiten saber..."></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? 'Guardar' : 'Crear' }}
-                        </span>
-                        <span wire:loading wire:target="save">
-                            {{ $editingId ? 'Guardar' : 'Crear' }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    Cancelar
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? 'Guardar' : 'Crear' }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? 'Guardar' : 'Crear' }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

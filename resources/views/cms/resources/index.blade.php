@@ -61,7 +61,7 @@
 
             {{-- Resources Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">{{ __('cms.resources.resource') }}</th>
@@ -81,9 +81,9 @@
                                     <div class="drag-handle cursor-move text-body hover:text-body mt-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div class="flex-1">
-                                        <div class="text-body mb-1">{{ $resource->title }}</div>
-                                        <div class="text-[13px] text-body line-clamp-2">{{ Str::limit($resource->description, 80) }}</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-body mb-1 truncate">{{ $resource->title }}</div>
+                                        <div class="text-[13px] text-body truncate">{{ Str::limit($resource->description, 80) }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -140,37 +140,26 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? __('cms.resources.edit_title') : __('cms.resources.new_title') }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">{{ __('cms.resources.subtitle') }}</p>
-            </div>
-
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-
-                    {{-- Toggle de estado y destacado --}}
-                    <div class="flex items-center gap-6 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? __('cms.resources.edit_title') : __('cms.resources.new_title') }}" description="{{ __('cms.resources.subtitle') }}" icon="briefcase">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-6 bg-slate-50/50 border border-slate-100 p-3 rounded-lg">
                         <label for="is_active" class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="is_active" wire:model="is_active" class="sr-only peer">
                             <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                            <span class="ml-3 text-sm font-medium text-body">{{ __('cms.general.status_active') }}</span>
+                            <span class="ml-3 text-[13px] font-medium text-body">{{ __('cms.general.status_active') }}</span>
                         </label>
 
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" wire:model="featured" class="sr-only peer">
                             <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
-                            <span class="ml-3 text-sm font-medium text-body">{{ __('cms.general.featured') }}</span>
+                            <span class="ml-3 text-[13px] font-medium text-body">{{ __('cms.general.featured') }}</span>
                         </label>
                     </div>
 
-                    {{-- Inputs principales --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.title_label') }} <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="title" placeholder="{{ __('cms.resources.title_placeholder') }}"
@@ -185,7 +174,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.type_label') }} <span class="text-red-500">*</span></label>
                             <select wire:model="type" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
@@ -199,9 +188,6 @@
                             </select>
                             @error('type') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.format_label') }}</label>
                             <select wire:model="format" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
@@ -213,8 +199,47 @@
                             @error('format') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Descripción --}}
+            {{-- Clasificación --}}
+            <x-ui-form-card title="Clasificación" description="Tipo de recurso y especialidad" icon="folder">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
+                        <select wire:model="resource_type_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="1">Caso Clínico</option>
+                            <option value="2">Video</option>
+                            <option value="3">Manual</option>
+                            <option value="4">Ficha Técnica</option>
+                            <option value="5">Guía Descargable</option>
+                            <option value="6">Artículo</option>
+                        </select>
+                        @error('resource_type_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Especialidad</label>
+                        <select wire:model="resource_specialty_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                            <option value="">Seleccionar especialidad</option>
+                            <option value="1">Cirugía Bucal</option>
+                            <option value="2">Maxilofacial</option>
+                            <option value="3">Periodoncia</option>
+                            <option value="4">Ortodoncia</option>
+                            <option value="5">Endodoncia</option>
+                            <option value="6">Implantología</option>
+                            <option value="7">Osteosíntesis</option>
+                            <option value="8">Biomateriales</option>
+                            <option value="9">Odontología General</option>
+                        </select>
+                        @error('resource_specialty_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </x-ui-form-card>
+
+            {{-- Contenido --}}
+            <x-ui-form-card title="Contenido" description="Descripción y contenido del recurso" icon="file-text">
+                <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.description_label') }} <span class="text-red-500">*</span></label>
                         <textarea wire:model="description" rows="4"
@@ -223,41 +248,41 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Tipo de Recurso y Especialidad --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Tipo de Recurso <span class="text-red-500">*</span></label>
-                            <select wire:model="resource_type_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                                <option value="">Seleccionar tipo</option>
-                                <option value="1">Caso Clínico</option>
-                                <option value="2">Video</option>
-                                <option value="3">Manual</option>
-                                <option value="4">Ficha Técnica</option>
-                                <option value="5">Guía Descargable</option>
-                                <option value="6">Artículo</option>
-                            </select>
-                            @error('resource_type_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Especialidad</label>
-                            <select wire:model="resource_specialty_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                                <option value="">Seleccionar especialidad</option>
-                                <option value="1">Cirugía Bucal</option>
-                                <option value="2">Maxilofacial</option>
-                                <option value="3">Periodoncia</option>
-                                <option value="4">Ortodoncia</option>
-                                <option value="5">Endodoncia</option>
-                                <option value="6">Implantología</option>
-                                <option value="7">Osteosíntesis</option>
-                                <option value="8">Biomateriales</option>
-                                <option value="9">Odontología General</option>
-                            </select>
-                            @error('resource_specialty_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                        </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.content_label') }}</label>
+                        <textarea wire:model="content" rows="6"
+                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"
+                                  placeholder="{{ __('cms.resources.content_placeholder') }}"></textarea>
+                        @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Archivo/URL --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.diagnosis_label') }}</label>
+                            <textarea wire:model="diagnosis" rows="3"
+                                      class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
+                            @error('diagnosis') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.materials_label') }}</label>
+                            <textarea wire:model="materials" rows="3"
+                                      class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
+                            @error('materials') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.results_label') }}</label>
+                            <textarea wire:model="results" rows="3"
+                                      class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
+                            @error('results') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                </div>
+            </x-ui-form-card>
+
+            {{-- Archivos --}}
+            <x-ui-form-card title="Archivos y multimedia" description="Archivo, URL, imagen y galería" icon="link">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.file_label') }} (opcional)</label>
                             <input type="file" wire:model="file_path" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
@@ -271,12 +296,6 @@
                         </div>
                     </div>
 
-                    {{-- Imagen miniatura --}}
-                    <x-ui-file-upload model="thumbnail" current-model="current_thumbnail" :preview="$thumbnail" :current-image="$current_thumbnail" :label="__('cms.resources.thumbnail_label')">
-                        {{ __('cms.general.select_image') }}
-                    </x-ui-file-upload>
-
-                    {{-- Video URL --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.video_url_label') }}</label>
                         <input type="url" wire:model="video_url" placeholder="https://www.youtube.com/embed/..."
@@ -284,37 +303,10 @@
                         @error('video_url') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Contenido --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.content_label') }}</label>
-                        <textarea wire:model="content" rows="6"
-                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"
-                                  placeholder="{{ __('cms.resources.content_placeholder') }}"></textarea>
-                        @error('content') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
+                    <x-ui-file-upload model="thumbnail" current-model="current_thumbnail" :preview="$thumbnail" :current-image="$current_thumbnail" :label="__('cms.resources.thumbnail_label')">
+                        {{ __('cms.general.select_image') }}
+                    </x-ui-file-upload>
 
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.diagnosis_label') }}</label>
-                        <textarea wire:model="diagnosis" rows="3"
-                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
-                        @error('diagnosis') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.materials_label') }}</label>
-                        <textarea wire:model="materials" rows="3"
-                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
-                        @error('materials') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.results_label') }}</label>
-                        <textarea wire:model="results" rows="3"
-                                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
-                        @error('results') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Galería --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resources.gallery_label') }}</label>
                         <div class="relative">
@@ -346,32 +338,30 @@
                             @error('gallery.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
-
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        {{ __('cms.general.cancel') }}
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.resources.new_button') }}
-                        </span>
-                        <span wire:loading wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.resources.new_button') }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    {{ __('cms.general.cancel') }}
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.resources.new_button') }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.resources.new_button') }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

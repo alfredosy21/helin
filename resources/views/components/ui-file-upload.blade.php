@@ -12,7 +12,7 @@
 
 <div class="space-y-1.5">
     @if($label)
-        <label class="text-xs font-semibold text-body uppercase tracking-wider">{{ $label }}</label>
+        <label class="text-[11px] font-medium text-body">{{ $label }}</label>
     @endif
     <div class="relative">
         @if($preview && !$multiple)
@@ -33,10 +33,10 @@
             </div>
         @endif
 
-        <label class="flex flex-col items-center justify-center w-full {{ $height }} border-2 border-dashed border-line rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-500/5 transition-colors bg-soft/50">
-            <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                <x-ui-icon name="upload" class="w-6 h-6 text-body mb-1" />
-                <p class="text-xs text-body">{{ $slot->isNotEmpty() ? $slot : __('cms.general.select_image') }}</p>
+        <label class="flex flex-col items-center justify-center w-full {{ $height }} border border-dashed border-line rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-500/5 transition-colors bg-soft/30">
+            <div class="flex flex-col items-center justify-center pt-3 pb-3">
+                <x-ui-icon name="upload" class="w-5 h-5 text-body mb-1" />
+                <p class="text-[11px] text-body">{{ $slot->isNotEmpty() ? $slot : __('cms.general.select_image') }}</p>
                 <p class="text-[10px] text-body mt-0.5">{{ $hint }}</p>
             </div>
             <input type="file" wire:model="{{ $model }}" class="hidden" accept="{{ $accept }}" {{ $multiple ? 'multiple' : '' }} />

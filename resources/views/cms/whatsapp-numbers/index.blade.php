@@ -46,7 +46,7 @@
 
             {{-- WhatsApp Numbers Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">{{ __('cms.whatsapp_numbers.phone_number') }}</th>
@@ -63,9 +63,9 @@
                                 <div class="flex items-center gap-2">
                                     <i class="fab fa-whatsapp text-[#25D366] text-lg"></i>
                                     <div>
-                                        <div class="text-body">{{ $whatsappNumber->formatted_number }}</div>
+                                        <div class="text-body truncate">{{ $whatsappNumber->formatted_number }}</div>
                                         @if($whatsappNumber->description)
-                                            <div class="text-[13px] text-body">{{ $whatsappNumber->description }}</div>
+                                            <div class="text-[13px] text-body truncate">{{ $whatsappNumber->description }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -122,42 +122,29 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? __('cms.whatsapp_numbers.edit_title') : __('cms.whatsapp_numbers.new_title') }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">{{ __('cms.whatsapp_numbers.subtitle') }}</p>
-            </div>
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? __('cms.whatsapp_numbers.edit_title') : __('cms.whatsapp_numbers.new_title') }}" description="{{ __('cms.whatsapp_numbers.subtitle') }}" icon="message-circle">
+                <div class="space-y-4">
+                    <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
 
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.phone_label') }} <span class="text-red-500">*</span></label>
+                            <input type="text" wire:model="phone_number" placeholder="{{ __('cms.whatsapp_numbers.phone_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            @error('phone_number') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
 
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.executive_label') }}</label>
+                            <input type="text" wire:model="executive_name" placeholder="{{ __('cms.whatsapp_numbers.executive_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            @error('executive_name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
-                    {{-- Número de teléfono --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.phone_label') }} <span class="text-red-500">*</span></label>
-                        <input type="text" wire:model="phone_number" placeholder="{{ __('cms.whatsapp_numbers.phone_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                        @error('phone_number') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Ejecutivo --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.executive_label') }}</label>
-                        <input type="text" wire:model="executive_name" placeholder="{{ __('cms.whatsapp_numbers.executive_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                        @error('executive_name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Estados (multi-select) --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.state_label') }} <span class="text-red-500">*</span></label>
                         <div class="max-h-48 overflow-y-auto bg-slate-50 border border-slate-100 rounded-lg p-3 space-y-2">
@@ -169,11 +156,10 @@
                                 </label>
                             @endforeach
                         </div>
-                        <p class="text-[13px] text-body">Selecciona los estados que cubre este número.</p>
+                        <p class="text-[11px] text-body">Selecciona los estados que cubre este número.</p>
                         @error('state_ids') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.whatsapp_numbers.description_label') }}</label>
                         <textarea wire:model="description" rows="3"
@@ -181,28 +167,30 @@
                                   placeholder="{{ __('cms.whatsapp_numbers.description_placeholder') }}"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        {{ __('cms.general.cancel') }}
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.whatsapp_numbers.new_button') }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    {{ __('cms.general.cancel') }}
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.whatsapp_numbers.new_button') }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.whatsapp_numbers.new_button') }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

@@ -29,67 +29,58 @@
     </div>
 
     <!-- Main Content -->
-    <div class="px-6 space-y-6">
+    <div class="px-3 sm:px-4 lg:px-6 space-y-4 sm:space-y-5">
 
-        <!-- Profile Header with Avatar -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-            <div class="flex flex-col md:flex-row gap-6 items-start">
-                <!-- Avatar Section -->
+        <!-- Avatar -->
+        <x-ui-form-card title="{{ __('cms.profile.upload_photo') }}" description="{{ __('cms.profile.photo_formats') }}" icon="image">
+            <div class="space-y-4">
                 <div class="flex-shrink-0">
                     <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" :label="__('cms.profile.upload_photo')" height="h-32">
                         {{ __('cms.profile.upload_photo') }}
                     </x-ui-file-upload>
-                    <p class="text-center text-[10px] text-body mt-1 uppercase font-bold tracking-wide">{{ __('cms.profile.photo_formats') }}</p>
-                </div>
-
-                <!-- Personal Information -->
-                <div class="flex-1">
-                    <h2 class="text-lg font-bold text-heading mb-6 flex items-center gap-2">
-                        <div class="w-1.5 h-6 bg-primary rounded-full"></div>
-                        {{ __('cms.profile.personal_info') }}
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                        <div class="space-y-1.5">
-                            <x-ui-input label="{{ __('cms.profile.full_name') }}" wire:model="name" icon="user" required />
-                            @error('name') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <x-ui-input label="{{ __('cms.profile.email') }}" wire:model="email" icon="mail" required />
-                            @error('email') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <x-ui-input label="{{ __('cms.profile.department') }}" wire:model="department" placeholder="{{ __('cms.profile.department_placeholder') }}" icon="building" />
-                            @error('department') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <x-ui-input label="{{ __('cms.profile.position') }}" wire:model="position" placeholder="{{ __('cms.profile.position_placeholder') }}" icon="award" />
-                            @error('position') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="space-y-1.5">
-                            <x-ui-input label="{{ __('cms.profile.phone') }}" wire:model="phone" placeholder="{{ __('cms.profile.phone_placeholder') }}" icon="phone" />
-                            @error('phone') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="md:col-span-2 space-y-1.5">
-                            <label class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-1">{{ __('cms.profile.biography') }}</label>
-                            <textarea wire:model="biography" rows="3" placeholder="{{ __('cms.profile.biography_placeholder') }}" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
-                            @error('biography') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
+                    <p class="text-center text-[11px] text-body mt-1 uppercase font-semibold tracking-wide">{{ __('cms.profile.photo_formats') }}</p>
                 </div>
             </div>
-        </div>
+        </x-ui-form-card>
 
-        <!-- Security Section -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-            <h2 class="text-lg font-bold text-heading mb-6 flex items-center gap-2">
-                <div class="w-1.5 h-6 bg-red-500 rounded-full"></div>
-                {{ __('cms.profile.security_title') }}
-            </h2>
+        <!-- Información personal -->
+        <x-ui-form-card title="{{ __('cms.profile.personal_info') }}" description="{{ __('cms.profile.title') }}" icon="user">
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    <div class="space-y-1.5">
+                        <x-ui-input label="{{ __('cms.profile.full_name') }}" wire:model="name" icon="user" required />
+                        @error('name') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <x-ui-input label="{{ __('cms.profile.email') }}" wire:model="email" icon="mail" required />
+                        @error('email') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <x-ui-input label="{{ __('cms.profile.department') }}" wire:model="department" placeholder="{{ __('cms.profile.department_placeholder') }}" icon="building" />
+                        @error('department') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <x-ui-input label="{{ __('cms.profile.position') }}" wire:model="position" placeholder="{{ __('cms.profile.position_placeholder') }}" icon="award" />
+                        @error('position') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="space-y-1.5">
+                        <x-ui-input label="{{ __('cms.profile.phone') }}" wire:model="phone" placeholder="{{ __('cms.profile.phone_placeholder') }}" icon="phone" />
+                        @error('phone') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-1">{{ __('cms.profile.biography') }}</label>
+                    <textarea wire:model="biography" rows="3" placeholder="{{ __('cms.profile.biography_placeholder') }}" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
+                    @error('biography') <span class="text-xs text-red-500 font-medium ml-1">{{ $message }}</span> @enderror
+                </div>
+            </div>
+        </x-ui-form-card>
 
-            <div class="space-y-6">
+        <!-- Seguridad -->
+        <x-ui-form-card title="{{ __('cms.profile.security_title') }}" description="{{ __('cms.profile.password_recommendation') }}" icon="lock">
+            <div class="space-y-4">
                 <!-- Password Fields -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                     <div class="space-y-1.5">
                         <label class="block text-[11px] font-semibold text-body uppercase tracking-wider mb-1">{{ __('cms.profile.current_password') }} <span class="text-red-500">*</span></label>
                         <div class="relative">
@@ -135,23 +126,23 @@
                 </div>
 
                 <!-- Security Actions -->
-                <div class="border-t border-slate-100 pt-6">
-                    <div class="flex items-center justify-between">
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-red-500">
-                                <x-ui-icon name="shield-alert" class="w-5 h-5" />
+                            <div class="w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center text-red-500">
+                                <x-ui-icon name="shield-alert" class="w-4 h-4" />
                             </div>
                             <div>
-                                <h4 class="font-bold text-heading text-sm">{{ __('cms.profile.security_zone') }}</h4>
-                                <p class="text-[13px] text-body">{{ __('cms.profile.password_recommendation') }}</p>
+                                <h4 class="font-semibold text-heading text-[13px]">{{ __('cms.profile.security_zone') }}</h4>
+                                <p class="text-[11px] text-body">{{ __('cms.profile.password_recommendation') }}</p>
                             </div>
                         </div>
 
-                        <div class="flex gap-3">
-                            <button onclick="confirmCloseAllSessions()" class="rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors px-4 py-2.5 cursor-pointer">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                            <button onclick="confirmCloseAllSessions()" class="rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors px-4 py-2 cursor-pointer">
                                 {{ __('cms.profile.close_sessions') }}
                             </button>
-                            <button wire:click="savePassword" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-3 py-1.5 text-[13px] font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer gap-2">
+                            <button wire:click="savePassword" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="rounded-lg bg-primary hover:bg-[#079d8b] text-white px-4 py-2 text-[13px] font-medium transition-colors inline-flex items-center shadow-none border-none cursor-pointer gap-2">
                                 <span wire:loading wire:target="savePassword">
                                     <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -165,7 +156,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </x-ui-form-card>
     </div>
 </div>
 

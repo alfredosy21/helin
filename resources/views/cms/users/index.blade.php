@@ -42,35 +42,24 @@
 
                 {{-- Users Table --}}
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full table-fixed text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
-                                <th class="px-4 py-2.5 text-center w-20">{{ __('cms.tables.admin') }}</th>
-                                <th class="px-4 py-2.5">{{ __('cms.tables.information') }}</th>
-                                <th class="px-4 py-2.5">{{ __('cms.tables.role_security') }}</th>
-                                <th class="px-4 py-2.5">{{ __('cms.tables.status') }}</th>
+                                <th class="px-4 py-2.5">{{ __('cms.users.name_label') }}</th>
+                                <th class="px-4 py-2.5">{{ __('cms.users.email_label') }}</th>
+                                <th class="px-4 py-2.5 w-40">{{ __('cms.tables.role_security') }}</th>
+                                <th class="px-4 py-2.5 w-32">{{ __('cms.tables.status') }}</th>
                                 <th class="px-4 py-2.5 text-right w-32">{{ __('cms.tables.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-[13px]">
                             @forelse($users as $user)
                                 <tr class="hover:bg-slate-50/70 transition-colors duration-150">
-                                    <td class="px-4 py-2.5 flex justify-center">
-                                        @if($user->image)
-                                            <div class="w-9 h-9 rounded-lg overflow-hidden border border-slate-100">
-                                                <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
-                                            </div>
-                                        @else
-                                            <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-body font-semibold text-xs border border-slate-200">
-                                                {{ substr($user->name, 0, 1) }}
-                                            </div>
-                                        @endif
+                                    <td class="px-4 py-2.5">
+                                        <span class="text-body block truncate">{{ $user->name }}</span>
                                     </td>
                                     <td class="px-4 py-2.5">
-                                        <div class="flex flex-col">
-                                            <span class="text-body">{{ $user->name }}</span>
-                                            <span class="text-[13px] text-body">{{ $user->email }}</span>
-                                        </div>
+                                        <span class="text-[13px] text-body block truncate">{{ $user->email }}</span>
                                     </td>
                                     <td class="px-4 py-2.5">
                                         <span class="px-2.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-xs text-body font-medium">
@@ -117,51 +106,41 @@
             </div>
         @else
             {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-            <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
+            <div class="space-y-4 sm:space-y-5">
 
-                {{-- Cabecera limpia sin botón X --}}
-                <div class="p-4 sm:p-6 border-b border-slate-50">
-                    <h2 class="text-lg font-bold text-heading">
-                        {{ $editingId ? __('cms.users.edit_title') : __('cms.users.new_title') }}
-                    </h2>
-                    <p class="text-[13px] text-body mt-1">{{ __('cms.users.subtitle') }}</p>
-                </div>
+                {{-- Información del usuario --}}
+                <x-ui-form-card title="{{ $editingId ? __('cms.users.edit_title') : __('cms.users.new_title') }}" description="{{ __('cms.users.subtitle') }}" icon="user">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                            <div class="space-y-1.5">
+                                <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.name_label') }} <span class="text-red-500">*</span></label>
+                                <input type="text" wire:model="name" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                                @error('name') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                            </div>
 
-                <div class="p-6 space-y-5">
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 p-4 bg-slate-50/50 rounded-lg border border-slate-100">
-                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
-                    </div>
-
-                    {{-- Nombre y Correo en Grid --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                        <div class="space-y-1.5">
-                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.name_label') }} <span class="text-red-500">*</span></label>
-                            <input type="text" wire:model="name" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
-                            @error('name') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                            <div class="space-y-1.5">
+                                <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.email_label') }} <span class="text-red-500">*</span></label>
+                                <input type="email" wire:model="email" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                                @error('email') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                            </div>
                         </div>
 
                         <div class="space-y-1.5">
-                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.email_label') }} <span class="text-red-500">*</span></label>
-                            <input type="email" wire:model="email" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
-                            @error('email') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.role_label') }} <span class="text-red-500">*</span></label>
+                            <select wire:model="rol_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                                <option value="">{{ __('cms.users.role_placeholder') }}</option>
+                                @foreach($roles as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                            @error('rol_id') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
+                </x-ui-form-card>
 
-                    {{-- Selección de Rol --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.role_label') }} <span class="text-red-500">*</span></label>
-                        <select wire:model="rol_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                            <option value="">{{ __('cms.users.role_placeholder') }}</option>
-                            @foreach($roles as $id => $name)
-                                <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                        @error('rol_id') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Bloque de Credenciales --}}
-                    <div class="pt-4 border-t border-slate-100 space-y-4">
+                {{-- Seguridad --}}
+                <x-ui-form-card title="{{ __('cms.users.credentials') }}" description="{{ __('cms.users.password_placeholder') }}" icon="lock">
+                    <div class="space-y-4">
                         <div class="flex items-center justify-between">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.users.credentials') }} <span class="text-red-500">*</span></label>
                             <button type="button" wire:click="generatePassword" class="text-xs font-medium text-primary hover:underline bg-transparent border-none p-0 cursor-pointer">
@@ -189,18 +168,25 @@
                             @endif
                         </div>
                         @error('password') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                        <p class="text-[13px] text-body italic">
+                        <p class="text-[11px] text-body italic">
                             {{ $editingId ? __('cms.users.password_hint_edit') : __('cms.users.password_hint_new') }}
                         </p>
                     </div>
-                </div>
+                </x-ui-form-card>
 
-                {{-- Botonera inferior alineada a la derecha --}}
-                <div class="p-6 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
-                    <button wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                {{-- Estado --}}
+                <x-ui-form-card title="{{ __('cms.general.status_active') }}" description="{{ __('cms.users.subtitle') }}" icon="toggle-left">
+                    <div class="space-y-4">
+                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
+                    </div>
+                </x-ui-form-card>
+
+                {{-- Acciones --}}
+                <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                    <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
                         {{ __('cms.general.cancel') }}
                     </button>
-                    <button wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
                         <span wire:loading wire:target="save">
                             <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

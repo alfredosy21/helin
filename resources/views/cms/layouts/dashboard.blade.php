@@ -207,7 +207,7 @@
 
                 {{-- Main Application Render Slot View Engine --}}
                 <main class="flex-1 flex flex-col min-h-0">
-                    <div class="flex-1 overflow-auto py-2 sm:py-3 px-1 sm:px-2 lg:px-3 bg-soft">
+                    <div class="flex-1 overflow-auto py-1 px-0.5 sm:px-1 lg:px-1.5 bg-soft">
                         @isset($slot)
                         {{ $slot }}
                         @else
@@ -216,8 +216,8 @@
                     </div>
 
                     {{-- Footer Section Details --}}
-                    <footer class="bg-soft border-t border-line">
-                        <div class="px-3 sm:px-4 py-2.5">
+                    <footer class="bg-white border-t border-line">
+                        <div class="px-3 sm:px-4 py-2">
                             <div class="flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-0">
                                 <div class="text-[11px] sm:text-[13px] text-body">
                                     © {{ date('Y') }} Helin CMS. Todos los derechos reservados.

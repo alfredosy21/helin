@@ -45,7 +45,7 @@
 
             {{-- Attribute Values Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">{{ __('cms.attribute_values.attribute') }}</th>
@@ -60,17 +60,17 @@
                         @forelse($attributeValues as $attributeValue)
                         <tr wire:key="attribute-value-{{ $attributeValue->id }}" class="hover:bg-slate-50/70 transition-colors duration-150">
                             <td class="px-4 py-2.5">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-50 border border-slate-100 text-xs text-body">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-50 border border-slate-100 text-xs text-body max-w-full truncate">
                                     {{ $attributeValue->attribute->name ?? '—' }}
                                 </span>
                             </td>
                             <td class="px-4 py-2.5">
-                                <div class="text-body">{{ $attributeValue->value }}</div>
+                                <div class="text-body truncate">{{ $attributeValue->value }}</div>
                                 @if($attributeValue->description)
-                                    <div class="text-[13px] text-body mt-0.5 max-w-md truncate">{{ $attributeValue->description }}</div>
+                                    <div class="text-[13px] text-body mt-0.5 truncate">{{ $attributeValue->description }}</div>
                                 @endif
                             </td>
-                            <td class="px-4 py-2.5 text-body">{{ $attributeValue->label ?? '—' }}</td>
+                            <td class="px-4 py-2.5 text-body truncate">{{ $attributeValue->label ?? '—' }}</td>
                             <td class="px-4 py-2.5">
                                 @if($attributeValue->color)
                                     <span class="inline-flex items-center gap-1.5 text-xs text-body">
@@ -121,93 +121,82 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? __('cms.attribute_values.edit_title') : __('cms.attribute_values.new_title') }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">{{ __('cms.attribute_values.subtitle') }}</p>
-            </div>
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? __('cms.attribute_values.edit_title') : __('cms.attribute_values.new_title') }}" description="{{ __('cms.attribute_values.subtitle') }}" icon="list">
+                <div class="space-y-4">
+                    <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
 
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.attribute_label') }} <span class="text-red-500">*</span></label>
+                            <select wire:model="attribute_id"
+                                    class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                                <option value="">{{ __('cms.attribute_values.attribute_placeholder') }}</option>
+                                @foreach($attributeList as $attribute)
+                                    <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('attribute_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
 
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
-                    </div>
-
-                    {{-- Atributo --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.attribute_label') }} <span class="text-red-500">*</span></label>
-                        <select wire:model="attribute_id"
-                                class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                            <option value="">{{ __('cms.attribute_values.attribute_placeholder') }}</option>
-                            @foreach($attributeList as $attribute)
-                                <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('attribute_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Valor --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.value_label') }} <span class="text-red-500">*</span></label>
-                        <input type="text" wire:model="value" placeholder="{{ __('cms.attribute_values.value_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                        @error('value') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
-
-                    {{-- Etiqueta --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.label_label') }}</label>
-                        <input type="text" wire:model="label" placeholder="{{ __('cms.attribute_values.label_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                    </div>
-
-                    {{-- Color --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.color_label') }}</label>
-                        <div class="flex items-center gap-3">
-                            <input type="color" wire:model="color"
-                                   class="w-12 h-10 rounded-lg border border-slate-100 bg-slate-50 cursor-pointer" />
-                            <input type="text" wire:model="color" placeholder="{{ __('cms.attribute_values.color_placeholder') }}"
-                                   class="flex-1 px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.value_label') }} <span class="text-red-500">*</span></label>
+                            <input type="text" wire:model="value" placeholder="{{ __('cms.attribute_values.value_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            @error('value') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
-                    {{-- Descripción --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.label_label') }}</label>
+                            <input type="text" wire:model="label" placeholder="{{ __('cms.attribute_values.label_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.color_label') }}</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" wire:model="color"
+                                       class="w-12 h-10 rounded-lg border border-slate-100 bg-slate-50 cursor-pointer" />
+                                <input type="text" wire:model="color" placeholder="{{ __('cms.attribute_values.color_placeholder') }}"
+                                       class="flex-1 px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.attribute_values.description_label') }}</label>
                         <textarea wire:model="description" rows="3"
                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"
                                   placeholder="{{ __('cms.attribute_values.description_placeholder') }}"></textarea>
                     </div>
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        {{ __('cms.general.cancel') }}
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.attribute_values.new_button') }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    {{ __('cms.general.cancel') }}
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.attribute_values.new_button') }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.attribute_values.new_button') }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

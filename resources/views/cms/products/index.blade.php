@@ -71,7 +71,7 @@
       </div>
       {{-- Products Table --}}
       <div class="overflow-x-auto">
-         <table class="w-full text-left border-collapse">
+         <table class="w-full table-fixed text-left border-collapse">
             <thead>
                <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                   <th class="px-4 py-2.5">{{ __('cms.tables.product') }}</th>
@@ -92,9 +92,9 @@
                               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
                            </svg>
                         </div>
-                        <div class="flex flex-col">
+                        <div class="flex flex-col min-w-0">
                            <div class="flex items-center gap-2">
-                              <span class="text-body">{{ $product->name }}</span>
+                              <span class="text-body truncate">{{ $product->name }}</span>
                               @if($product->is_featured)
                               <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-50 text-yellow-600 border border-yellow-100">{{ __('cms.products.featured_badge') }}</span>
                               @endif
@@ -104,14 +104,14 @@
                   </td>
                   <td class="px-4 py-2.5">
                      @if($product->category)
-                     <span class="text-[13px] text-body">{{ $product->category->name }}</span>
+                     <span class="text-[13px] text-body block truncate">{{ $product->category->name }}</span>
                      @else
                      <span class="text-[13px] text-body">-</span>
                      @endif
                   </td>
                   <td class="px-4 py-2.5">
                      @if($product->brand)
-                     <span class="text-[13px] text-body">{{ $product->brand->name }}</span>
+                     <span class="text-[13px] text-body block truncate">{{ $product->brand->name }}</span>
                      @else
                      <span class="text-[13px] text-body">-</span>
                      @endif
@@ -170,77 +170,95 @@
    {{ $products->links() }}
    @else
    {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-   <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
-      {{-- Cabecera limpia sin botón X --}}
-      <div class="p-4 sm:p-6 border-b border-slate-50">
-         <h2 class="text-lg font-bold text-heading">{{ $editingId ? __('cms.products.edit_title') : __('cms.products.new_title') }}</h2>
-      </div>
-      {{-- Formulario --}}
-      <form wire:submit.prevent="save" class="p-6 space-y-6">
-         {{-- Básico --}}
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
-               <input type="text" wire:model="name" required
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-               @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+   <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
+
+      {{-- Información básica --}}
+      <x-ui-form-card title="{{ $editingId ? __('cms.products.edit_title') : __('cms.products.new_title') }}" description="{{ __('cms.products.name_label') }}" icon="package">
+         <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.name_label') }} <span class="text-red-500">*</span></label>
+                  <input type="text" wire:model="name" required
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                  @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sku_label') }} <span class="text-red-500">*</span></label>
+                  <input type="text" wire:model="sku" required
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                  @error('sku') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
             </div>
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sku_label') }} <span class="text-red-500">*</span></label>
-               <input type="text" wire:model="sku" required
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-               @error('sku') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-            </div>
-         </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
-               <select wire:model="category_id" required
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                  <option value="">Seleccionar</option>
-                  @foreach($categories as $category)
-                  <option value="{{ $category->id }}">{{ $category->name }}</option>
-                  @endforeach
-               </select>
-               @error('category_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-            </div>
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.brand_label') }} <span class="text-red-500">*</span></label>
-               <select wire:model="brand_id" required
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                  <option value="">{{ __('cms.products.select_option') }}</option>
-                  @foreach($brands as $brand)
-                  <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                  @endforeach
-               </select>
-               @error('brand_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.category_label') }} <span class="text-red-500">*</span></label>
+                  <select wire:model="category_id" required
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                     <option value="">Seleccionar</option>
+                     @foreach($categories as $category)
+                     <option value="{{ $category->id }}">{{ $category->name }}</option>
+                     @endforeach
+                  </select>
+                  @error('category_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.brand_label') }} <span class="text-red-500">*</span></label>
+                  <select wire:model="brand_id" required
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                     <option value="">{{ __('cms.products.select_option') }}</option>
+                     @foreach($brands as $brand)
+                     <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                     @endforeach
+                  </select>
+                  @error('brand_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
             </div>
          </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
-               <select wire:model="system_product_id"
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                  <option value="">{{ __('cms.products.select_system_option') }}</option>
-                  @foreach($systemProducts as $systemProduct)
-                  <option value="{{ $systemProduct->id }}">{{ $systemProduct->name }}</option>
-                  @endforeach
-               </select>
-               @error('system_product_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+      </x-ui-form-card>
+
+      {{-- Clasificación --}}
+      <x-ui-form-card title="Clasificación" description="Sistema, plataforma y material" icon="layers">
+         <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.system_product_label') }}</label>
+                  <select wire:model="system_product_id"
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                     <option value="">{{ __('cms.products.select_system_option') }}</option>
+                     @foreach($systemProducts as $systemProduct)
+                     <option value="{{ $systemProduct->id }}">{{ $systemProduct->name }}</option>
+                     @endforeach
+                  </select>
+                  @error('system_product_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.product_platform_label') }}</label>
+                  <select wire:model="product_platform_id"
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
+                     <option value="">{{ __('cms.products.select_platform_option') }}</option>
+                     @foreach($productPlatforms as $productPlatform)
+                     <option value="{{ $productPlatform->id }}">{{ $productPlatform->name }}</option>
+                     @endforeach
+                  </select>
+                  @error('product_platform_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+               </div>
             </div>
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.product_platform_label') }}</label>
-               <select wire:model="product_platform_id"
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
-                  <option value="">{{ __('cms.products.select_platform_option') }}</option>
-                  @foreach($productPlatforms as $productPlatform)
-                  <option value="{{ $productPlatform->id }}">{{ $productPlatform->name }}</option>
-                  @endforeach
-               </select>
-               @error('product_platform_id') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+               <div class="space-y-1.5">
+                  <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Material</label>
+                  <input type="text" wire:model="material" placeholder="ej: Titanio Grado 5, Cerámica, Acero"
+                     class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+               </div>
+               <div class="space-y-1.5 flex items-center pt-5">
+                  <x-ui-toggle wire:model="is_biomaterial" label="Es Biomaterial" />
+               </div>
             </div>
          </div>
-         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      </x-ui-form-card>
+
+      {{-- Precio y stock --}}
+      <x-ui-form-card title="Precio y stock" description="Información comercial" icon="dollar-sign">
+         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.price_label') }} <span class="text-red-500">*</span></label>
                <input type="number" step="0.01" wire:model="price" required
@@ -269,32 +287,28 @@
                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
             </div>
          </div>
-         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <div class="space-y-1.5">
-               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Material</label>
-               <input type="text" wire:model="material" placeholder="ej: Titanio Grado 5, Cerámica, Acero"
-                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-            </div>
-            <div class="space-y-1.5 flex items-center pt-5">
-               <x-ui-toggle wire:model="is_biomaterial" label="Es Biomaterial" />
-            </div>
-         </div>
-         {{-- Descripción --}}
-         <div class="space-y-1.5">
-            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.description_label') }}</label>
-            <textarea wire:model="description" rows="3"
-               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
-         </div>
-         {{-- Especificaciones Clínicas --}}
-         <div class="space-y-1.5">
-            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.clinical_specs_label') }}</label>
-            <textarea wire:model="clinical_specs" rows="3" placeholder="{{ __('cms.products.clinical_specs_placeholder') }}"
-               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-body"></textarea>
-         </div>
-         {{-- Atributos del Producto --}}
-         @if($attributeGroups->isNotEmpty())
+      </x-ui-form-card>
+
+      {{-- Descripción --}}
+      <x-ui-form-card title="Descripción" description="Descripción y especificaciones clínicas" icon="file-text">
          <div class="space-y-4">
-            <h4 class="text-xs font-bold text-body uppercase tracking-wider">Atributos del Producto</h4>
+            <div class="space-y-1.5">
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.description_label') }}</label>
+               <textarea wire:model="description" rows="3"
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none"></textarea>
+            </div>
+            <div class="space-y-1.5">
+               <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.clinical_specs_label') }}</label>
+               <textarea wire:model="clinical_specs" rows="3" placeholder="{{ __('cms.products.clinical_specs_placeholder') }}"
+                  class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none placeholder-body"></textarea>
+            </div>
+         </div>
+      </x-ui-form-card>
+
+      {{-- Atributos --}}
+      @if($attributeGroups->isNotEmpty())
+      <x-ui-form-card title="Atributos" description="Atributos del producto" icon="sliders-horizontal">
+         <div class="space-y-4">
             @foreach($attributeGroups as $attribute)
                @if($attribute->activeValues->isNotEmpty())
                <div class="rounded-lg border border-slate-100 bg-slate-50/50 p-4 space-y-2">
@@ -318,10 +332,12 @@
             @endforeach
             @error('attribute_value_ids') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
          </div>
-         @endif
-         {{-- Imágenes y Documentos --}}
-         <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.media_section') }}</h4>
+      </x-ui-form-card>
+      @endif
+
+      {{-- Media --}}
+      <x-ui-form-card title="{{ __('cms.products.media_section') }}" description="Imágenes y documentos" icon="image">
+         <div class="space-y-4">
             <div class="space-y-1.5">
                <x-ui-file-upload model="featured_image" :preview="$featured_image" :label="__('cms.products.featured_image_label')">
                   {{ __('cms.products.featured_image_placeholder') }}
@@ -377,9 +393,11 @@
                @error('documents.*') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
             </div>
          </div>
-         {{-- SEO --}}
-         <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.seo_section') }}</h4>
+      </x-ui-form-card>
+
+      {{-- SEO --}}
+      <x-ui-form-card title="{{ __('cms.products.seo_section') }}" description="Optimización para buscadores" icon="search">
+         <div class="space-y-4">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.meta_title') }}</label>
                <input type="text" wire:model="meta_title" placeholder="{{ __('cms.products.meta_title_placeholder') }}"
@@ -404,12 +422,14 @@
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">SEO Keywords (Web)</label>
                <input type="text" wire:model="seo_keywords" placeholder="ej: implantes, titanio, odontología"
                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-               <p class="text-[13px] text-body italic mt-1">Separadas por comas</p>
+               <p class="text-[11px] text-body italic mt-1">Separadas por comas</p>
             </div>
          </div>
-         {{-- Promociones --}}
-         <div class="border-t border-slate-100 pt-5 space-y-4">
-            <h4 class="text-xs font-bold text-body uppercase tracking-wider">{{ __('cms.products.promotions_section') }}</h4>
+      </x-ui-form-card>
+
+      {{-- Promociones --}}
+      <x-ui-form-card title="{{ __('cms.products.promotions_section') }}" description="Precios y fechas de oferta" icon="tag">
+         <div class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                <div class="space-y-1.5">
                   <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.sale_price') }}</label>
@@ -429,42 +449,41 @@
                   </div>
                </div>
             </div>
-         </div>
-         {{-- Publicación --}}
-         <div class="border-t border-slate-100 pt-5">
             <div class="space-y-1.5">
                <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.products.publish_date') }}</label>
                <input type="datetime-local" wire:model="published_at"
                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
             </div>
          </div>
-         {{-- Toggles de estado --}}
-         <div class="flex flex-wrap items-center gap-6 pt-2">
+      </x-ui-form-card>
+
+      {{-- Estado --}}
+      <x-ui-form-card title="Estado" description="Visibilidad y destacados" icon="toggle-left">
+         <div class="flex flex-wrap items-center gap-6">
             <x-ui-toggle wire:model="is_active" :label="__('cms.products.active')" />
             <x-ui-toggle wire:model="is_featured" :label="__('cms.products.featured')" />
             <x-ui-toggle wire:model="is_new" :label="__('cms.products.new')" />
             <x-ui-toggle wire:model="is_on_sale" :label="__('cms.products.on_sale')" />
          </div>
-         {{-- Acciones alineadas en la base del formulario --}}
-            <div class="px-4 py-2.5 border-t border-slate-100 bg-slate-50/30 flex justify-end gap-3">
-                <button type="button" wire:click="cancel"
-                        class="px-5 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-body hover:bg-slate-50 transition-colors cursor-pointer bg-white">
-                    {{ __('cms.general.cancel') }}
-                </button>
-                <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed"
-                        class="px-6 py-2.5 rounded-lg bg-primary hover:bg-[#079d8b] text-white text-sm font-medium transition-colors cursor-pointer border-none flex items-center justify-center gap-2">
-                    <span wire:loading wire:target="save">
-                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                        </svg>
-                    </span>
-                    <span wire:loading.remove wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
-                    <span wire:loading wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
-                </button>
-            </div>
-      </form>
-   </div>
+      </x-ui-form-card>
+
+      {{-- Acciones --}}
+      <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+         <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+            {{ __('cms.general.cancel') }}
+         </button>
+         <button type="button" wire:click="save" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+            <span wire:loading wire:target="save">
+               <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+               </svg>
+            </span>
+            <span wire:loading.remove wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
+            <span wire:loading wire:target="save">{{ $editingId ? __('cms.general.save') : __('cms.products.new_button') }}</span>
+         </button>
+      </div>
+   </form>
    @endif
 </div>
 <script>

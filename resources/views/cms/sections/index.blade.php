@@ -92,26 +92,11 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden animate-in fade-in duration-200">
+        <form wire:submit.prevent="update" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia sin botón X --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">{{ __('cms.sections.edit_title') }}</h2>
-                <p class="text-[13px] text-body mt-1">{{ __('cms.sections.title') }}</p>
-            </div>
-
-            {{-- Formulario --}}
-            <form wire:submit.prevent="update" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-
-                    {{-- Toggles de estado agrupados --}}
-                    <div class="flex flex-wrap items-center gap-6 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <x-ui-toggle wire:model="status" :label="__('cms.sections.active')" />
-
-                        <x-ui-toggle wire:model="status_content" :label="__('cms.sections.visible')" />
-                    </div>
-
-                    {{-- Título a ancho completo --}}
+            {{-- Información de la sección --}}
+            <x-ui-form-card title="{{ __('cms.sections.edit_title') }}" description="{{ __('cms.sections.title') }}" icon="layout">
+                <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.title_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="title" placeholder="{{ __('cms.sections.title_placeholder') }}"
@@ -119,7 +104,6 @@
                         @error('title') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Subtítulo --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.subtitle_label') }}</label>
                         <input type="text" wire:model="subtitle" placeholder="{{ __('cms.sections.subtitle_placeholder') }}"
@@ -127,8 +111,7 @@
                         @error('subtitle') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Tipo de layout e iconos --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.layout_type_label') }}</label>
                             <select wire:model="layout_type" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
@@ -148,8 +131,23 @@
                             @error('icon_style') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Contenido con Quill Editor --}}
+            {{-- Estado y visibilidad --}}
+            <x-ui-form-card title="{{ __('cms.general.status_active') }}" description="{{ __('cms.sections.title') }}" icon="toggle-left">
+                <div class="space-y-4">
+                    <div class="flex flex-wrap items-center gap-6">
+                        <x-ui-toggle wire:model="status" :label="__('cms.sections.active')" />
+
+                        <x-ui-toggle wire:model="status_content" :label="__('cms.sections.visible')" />
+                    </div>
+                </div>
+            </x-ui-form-card>
+
+            {{-- Contenido --}}
+            <x-ui-form-card title="{{ __('cms.sections.content_label') }}" description="{{ __('cms.sections.description_label') }}" icon="file-text">
+                <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.content_label') }} <span class="text-red-500">*</span></label>
                         <div wire:ignore class="relative bg-white rounded-lg overflow-hidden border border-slate-200">
@@ -159,16 +157,19 @@
                         @error('content') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.description_label') }}</label>
                         <textarea wire:model="description" rows="3" placeholder="{{ __('cms.sections.description_placeholder') }}"
                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body resize-none"></textarea>
                         @error('description') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Botón CTA e URL en grid de dos columnas --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {{-- Botón y enlace --}}
+            <x-ui-form-card title="{{ __('cms.sections.button_label') }}" description="{{ __('cms.sections.url_label') }}" icon="link">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.button_label') }}</label>
                             <input type="text" wire:model="name_button" placeholder="{{ __('cms.sections.button_placeholder') }}"
@@ -183,17 +184,20 @@
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.category_slug_label') }}</label>
                             <input type="text" wire:model="category_slug" placeholder="{{ __('cms.sections.category_slug_placeholder') }}"
                                    class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                            <p class="text-[10px] text-body">{{ __('cms.sections.category_slug_hint') }}</p>
+                            <p class="text-[11px] text-body">{{ __('cms.sections.category_slug_hint') }}</p>
                         </div>
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Items estructurados (repeater) --}}
-                    @php
-                        $itemFields = $this->itemFields($layout_type);
-                        $itemFieldLabels = $this->itemFieldLabels();
-                        $repeaterItems = $items ?? [];
-                    @endphp
-                    <div class="space-y-4">
+            {{-- Items estructurados (repeater) --}}
+            @php
+                $itemFields = $this->itemFields($layout_type);
+                $itemFieldLabels = $this->itemFieldLabels();
+                $repeaterItems = $items ?? [];
+            @endphp
+            <x-ui-form-card title="{{ __('cms.sections.items_label') }}" description="{{ __('cms.sections.items_hint') }} {{ $itemsGroup }}" icon="list">
+                <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.items_label') }}</label>
@@ -243,14 +247,16 @@
                             </div>
                             @endforeach
                         </div>
-                        @error('items') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                    </div>
+                    @error('items') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Botones de la sección (repeater) --}}
-                    @php
-                        $repeaterButtons = $buttons ?? [];
-                    @endphp
-                    <div class="space-y-4">
+            {{-- Botones de la sección (repeater) --}}
+            @php
+                $repeaterButtons = $buttons ?? [];
+            @endphp
+            <x-ui-form-card title="{{ __('cms.sections.buttons_label') }}" description="{{ __('cms.sections.buttons_hint') }}" icon="mouse-pointer-click">
+                <div class="space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.buttons_label') }}</label>
@@ -305,10 +311,12 @@
                             @endforeach
                         </div>
                         @error('buttons') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                    </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Galería de imágenes múltiples --}}
-                    <div class="space-y-4">
+            {{-- Galería de imágenes --}}
+            <x-ui-form-card title="{{ __('cms.sections.images_label') }}" description="{{ count($photos) }} {{ __('cms.sections.images_count') }}" icon="image">
+                <div class="space-y-4">
                         <div class="flex items-center justify-between">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider block">{{ __('cms.sections.images_label') }}</label>
                             <span class="text-[13px] text-body">{{ count($photos) }} {{ __('cms.sections.images_count') }}</span>
@@ -347,27 +355,26 @@
                             </div>
                         </div>
                         @error('image') <span class="text-xs text-red-500 font-medium italic block mt-1">{{ $message }}</span> @enderror
-                    </div>
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha en la base del formulario --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancelEdit" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        {{ __('cms.general.cancel') }}
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="update">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="update">{{ __('cms.general.save') }}</span>
-                        <span wire:loading wire:target="update">{{ __('cms.general.save') }}</span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancelEdit" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    {{ __('cms.general.cancel') }}
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="update">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="update">{{ __('cms.general.save') }}</span>
+                    <span wire:loading wire:target="update">{{ __('cms.general.save') }}</span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

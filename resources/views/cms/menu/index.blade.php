@@ -47,7 +47,7 @@
 
             {{-- Menu Items Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">Título</th>
@@ -67,8 +67,8 @@
                                     <div class="drag-handle cursor-move text-body hover:text-body mt-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-body">{{ $menu->title }}</span>
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-body truncate">{{ $menu->title }}</span>
                                         @if($menu->icon)
                                         <div class="flex items-center gap-1 mt-1">
                                             <i class="{{ $menu->icon }} text-xs text-body"></i>
@@ -78,9 +78,9 @@
                                 </div>
                             </td>
                             <td class="px-4 py-2.5">
-                                <div class="flex flex-col">
+                                <div class="flex flex-col min-w-0">
                                     @if($menu->url)
-                                    <a href="{{ $menu->url }}" target="{{ $menu->target_blank ? '_blank' : '_self' }}" class="text-xs text-body hover:text-primary truncate max-w-xs block">
+                                    <a href="{{ $menu->url }}" target="{{ $menu->target_blank ? '_blank' : '_self' }}" class="text-xs text-body hover:text-primary truncate block">
                                         {{ $menu->url }}
                                         @if($menu->target_blank)
                                         <svg class="w-3 h-3 inline-block ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
@@ -90,7 +90,7 @@
                                     <span class="text-[13px] text-body italic">Sin URL</span>
                                     @endif
                                     @if($menu->description)
-                                    <span class="text-[13px] text-body mt-1 block">{{ Str::limit($menu->description, 50) }}</span>
+                                    <span class="text-[13px] text-body mt-1 block truncate">{{ Str::limit($menu->description, 50) }}</span>
                                     @endif
                                 </div>
                             </td>
@@ -154,27 +154,14 @@
         @else
 
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? 'Editar Menú' : 'Nuevo Menú' }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">Configura los elementos del menú de navegación</p>
-            </div>
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? 'Editar Menú' : 'Nuevo Menú' }}" description="Configura los elementos del menú de navegación" icon="menu">
+                <div class="space-y-4">
+                    <x-ui-toggle wire:model="status" :label="__('cms.general.status_active')" />
 
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <x-ui-toggle wire:model="status" :label="__('cms.general.status_active')" />
-                    </div>
-
-                    {{-- Inputs principales --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Título <span class="text-red-500">*</span></label>
                             <input type="text" wire:model="title" placeholder="Ej: Inicio"
@@ -193,7 +180,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">URL</label>
                             <input type="text" wire:model="url" placeholder="Ej: /inicio o https://ejemplo.com"
@@ -207,8 +194,13 @@
                             @error('position') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {{-- Estructura --}}
+            <x-ui-form-card title="Estructura" description="Jerarquía e icono del menú" icon="git-branch">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div class="space-y-1.5">
                             <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Menú Padre</label>
                             <select wire:model="parent_id" class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors">
@@ -227,7 +219,6 @@
                         </div>
                     </div>
 
-                    {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">Descripción</label>
                         <textarea wire:model="description" rows="3"
@@ -236,40 +227,40 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Opciones adicionales --}}
                     <div class="space-y-1.5">
                         <x-ui-toggle wire:model="target_blank" label="Abrir en nueva pestaña" />
                     </div>
-
-                    {{-- Imagen --}}
-                    <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" label="Imagen" hint="JPG, PNG (Máx. 2MB)" height="h-28">
-                        Subir imagen
-                    </x-ui-file-upload>
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        Cancelar
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? 'Guardar' : 'Crear' }}
-                        </span>
-                        <span wire:loading wire:target="save">
-                            {{ $editingId ? 'Guardar' : 'Crear' }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Imagen --}}
+            <x-ui-form-card title="Imagen" description="Imagen del menú" icon="image">
+                <x-ui-file-upload model="image" current-model="current_image" :preview="$image" :current-image="$current_image" label="Imagen" hint="JPG, PNG (Máx. 2MB)" height="h-28">
+                    Subir imagen
+                </x-ui-file-upload>
+            </x-ui-form-card>
+
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    Cancelar
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? 'Guardar' : 'Crear' }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? 'Guardar' : 'Crear' }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>

@@ -35,7 +35,7 @@
 
             {{-- Requests Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">ID</th>
@@ -44,51 +44,51 @@
                             <th class="px-4 py-2.5">Ubicación</th>
                             <th class="px-4 py-2.5">Método de Entrega</th>
                             <th class="px-4 py-2.5">Método de Pago</th>
-                            <th class="px-4 py-2.5 text-center">Estado</th>
-                            <th class="px-4 py-2.5 text-center">Fecha</th>
-                            <th class="px-4 py-2.5 text-center">Acciones</th>
+                            <th class="px-4 py-2.5 text-center w-28">Estado</th>
+                            <th class="px-4 py-2.5 text-center w-36">Fecha</th>
+                            <th class="px-4 py-2.5 text-center w-32">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-[13px]">
                         @forelse($requests as $request)
                         <tr wire:key="request-{{ $request->id }}" class="hover:bg-slate-50/70 transition-colors duration-150">
                             <td class="px-4 py-2.5">
-                                <div class="flex flex-col">
-                                    <span class="text-body">{{ $request->correlative }}</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-body truncate">{{ $request->correlative }}</span>
                                     @if($request->uuid)
-                                    <span class="text-[13px] text-body font-mono">{{ substr($request->uuid, 0, 8) }}...</span>
+                                    <span class="text-[13px] text-body font-mono truncate">{{ substr($request->uuid, 0, 8) }}...</span>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-4 py-2.5">
-                                <div class="flex flex-col">
-                                    <span class="text-body">{{ $request->full_name }}</span>
-                                    <span class="text-[13px] text-body">{{ $request->customerType->name ?? 'N/A' }}</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-body truncate">{{ $request->full_name }}</span>
+                                    <span class="text-[13px] text-body truncate">{{ $request->customerType->name ?? 'N/A' }}</span>
                                     @if($request->company_name)
-                                    <span class="text-[13px] text-body">{{ $request->company_name }}</span>
+                                    <span class="text-[13px] text-body truncate">{{ $request->company_name }}</span>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-4 py-2.5">
-                                <div class="flex flex-col text-xs">
-                                    <span class="text-body">{{ $request->email }}</span>
-                                    <span class="text-body">{{ $request->phone }}</span>
+                                <div class="flex flex-col text-xs min-w-0">
+                                    <span class="text-body truncate">{{ $request->email }}</span>
+                                    <span class="text-body truncate">{{ $request->phone }}</span>
                                     @if($request->whatsappNumber)
-                                    <span class="text-turquesa">WhatsApp: {{ $request->whatsappNumber->phone_number }}</span>
+                                    <span class="text-turquesa truncate">WhatsApp: {{ $request->whatsappNumber->phone_number }}</span>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-4 py-2.5">
-                                <div class="flex flex-col text-xs">
-                                    <span class="text-body">{{ $request->city->name ?? 'N/A' }}</span>
-                                    <span class="text-body">{{ $request->state->name ?? 'N/A' }}</span>
+                                <div class="flex flex-col text-xs min-w-0">
+                                    <span class="text-body truncate">{{ $request->city->name ?? 'N/A' }}</span>
+                                    <span class="text-body truncate">{{ $request->state->name ?? 'N/A' }}</span>
                                 </div>
                             </td>
                             <td class="px-4 py-2.5">
-                                <span class="text-[13px] text-body">{{ $request->deliveryMethod->name ?? 'N/A' }}</span>
+                                <span class="text-[13px] text-body block truncate">{{ $request->deliveryMethod->name ?? 'N/A' }}</span>
                             </td>
                             <td class="px-4 py-2.5">
-                                <span class="text-[13px] text-body">{{ $request->paymentMethod->name ?? 'N/A' }}</span>
+                                <span class="text-[13px] text-body block truncate">{{ $request->paymentMethod->name ?? 'N/A' }}</span>
                             </td>
                             <td class="px-4 py-2.5 text-center">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium

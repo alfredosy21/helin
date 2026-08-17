@@ -43,7 +43,7 @@
 
             {{-- Resource Types Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+                <table class="w-full table-fixed text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/60 text-[10px] font-semibold text-body uppercase tracking-wider border-b border-slate-100">
                             <th class="px-4 py-2.5">{{ __('cms.resource_types.resource_type') }}</th>
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <div>
-                                            <div class="text-body">{{ $resourceType->name }}</div>
+                                            <div class="text-body block truncate">{{ $resourceType->name }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -109,26 +109,13 @@
         </div>
         @else
         {{-- SECCIÓN DEL FORMULARIO A PANTALLA COMPLETA --}}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl border border-slate-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)] overflow-hidden">
+        <form wire:submit.prevent="save" class="space-y-4 sm:space-y-5">
 
-            {{-- Cabecera limpia --}}
-            <div class="p-4 sm:p-6 border-b border-slate-50">
-                <h2 class="text-lg font-bold text-heading">
-                    {{ $editingId ? __('cms.resource_types.edit_title') : __('cms.resource_types.new_title') }}
-                </h2>
-                <p class="text-[13px] text-body mt-1">{{ __('cms.resource_types.subtitle') }}</p>
-            </div>
+            {{-- Información básica --}}
+            <x-ui-form-card title="{{ $editingId ? __('cms.resource_types.edit_title') : __('cms.resource_types.new_title') }}" description="{{ __('cms.resource_types.subtitle') }}" icon="folder">
+                <div class="space-y-4">
+                    <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
 
-            {{-- Formulario --}}
-            <form wire:submit.prevent="save" class="w-full">
-                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
-
-                    {{-- Toggle de estado --}}
-                    <div class="flex items-center gap-3 bg-slate-50/50 border border-slate-100 p-4 rounded-lg">
-                        <x-ui-toggle wire:model="is_active" :label="__('cms.general.status_active')" />
-                    </div>
-
-                    {{-- Inputs principales --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.name_label') }} <span class="text-red-500">*</span></label>
                         <input type="text" wire:model="name" placeholder="{{ __('cms.resource_types.name_placeholder') }}"
@@ -136,7 +123,6 @@
                         @error('name') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Descripción --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.description_label') }}</label>
                         <textarea wire:model="description" rows="3"
@@ -145,25 +131,29 @@
                         @error('description') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                     </div>
 
-                    {{-- Icono --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.icon_label') }}</label>
-                        <input type="text" wire:model="icon" placeholder="{{ __('cms.resource_types.icon_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                        <p class="text-[10px] text-body">{{ __('cms.resource_types.icon_hint') }}</p>
-                        @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.icon_label') }}</label>
+                            <input type="text" wire:model="icon" placeholder="{{ __('cms.resource_types.icon_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            <p class="text-[11px] text-body italic">{{ __('cms.resource_types.icon_hint') }}</p>
+                            @error('icon') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
 
-                    {{-- Etiqueta de formato --}}
-                    <div class="space-y-1.5">
-                        <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.format_label_label') }}</label>
-                        <input type="text" wire:model="format_label" placeholder="{{ __('cms.resource_types.format_label_placeholder') }}"
-                               class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
-                        <p class="text-[10px] text-body">{{ __('cms.resource_types.format_label_hint') }}</p>
-                        @error('format_label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.resource_types.format_label_label') }}</label>
+                            <input type="text" wire:model="format_label" placeholder="{{ __('cms.resource_types.format_label_placeholder') }}"
+                                   class="w-full px-2.5 py-1.5 bg-white border border-line text-[13px] text-body rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder-body" />
+                            <p class="text-[11px] text-body italic">{{ __('cms.resource_types.format_label_hint') }}</p>
+                            @error('format_label') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
+                        </div>
                     </div>
+                </div>
+            </x-ui-form-card>
 
-                    {{-- Imagen --}}
+            {{-- Imagen --}}
+            <x-ui-form-card title="{{ __('cms.general.image_label') }}" description="Imagen y banner del tipo de recurso" icon="image">
+                <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.general.image_label') }}</label>
                         <div class="relative">
@@ -188,7 +178,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
                                     </svg>
                                     <p class="text-[13px] text-body">{{ __('cms.general.select_image') }}</p>
-                                    <p class="text-[10px] text-body mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                                    <p class="text-[11px] text-body mt-0.5">JPG, PNG (Máx. 2MB)</p>
                                 </div>
                                 <input type="file" wire:model="image" class="hidden" accept="image/*" />
                             </label>
@@ -196,7 +186,6 @@
                         </div>
                     </div>
 
-                    {{-- Banner --}}
                     <div class="space-y-1.5">
                         <label class="text-[11px] font-semibold text-body uppercase tracking-wider">{{ __('cms.general.banner_title_label') }}</label>
                         <input type="text" wire:model="banner_title"
@@ -235,39 +224,37 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 0 01-1.41-8.25 5.25 5.25 0 0110.32-2.17 4.5 4.5 0 0110.34 2.17 4.5 4.5 0 01-1.41 8.25H6.75z"/>
                                     </svg>
                                     <p class="text-[13px] text-body">{{ __('cms.general.select_banner_image') }}</p>
-                                    <p class="text-[10px] text-body mt-0.5">JPG, PNG (Máx. 2MB)</p>
+                                    <p class="text-[11px] text-body mt-0.5">JPG, PNG (Máx. 2MB)</p>
                                 </div>
                                 <input type="file" wire:model="banner_image" class="hidden" accept="image/*" />
                             </label>
                             @error('banner_image') <span class="text-xs text-red-500 font-medium italic">{{ $message }}</span> @enderror
                         </div>
                     </div>
-
-
                 </div>
+            </x-ui-form-card>
 
-                {{-- Acciones alineadas a la derecha --}}
-                <div class="p-4 sm:p-6 border-t border-slate-50 bg-slate-50/30 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-                    <button type="button" wire:click="cancel" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
-                        {{ __('cms.general.cancel') }}
-                    </button>
-                    <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-4 py-1.5 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
-                        <span wire:loading wire:target="save">
-                            <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                        <span wire:loading.remove wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.resource_types.new_button') }}
-                        </span>
-                        <span wire:loading wire:target="save">
-                            {{ $editingId ? __('cms.general.save') : __('cms.resource_types.new_button') }}
-                        </span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            {{-- Acciones --}}
+            <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+                <button type="button" wire:click="cancel" class="px-4 py-2 rounded-lg text-[13px] font-medium border border-slate-200 text-body bg-white hover:bg-slate-50 transition-colors cursor-pointer">
+                    {{ __('cms.general.cancel') }}
+                </button>
+                <button type="submit" wire:loading.attr="disabled" wire:loading.class="opacity-75 cursor-not-allowed" class="px-5 py-2 rounded-lg text-[13px] font-medium bg-primary hover:bg-[#079d8b] text-white transition-colors border-none cursor-pointer flex items-center justify-center gap-2">
+                    <span wire:loading wire:target="save">
+                        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span wire:loading.remove wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.resource_types.new_button') }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        {{ $editingId ? __('cms.general.save') : __('cms.resource_types.new_button') }}
+                    </span>
+                </button>
+            </div>
+        </form>
         @endif
 
     </div>
