@@ -13,26 +13,29 @@
                 <i class="fas fa-home text-turquesa w-5 text-center"></i> Inicio
             </a>
             <a href="{{ route('catalogo') }}" class="flex items-center gap-3 py-3 px-4 text-helin-heading font-semibold hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-th-large text-turquesa w-5 text-center"></i> Todos los productos
+                <i class="fa fa-list-ul text-turquesa w-5 text-center" aria-hidden="true"></i> Todos los productos
             </a>
             <div class="border-t border-helin-border my-3"></div>
             <a href="{{ route('catalogo', ['category' => 'implantologia']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-tooth text-turquesa w-5 text-center"></i> Implantología
             </a>
+            <a href="{{ route('catalogo', ['category' => 'regeneracion-guiada-bucal']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-bone text-turquesa w-5 text-center"></i> Regeneración Ósea Guiada
+            </a>
             <a href="{{ route('catalogo', ['category' => 'osteosintesis']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-toolbox text-turquesa w-5 text-center"></i> Osteosíntesis
+            </a>
+            <a href="{{ route('catalogo', ['category' => 'cuidados-especiales']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-face-smile text-turquesa w-5 text-center"></i> Cuidado Bucal
             </a>
             <a href="{{ route('catalogo', ['category' => 'instrumentos']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-tools text-turquesa w-5 text-center"></i> Instrumentos
             </a>
+            <a href="{{ route('catalogo', ['category' => 'equipos-odontologicos']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
+                <i class="fas fa-gears text-turquesa w-5 text-center"></i> Equipos
+            </a>
             <a href="{{ route('catalogo', ['category' => 'planificacion-digital']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
                 <i class="fas fa-cube text-turquesa w-5 text-center"></i> Planificación Digital
-            </a>
-            <a href="{{ route('catalogo', ['tag' => 'on_sale']) }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-tags text-turquesa w-5 text-center"></i> Ofertas
-            </a>
-            <a href="{{ route('recursos-clinicos') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">
-                <i class="fas fa-cloud-download-alt text-turquesa w-5 text-center"></i> Recursos Clínicos
             </a>
             <div class="border-t border-helin-border my-3"></div>
             <a href="{{ route('carrito') }}" class="flex items-center gap-3 py-3 px-4 text-helin-text hover:bg-helin-soft rounded-lg">

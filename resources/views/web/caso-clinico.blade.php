@@ -42,6 +42,8 @@
 @endsection
 
 @section('content')
+<hr class="hidden lg:block w-full" style="border:none;border-top:1px solid rgba(0,0,0,0.06);">
+
 <main class="page">
     @include('web.components.breadcrumb', [
         'items' => [

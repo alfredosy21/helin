@@ -75,11 +75,15 @@ class HelinHeaderSearch {
         const input = document.querySelector(type === 'mobile' ? '#mobile-search-input' : '#header-search-input');
         const query = input?.value.trim() || '';
 
-        if (query) {
-            window.location.href = '/catalogo?search=' + encodeURIComponent(query);
-        } else {
-            window.location.href = '/catalogo';
-        }
+        const categorySelect = type === 'mobile' ? null : document.querySelector('#header-search-category');
+        const category = categorySelect?.value || '';
+
+        const params = new URLSearchParams();
+        if (query) params.set('search', query);
+        if (category) params.set('category', category);
+
+        const queryString = params.toString();
+        window.location.href = '/catalogo' + (queryString ? '?' + queryString : '');
     }
 
     async performSearch(query, dropdown, type) {
