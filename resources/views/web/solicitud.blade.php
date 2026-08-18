@@ -139,7 +139,7 @@
         <!-- Columna Derecha (45%) - Widget de Orden -->
         <div class="lg:w-[45%]">
             <div class="bg-white/80 rounded-xl border border-helin-border/30 p-6 sticky top-24">
-                <h2 class="text-lg font-semibold text-helin-heading/80 mb-5">Resumen de la orden</h2>
+                <h2 class="text-lg font-semibold text-helin-heading/80 mb-5 -ml-2">Resumen de la orden</h2>
 
                 <!-- Resumen de productos -->
                 <div class="mb-6 -mx-6" id="cart-summary">

@@ -21,13 +21,11 @@
                             'instagram' => $settings->instagram ?? null,
                             'facebook' => $settings->facebook ?? null,
                             'linkedin' => $settings->linkedin ?? null,
-                            'youtube' => $settings->youtube ?? null,
                         ];
                         $socialIcons = [
                             'instagram' => 'fab fa-instagram',
                             'facebook' => 'fab fa-facebook-f',
                             'linkedin' => 'fab fa-linkedin-in',
-                            'youtube' => 'fab fa-youtube',
                         ];
                     @endphp
                     @foreach($socials as $network => $url)

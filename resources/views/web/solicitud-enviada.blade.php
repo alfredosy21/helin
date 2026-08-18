@@ -50,7 +50,7 @@
             <div class="order-table">
                 <div class="order-head">
                     <div>Producto</div>
-                    <div>Precio (USD)</div>
+                    <div>Subtotal</div>
                 </div>
 
                 @if(isset($cartItems) && count($cartItems) > 0)
