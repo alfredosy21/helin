@@ -52,22 +52,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const formattedBsRate = bsRate.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         const itemsHtml = items.map(item => `
-            <div class="flex justify-between text-sm py-2 border-b border-helin-border/20 last:border-b-0">
+            <div class="flex justify-between items-center text-sm px-4 py-3 border-b border-gray-100">
                 <span class="text-helin-text">${item.name} <span class="text-helin-text/60">× ${item.qty}</span></span>
-                <span class="font-medium text-helin-heading">$${(item.price * item.qty).toFixed(2)}</span>
+                <span class="font-medium text-helin-heading whitespace-nowrap ml-3">$${(item.price * item.qty).toFixed(2)}</span>
             </div>
         `).join('');
 
         summaryRoot.innerHTML = `
-            <div class="px-4">
+            <div class="flex justify-between items-center text-xs font-semibold text-white px-4 py-2.5" style="background-color:#6BC2C3;">
+                <span>Producto</span>
+                <span>Subtotal</span>
+            </div>
+            <div>
                 ${itemsHtml}
             </div>
-            <div class="border-t border-helin-border/30 pt-3 mt-3 px-4 pb-4 rounded-b-lg">
-                <div class="flex justify-between text-sm mb-2">
+            <div class="pt-3 px-4 pb-4 rounded-b-lg">
+                <div class="flex justify-between text-sm pb-3 border-b border-gray-100">
                     <span class="text-helin-text">Subtotal</span>
                     <span class="font-medium text-helin-heading">$${subtotal.toFixed(2)}</span>
                 </div>
-                <div class="flex justify-between font-bold">
+                <div class="flex justify-between font-bold pt-3">
                     <span class="text-helin-heading">Total</span>
                     <span class="text-turquesa">$${total.toFixed(2)}</span>
                 </div>

@@ -107,12 +107,8 @@ class HelinHeaderSearch {
     executeSearch(type) {
         const input = document.querySelector(type === 'mobile' ? '#mobile-search-input' : '#header-search-input');
         const query = input?.value.trim() || '';
-        const categorySelect = document.getElementById('header-category-select');
-        const category = categorySelect?.value || '';
 
-        if (query || category) {
-            window.location.href = this.buildCatalogUrl(query);
-        }
+        window.location.href = this.buildCatalogUrl(query);
     }
 
     async performSearch(query, dropdown, type) {
